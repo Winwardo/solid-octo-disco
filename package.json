@@ -1,0 +1,16 @@
+{
+  "name": "solid-octo-disco",
+  "version": "1.0.0",
+  "description": "Topher and Vasily's football tweet miner assignment.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://winwardo@bitbucket.org/winwardo/solid-octo-disco.git"
+  },
+  "author": ["Topher Winward", "Vasily Shelkov"],
+  "license": "All copyright retained.",
+  "homepage": "https://bitbucket.org/winwardo/solid-octo-disco#readme"
+}
