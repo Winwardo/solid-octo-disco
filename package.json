@@ -2,16 +2,26 @@
   "name": "solid-octo-disco",
   "version": "1.0.0",
   "description": "Topher and Vasily's football tweet miner assignment.",
-  "main": "src/server.js",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://winwardo@bitbucket.org/winwardo/solid-octo-disco.git"
+    "url": "git+https://github.com/Winwardo/solid-octo-disco.git"
   },
   "scripts": {
     "test": "mocha --compilers js:babel-core/register",
-    "start": "webpack && babel-node --presets es2015 src/server.js"
+    "start": "webpack && node src/index.js"
   },
-  "author": ["Topher Winward", "Vasily Shelkov"],
+  "author": [
+    "Topher Winward",
+    "Vasily Shelkov"
+  ],
   "license": "All copyright retained.",
-  "homepage": "https://bitbucket.org/winwardo/solid-octo-disco#readme"
+  "homepage": "https://github.com/Winwardo/solid-octo-disco",
+  "dependencies": {
+    "babel-core": "^6.5.2",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-react": "^6.5.0",
+    "webpack": "^1.12.14"
+  }
 }
