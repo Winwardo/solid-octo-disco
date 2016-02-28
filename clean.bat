@@ -1,0 +1,1 @@
+esbeautifier src/**/*.js*
