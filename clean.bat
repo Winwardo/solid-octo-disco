@@ -1,1 +1,1 @@
-esbeautifier src/**/*.js*
+esbeautifier src/**/*.js* test/**/*.js*

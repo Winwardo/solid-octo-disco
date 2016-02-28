@@ -1,7 +1,7 @@
 var http = require( 'http' );
 var url = require( 'url' );
 
-var server = http.createServer( ( request, response ) => {
+var server = http.createServer( (request, response) => {
   if ( request.method === 'GET' ) {
     var queryData = url.parse( request.url, true ).query;
     response.writeHead( 200, { 'Content-Type': 'text/plain' } );
