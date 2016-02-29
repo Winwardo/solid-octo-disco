@@ -10,7 +10,7 @@ const server = http.createServer( (request, response) => {
 
     // if parameter is provided
     if ( queryData.name ) {
-      response.end( 'Hello ' + queryData.name + '\n' );
+      response.end( `Hello ${queryData.name}\n` );
     } else {
       response.end( 'Hello World\n' );
     }
