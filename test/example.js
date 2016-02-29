@@ -1,7 +1,7 @@
-require( 'chai' ).should();
+require('chai').should();
 
-describe( '#Example', () => {
-  it( 'passes one test', () => {
+describe('#Example', () => {
+  it('passes one test', () => {
     true.should.be.true;
-  } );
-} );
+  });
+});
