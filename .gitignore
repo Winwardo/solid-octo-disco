@@ -35,3 +35,4 @@ jspm_packages
 
 public/bundle.js
 .idea/*
+coverage.html
