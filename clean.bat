@@ -1,1 +1,1 @@
-esbeautifier src/**/*.js* test/**/*.js*
+jscs src --fix
