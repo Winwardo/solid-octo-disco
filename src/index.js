@@ -1,9 +1,11 @@
-var http = require( 'http' );
-var url = require( 'url' );
+"use strict"
 
-var server = http.createServer( (request, response) => {
+const http = require( 'http' );
+const url = require( 'url' );
+
+const server = http.createServer( (request, response) => {
   if ( request.method === 'GET' ) {
-    var queryData = url.parse( request.url, true ).query;
+    const queryData = url.parse( request.url, true ).query;
     response.writeHead( 200, { 'Content-Type': 'text/plain' } );
 
     // if parameter is provided
