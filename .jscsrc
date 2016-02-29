@@ -2,7 +2,6 @@
   "preset": "airbnb",
   "fileExtensions": [".js", "jscs"],
 
-  "requireSemicolons": false,
   "validateLineBreaks": null,
 
   "excludeFiles": [

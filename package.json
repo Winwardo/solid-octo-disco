@@ -8,7 +8,7 @@
     "url": "git+https://github.com/Winwardo/solid-octo-disco.git"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register --require blanket -R html-cov > coverage.html",
+    "test": "mocha --compilers js:babel-core/register",
     "start": "webpack && node src/index.js"
   },
   "author": [
