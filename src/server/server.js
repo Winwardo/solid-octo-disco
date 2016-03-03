@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import {exampleDatabaseCall} from './tweetfinder';
+import { exampleDatabaseCall } from './tweetfinder';
 
 const app = express();
 const port = process.env.PORT || 3000;

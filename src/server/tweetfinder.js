@@ -4,10 +4,10 @@ import { TweeterBuilder } from '../shared/data/tweeter';
 import { flattenImmutableObject } from '../shared/utilities';
 
 export const exampleDatabaseCall = (response) => {
-  const result = [];
-
-  const ttt = db.query('SELECT FROM tweet')
+  db.query('SELECT FROM tweet')
     .then((tweetRecords) => {
+      const result = [];
+
       const promises = tweetRecords.map((tweetRecord) => {
         const rid = '' + tweetRecord['@rid'];
 
