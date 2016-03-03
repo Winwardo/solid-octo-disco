@@ -8,7 +8,9 @@
     "url": "git+https://github.com/Winwardo/solid-octo-disco.git"
   },
   "scripts": {
-    "test": "mocha ./src/**/*.spec.js --compilers js:babel-core/register",
+    "test": "babel-node node_modules/mocha/bin/_mocha ./src/**/*.spec.js",
+    "coverage": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha -- --bail --recursive ./src/**/*.spec.js",
+    "clean": "jscs src --fix",
     "start": "webpack && node src/index.js"
   },
   "author": [
@@ -18,6 +20,7 @@
   "license": "All copyright retained.",
   "homepage": "https://github.com/Winwardo/solid-octo-disco",
   "dependencies": {
+    "babel-cli": "^6.2.0",
     "babel-core": "^6.5.2",
     "babel-eslint": "^5.0.0",
     "babel-loader": "^6.2.4",
@@ -33,14 +36,8 @@
     "webpack": "^1.12.14"
   },
   "devDependencies": {
-    "blanket": "^1.2.2",
     "coveralls": "^2.11.8",
+    "istanbul": "^0.4.2",
     "mocha-lcov-reporter": "^1.2.0"
-  },
-  "config": {
-    "blanket": {
-      "pattern": [ "" ],
-      "data-cover-never": [ "node_modules", "tests" ]
-    }
   }
 }
