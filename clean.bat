@@ -1,1 +1,1 @@
-jscs src test --fix
+jscs src --fix
