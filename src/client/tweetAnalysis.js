@@ -52,4 +52,8 @@ module.exports = {
     const wordCounts = countWords(tweets);
     return wordCountToSortedList(wordCounts);
   },
+
+  mostActiveUsers: function(tweets) {
+    return [];
+  }
 };

@@ -36,4 +36,11 @@ describe('#TweetAnalysis', () => {
     });
 
   });
+
+  describe('Most active users counter', () => {
+    it('returns an empty list on an empty input', () => {
+      const tweets = [];
+      TweetAnalysis.mostActiveUsers(tweets).should.deep.equal([]);
+    });
+  });
 });
