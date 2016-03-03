@@ -1,6 +1,6 @@
 'use strict';
 
-const TwitterSearch = require('./server/twitterSearch')
+const TwitterSearch = require('./server/twitterSearch');
 
 const http = require('http');
 const url = require('url');
