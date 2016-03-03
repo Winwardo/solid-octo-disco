@@ -22,7 +22,10 @@
   ],
   "license": "All copyright retained.",
   "homepage": "https://github.com/Winwardo/solid-octo-disco",
-  "dependencies": {},
+  "dependencies": {
+    "js-builder-decorator": "^0.1.3",
+    "orientjs": "^2.1.11"
+  },
   "devDependencies": {
     "babel-cli": "^6.6.4",
     "babel-core": "^6.5.2",
