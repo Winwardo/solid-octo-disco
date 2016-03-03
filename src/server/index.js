@@ -1,7 +1,7 @@
-'use strict';
+import http from 'http';
+import url from 'url';
 
-const http = require('http');
-const url = require('url');
+const port = process.env.PORT || 3000;
 
 const server = http.createServer((request, response) => {
   if (request.method === 'GET') {
@@ -18,4 +18,6 @@ const server = http.createServer((request, response) => {
 });
 
 // Listen on port 3000, IP defaults to 127.0.0.1 (localhost)
-server.listen(3000);
+server.listen(port, () => {
+  console.log('Server running at http://localhost: ' + port);
+});

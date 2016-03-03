@@ -6,6 +6,7 @@
   "disallowQuotedKeysInObjects": false,
 
   "excludeFiles": [
-    "test/data/**"
+    "test/data/**",
+    "build"
   ]
 }
