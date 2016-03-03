@@ -3,12 +3,13 @@
 const Utilities = require('./utilities');
 
 module.exports = {
+
   /**
    * Given a list of Tweet objects, return a sorted list of the most frequent words in them
    * @param tweets
    * @returns {Array}
    */
-  mostFrequentWords: (tweets) => {
+  'mostFrequentWords': (tweets) => {
     return wordCountToSortedList(countWords(tweets));
   },
 
@@ -18,9 +19,13 @@ module.exports = {
    * @param tweets
    * @returns {Array}\
    */
-  mostActiveUsers: (tweets) => {
+  'mostActiveUsers': (tweets) => {
     const result = Utilities.flattenObjectToArray(categoriseByUser(tweets));
-    result.sort((tweetList1, tweetList2) => { return tweetList1.tweets.length < tweetList2.tweets.length; });
+    result.sort(
+      (tweetList1, tweetList2) => {
+        return tweetList1.tweets.length < tweetList2.tweets.length;
+      }
+    );
     return result;
   },
 };
