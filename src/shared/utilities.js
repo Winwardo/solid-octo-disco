@@ -20,14 +20,16 @@ export const flattenObjectToArray = (givenObject) => {
  * @param givenObject Similar to {'name': () => { return 'John'; }}
  * @returns {{}} Similar to {'name': 'John'}
  */
-export const flattenImmutableObject = (givenObject) => {
+export const flattenImmutableObject = (givenObject, recursive = false) => {
+  if (typeof givenObject !== 'object') { return givenObject; }
+
   const result = {};
   for (const key in givenObject) {
     if (givenObject.hasOwnProperty(key)) {
       const field = givenObject[key];
 
-      if (field instanceof Function) {
-        result[key] = field();
+      if (typeof field === 'function') {
+        result[key] = flattenImmutableObject(field());
       } else {
         result[key] = field;
       }

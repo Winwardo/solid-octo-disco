@@ -31,6 +31,23 @@ describe('#Utilities', () => {
 
     });
 
+    it('can recursively resolve functions on an immutable object and return a flat object', () => {
+      const exampleImmutableObject = {
+        'thing': () => {
+          return {
+            'inner': () => { return 'okay'; },
+          };
+        },
+      };
+
+      flattenImmutableObject(exampleImmutableObject, true).should.deep.equal({
+        'thing': {
+          'inner': 'okay',
+        },
+      });
+
+    });
+
   });
 
 });
