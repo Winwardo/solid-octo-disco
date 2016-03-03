@@ -3,6 +3,7 @@
   "fileExtensions": [".js", "jscs"],
 
   "validateLineBreaks": null,
+  "disallowQuotedKeysInObjects": false,
 
   "excludeFiles": [
     "test/data/**"
