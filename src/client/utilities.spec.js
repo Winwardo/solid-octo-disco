@@ -2,7 +2,7 @@ require('chai').should();
 Utilities = require('./utilities');
 
 describe('#Utilities', () => {
-  describe('Object flattener', ()=> {
+  describe('Object flattener', () => {
     it('can flatten an object to an array', () => {
       Utilities.flattenObjectToArray(
         { 'a': { 'b': 1 }, 'd': { 'e': 2 } }

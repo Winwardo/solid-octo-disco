@@ -1,9 +1,10 @@
 'use strict';
 
 module.exports = {
+
   /**
    * Converts an object of style {'a': {'b': c}, 'd': {'e': f}} to [{'b': c}, {'e': f}]
-   * @param {Object} givenObject
+   * @param {Object} givenObject Any object.
    * @returns {Array}
    */
   'flattenObjectToArray': (givenObject) => {
