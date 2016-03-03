@@ -1,5 +1,7 @@
 'use strict';
 
+const Utilities = require('./utilities');
+
 module.exports = {
   /**
    * Given a list of Tweet objects, return a sorted list of the most frequent words in them
@@ -7,8 +9,7 @@ module.exports = {
    * @returns {Array}
    */
   mostFrequentWords: function (tweets) {
-    const wordCounts = countWords(tweets);
-    return wordCountToSortedList(wordCounts);
+    return wordCountToSortedList(countWords(tweets));
   },
 
   /**
@@ -18,8 +19,7 @@ module.exports = {
    * @returns {Array}
    */
   mostActiveUsers: function (tweets) {
-    const tweeterCount = categoriseByUser(tweets);
-    return flattenObjectToArray(tweeterCount);
+    return Utilities.flattenObjectToArray(categoriseByUser(tweets));
   },
 };
 
@@ -85,20 +85,4 @@ function categoriseByUser(tweets) {
   }
 
   return tweeterCount;
-}
-
-/**
- * Converts an object of style {'a': {'b': c}, 'd': {'e': f}} to [{'b': c}, {'e': f}]
- * @param givenObject
- * @returns {Array}
- */
-function flattenObjectToArray(givenObject) {
-  let result = [];
-  for (let key in givenObject) {
-    if (givenObject.hasOwnProperty(key)) {
-      result.push(givenObject[key]);
-    }
-  }
-
-  return result;
 }
