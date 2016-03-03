@@ -8,7 +8,7 @@ module.exports = {
    * @param tweets
    * @returns {Array}
    */
-  mostFrequentWords: function (tweets) {
+  mostFrequentWords: (tweets) => {
     return wordCountToSortedList(countWords(tweets));
   },
 
@@ -16,11 +16,11 @@ module.exports = {
    * Given a list of Tweet objects, return a sorted list of the most active users,
    * along with their tweets.
    * @param tweets
-   * @returns {Array}
+   * @returns {Array}\
    */
-  mostActiveUsers: function (tweets) {
-    const result= Utilities.flattenObjectToArray(categoriseByUser(tweets));
-    result.sort((a, b) => { return a.tweets.length < b.tweets.length; });
+  mostActiveUsers: (tweets) => {
+    const result = Utilities.flattenObjectToArray(categoriseByUser(tweets));
+    result.sort((tweetList1, tweetList2) => { return tweetList1.tweets.length < tweetList2.tweets.length; });
     return result;
   },
 };
@@ -34,14 +34,14 @@ module.exports = {
  */
 function countWords(tweets) {
   const wordCount = {};
-  for (let tweet of tweets) {
-    for (let word of tweet.content.split(/[ !,.?"']/)) {
-      word = word.trim();
-      if (word === '') { continue; }
-
-      // ~~ will convert floats to integer,
-      // but importantly quickly convert undefined to 0
-      wordCount[word] = ~~wordCount[word] + 1;
+  for (const tweet of tweets) {
+    for (const word of tweet.content.split(/[ !,.?"']/)) {
+      const trimmed = word.trim();
+      if (trimmed !== '') {
+        // ~~ will convert floats to integer,
+        // but importantly quickly convert undefined to 0
+        wordCount[trimmed] = ~~wordCount[trimmed] + 1;
+      }
     }
   };
 
@@ -55,7 +55,7 @@ function countWords(tweets) {
  * @returns {Array} A sorted list of word/count pairs, e.g. [{'word': 'hello', 'count': 5}, ...]
  */
 function wordCountToSortedList(wordCounts) {
-  let result = [];
+  const result = [];
   for (let key in wordCounts) {
     if (wordCounts.hasOwnProperty(key)) {
       result.push({
@@ -65,7 +65,7 @@ function wordCountToSortedList(wordCounts) {
     }
   }
 
-  result.sort((a, b) => { return a.count < b.count; });
+  result.sort((wordCount1, wordCount2) => { return wordCount1.count < wordCount2.count; });
   return result;
 };
 
@@ -75,9 +75,9 @@ function wordCountToSortedList(wordCounts) {
  * @returns {{}}
  */
 function categoriseByUser(tweets) {
-  let tweeterCount = {};
+  const tweeterCount = {};
 
-  for (let tweet of tweets) {
+  for (const tweet of tweets) {
     const tweeter = tweet.tweeter;
     if (tweeterCount[tweeter] === undefined) {
       tweeterCount[tweeter] = { 'tweeter': tweeter, 'tweets': [] };
