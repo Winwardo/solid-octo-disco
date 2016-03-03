@@ -1,34 +1,29 @@
-'use strict';
+import { flattenObjectToArray } from './utilities';
 
-const Utilities = require('./utilities');
+/**
+ * Given a list of Tweet objects, return a sorted list of the most frequent words in them
+ * @param tweets
+ * @returns {Array}
+ */
+export const mostFrequentWords = (tweets) => {
+  return wordCountToSortedList(countWords(tweets));
+};;
 
-module.exports = {
-
-  /**
-   * Given a list of Tweet objects, return a sorted list of the most frequent words in them
-   * @param tweets
-   * @returns {Array}
-   */
-  'mostFrequentWords': (tweets) => {
-    return wordCountToSortedList(countWords(tweets));
-  },
-
-  /**
-   * Given a list of Tweet objects, return a sorted list of the most active users,
-   * along with their tweets.
-   * @param tweets
-   * @returns {Array}\
-   */
-  'mostActiveUsers': (tweets) => {
-    const result = Utilities.flattenObjectToArray(categoriseByUser(tweets));
-    result.sort(
-      (tweetList1, tweetList2) => {
-        return tweetList1.tweets.length < tweetList2.tweets.length;
-      }
-    );
-    return result;
-  },
-};
+/**
+ * Given a list of Tweet objects, return a sorted list of the most active users,
+ * along with their tweets.
+ * @param tweets
+ * @returns {Array}\
+ */
+export const mostActiveUsers = (tweets) => {
+  const result = flattenObjectToArray(categoriseByUser(tweets));
+  result.sort(
+    (tweetList1, tweetList2) => {
+      return tweetList1.tweets.length < tweetList2.tweets.length;
+    }
+  );
+  return result;
+};;
 
 // ---------------------------------------------------------------------------------------
 
