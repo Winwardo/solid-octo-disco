@@ -12,4 +12,27 @@ export const flattenObjectToArray = (givenObject) => {
   }
 
   return result;
-};;
+};
+
+/**
+ * Converts an immutable object (one with purely getter methods) to a plain key/value
+ * object, by calling the functions and storing the result.
+ * @param givenObject Similar to {'name': () => { return 'John'; }}
+ * @returns {{}} Similar to {'name': 'John'}
+ */
+export const flattenImmutableObjectToDataObject = (givenObject) => {
+  const result = {};
+  for (const key in givenObject) {
+    if (givenObject.hasOwnProperty(key)) {
+      const field = givenObject[key];
+
+      if (field instanceof Function) {
+        result[key] = field();
+      } else {
+        result[key] = field;
+      }
+    }
+  }
+
+  return result;
+};
