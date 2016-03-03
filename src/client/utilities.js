@@ -8,7 +8,7 @@ module.exports = {
    * @returns {Array}
    */
   'flattenObjectToArray': (givenObject) => {
-    let result = [];
+    const result = [];
     for (const key in givenObject) {
       if (givenObject.hasOwnProperty(key)) {
         result.push(givenObject[key]);
