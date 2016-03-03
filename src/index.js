@@ -1,5 +1,7 @@
 'use strict';
 
+const TwitterSearch = require('./server/twitterSearch')
+
 const http = require('http');
 const url = require('url');
 
@@ -7,6 +9,8 @@ const server = http.createServer((request, response) => {
   if (request.method === 'GET') {
     const queryData = url.parse(request.url, true).query;
     response.writeHead(200, { 'Content-Type': 'text/plain' });
+
+    TwitterSearch.test();
 
     // if parameter is provided
     if (queryData.name) {
