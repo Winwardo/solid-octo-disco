@@ -42,5 +42,21 @@ describe('#TweetAnalysis', () => {
       const tweets = [];
       TweetAnalysis.mostActiveUsers(tweets).should.deep.equal([]);
     });
+
+    it('returns the Tweeter and their tweets', () => {
+      const tweets = [
+        { 'tweeter': 1, 'content': 'hello world' },
+        { 'tweeter': 1, 'content': 'second tweet' },
+      ];
+      TweetAnalysis.mostActiveUsers(tweets).should.deep.equal(
+        [
+        { 'tweeter': 1, 'tweets': [
+          { 'tweeter': 1, 'content': 'hello world' },
+          { 'tweeter': 1, 'content': 'second tweet' },
+        ], },
+      ]
+      );
+    });
+
   });
 });
