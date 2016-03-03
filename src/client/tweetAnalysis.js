@@ -8,7 +8,10 @@
 function countWords(tweets) {
   const wordCount = {};
   for (let tweet of tweets) {
-    for (let word of tweet.content.split(' ')) {
+    for (let word of tweet.content.split(/[ !,.?]/)) {
+      word = word.trim();
+      if (word === '') { continue; }
+
       // ~~ will convert floats to integer,
       // but importantly quickly convert undefined to 0
       wordCount[word] = ~~wordCount[word] + 1;

@@ -25,5 +25,15 @@ describe('#TweetAnalysis', () => {
         { 'word': 'one', 'count': 1 },
       ]);
     });
+
+    it('ignores punctuation when splitting words', () => {
+      const tweets = [{ 'content': 'one, two,two three.three !three' }];
+      TweetAnalysis.mostFrequentWords(tweets).should.deep.equal([
+        { 'word':'three', 'count': 3 },
+        { 'word': 'two', 'count': 2 },
+        { 'word': 'one', 'count': 1 },
+      ]);
+    });
+
   });
 });
