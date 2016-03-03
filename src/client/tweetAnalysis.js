@@ -19,7 +19,9 @@ module.exports = {
    * @returns {Array}
    */
   mostActiveUsers: function (tweets) {
-    return Utilities.flattenObjectToArray(categoriseByUser(tweets));
+    const result= Utilities.flattenObjectToArray(categoriseByUser(tweets));
+    result.sort((a, b) => { return a.tweets.length < b.tweets.length; });
+    return result;
   },
 };
 
