@@ -20,7 +20,7 @@ export const flattenObjectToArray = (givenObject) => {
  * @param givenObject Similar to {'name': () => { return 'John'; }}
  * @returns {{}} Similar to {'name': 'John'}
  */
-export const flattenImmutableObjectToDataObject = (givenObject) => {
+export const flattenImmutableObject = (givenObject) => {
   const result = {};
   for (const key in givenObject) {
     if (givenObject.hasOwnProperty(key)) {

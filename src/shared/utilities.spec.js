@@ -1,5 +1,5 @@
 import { should } from 'chai';
-import { flattenObjectToArray, flattenImmutableObjectToDataObject } from './utilities';
+import { flattenObjectToArray, flattenImmutableObject } from './utilities';
 should();
 
 describe('#Utilities', () => {
@@ -23,7 +23,7 @@ describe('#Utilities', () => {
 
       exampleImmutableObject.name().should.equal('John');
 
-      flattenImmutableObjectToDataObject(exampleImmutableObject).should.deep.equal({
+      flattenImmutableObject(exampleImmutableObject).should.deep.equal({
         'name': 'John',
         'age': 7,
         'notAFunction': 'something',
