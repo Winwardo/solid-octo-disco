@@ -20,7 +20,7 @@ export const flattenObjectToArray = (givenObject) => {
  * @param givenObject Similar to {'name': () => { return 'John'; }}
  * @returns {{}} Similar to {'name': 'John'}
  */
-export const flattenImmutableObject = (givenObject, recursive = false) => {
+export const flattenImmutableObject = (givenObject) => {
   if (typeof givenObject !== 'object') { return givenObject; }
 
   const result = {};
