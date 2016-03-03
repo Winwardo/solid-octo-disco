@@ -1,1 +1,0 @@
-mocha --compilers js:babel-core/register --require blanket -R html-cov > coverage.html
