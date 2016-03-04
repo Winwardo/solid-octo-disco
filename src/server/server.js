@@ -1,15 +1,20 @@
 import express from 'express';
 import path from 'path';
 import { exampleDatabaseCall } from './tweetfinder';
+import { generateDatabase } from './orientdb';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use('/public', express.static('public'));
 
-app.get('/orient', (req, response) => {
-  response.writeHead(200, { 'Content-Type': 'application/json' });
-  exampleDatabaseCall(response);
+app.get('/orient/generate', (req, res) => {
+  generateDatabase(res);
+});
+
+app.get('/orient', (req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  exampleDatabaseCall(res);
 });
 
 app.get('/', (req, res) => {
