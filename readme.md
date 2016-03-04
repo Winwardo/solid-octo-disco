@@ -25,6 +25,8 @@ git clone https://github.com/Winwardo/solid-octo-disco.git
 cd solid-octo-disco
 make clean
 npm install or make bootstrap
+npm build
+npm start
 ```
 
 Then for development run `npm run dev` and testing `npm run test-quick`.
