@@ -17,6 +17,6 @@ export const schema = {
   },
   'TWEETED': {
     'superclass': 'E',
-    'properties': []
-  }
+    'properties': [],
+  },
 };

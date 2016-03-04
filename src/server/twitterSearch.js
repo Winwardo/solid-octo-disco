@@ -12,53 +12,53 @@ var T = new Twit({
   timeout_ms:           60 * 1000,  // optional HTTP request timeout to apply to all requests.
 });
 
- export const test = (res) => {
-    //T.get('search/tweets', { q: 'manchester since:2011-07-11', count: 10 }, function (err, data, response) {
-    //  console.log(data);
-    //  res.end(JSON.stringify(data));
-    //});
-   exampleSearch.statuses.forEach((status) => {
-     const user = status.user;
+export const test = (res) => {
+  //T.get('search/tweets', { q: 'manchester since:2011-07-11', count: 10 }, function (err, data, response) {
+  //  console.log(data);
+  //  res.end(JSON.stringify(data));
+  //});
+  exampleSearch.statuses.forEach((status) => {
+    const user = status.user;
 
-     db.query('UPDATE tweeter SET name=:name, handle=:handle UPSERT WHERE handle=:handle',
+    db.query('UPDATE tweeter SET name=:name, handle=:handle UPSERT WHERE handle=:handle',
        {
          'params': {
-          'name': user.name,
-           'handle': user.screen_name
-         }
+           'name': user.name,
+           'handle': user.screen_name,
+         },
        }).then((result) => {
-       db.query('UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets UPSERT WHERE id=:id',
+         db.query('UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets UPSERT WHERE id=:id',
          {
            'params': {
              'id': status.id,
              'content': status.text,
              'date': new Date(status.created_at),
              'likes': status.favourite_count || 0,
-             'retweets': status.retweet_count || 0
-           }
+             'retweets': status.retweet_count || 0,
+           },
          }).then((result) => {
-         console.log("Ready to join")
-         db.query('CREATE EDGE TWEETED FROM (SELECT FROM tweeter WHERE handle = :tweeterHandle) TO (SELECT FROM tweet WHERE id = :tweetId)',
+           console.log('Ready to join');
+           db.query('CREATE EDGE TWEETED FROM (SELECT FROM tweeter WHERE handle = :tweeterHandle) TO (SELECT FROM tweet WHERE id = :tweetId)',
            {
              'params': {
                'tweetId': status.id,
-               'tweeterHandle': user.screen_name
-             }
+               'tweeterHandle': user.screen_name,
+             },
            }).then((r) => {
-           console.log("Made link")
+             console.log('Made link');
 
-         }).error((e) => {
-           "use strict";
-           console.log("did not make link")
-           console.log(e)
-         })
+           }).error((e) => {
+             'use strict';
+             console.log('did not make link');
+             console.log(e);
+           });
+         });
+       }).error((error) => {
+         console.warn('ERROR');
+         console.log(error);
        });
-     }).error((error) => {
-       console.warn("ERROR")
-       console.log(error)
-     });
 
-   })
+  });
 
-   res.end(JSON.stringify(exampleSearch));
-  };
+  res.end(JSON.stringify(exampleSearch));
+};
