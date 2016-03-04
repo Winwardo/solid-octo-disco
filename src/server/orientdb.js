@@ -6,7 +6,7 @@ const server = OrientDB({
   host: 'localhost',
   port: 2424,
   username: 'root',
-  password: 'open',
+  password: 'admin',
 });
 
 export const db = server.use('footballers1');

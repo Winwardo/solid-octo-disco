@@ -13,8 +13,9 @@
     "lint": "jscs src --fix",
     "build": "gulp build",
     "watch": "gulp watch",
-    "dev": "set NODE_ENV=development && gulp run",
-    "start": "set NODE_ENV=production && node build/index.js"
+    "dev": "set NODE_ENV=development && npm run orient && gulp run",
+    "start": "set NODE_ENV=production && npm run orient && node build/index.js",
+    "orient": "start lib\\orientdb\\bin\\server"
   },
   "author": [
     "Topher Winward",
