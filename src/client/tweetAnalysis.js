@@ -1,4 +1,4 @@
-import { flattenObjectToArray } from './utilities';
+import { flattenObjectToArray } from './../shared/utilities';
 
 /**
  * Given a list of Tweet objects, return a sorted list of the most frequent words in them
