@@ -2,7 +2,7 @@ const Twit = require('twit');
 const moment = require('moment');
 import { exampleSearch } from './exampleSearch';
 import { db } from './orientdb';
-import { TweeterBuilder, TweetBuilder } from '../shared/data/databaseObjects';
+import * as Builders from '../shared/data/databaseObjects';
 import { flattenImmutableObject } from '../shared/utilities';
 
 // These keys should be hidden in a private config file or environment variables
@@ -22,7 +22,7 @@ const runQueryOnImmutableObject = (db, query, objectToFlatten) => {
 const upsertTweeter = (db, tweeter) => {
   return runQueryOnImmutableObject(
     db,
-    'UPDATE tweeter SET name=:name, handle=:handle UPSERT WHERE handle=:handle',
+    'UPDATE tweeter SET id=:id, name=:name, handle=:handle UPSERT WHERE handle=:handle',
     tweeter);
 };
 
@@ -33,13 +33,31 @@ const upsertTweet = (db, tweet) => {
     tweet);
 };
 
-const makeTWEETEDedge = (db, tweet, tweeter) => {
+const upsertHashtag = (db, hashtag) => {
+  return runQueryOnImmutableObject(
+    db,
+    'UPDATE hashtag SET content=:content UPSERT WHERE content=:content',
+    hashtag);
+};
+
+const linkTweeterToTweet = (db, tweeter, tweet) => {
   return db.query(
-    'CREATE EDGE TWEETED FROM (SELECT FROM tweeter WHERE handle = :tweeterHandle) TO (SELECT FROM tweet WHERE id = :tweetId)',
+    'CREATE EDGE TWEETED FROM (SELECT FROM tweeter WHERE id = :tweeterId) TO (SELECT FROM tweet WHERE id = :tweetId)',
     {
       'params': {
         'tweetId': tweet.id(),
-        'tweeterHandle': tweeter.handle(),
+        'tweeterId': tweeter.id(),
+      },
+    });
+};
+
+const linkTweetToHashtag = (db, tweet, hashtag) => {
+  return db.query(
+    'CREATE EDGE HAS_HASHTAG FROM (SELECT FROM tweet WHERE id = :tweetId) TO (SELECT FROM hashtag WHERE content = :hashtagContent)',
+    {
+      'params': {
+        'tweetId': tweet.id(),
+        'hashtagContent': hashtag.content(),
       },
     });
 };
@@ -49,29 +67,38 @@ export const test = (res) => {
   //  console.log(data);
   //  res.end(JSON.stringify(data));
   //});
-  exampleSearch.statuses.forEach((status) => {
-    const user = status.user;
+  let count = 0;
+  exampleSearch.statuses.forEach((tweetRaw) => {
+    const userRaw = tweetRaw.user;
 
-    const tweet = TweetBuilder()
-      .id(status.id)
-      .content(status.text)
-      .date(moment(status.created_at).format('YYYY-MM-DD HH:mm:ss'))
-      .likes(status.favourite_count || 0)
-      .retweets(status.retweet_count || 0)
+    const tweet = Builders.TweetBuilder()
+      .id(tweetRaw.id)
+      .content(tweetRaw.text)
+      .date(moment(new Date(tweetRaw.created_at)).format('YYYY-MM-DD HH:mm:ss'))
+      .likes(tweetRaw.favourite_count || 0)
+      .retweets(tweetRaw.retweet_count || 0)
       .build();
 
-    const tweeter = TweeterBuilder()
-      .name(user.name)
-      .handle(user.screen_name)
+    const tweeter = Builders.TweeterBuilder()
+      .id(userRaw.id)
+      .name(userRaw.name)
+      .handle(userRaw.screen_name)
       .build();
 
     upsertTweeter(db, tweeter)
         .then((result) => {
           upsertTweet(db, tweet)
             .then((result) => {
-              makeTWEETEDedge(db, tweet, tweeter);
+              linkTweeterToTweet(db, tweeter, tweet);
             });
         });
+
+    tweetRaw.entities.hashtags.forEach((hashtagRaw) => {
+      const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
+      upsertHashtag(db, hashtag).then((result) => {
+        linkTweetToHashtag(db, tweet, hashtag);
+      });
+    });
   });
 
   res.end(JSON.stringify(exampleSearch));
