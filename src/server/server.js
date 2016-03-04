@@ -12,9 +12,9 @@ app.get('/orient/generate', (req, res) => {
   generateDatabase(res);
 });
 
-app.get('/orient', (req, response) => {
+app.get('/orient', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
-  exampleDatabaseCall(response);
+  exampleDatabaseCall(res);
 });
 
 app.get('/', (req, res) => {
