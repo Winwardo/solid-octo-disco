@@ -14,7 +14,6 @@ app.get('/orient/generate', (req, res) => {
 });
 
 app.get('/orient', (req, response) => {
-  response.writeHead(200, { 'Content-Type': 'application/json' });
   exampleDatabaseCall(response);
 });
 
