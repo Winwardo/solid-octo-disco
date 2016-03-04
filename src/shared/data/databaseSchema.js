@@ -2,6 +2,7 @@ export const schema = {
   'Tweet': {
     'superclass': 'V',
     'properties': [
+      ['id', 'Integer'],
       ['content', 'String'],
       ['date', 'Datetime'],
       ['likes', 'Integer'],

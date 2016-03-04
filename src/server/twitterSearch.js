@@ -1,6 +1,9 @@
-var Twit = require('twit');
+const Twit = require('twit');
+const moment = require('moment');
 import { exampleSearch } from './exampleSearch';
 import { db } from './orientdb';
+import { TweeterBuilder, TweetBuilder } from '../shared/data/databaseObjects';
+import { flattenImmutableObject } from '../shared/utilities';
 
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
@@ -12,53 +15,66 @@ var T = new Twit({
   timeout_ms:           60 * 1000,  // optional HTTP request timeout to apply to all requests.
 });
 
+const runQueryOnImmutableObject = (db, query, objectToFlatten) => {
+  return db.query(query, { 'params': flattenImmutableObject(objectToFlatten) });
+};
+
+const upsertTweeter = (db, tweeter) => {
+  return runQueryOnImmutableObject(
+    db,
+    'UPDATE tweeter SET name=:name, handle=:handle UPSERT WHERE handle=:handle',
+    tweeter);
+};
+
+const upsertTweet = (db, tweet) => {
+  return runQueryOnImmutableObject(
+    db,
+    'UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets UPSERT WHERE id=:id',
+    tweet);
+};
+
+const makeTWEETEDedge = (db, tweet, tweeter) => {
+  return db.query(
+    'CREATE EDGE TWEETED FROM (SELECT FROM tweeter WHERE handle = :tweeterHandle) TO (SELECT FROM tweet WHERE id = :tweetId)',
+    {
+      'params': {
+        'tweetId': tweet.id(),
+        'tweeterHandle': tweeter.handle(),
+      },
+    });
+};
+
 export const test = (res) => {
-  //T.get('search/tweets', { q: 'manchester since:2011-07-11', count: 10 }, function (err, data, response) {
+  //T.get('search/tweets', { q: 'liverpool', count: 100 }, function (err, data, response) {
   //  console.log(data);
   //  res.end(JSON.stringify(data));
   //});
   exampleSearch.statuses.forEach((status) => {
     const user = status.user;
 
-    db.query('UPDATE tweeter SET name=:name, handle=:handle UPSERT WHERE handle=:handle',
-       {
-         'params': {
-           'name': user.name,
-           'handle': user.screen_name,
-         },
-       }).then((result) => {
-         db.query('UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets UPSERT WHERE id=:id',
-         {
-           'params': {
-             'id': status.id,
-             'content': status.text,
-             'date': new Date(status.created_at),
-             'likes': status.favourite_count || 0,
-             'retweets': status.retweet_count || 0,
-           },
-         }).then((result) => {
-           console.log('Ready to join');
-           db.query('CREATE EDGE TWEETED FROM (SELECT FROM tweeter WHERE handle = :tweeterHandle) TO (SELECT FROM tweet WHERE id = :tweetId)',
-           {
-             'params': {
-               'tweetId': status.id,
-               'tweeterHandle': user.screen_name,
-             },
-           }).then((r) => {
-             console.log('Made link');
+    const tweet = TweetBuilder()
+      .id(status.id)
+      .content(status.text)
+      .date(moment(status.created_at).format('YYYY-MM-DD HH:mm:ss'))
+      .likes(status.favourite_count || 0)
+      .retweets(status.retweet_count || 0)
+      .build();
 
-           }).error((e) => {
-             'use strict';
-             console.log('did not make link');
-             console.log(e);
-           });
-         });
-       }).error((error) => {
-         console.warn('ERROR');
-         console.log(error);
-       });
+    const tweeter = TweeterBuilder()
+      .name(user.name)
+      .handle(user.screen_name)
+      .build();
 
+    upsertTweeter(db, tweeter)
+        .then((result) => {
+          upsertTweet(db, tweet)
+            .then((result) => {
+              makeTWEETEDedge(db, tweet, tweeter);
+            });
+        });
   });
 
   res.end(JSON.stringify(exampleSearch));
+
+  //});
 };
