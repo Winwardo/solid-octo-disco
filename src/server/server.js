@@ -1,6 +1,7 @@
 import express from 'express';
 import { exampleDatabaseCall } from './tweetfinder';
 import { generateDatabase } from './orientdb';
+import { test } from './twitterSearch'
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -16,6 +17,11 @@ app.get('/orient', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
   exampleDatabaseCall(res);
 });
+
+app.get('/twit', (req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  test(res);
+})
 
 app.get('/', (req, res) => {
   res.sendFile('index.html', { root: 'public' });

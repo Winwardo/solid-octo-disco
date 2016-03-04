@@ -15,4 +15,8 @@ export const schema = {
       ['handle', 'String'],
     ],
   },
+  'TWEETED': {
+    'superclass': 'E',
+    'properties': []
+  }
 };
