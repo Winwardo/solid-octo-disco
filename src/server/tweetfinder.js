@@ -4,8 +4,10 @@ import { TweeterBuilder } from '../shared/data/tweeter';
 import { flattenImmutableObject } from '../shared/utilities';
 
 export const exampleDatabaseCall = (response) => {
+  console.log("hi")
   db.query('SELECT FROM tweet')
     .then((tweetRecords) => {
+      response.end("YAY")
       const result = [];
 
       const promises = tweetRecords.map((tweetRecord) => {
@@ -36,5 +38,10 @@ export const exampleDatabaseCall = (response) => {
               result));
         });
 
+    })
+    .error((error) => {
+      response.end("Unable to connect to database.");
     });
+
+    response.end("wtf");
 };
