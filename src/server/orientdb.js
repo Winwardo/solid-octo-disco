@@ -27,7 +27,7 @@ const insertClass = (db, name, superclass, properties) => {
     });
 
     clazz.property.create(transformedProperties);
-	});
+  });
 };
 
 /**

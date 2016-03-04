@@ -23,7 +23,7 @@ const convertSchemaObjectToClass = (name) => {
  */
 const generateBuilder = (name) => {
   return BuilderDecorator.BuilderDecorator(convertSchemaObjectToClass(name),  { 'allFieldsMustBeSet': true });
-}
+};
 
 // ----------------------
 
