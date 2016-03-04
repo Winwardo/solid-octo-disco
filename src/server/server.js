@@ -1,5 +1,4 @@
 import express from 'express';
-import path from 'path';
 import { exampleDatabaseCall } from './tweetfinder';
 import { generateDatabase } from './orientdb';
 
@@ -7,6 +6,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use('/public', express.static('public'));
+app.use('/semantic', express.static('semantic'));
 
 app.get('/orient/generate', (req, res) => {
   generateDatabase(res);
