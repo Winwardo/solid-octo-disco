@@ -1,8 +1,12 @@
 import { db } from './orientdb';
-import { TweetBuilder } from '../shared/data/tweet';
-import { TweeterBuilder } from '../shared/data/tweeter';
+import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
 import { flattenImmutableObject } from '../shared/utilities';
 
+/**
+ * Grab all tweets from the database, and show them with their authors.
+ * @deprecated
+ * @param response
+ */
 export const exampleDatabaseCall = (response) => {
   db.query('SELECT FROM tweet')
     .then((tweetRecords) => {
@@ -16,16 +20,24 @@ export const exampleDatabaseCall = (response) => {
           )
           .then((tweeterRecords) => {
             const tweeterRecord = tweeterRecords[0];
-            const tweet = TweetBuilder()
-              .content(tweetRecord.content)
-              .tweeter(
-                TweeterBuilder()
+            const toReturn = {
+              'tweet':
+                flattenImmutableObject(
+                  TweetBuilder()
+                  .content(tweetRecord.content)
+                  .date(tweetRecord.date.toISOString())
+                  .likes(tweetRecord.likes)
+                  .retweets(tweeterRecord.retweets)
+                  .build()),
+              'tweeter':
+                flattenImmutableObject(
+                  TweeterBuilder()
                   .name(tweeterRecord.name)
                   .handle(tweeterRecord.handle)
-                  .build())
-              .date(tweetRecord.date.toISOString())
-              .build();
-            result.push(flattenImmutableObject(tweet));
+                  .build()),
+            };
+
+            result.push(toReturn);
           });
       });
 
@@ -36,5 +48,9 @@ export const exampleDatabaseCall = (response) => {
               result));
         });
 
+    })
+    .error((error) => {
+      console.error('Major issues abound.');
+      response.end('Unable to connect to database.');
     });
 };
