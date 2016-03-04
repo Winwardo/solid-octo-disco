@@ -3,7 +3,7 @@ var fs = require('fs');
 const webpack = require('webpack');
 const extend = require('extend');
 
-const production = process.env.NODE_ENV === 'production' ? false : true;
+const production = process.env.NODE_ENV === 'production' ? true : false;
 
 //
 // Common configuration chunk to be used for both
@@ -15,17 +15,14 @@ const config = {
       {
         test: /\.js$/,
         loaders: ['babel'],
-        include: path.join(__dirname, 'src'),
+        include: path.join(__dirname, 'src')
       }
-    ],
+    ]
   },
   debug: production,
   resolve: {
-    'extensions': ['', '.js', '.jsx', '.json']
-  },
-  plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-  ],
+    extensions: ['', '.js']
+  }
 }
 
 // Calculate external dependencies for Webpack. Webpack searches for these
@@ -60,7 +57,12 @@ const serverConfig = extend(true, {}, config, {
 // Configuration for the client-side bundle (client.js)
 // -----------------------------------------------------------------------------
 const clientConfig = extend(true, {}, config, {
-  entry: './src/client/index.js' ,
+  entry: production ? './src/client/index.js' : 
+  [
+    'eventsource-polyfill', //necessary evil for hot loading with IE
+    'webpack-hot-middleware/client',
+    './src/client/index.js' 
+  ],
   output: {
     path: path.join(__dirname, 'public'),
     filename: 'bundle.js',
@@ -78,7 +80,11 @@ const clientConfig = extend(true, {}, config, {
         },
       }),
       new webpack.optimize.AggressiveMergingPlugin(),
-    ] : []
+    ] : [
+      new webpack.optimize.OccurenceOrderPlugin(),
+      new webpack.HotModuleReplacementPlugin(),
+      new webpack.NoErrorsPlugin()
+    ]
 });
 
 module.exports = [ serverConfig, clientConfig ];
