@@ -7,5 +7,29 @@
 Team repo.
 
 #### Tools
-* `clean.bat`: Autoformats all code in src and test to the AirBnB code style.
-* `coverage.bat`: Generates a `coverage.html` showing test line coverage.
+* `make clean`: Removes all build and node_module files.
+* `npm install`: Install all the project's dependencies.
+
+* `npm run dev`: Run's nodeman's file watcher on the server side code so don't have to restart server with every change.
+* `npm start`: Run's the built server.
+
+* `npm run lint`: Autoformats all code in src and test to the AirBnB code style.
+
+* `npm test`: Generates a `coverage.html` showing test line coverage for travis to send code coverage to codacity.
+* `npm run test-quick`: Quick runner for local testing.
+
+### Getting Started
+run:
+```
+git clone https://github.com/Winwardo/solid-octo-disco.git
+cd solid-octo-disco
+make clean
+npm install or make bootstrap
+npm build
+npm start
+```
+
+Then for development run `npm run dev` and testing `npm run test-quick`.
+
+### Pushing a change
+Then run `npm run lint` first for autoformatting.

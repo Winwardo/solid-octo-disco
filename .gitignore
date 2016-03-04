@@ -36,3 +36,10 @@ jspm_packages
 public/bundle.js
 .idea/*
 coverage.html
+
+# Folder created by gulp which transpiles es6 server side code to es5
+build
+
+# Database data
+lib/orientdb/databases
+lib/orientdb/log
