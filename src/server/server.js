@@ -1,7 +1,8 @@
 import express from 'express';
-import path from 'path';
 import webpack from 'webpack';
-import clientConfig from '../../webpack.config.js'
+import clientConfig from '../../webpack.config.js';
+import { exampleDatabaseCall } from './tweetfinder';
+import { generateDatabase } from './orientdb';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,8 +22,18 @@ if (!(process.env.NODE_ENV === 'production')){
 //--------------------------------------------------------------------------
 
 app.use('/public', express.static('public'));
+app.use('/semantic', express.static('semantic'));
 
-app.get('*', (req, res) => {
+app.get('/orient/generate', (req, res) => {
+  generateDatabase(res);
+});
+
+app.get('/orient', (req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  exampleDatabaseCall(res);
+});
+
+app.get('/', (req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
 
