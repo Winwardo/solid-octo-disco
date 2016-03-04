@@ -9,11 +9,11 @@ const port = process.env.PORT || 3000;
 app.use('/public', express.static('public'));
 
 app.get('/orient/generate', (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'application/json' });
   generateDatabase(res);
 });
 
 app.get('/orient', (req, response) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
   exampleDatabaseCall(response);
 });
 

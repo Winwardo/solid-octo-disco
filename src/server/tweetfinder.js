@@ -2,6 +2,11 @@ import { db } from './orientdb';
 import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
 import { flattenImmutableObject } from '../shared/utilities';
 
+/**
+ * Grab all tweets from the database, and show them with their authors.
+ * @deprecated
+ * @param response
+ */
 export const exampleDatabaseCall = (response) => {
   db.query('SELECT FROM tweet')
     .then((tweetRecords) => {
@@ -45,7 +50,7 @@ export const exampleDatabaseCall = (response) => {
 
     })
     .error((error) => {
-      console.log('Issues abound');
+      console.error('Major issues abound.');
       response.end('Unable to connect to database.');
     });
 };
