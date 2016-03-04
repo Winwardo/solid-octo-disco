@@ -3,7 +3,10 @@ import React, { Component } from 'react';
 const App = () => {
   return (
 		<div>
-			Template for React :D Vasia Shelkov
+			<h2 className="ui center aligned icon header">
+				<i className="circular users icon"></i>
+  			Socto
+			</h2>
 		</div>
 	);
 };

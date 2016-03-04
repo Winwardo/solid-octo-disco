@@ -3,6 +3,7 @@
 
 var path = require('path');
 var gulp = require('gulp');
+var semanticBuild = require('./semantic/tasks/build');
 var webpack = require('webpack');
 var nodemon = require('nodemon');
 var webpackConfig = require('./webpack.config');
@@ -21,12 +22,19 @@ function onBuild(done) {
   };
 }
 
+gulp.task('build-semantic', semanticBuild);
+
 // Gulp tasks definition begins.
-gulp.task('build', function(done) {
+gulp.task('build', ['build-semantic'], function(done) {
   webpack(webpackConfig).run(onBuild(done));
 });
 
-gulp.task('build-watch', ['build'], function() {
+//for dev so that the build watcher doesn't rebuild semantic every time
+gulp.task('build-quick', function(done) {
+  webpack(webpackConfig).run(onBuild(done));
+});
+
+gulp.task('build-watch', ['build-quick'], function() {
   webpack(webpackConfig).watch(100, function(err, stats) {
     onBuild()(err, stats);
     nodemon.restart();

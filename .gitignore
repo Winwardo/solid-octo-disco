@@ -39,3 +39,6 @@ coverage.html
 
 #Folder created by gulp which transpiles es6 server side code to es5
 build
+
+#Semantic build files that can be recreated used gulp build command
+semantic/dist
