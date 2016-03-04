@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
+import Header from './Header';
 
 const App = () => {
   return (
 		<div>
-			<h2 className="ui center aligned icon header">
-				<i className="circular users icon"></i>
-  			Socto
-			</h2>
+			<Header />
+
+			{/* <Search /> */}
+
+			{/* <Results /> */}
+
+			{/* <Footer /> */}
 		</div>
 	);
 };
