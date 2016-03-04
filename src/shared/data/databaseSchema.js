@@ -7,6 +7,11 @@ const Vertex = 'V';
 
 const None = [];
 
+const EmptyEdge = {
+  'superclass': Edge,
+  'properties': None,
+};
+
 export const schema = {
   'Tweet': {
     'superclass': Vertex,
@@ -21,16 +26,19 @@ export const schema = {
   'Tweeter': {
     'superclass': Vertex,
     'properties': [
+      ['id', Integer]
       ['name', String],
       ['handle', String],
     ],
   },
-  'TWEETED': {
-    'superclass': Edge,
-    'properties': None,
+  'Hashtag': {
+    'superclass': Vertex,
+    'properties': [
+      ['content', String],
+    ],
   },
-  'MENTIONED': {
-    'superclass': Edge,
-    'properties': None,
-  },
+  'TWEETED': EmptyEdge,
+  'FOLLOWS': EmptyEdge,
+  'MENTIONS': EmptyEdge,
+  'HAD_HASHTAG': EmptyEdge,
 };
