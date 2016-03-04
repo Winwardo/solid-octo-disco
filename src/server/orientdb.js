@@ -1,5 +1,5 @@
 import OrientDB from 'orientjs';
-import { schema } from './databaseschema';
+import { schema } from './../shared/data/databaseSchema';
 
 // Credentials should be stored in a hidden config file, or in environment variables.
 // As this is a student project, for simplicity, they will reside here.
@@ -10,7 +10,7 @@ const server = OrientDB({
   password: 'admin',
 });
 
-const DATABASE_NAME = 'footballers3';
+const DATABASE_NAME = 'footballers1';
 
 const makeClass = (db, name, superclass, properties) => {
   db.class.create(name, superclass)
@@ -24,8 +24,9 @@ const makeClass = (db, name, superclass, properties) => {
 };
 
 const makeClasses = (db) => {
-  schema.forEach((clazz) => {
-    makeClass(db, clazz.name, clazz.superclass, clazz.properties);
+  Object.keys(schema).forEach((name) => {
+    const clazz = schema[name];
+    makeClass(db, name, clazz.superclass, clazz.properties);
   });
 };
 
@@ -42,13 +43,13 @@ export const generateDatabase = (res) => {
     if (foundDb === null) {
       server.create(DATABASE_NAME).then((db) => {
         makeClasses(db);
-        res.end('Generated database.');
+        res.end('Generated database and classes.');
       });
     } else {
       makeClasses(foundDb);
-      res.end(`Found: ${foundDb}`);
+      res.end(`Found database, added missing classes.`);
     }
   });
-};;
+};
 
 export const db = server.use(DATABASE_NAME);
