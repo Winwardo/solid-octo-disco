@@ -26,7 +26,7 @@ export const schema = {
   'Tweeter': {
     'superclass': Vertex,
     'properties': [
-      ['id', Integer]
+      ['id', Integer],
       ['name', String],
       ['handle', String],
     ],
@@ -40,5 +40,5 @@ export const schema = {
   'TWEETED': EmptyEdge,
   'FOLLOWS': EmptyEdge,
   'MENTIONS': EmptyEdge,
-  'HAD_HASHTAG': EmptyEdge,
+  'HAS_HASHTAG': EmptyEdge,
 };
