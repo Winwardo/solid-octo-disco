@@ -85,11 +85,15 @@ export const generateDatabase = (res) => {
     if (foundDb === null) {
       SERVER.create(DATABASE_NAME).then((db) => {
         insertClassesFromSchema(db, schema);
-        res.end(JSON.stringify(`Attempted to generate new database ${DATABASE_NAME} with classes.`));
+        res.end(JSON.stringify(
+          `Attempted to generate new database ${DATABASE_NAME} with classes.`
+        ));
       });
     } else {
       insertClassesFromSchema(foundDb, schema);
-      res.end(JSON.stringify(`Found database ${DATABASE_NAME}, attempted to add missing classes.`));
+      res.end(JSON.stringify(
+        `Found database ${DATABASE_NAME}, attempted to add missing classes.`
+      ));
     }
   });
 };

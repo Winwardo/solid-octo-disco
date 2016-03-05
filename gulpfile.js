@@ -26,8 +26,8 @@ gulp.task('build', function(done) {
   webpack(webpackConfig).run(onBuild(done));
 });
 
-gulp.task('build-watch', ['build'], function() {
-  webpack(webpackConfig).watch(100, function(err, stats) {
+gulp.task('build-watch', function() {
+  webpack(webpackConfig[0]).watch(100, function(err, stats) {
     onBuild()(err, stats);
     nodemon.restart();
   });
@@ -39,8 +39,8 @@ gulp.task('run', ['build-watch'], function() {
       js: 'node',
     },
     script: path.join(__dirname, 'build/server'),
-    ignore: ['*'],
-    ext: 'js',
+    ignore: ['/src/client/**/*'],
+    ext: 'js'
   }).on('restart', function() {
     console.log('Reloading Nodemon');
   });

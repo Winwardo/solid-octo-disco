@@ -3,7 +3,7 @@ var fs = require('fs');
 const webpack = require('webpack');
 const extend = require('extend');
 
-const production = process.env.NODE_ENV === 'production' ? false : true;
+const production = process.env.NODE_ENV === 'production';
 
 //
 // Common configuration chunk to be used for both
@@ -14,18 +14,12 @@ const config = {
     loaders: [
       {
         test: /\.js$/,
-        loaders: ['babel'],
-        include: path.join(__dirname, 'src'),
+        loader: 'babel',
+        include: path.join(__dirname, 'src')
       }
-    ],
+    ]
   },
-  debug: production,
-  resolve: {
-    'extensions': ['', '.js', '.jsx', '.json']
-  },
-  plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-  ],
+  debug: !production
 }
 
 // Calculate external dependencies for Webpack. Webpack searches for these
@@ -52,7 +46,9 @@ const serverConfig = extend(true, {}, config, {
     __dirname: true,
     __filename: true,
   },
-  externals: nodeModules,
+  externals: [nodeModules, {
+    '../../webpack.config.js': 'commonjs ' + require.resolve(__filename)
+  }],
   plugins: [],
 });
 
@@ -60,7 +56,13 @@ const serverConfig = extend(true, {}, config, {
 // Configuration for the client-side bundle (client.js)
 // -----------------------------------------------------------------------------
 const clientConfig = extend(true, {}, config, {
-  entry: './src/client/index.js' ,
+  devtool: 'eval',
+  entry: production ? './src/client/index.js' : 
+  [
+    'eventsource-polyfill', //necessary evil for hot loading with IE
+    'webpack-hot-middleware/client',
+    './src/client/index.js' 
+  ],
   output: {
     path: path.join(__dirname, 'public'),
     filename: 'bundle.js',
@@ -78,7 +80,10 @@ const clientConfig = extend(true, {}, config, {
         },
       }),
       new webpack.optimize.AggressiveMergingPlugin(),
-    ] : []
+    ] : [
+      new webpack.optimize.OccurenceOrderPlugin(),
+      new webpack.HotModuleReplacementPlugin()
+    ]
 });
 
 module.exports = [ serverConfig, clientConfig ];
