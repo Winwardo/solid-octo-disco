@@ -5,7 +5,7 @@ const App = () => {
 		<div>
 			<h2 className="ui center aligned icon header">
 				<i className="circular users icon"></i>
-  			Socto
+  			Socto I win at life
 			</h2>
 		</div>
 	);

@@ -46,7 +46,9 @@ const serverConfig = extend(true, {}, config, {
     __dirname: true,
     __filename: true,
   },
-  externals: nodeModules,
+  externals: [nodeModules, {
+    '../../webpack.config.js': 'commonjs ' + require.resolve(__filename)
+  }],
   plugins: [],
 });
 

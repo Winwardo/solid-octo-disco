@@ -12,16 +12,18 @@ if (!(process.env.NODE_ENV === 'production')){
 	const compiler = webpack(config[1]);
 	app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
-	  publicPath: config[1].output.publicPath
-	}));
-
-	app.use(require('webpack-hot-middleware')(compiler, {
-    log: console.log
+    publicPath: config[1].output.publicPath
   }));
+
+	app.use(require('webpack-hot-middleware')(compiler));
 }
 //--------------------------------------------------------------------------
 
 app.use('/public', express.static('public'));
+
+app.get('/', (req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
 
 app.get('/orient/generate', (req, res) => {
   generateDatabase(res);
@@ -32,9 +34,6 @@ app.get('/orient', (req, res) => {
   exampleDatabaseCall(res);
 });
 
-app.get('/', (req, res) => {
-  res.sendFile('index.html', { root: 'public' });
-});
 
 // Listen on port 3000, IP defaults to 127.0.0.1 (localhost)
 app.listen(port, (err) => {
@@ -43,5 +42,5 @@ app.listen(port, (err) => {
     return;
   }
 
-  console.log('Server running at http://localhost: ' + port);
+  console.log('Server running at http://localhost:' + port);
 });
