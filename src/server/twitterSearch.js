@@ -42,7 +42,7 @@ const buildTweeterFromRaw = (rawTweeter) => {
     .name(rawTweeter.name)
     .handle(rawTweeter.screen_name)
     .build();
-}
+};
 
 /**
  * Given some raw status we know is a retweet, insert it and add a RETWEETED link.
