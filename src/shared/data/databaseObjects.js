@@ -29,3 +29,4 @@ const generateBuilder = (name) => {
 
 export const TweetBuilder = generateBuilder('Tweet');
 export const TweeterBuilder = generateBuilder('Tweeter');
+export const HashtagBuilder = generateBuilder('Hashtag');

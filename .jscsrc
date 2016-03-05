@@ -8,6 +8,7 @@
 
   "excludeFiles": [
     "test/data/**",
-    "build"
+    "build",
+    "**/exampleSearch.js"
   ]
 }
