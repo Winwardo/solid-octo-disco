@@ -1,4 +1,6 @@
 import express from 'express';
+import webpack from 'webpack';
+import config from '../../webpack.config.js';
 import { exampleDatabaseCall } from './tweetFinder';
 import { generateDatabase } from './orientdb';
 import { searchAndSave } from './twitterSearch';
@@ -6,8 +8,24 @@ import { searchAndSave } from './twitterSearch';
 const app = express();
 const port = process.env.PORT || 3000;
 
+//In development hotload React using webpack-hot-middleware
+if (!(process.env.NODE_ENV === 'production')) {
+  const compiler = webpack(config[1]);
+  app.use(require('webpack-dev-middleware')(compiler, {
+    noInfo: true,
+    publicPath: config[1].output.publicPath,
+  }));
+
+  app.use(require('webpack-hot-middleware')(compiler));
+}
+
+//--------------------------------------------------------------------------
+
 app.use('/public', express.static('public'));
-app.use('/semantic', express.static('semantic'));
+
+app.get('/', (req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
 
 app.get('/orient/generate', (req, res) => {
   generateDatabase(res);
@@ -23,10 +41,6 @@ app.get('/twit/:query', (req, res) => {
   searchAndSave(res, req.params.query);
 });
 
-app.get('/', (req, res) => {
-  res.sendFile('index.html', { root: 'public' });
-});
-
 // Listen on port 3000, IP defaults to 127.0.0.1 (localhost)
 app.listen(port, (err) => {
   if (err) {
@@ -34,5 +48,5 @@ app.listen(port, (err) => {
     return;
   }
 
-  console.log('Server running at http://localhost: ' + port);
+  console.log('Server running at http://localhost:' + port);
 });
