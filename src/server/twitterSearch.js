@@ -35,9 +35,9 @@ const buildTweeterFromRaw = (rawTweeter) => {
 
 const chainPromises = (callback) => {
   return new Promise((resolve) => {
-      resolve(callback());
+    resolve(callback());
   });
-}
+};
 
 function processRawRetweet(db, retweetRaw, retweeter) {
   const originalTweeter = buildTweeterFromRaw(retweetRaw.user);
@@ -45,7 +45,7 @@ function processRawRetweet(db, retweetRaw, retweeter) {
 
   // If this is a retweet, process the original tweet,
   // then make this user point at it.
-  return Promise.resolve(() => {
+  return chainPromises(() => {
     return upsertTweeter(db, retweeter);
   }).then(() => {
     return processRawOriginalTweet(db, retweetRaw, originalTweeter);
@@ -56,13 +56,14 @@ function processRawRetweet(db, retweetRaw, retweeter) {
 
 function processRawOriginalTweet(db, tweetRaw, originalTweeter) {
   const tweet = buildTweetFromRaw(tweetRaw);
+
   //console.log('Tweet built.');
   //console.log('tweet.content():', tweet.content());
   //console.log('originalTweeter.name():', originalTweeter.name());
 
   return chainPromises(() => {
-      //console.log('Upsert Tweet:', tweet.content());
-      return upsertTweet(db, tweet);
+    //console.log('Upsert Tweet:', tweet.content());
+    return upsertTweet(db, tweet);
   }).then(() => {
     //console.log('Upsert Tweeter:', originalTweeter.handle());
     return upsertTweeter(db, originalTweeter);
@@ -71,7 +72,7 @@ function processRawOriginalTweet(db, tweetRaw, originalTweeter) {
     return linkTweeterToTweet(db, originalTweeter, tweet);
   })
     .then(() => {
-    return Promise.all(
+      return Promise.all(
       tweetRaw.entities.hashtags.map((hashtagRaw) => {
         const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
         return upsertHashtag(db, hashtag).then((result) => {
@@ -79,8 +80,8 @@ function processRawOriginalTweet(db, tweetRaw, originalTweeter) {
         });
       })
     );
-  }).then(() => {
-    return Promise.all(
+    }).then(() => {
+      return Promise.all(
       tweetRaw.entities.user_mentions.map((mentionRaw) => {
         const mentionedTweeter = buildTweeterFromRaw(mentionRaw);
         return upsertTweeter(db, mentionedTweeter).then((result) => {
@@ -88,7 +89,7 @@ function processRawOriginalTweet(db, tweetRaw, originalTweeter) {
         });
       })
     );
-  });
+    });
 }
 
 /**
@@ -103,7 +104,7 @@ const processTweet = (db, tweetRaw) => {
   const tweeter = buildTweeterFromRaw(tweetRaw.user);
   const retweetedStatusRaw = tweetRaw['retweeted_status'];
 
-  if (false && retweetedStatusRaw !== undefined) {
+  if (retweetedStatusRaw !== undefined) {
     return processRawRetweet(db, retweetedStatusRaw, tweeter);
   } else {
     console.log('Process original tweet.');
@@ -117,7 +118,7 @@ const processTweet = (db, tweetRaw) => {
  * @param query Query to search twitter
  */
 export const searchAndSave = (res, query) => {
-  T.get('search/tweets', { 'q': query, 'count': 1 }, function (err, result, response) {
+  T.get('search/tweets', { 'q': query, 'count': 20 }, function (err, result, response) {
     Promise.all(
       result.statuses.map((tweetRaw) => {
         return processTweet(db, tweetRaw);
