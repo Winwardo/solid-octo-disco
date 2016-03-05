@@ -2,8 +2,9 @@ const Twit = require('twit');
 const moment = require('moment');
 import { exampleSearch } from './exampleSearch';
 import { db } from './orientdb';
-import * as Builders from '../shared/data/databaseObjects';
 import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweetToTweeterViaMention, upsertHashtag, upsertTweet, upsertTweeter } from '../shared/data/databaseInsertActions';
+import * as Builders from '../shared/data/databaseObjects';
+import { chainPromises } from '../shared/utilities';
 
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
@@ -15,6 +16,11 @@ var T = new Twit({
   'timeout_ms':           60 * 1000,  // optional HTTP request timeout to apply to all requests.
 });
 
+/**
+ * Convert some raw status from the Twitter API into a proper immutable Tweet object.
+ * @param rawTweet From the Twitter API.
+ * @returns {ImmutableTweet}
+ */
 const buildTweetFromRaw = (rawTweet) => {
   return Builders.TweetBuilder()
     .id(rawTweet.id)
@@ -25,26 +31,30 @@ const buildTweetFromRaw = (rawTweet) => {
     .build();
 };
 
+/**
+ * Convert some raw user from the Twitter API into a proper immutable Tweeter object.
+ * @param rawTweeter From the Twitter API.
+ * @returns {ImmutableTweet}
+ */
 const buildTweeterFromRaw = (rawTweeter) => {
   return Builders.TweeterBuilder()
     .id(rawTweeter.id)
     .name(rawTweeter.name)
     .handle(rawTweeter.screen_name)
     .build();
-};
+}
 
-const chainPromises = (callback) => {
-  return new Promise((resolve) => {
-    resolve(callback());
-  });
-};
-
+/**
+ * Given some raw status we know is a retweet, insert it and add a RETWEETED link.
+ * @param db The OrientDB instance
+ * @param retweetRaw A raw status from the Twitter API
+ * @param retweeter An immutable Tweeter object
+ * @returns {Promise}
+ */
 function processRawRetweet(db, retweetRaw, retweeter) {
   const originalTweeter = buildTweeterFromRaw(retweetRaw.user);
   const originalTweet = buildTweeterFromRaw(retweetRaw);
 
-  // If this is a retweet, process the original tweet,
-  // then make this user point at it.
   return chainPromises(() => {
     return upsertTweeter(db, retweeter);
   }).then(() => {
@@ -54,25 +64,25 @@ function processRawRetweet(db, retweetRaw, retweeter) {
   });
 }
 
+/**
+ * Given a raw status we know is not a retweet, insert it and upsert the user.
+ * @param db The OrientDB instance
+ * @param tweetRaw A raw status from the Twitter API
+ * @param originalTweeter An immutable Tweeter object
+ * @returns {Promise}
+ */
 function processRawOriginalTweet(db, tweetRaw, originalTweeter) {
   const tweet = buildTweetFromRaw(tweetRaw);
 
-  //console.log('Tweet built.');
-  //console.log('tweet.content():', tweet.content());
-  //console.log('originalTweeter.name():', originalTweeter.name());
-
   return chainPromises(() => {
-    //console.log('Upsert Tweet:', tweet.content());
     return upsertTweet(db, tweet);
   }).then(() => {
-    //console.log('Upsert Tweeter:', originalTweeter.handle());
     return upsertTweeter(db, originalTweeter);
   }).then(() => {
-    //console.log('Link Tweeter to Tweet:', originalTweeter.id(), tweet.id());
     return linkTweeterToTweet(db, originalTweeter, tweet);
   })
-    .then(() => {
-      return Promise.all(
+  .then(() => {
+    return Promise.all(
       tweetRaw.entities.hashtags.map((hashtagRaw) => {
         const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
         return upsertHashtag(db, hashtag).then((result) => {
@@ -80,8 +90,8 @@ function processRawOriginalTweet(db, tweetRaw, originalTweeter) {
         });
       })
     );
-    }).then(() => {
-      return Promise.all(
+  }).then(() => {
+    return Promise.all(
       tweetRaw.entities.user_mentions.map((mentionRaw) => {
         const mentionedTweeter = buildTweeterFromRaw(mentionRaw);
         return upsertTweeter(db, mentionedTweeter).then((result) => {
@@ -89,7 +99,7 @@ function processRawOriginalTweet(db, tweetRaw, originalTweeter) {
         });
       })
     );
-    });
+  });
 }
 
 /**
