@@ -1,28 +1,27 @@
 import express from 'express';
 import webpack from 'webpack';
-import clientConfig from '../../webpack.config.js';
+import config from '../../webpack.config.js';
 import { exampleDatabaseCall } from './tweetfinder';
 import { generateDatabase } from './orientdb';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-console.log(clientConfig[1]);
 //In development hotload React using webpack-hot-middleware
 if (!(process.env.NODE_ENV === 'production')){
-	const compiler = webpack(clientConfig[1]);
-
+	const compiler = webpack(config[1]);
 	app.use(require('webpack-dev-middleware')(compiler, {
-	  noInfo: true,
-	  publicPath: clientConfig[1].output.publicPath
+    noInfo: true,
+	  publicPath: config[1].output.publicPath
 	}));
 
-	app.use(require('webpack-hot-middleware')(compiler));
+	app.use(require('webpack-hot-middleware')(compiler, {
+    log: console.log
+  }));
 }
 //--------------------------------------------------------------------------
 
 app.use('/public', express.static('public'));
-app.use('/semantic', express.static('semantic'));
 
 app.get('/orient/generate', (req, res) => {
   generateDatabase(res);

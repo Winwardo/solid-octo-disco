@@ -14,15 +14,12 @@ const config = {
     loaders: [
       {
         test: /\.js$/,
-        loaders: ['babel'],
+        loader: 'babel',
         include: path.join(__dirname, 'src')
       }
     ]
   },
-  debug: production,
-  resolve: {
-    extensions: ['', '.js']
-  }
+  debug: !production
 }
 
 // Calculate external dependencies for Webpack. Webpack searches for these
@@ -57,6 +54,7 @@ const serverConfig = extend(true, {}, config, {
 // Configuration for the client-side bundle (client.js)
 // -----------------------------------------------------------------------------
 const clientConfig = extend(true, {}, config, {
+  devtool: 'eval',
   entry: production ? './src/client/index.js' : 
   [
     'eventsource-polyfill', //necessary evil for hot loading with IE
