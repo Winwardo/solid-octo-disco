@@ -82,8 +82,7 @@ const clientConfig = extend(true, {}, config, {
       new webpack.optimize.AggressiveMergingPlugin(),
     ] : [
       new webpack.optimize.OccurenceOrderPlugin(),
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoErrorsPlugin()
+      new webpack.HotModuleReplacementPlugin()
     ]
 });
 
