@@ -62,46 +62,62 @@ const linkTweetToHashtag = (db, tweet, hashtag) => {
     });
 };
 
-export const test = (res) => {
-  //T.get('search/tweets', { q: 'liverpool', count: 100 }, function (err, data, response) {
-  //  console.log(data);
-  //  res.end(JSON.stringify(data));
-  //});
-  let count = 0;
-  exampleSearch.statuses.forEach((tweetRaw) => {
-    const userRaw = tweetRaw.user;
+const linkTweetToTweeterViaMention = (db, tweet, mentionedTweeter) => {
+  return db.query(
+    'CREATE EDGE MENTIONS FROM (SELECT FROM tweet WHERE id = :tweetId) TO (SELECT FROM tweeter WHERE id = :mentionedTweeterId)',
+    {
+      'params': {
+        'tweetId': tweet.id(),
+        'mentionedTweeterId': mentionedTweeter.id(),
+      },
+    });
+};
 
-    const tweet = Builders.TweetBuilder()
-      .id(tweetRaw.id)
-      .content(tweetRaw.text)
-      .date(moment(new Date(tweetRaw.created_at)).format('YYYY-MM-DD HH:mm:ss'))
-      .likes(tweetRaw.favourite_count || 0)
-      .retweets(tweetRaw.retweet_count || 0)
-      .build();
+const makeTweeterFromRaw = (raw) => {
+  return Builders.TweeterBuilder()
+    .id(raw.id)
+    .name(raw.name)
+    .handle(raw.screen_name)
+    .build();
+};
 
-    const tweeter = Builders.TweeterBuilder()
-      .id(userRaw.id)
-      .name(userRaw.name)
-      .handle(userRaw.screen_name)
-      .build();
+export const searchAndSave = (res, query) => {
+  T.get('search/tweets', { 'q': query, count: 300 }, function (err, result, response) {
+    let count = 0;
+    result.statuses.forEach((tweetRaw) => {
+      const userRaw = tweetRaw.user;
 
-    upsertTweeter(db, tweeter)
-        .then((result) => {
-          upsertTweet(db, tweet)
-            .then((result) => {
-              linkTweeterToTweet(db, tweeter, tweet);
-            });
+      const tweet = Builders.TweetBuilder()
+        .id(tweetRaw.id)
+        .content(tweetRaw.text)
+        .date(moment(new Date(tweetRaw.created_at)).format('YYYY-MM-DD HH:mm:ss'))
+        .likes(tweetRaw.favourite_count || 0)
+        .retweets(tweetRaw.retweet_count || 0)
+        .build();
+
+      const tweeter = makeTweeterFromRaw(userRaw);
+
+      upsertTweeter(db, tweeter).then((result) => {
+        upsertTweet(db, tweet).then((result) => {
+          linkTweeterToTweet(db, tweeter, tweet);
         });
+      });
 
-    tweetRaw.entities.hashtags.forEach((hashtagRaw) => {
-      const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
-      upsertHashtag(db, hashtag).then((result) => {
-        linkTweetToHashtag(db, tweet, hashtag);
+      tweetRaw.entities.hashtags.forEach((hashtagRaw) => {
+        const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
+        upsertHashtag(db, hashtag).then((result) => {
+          linkTweetToHashtag(db, tweet, hashtag);
+        });
+      });
+
+      tweetRaw.entities.user_mentions.forEach((mentionRaw) => {
+        const mentionedTweeter = makeTweeterFromRaw(mentionRaw);
+        upsertTweeter(db, mentionedTweeter).then((result) => {
+          linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
+        });
       });
     });
+
+    res.end(JSON.stringify(result));
   });
-
-  res.end(JSON.stringify(exampleSearch));
-
-  //});
 };

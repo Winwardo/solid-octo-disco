@@ -17,7 +17,7 @@ export const schema = {
     'superclass': Vertex,
     'properties': [
       ['id', Integer],
-      ['content', String],
+      ['content', String, true],
       ['date', Datetime],
       ['likes', Integer],
       ['retweets', Integer],
@@ -27,14 +27,14 @@ export const schema = {
     'superclass': Vertex,
     'properties': [
       ['id', Integer],
-      ['name', String],
+      ['name', String, true],
       ['handle', String],
     ],
   },
   'Hashtag': {
     'superclass': Vertex,
     'properties': [
-      ['content', String],
+      ['content', String, true],
     ],
   },
   'TWEETED': EmptyEdge,

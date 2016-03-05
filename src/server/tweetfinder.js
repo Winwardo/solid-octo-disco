@@ -8,7 +8,7 @@ import { flattenImmutableObject } from '../shared/utilities';
  * @param response
  */
 export const exampleDatabaseCall = (response) => {
-  db.query('SELECT FROM tweet')
+  db.query('SELECT FROM tweet LIMIT 20')
     .then((tweetRecords) => {
       const result = [];
 

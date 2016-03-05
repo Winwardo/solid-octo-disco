@@ -26,25 +26,26 @@ const insertClass = (db, name, superclass, properties) => {
       return { 'name': input[0], 'type': input[1], 'mandatory': true };
     });
 
-    clazz.property.create(transformedProperties);
+    // Add the properties to the class
+    clazz.property.create(transformedProperties).then(() => {
+      properties.forEach((input) => {
+        // Add Lucene fulltext indexes to some properties
+        if (input.length >= 3) {
+          db.index.create({
+            'name': `${name}.${input[0]}`,
+            'type': 'FULLTEXT',
+            'engine': 'LUCENE',
+          });
+        };
+      });
+    });
 
-    console.log('made properties');
     if (superclass === 'E') {
-      console.log('found edge');
       clazz.property.create([
         { 'name': 'out', 'type': 'LINK' },
         { 'name': 'in', 'type': 'LINK' },
       ]).then(() => {
-        const a = `${name}.in_out`;
-        console.log('making unique index', a);
-
-        db.execute(`CREATE INDEX unique_${name} ON ${name} (in, out) UNIQUE;`)
-        .then((r) => {
-          console.log('made index');
-        }).error((e) => {
-          console.log('did not make index');
-          console.log(e);
-        });
+        db.execute(`CREATE INDEX unique_${name} ON ${name} (in, out) UNIQUE;`);
       });
     }
 
