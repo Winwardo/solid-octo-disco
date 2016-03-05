@@ -37,12 +37,12 @@ const processTweet = (tweetRaw, isRetweet = false) => {
   const tweeter = makeTweeterFromRaw(tweetRaw.user);
   const retweetedStatusRaw = tweetRaw.retweeted_status;
 
-  //const upsertedTweeterPromise = ;
+  const upsertedTweeterPromise = upsertTweeter(db, tweeter);
 
   if (retweetedStatusRaw !== undefined) {
     // If this is a retweet, process the original tweet,
     // then make this user point at it.
-    return upsertTweeter(db, tweeter)
+    return upsertedTweeterPromise
       .then(() => {
         return processTweet(retweetedStatusRaw, true);
       })
@@ -58,12 +58,13 @@ const processTweet = (tweetRaw, isRetweet = false) => {
       .retweets(tweetRaw.retweet_count || 0)
       .build();
 
-    return upsertTweeter(db, tweeter).then((result) => {
-      return upsertTweet(db, tweet);
-    }).then(() => {
-      return linkTweeterToTweet(db, tweeter, tweet);
-    }).then(() => {
-      return Promise.all(
+    return upsertedTweeterPromise
+      .then((result) => {
+        return upsertTweet(db, tweet);
+      }).then(() => {
+        return linkTweeterToTweet(db, tweeter, tweet);
+      }).then(() => {
+        return Promise.all(
         tweetRaw.entities.hashtags.map((hashtagRaw) => {
           const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
           return upsertHashtag(db, hashtag).then((result) => {
@@ -71,8 +72,8 @@ const processTweet = (tweetRaw, isRetweet = false) => {
           });
         })
       );
-    }).then(() => {
-      return Promise.all(
+      }).then(() => {
+        return Promise.all(
         tweetRaw.entities.user_mentions.map((mentionRaw) => {
           const mentionedTweeter = makeTweeterFromRaw(mentionRaw);
           return upsertTweeter(db, mentionedTweeter).then((result) => {
@@ -80,7 +81,7 @@ const processTweet = (tweetRaw, isRetweet = false) => {
           });
         })
       );
-    });
+      });
   }
 };
 

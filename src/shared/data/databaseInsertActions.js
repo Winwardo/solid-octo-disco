@@ -8,18 +8,14 @@ export const upsertTweeter = (db, tweeter) => {
   return runQueryOnImmutableObject(
     db,
     'UPDATE tweeter SET id=:id, name=:name, handle=:handle UPSERT WHERE id=:id',
-    tweeter).then((r) => {
-      console.log(`upserted tweeter: ${tweeter.id()}`);
-    });
+    tweeter);
 };
 
 export const upsertTweet = (db, tweet) => {
   return runQueryOnImmutableObject(
     db,
     'UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets UPSERT WHERE id=:id',
-    tweet).then((r) => {
-    console.log(`upserted tweet: ${tweet.id()}`);
-  });
+    tweet);
 };
 
 export const upsertHashtag = (db, hashtag) => {
@@ -41,7 +37,6 @@ export const linkTweeterToTweet = (db, tweeter, tweet) => {
 };
 
 export const linkTweeterToRetweet = (db, tweeter, tweet) => {
-  //console.log(`tweeter: ${tweeter.id()} RETWEETED tweet: ${tweet.id()}`);
   return db.query(
     'CREATE EDGE RETWEETED FROM (SELECT FROM tweeter WHERE id = :tweeterId) TO (SELECT FROM tweet WHERE id = :tweetId)',
     {
@@ -49,8 +44,6 @@ export const linkTweeterToRetweet = (db, tweeter, tweet) => {
         'tweetId': tweet.id(),
         'tweeterId': tweeter.id(),
       },
-    }).error((e) => {
-      console.log(`failed on tweeter: ${tweeter.id()} RETWEETED tweet: ${tweet.id()}`);
     });
 };
 
