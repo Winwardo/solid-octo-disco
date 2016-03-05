@@ -127,7 +127,7 @@ function processRawOriginalTweet(db, rawTweet, originalTweeter) {
  */
 const processTweet = (db, rawTweet) => {
   const tweeter = buildTweeterFromRaw(rawTweet.user);
-  const rawRetweetedStatus = rawTweet['retweeted_status'];
+  const rawRetweetedStatus = rawTweet.retweeted_status;
 
   if (rawRetweetedStatus !== undefined) {
     return processRawRetweet(db, rawRetweetedStatus, tweeter);
