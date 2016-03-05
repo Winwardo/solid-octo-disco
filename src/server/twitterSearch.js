@@ -82,7 +82,7 @@ const processTweet = (tweetRaw, isRetweet = false) => {
           })
         );
       });
-  }
+  };
 };
 
 export const searchAndSave = (res, query) => {
