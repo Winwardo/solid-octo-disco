@@ -47,18 +47,18 @@ const buildTweeterFromRaw = (rawTweeter) => {
 /**
  * Given some raw status we know is a retweet, insert it and add a RETWEETED link.
  * @param db The OrientDB instance
- * @param retweetRaw A raw status from the Twitter API
+ * @param rawRetweet A raw status from the Twitter API
  * @param retweeter An immutable Tweeter object
  * @returns {Promise}
  */
-function processRawRetweet(db, retweetRaw, retweeter) {
-  const originalTweeter = buildTweeterFromRaw(retweetRaw.user);
-  const originalTweet = buildTweeterFromRaw(retweetRaw);
+function processRawRetweet(db, rawRetweet, retweeter) {
+  const originalTweeter = buildTweeterFromRaw(rawRetweet.user);
+  const originalTweet = buildTweeterFromRaw(rawRetweet);
 
   return chainPromises(() => {
     return upsertTweeter(db, retweeter);
   }).then(() => {
-    return processRawOriginalTweet(db, retweetRaw, originalTweeter);
+    return processRawOriginalTweet(db, rawRetweet, originalTweeter);
   }).then(() => {
     return linkTweeterToRetweet(db, retweeter, originalTweet);
   });
@@ -73,8 +73,8 @@ function processRawRetweet(db, retweetRaw, retweeter) {
  */
 const linkTweetToHashtags = (db, rawHashtags, tweet) => {
   return Promise.all(
-    rawHashtags.map((hashtagRaw) => {
-      const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
+    rawHashtags.map((rawHashtag) => {
+      const hashtag = Builders.HashtagBuilder().content(rawHashtag.text.toLowerCase()).build();
       return upsertHashtag(db, hashtag).then((result) => {
         return linkTweetToHashtag(db, tweet, hashtag);
       });
@@ -84,8 +84,8 @@ const linkTweetToHashtags = (db, rawHashtags, tweet) => {
 
 const linkTweetToMentions = (db, rawMentions, tweet) => {
   return Promise.all(
-    rawMentions.map((mentionRaw) => {
-      const mentionedTweeter = buildTweeterFromRaw(mentionRaw);
+    rawMentions.map((rawMention) => {
+      const mentionedTweeter = buildTweeterFromRaw(rawMention);
       return upsertTweeter(db, mentionedTweeter).then((result) => {
         return linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
       });
@@ -95,14 +95,14 @@ const linkTweetToMentions = (db, rawMentions, tweet) => {
 /**
  * Given a raw status we know is not a retweet, insert it and upsert the user.
  * @param db The OrientDB instance
- * @param tweetRaw A raw status from the Twitter API
+ * @param rawTweet A raw status from the Twitter API
  * @param originalTweeter An immutable Tweeter object
  * @returns {Promise}
  */
-function processRawOriginalTweet(db, tweetRaw, originalTweeter) {
-  const tweet = buildTweetFromRaw(tweetRaw);
-  const rawHashtags = tweetRaw.entities.hashtags;
-  const rawMentions = tweetRaw.entities.hashtags;
+function processRawOriginalTweet(db, rawTweet, originalTweeter) {
+  const tweet = buildTweetFromRaw(rawTweet);
+  const rawHashtags = rawTweet.entities.hashtags;
+  const rawMentions = rawTweet.entities.hashtags;
 
   return chainPromises(() => {
     return upsertTweet(db, tweet);
@@ -122,18 +122,18 @@ function processRawOriginalTweet(db, tweetRaw, originalTweeter) {
  * if it was a retweet, etc, and store all information in
  * the database.
  * @param db The OrientDB instance
- * @param tweetRaw The original status object from the Twitter API
+ * @param rawTweet The original status object from the Twitter API
  * @returns {Promise.<T>}
  */
-const processTweet = (db, tweetRaw) => {
-  const tweeter = buildTweeterFromRaw(tweetRaw.user);
-  const retweetedStatusRaw = tweetRaw['retweeted_status'];
+const processTweet = (db, rawTweet) => {
+  const tweeter = buildTweeterFromRaw(rawTweet.user);
+  const rawRetweetedStatus = rawTweet['retweeted_status'];
 
-  if (retweetedStatusRaw !== undefined) {
-    return processRawRetweet(db, retweetedStatusRaw, tweeter);
+  if (rawRetweetedStatus !== undefined) {
+    return processRawRetweet(db, rawRetweetedStatus, tweeter);
   } else {
     console.log('Process original tweet.');
-    return processRawOriginalTweet(db, tweetRaw, tweeter);
+    return processRawOriginalTweet(db, rawTweet, tweeter);
   };
 };
 
@@ -145,8 +145,8 @@ const processTweet = (db, tweetRaw) => {
 export const searchAndSave = (res, query) => {
   T.get('search/tweets', { 'q': query, 'count': 20 }, function (err, result, response) {
     Promise.all(
-      result.statuses.map((tweetRaw) => {
-        return processTweet(db, tweetRaw);
+      result.statuses.map((rawTweet) => {
+        return processTweet(db, rawTweet);
       })
     ).then(() => {
       res.end(JSON.stringify(result));
