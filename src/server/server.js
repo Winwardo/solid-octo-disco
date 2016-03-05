@@ -20,7 +20,7 @@ app.get('/orient', (req, res) => {
 
 app.get('/twit/:query', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
-  searchAndSave(res, q.params.query);
+  searchAndSave(res, req.params.query);
 });
 
 app.get('/', (req, res) => {
