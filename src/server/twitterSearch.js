@@ -65,34 +65,35 @@ const processTweet = (tweetRaw, isRetweet = false) => {
         return linkTweeterToTweet(db, tweeter, tweet);
       }).then(() => {
         return Promise.all(
-        tweetRaw.entities.hashtags.map((hashtagRaw) => {
-          const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
-          return upsertHashtag(db, hashtag).then((result) => {
-            return linkTweetToHashtag(db, tweet, hashtag);
-          });
-        })
-      );
+          tweetRaw.entities.hashtags.map((hashtagRaw) => {
+            const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
+            return upsertHashtag(db, hashtag).then((result) => {
+              return linkTweetToHashtag(db, tweet, hashtag);
+            });
+          })
+        );
       }).then(() => {
         return Promise.all(
-        tweetRaw.entities.user_mentions.map((mentionRaw) => {
-          const mentionedTweeter = makeTweeterFromRaw(mentionRaw);
-          return upsertTweeter(db, mentionedTweeter).then((result) => {
-            return linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
-          });
-        })
-      );
+          tweetRaw.entities.user_mentions.map((mentionRaw) => {
+            const mentionedTweeter = makeTweeterFromRaw(mentionRaw);
+            return upsertTweeter(db, mentionedTweeter).then((result) => {
+              return linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
+            });
+          })
+        );
       });
   }
 };
 
 export const searchAndSave = (res, query) => {
-  T.get('search/tweets', { 'q': query, 'count': 15 }, function (err, result, response) {
-    let count = 0;
-    result.statuses.forEach((tweetRaw) => {
-      processTweet(tweetRaw);
+  T.get('search/tweets', { 'q': query, 'count': 1000 }, function (err, result, response) {
+    Promise.all(
+      result.statuses.map((tweetRaw) => {
+        return processTweet(tweetRaw);
+      })
+    ).then(() => {
+      res.end(JSON.stringify(result));
     });
-
-    res.end(JSON.stringify(result));
   });
 };
 
