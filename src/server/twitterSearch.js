@@ -35,7 +35,7 @@ const makeTweeterFromRaw = (raw) => {
 
 const processTweet = (tweetRaw, isRetweet = false) => {
   const tweeter = makeTweeterFromRaw(tweetRaw.user);
-  const retweetedStatusRaw = tweetRaw.retweeted_status;
+  const retweetedStatusRaw = tweetRaw['retweeted_status'];
 
   const upsertedTweeterPromise = upsertTweeter(db, tweeter);
 
@@ -53,9 +53,9 @@ const processTweet = (tweetRaw, isRetweet = false) => {
     const tweet = Builders.TweetBuilder()
       .id(tweetRaw.id)
       .content(tweetRaw.text)
-      .date(moment(new Date(tweetRaw.created_at)).format('YYYY-MM-DD HH:mm:ss'))
-      .likes(tweetRaw.favourite_count || 0)
-      .retweets(tweetRaw.retweet_count || 0)
+      .date(moment(new Date(tweetRaw['created_at'])).format('YYYY-MM-DD HH:mm:ss'))
+      .likes(tweetRaw['favourite_count'] || 0)
+      .retweets(tweetRaw['retweet_count'] || 0)
       .build();
 
     return upsertedTweeterPromise
@@ -103,8 +103,7 @@ export const stream = (req, res) => {
   stream.on('tweet', (tweet) => {
     processTweet(tweet);
     console.log(tweet.text);
-    res.write(`${tweet.text}
-`);
+    res.write(`${tweet.text}`);
   });
 
   setTimeout(() => {
