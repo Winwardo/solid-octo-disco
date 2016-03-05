@@ -50,13 +50,13 @@ const processTweet = (db, tweetRaw) => {
   if (retweetedStatusRaw !== undefined) {
     // If this is a retweet, process the original tweet,
     // then make this user point at it.
-    return upsertedTweeterPromise
-      .then(() => {
-        return processTweet(db, retweetedStatusRaw);
-      })
-      .then(() => {
-        return linkTweeterToRetweet(db, tweeter, makeTweetFromRaw(retweetedStatusRaw));
-      });
+    return Promise.resolve(() => {
+      return upsertedTweeterPromise;
+    }).then(() => {
+      return processTweet(db, retweetedStatusRaw);
+    }).then(() => {
+      return linkTweeterToRetweet(db, tweeter, makeTweetFromRaw(retweetedStatusRaw));
+    });
 
   } else {
     const tweet = Builders.TweetBuilder()
@@ -67,32 +67,31 @@ const processTweet = (db, tweetRaw) => {
       .retweets(tweetRaw['retweet_count'] || 0)
       .build();
 
-    return upsertedTweeterPromise
-      .then(() => {
-        return upsertTweet(db, tweet);
-      }).then(() => {
-        return linkTweeterToTweet(db, tweeter, tweet);
-      }).then(() => {
-        return Promise.all(
-          tweetRaw.entities.hashtags.map((hashtagRaw) => {
-            const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
-            return upsertHashtag(db, hashtag).then((result) => {
-              return linkTweetToHashtag(db, tweet, hashtag);
-            });
-          })
-        );
-      }).then(() => {
-        return Promise.all(
-          tweetRaw.entities.user_mentions.map((mentionRaw) => {
-            const mentionedTweeter = makeTweeterFromRaw(mentionRaw);
-            return upsertTweeter(db, mentionedTweeter).then((result) => {
-              return linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
-            });
-          })
-        );
-      }).catch((e) => {
-        console.log('ERROR', e);
-      });
+    return Promise.resolve(() => {
+      return upsertedTweeterPromise;
+    }).then(() => {
+      return upsertTweet(db, tweet);
+    }).then(() => {
+      return linkTweeterToTweet(db, tweeter, tweet);
+    }).then(() => {
+      return Promise.all(
+        tweetRaw.entities.hashtags.map((hashtagRaw) => {
+          const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
+          return upsertHashtag(db, hashtag).then((result) => {
+            return linkTweetToHashtag(db, tweet, hashtag);
+          });
+        })
+      );
+    }).then(() => {
+      return Promise.all(
+        tweetRaw.entities.user_mentions.map((mentionRaw) => {
+          const mentionedTweeter = makeTweeterFromRaw(mentionRaw);
+          return upsertTweeter(db, mentionedTweeter).then((result) => {
+            return linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
+          });
+        })
+      );
+    });
   };
 };
 
