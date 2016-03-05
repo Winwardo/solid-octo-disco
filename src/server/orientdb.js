@@ -26,7 +26,29 @@ const insertClass = (db, name, superclass, properties) => {
       return { 'name': input[0], 'type': input[1], 'mandatory': true };
     });
 
-    clazz.property.create(transformedProperties);
+    // Add the properties to the class
+    clazz.property.create(transformedProperties).then(() => {
+      properties.forEach((input) => {
+        // Add Lucene fulltext indexes to some properties
+        if (input.length >= 3) {
+          db.index.create({
+            'name': `${name}.${input[0]}`,
+            'type': 'FULLTEXT',
+            'engine': 'LUCENE',
+          });
+        };
+      });
+    });
+
+    if (superclass === 'E') {
+      clazz.property.create([
+        { 'name': 'out', 'type': 'LINK' },
+        { 'name': 'in', 'type': 'LINK' },
+      ]).then(() => {
+        db.execute(`CREATE INDEX unique_${name} ON ${name} (in, out) UNIQUE;`);
+      });
+    }
+
   });
 };
 
