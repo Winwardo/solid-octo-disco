@@ -1,5 +1,5 @@
 import express from 'express';
-import { exampleDatabaseCall } from './tweetfinder';
+import { exampleDatabaseCall } from './tweetfinder1';
 import { generateDatabase } from './orientdb';
 import { searchAndSave } from './twitterSearch';
 
