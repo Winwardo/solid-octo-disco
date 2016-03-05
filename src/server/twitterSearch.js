@@ -33,7 +33,15 @@ const makeTweeterFromRaw = (raw) => {
     .build();
 };
 
-const processTweet = (tweetRaw, isRetweet = false) => {
+/**
+ * Given a raw tweet, extract information about the tweeter,
+ * if it was a retweet, etc, and store all information in
+ * the database.
+ * @param db The OrientDB instance
+ * @param tweetRaw The original status object from the Twitter API
+ * @returns {Promise.<T>}
+ */
+const processTweet = (db, tweetRaw) => {
   const tweeter = makeTweeterFromRaw(tweetRaw.user);
   const retweetedStatusRaw = tweetRaw['retweeted_status'];
 
@@ -44,11 +52,12 @@ const processTweet = (tweetRaw, isRetweet = false) => {
     // then make this user point at it.
     return upsertedTweeterPromise
       .then(() => {
-        return processTweet(retweetedStatusRaw, true);
+        return processTweet(db, retweetedStatusRaw);
       })
       .then(() => {
         return linkTweeterToRetweet(db, tweeter, makeTweetFromRaw(retweetedStatusRaw));
       });
+
   } else {
     const tweet = Builders.TweetBuilder()
       .id(tweetRaw.id)
@@ -59,7 +68,7 @@ const processTweet = (tweetRaw, isRetweet = false) => {
       .build();
 
     return upsertedTweeterPromise
-      .then((result) => {
+      .then(() => {
         return upsertTweet(db, tweet);
       }).then(() => {
         return linkTweeterToTweet(db, tweeter, tweet);
@@ -81,15 +90,22 @@ const processTweet = (tweetRaw, isRetweet = false) => {
             });
           })
         );
+      }).catch((e) => {
+        console.log('ERROR', e);
       });
   };
 };
 
+/**
+ * Search the Twitter API for some query, saving and displaying the results.
+ * @param res HTTP Response object
+ * @param query Query to search twitter
+ */
 export const searchAndSave = (res, query) => {
   T.get('search/tweets', { 'q': query, 'count': 1000 }, function (err, result, response) {
     Promise.all(
       result.statuses.map((tweetRaw) => {
-        return processTweet(tweetRaw);
+        return processTweet(db, tweetRaw);
       })
     ).then(() => {
       res.end(JSON.stringify(result));
@@ -97,6 +113,11 @@ export const searchAndSave = (res, query) => {
   });
 };
 
+/**
+ * Connect to the Twitter Stream API for one minute, processing all results.
+ * @param req HTTP Request object with `query` parameter
+ * @param res HTTP Response object
+ */
 export const stream = (req, res) => {
   const stream = T.stream('statuses/filter', { 'track': req.params.query });
 
@@ -108,6 +129,7 @@ export const stream = (req, res) => {
 
   setTimeout(() => {
     stream.stop();
+    console.log('END');
     res.end('END');
   }, 60000);
-};;
+};
