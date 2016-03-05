@@ -22,10 +22,14 @@ const convertSchemaObjectToClass = (name) => {
  * @returns {Builder}
  */
 const generateBuilder = (name) => {
-  return BuilderDecorator.BuilderDecorator(convertSchemaObjectToClass(name),  { 'allFieldsMustBeSet': true });
+  return BuilderDecorator.BuilderDecorator(
+		convertSchemaObjectToClass(name),
+		{ 'allFieldsMustBeSet': true }
+	);
 };
 
 // ----------------------
 
 export const TweetBuilder = generateBuilder('Tweet');
 export const TweeterBuilder = generateBuilder('Tweeter');
+export const HashtagBuilder = generateBuilder('Hashtag');

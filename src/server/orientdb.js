@@ -26,7 +26,29 @@ const insertClass = (db, name, superclass, properties) => {
       return { 'name': input[0], 'type': input[1], 'mandatory': true };
     });
 
-    clazz.property.create(transformedProperties);
+    // Add the properties to the class
+    clazz.property.create(transformedProperties).then(() => {
+      properties.forEach((input) => {
+        // Add Lucene fulltext indexes to some properties
+        if (input.length >= 3) {
+          db.index.create({
+            'name': `${name}.${input[0]}`,
+            'type': 'FULLTEXT',
+            'engine': 'LUCENE',
+          });
+        };
+      });
+    });
+
+    if (superclass === 'E') {
+      clazz.property.create([
+        { 'name': 'out', 'type': 'LINK' },
+        { 'name': 'in', 'type': 'LINK' },
+      ]).then(() => {
+        db.execute(`CREATE INDEX unique_${name} ON ${name} (in, out) UNIQUE;`);
+      });
+    }
+
   });
 };
 
@@ -63,11 +85,15 @@ export const generateDatabase = (res) => {
     if (foundDb === null) {
       SERVER.create(DATABASE_NAME).then((db) => {
         insertClassesFromSchema(db, schema);
-        res.end(JSON.stringify(`Attempted to generate new database ${DATABASE_NAME} with classes.`));
+        res.end(JSON.stringify(
+          `Attempted to generate new database ${DATABASE_NAME} with classes.`
+        ));
       });
     } else {
       insertClassesFromSchema(foundDb, schema);
-      res.end(JSON.stringify(`Found database ${DATABASE_NAME}, attempted to add missing classes.`));
+      res.end(JSON.stringify(
+        `Found database ${DATABASE_NAME}, attempted to add missing classes.`
+      ));
     }
   });
 };

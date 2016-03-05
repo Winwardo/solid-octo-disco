@@ -7,8 +7,13 @@ import { flattenImmutableObject } from '../shared/utilities';
  * @deprecated
  * @param response
  */
-export const exampleDatabaseCall = (response) => {
-  db.query('SELECT FROM tweet')
+export const exampleDatabaseCall = (request, response) => {
+  db.query('SELECT FROM tweet WHERE content LUCENE :query LIMIT 20',
+    {
+      'params': {
+        'query': request.params.query + '~',
+      },
+    })
     .then((tweetRecords) => {
       const result = [];
 
@@ -24,6 +29,7 @@ export const exampleDatabaseCall = (response) => {
               'tweet':
                 flattenImmutableObject(
                   TweetBuilder()
+                    .id(tweetRecord.id)
                   .content(tweetRecord.content)
                   .date(tweetRecord.date.toISOString())
                   .likes(tweetRecord.likes)
@@ -32,6 +38,7 @@ export const exampleDatabaseCall = (response) => {
               'tweeter':
                 flattenImmutableObject(
                   TweeterBuilder()
+                    .id(tweeterRecord.id)
                   .name(tweeterRecord.name)
                   .handle(tweeterRecord.handle)
                   .build()),

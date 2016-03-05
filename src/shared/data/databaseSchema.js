@@ -1,18 +1,44 @@
+const Integer = 'Integer';
+const String = 'String';
+const Datetime = 'Datetime';
+
+const Edge = 'E';
+const Vertex = 'V';
+
+const None = [];
+
+const EmptyEdge = {
+  'superclass': Edge,
+  'properties': None,
+};
+
 export const schema = {
   'Tweet': {
-    'superclass': 'V',
+    'superclass': Vertex,
     'properties': [
-      ['content', 'String'],
-      ['date', 'Datetime'],
-      ['likes', 'Integer'],
-      ['retweets', 'Integer'],
+      ['id', Integer],
+      ['content', String, true],
+      ['date', Datetime],
+      ['likes', Integer],
+      ['retweets', Integer],
     ],
   },
   'Tweeter': {
-    'superclass': 'V',
+    'superclass': Vertex,
     'properties': [
-      ['name', 'String'],
-      ['handle', 'String'],
+      ['id', Integer],
+      ['name', String, true],
+      ['handle', String],
     ],
   },
+  'Hashtag': {
+    'superclass': Vertex,
+    'properties': [
+      ['content', String, true],
+    ],
+  },
+  'TWEETED': EmptyEdge,
+  'FOLLOWS': EmptyEdge,
+  'MENTIONS': EmptyEdge,
+  'HAS_HASHTAG': EmptyEdge,
 };
