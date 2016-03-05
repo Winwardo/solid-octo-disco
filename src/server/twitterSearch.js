@@ -65,6 +65,34 @@ function processRawRetweet(db, retweetRaw, retweeter) {
 }
 
 /**
+ * Link a tweet to all of its hashtags
+ * @param db The OrientDB instance
+ * @param rawHashtags The original hashtags
+ * @param tweet
+ * @returns {Promise}
+ */
+const linkTweetToHashtags = (db, rawHashtags, tweet) => {
+  return Promise.all(
+    rawHashtags.map((hashtagRaw) => {
+      const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
+      return upsertHashtag(db, hashtag).then((result) => {
+        return linkTweetToHashtag(db, tweet, hashtag);
+      });
+    })
+  );
+};
+
+const linkTweetToMentions = (db, rawMentions, tweet) => {
+  return Promise.all(
+    rawMentions.map((mentionRaw) => {
+      const mentionedTweeter = buildTweeterFromRaw(mentionRaw);
+      return upsertTweeter(db, mentionedTweeter).then((result) => {
+        return linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
+      });
+    })
+  );
+};
+/**
  * Given a raw status we know is not a retweet, insert it and upsert the user.
  * @param db The OrientDB instance
  * @param tweetRaw A raw status from the Twitter API
@@ -73,6 +101,8 @@ function processRawRetweet(db, retweetRaw, retweeter) {
  */
 function processRawOriginalTweet(db, tweetRaw, originalTweeter) {
   const tweet = buildTweetFromRaw(tweetRaw);
+  const rawHashtags = tweetRaw.entities.hashtags;
+  const rawMentions = tweetRaw.entities.hashtags;
 
   return chainPromises(() => {
     return upsertTweet(db, tweet);
@@ -80,25 +110,10 @@ function processRawOriginalTweet(db, tweetRaw, originalTweeter) {
     return upsertTweeter(db, originalTweeter);
   }).then(() => {
     return linkTweeterToTweet(db, originalTweeter, tweet);
-  })
-  .then(() => {
-    return Promise.all(
-      tweetRaw.entities.hashtags.map((hashtagRaw) => {
-        const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
-        return upsertHashtag(db, hashtag).then((result) => {
-          return linkTweetToHashtag(db, tweet, hashtag);
-        });
-      })
-    );
   }).then(() => {
-    return Promise.all(
-      tweetRaw.entities.user_mentions.map((mentionRaw) => {
-        const mentionedTweeter = buildTweeterFromRaw(mentionRaw);
-        return upsertTweeter(db, mentionedTweeter).then((result) => {
-          return linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
-        });
-      })
-    );
+    return linkTweetToHashtags(db, rawHashtags, tweet);
+  }).then(() => {
+    return linkTweetToMentions(db, rawMentions, tweet);
   });
 }
 
