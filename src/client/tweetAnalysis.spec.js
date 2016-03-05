@@ -5,9 +5,9 @@ should();
 describe('#TweetAnalysis', () => {
   describe('Frequent words counter', () => {
     const exampleFrequentWords = [
-      {'word': 'three', 'count': 3},
-      {'word': 'two', 'count': 2},
-      {'word': 'one', 'count': 1},
+      { 'word': 'three', 'count': 3 },
+      { 'word': 'two', 'count': 2 },
+      { 'word': 'one', 'count': 1 },
     ];
 
     it('returns an empty list on empty input', () => {

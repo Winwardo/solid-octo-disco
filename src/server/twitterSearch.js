@@ -15,23 +15,81 @@ var T = new Twit({
   'timeout_ms':           60 * 1000,  // optional HTTP request timeout to apply to all requests.
 });
 
-const makeTweetFromRaw = (raw) => {
+const buildTweetFromRaw = (rawTweet) => {
   return Builders.TweetBuilder()
-    .id(raw.id)
-    .content(raw.text)
-    .date(moment(new Date(raw.created_at)).format('YYYY-MM-DD HH:mm:ss'))
-    .likes(raw.favourite_count || 0)
-    .retweets(raw.retweet_count || 0)
+    .id(rawTweet.id)
+    .content(rawTweet.text)
+    .date(moment(new Date(rawTweet.created_at)).format('YYYY-MM-DD HH:mm:ss'))
+    .likes(rawTweet.favourite_count || 0)
+    .retweets(rawTweet.retweet_count || 0)
     .build();
 };
 
-const makeTweeterFromRaw = (raw) => {
+const buildTweeterFromRaw = (rawTweeter) => {
   return Builders.TweeterBuilder()
-    .id(raw.id)
-    .name(raw.name)
-    .handle(raw.screen_name)
+    .id(rawTweeter.id)
+    .name(rawTweeter.name)
+    .handle(rawTweeter.screen_name)
     .build();
 };
+
+const chainPromises = (callback) => {
+  return new Promise((resolve) => {
+      resolve(callback());
+  });
+}
+
+function processRawRetweet(db, retweetRaw, retweeter) {
+  const originalTweeter = buildTweeterFromRaw(retweetRaw.user);
+  const originalTweet = buildTweeterFromRaw(retweetRaw);
+
+  // If this is a retweet, process the original tweet,
+  // then make this user point at it.
+  return Promise.resolve(() => {
+    return upsertTweeter(db, retweeter);
+  }).then(() => {
+    return processRawOriginalTweet(db, retweetRaw, originalTweeter);
+  }).then(() => {
+    return linkTweeterToRetweet(db, retweeter, originalTweet);
+  });
+}
+
+function processRawOriginalTweet(db, tweetRaw, originalTweeter) {
+  const tweet = buildTweetFromRaw(tweetRaw);
+  //console.log('Tweet built.');
+  //console.log('tweet.content():', tweet.content());
+  //console.log('originalTweeter.name():', originalTweeter.name());
+
+  return chainPromises(() => {
+      //console.log('Upsert Tweet:', tweet.content());
+      return upsertTweet(db, tweet);
+  }).then(() => {
+    //console.log('Upsert Tweeter:', originalTweeter.handle());
+    return upsertTweeter(db, originalTweeter);
+  }).then(() => {
+    //console.log('Link Tweeter to Tweet:', originalTweeter.id(), tweet.id());
+    return linkTweeterToTweet(db, originalTweeter, tweet);
+  })
+    .then(() => {
+    return Promise.all(
+      tweetRaw.entities.hashtags.map((hashtagRaw) => {
+        const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
+        return upsertHashtag(db, hashtag).then((result) => {
+          return linkTweetToHashtag(db, tweet, hashtag);
+        });
+      })
+    );
+  }).then(() => {
+    return Promise.all(
+      tweetRaw.entities.user_mentions.map((mentionRaw) => {
+        const mentionedTweeter = buildTweeterFromRaw(mentionRaw);
+        return upsertTweeter(db, mentionedTweeter).then((result) => {
+          return linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
+        });
+      })
+    );
+  });
+}
 
 /**
  * Given a raw tweet, extract information about the tweeter,
@@ -42,56 +100,14 @@ const makeTweeterFromRaw = (raw) => {
  * @returns {Promise.<T>}
  */
 const processTweet = (db, tweetRaw) => {
-  const tweeter = makeTweeterFromRaw(tweetRaw.user);
+  const tweeter = buildTweeterFromRaw(tweetRaw.user);
   const retweetedStatusRaw = tweetRaw['retweeted_status'];
 
-  const upsertedTweeterPromise = upsertTweeter(db, tweeter);
-
-  if (retweetedStatusRaw !== undefined) {
-    // If this is a retweet, process the original tweet,
-    // then make this user point at it.
-    return Promise.resolve(() => {
-      return upsertedTweeterPromise;
-    }).then(() => {
-      return processTweet(db, retweetedStatusRaw);
-    }).then(() => {
-      return linkTweeterToRetweet(db, tweeter, makeTweetFromRaw(retweetedStatusRaw));
-    });
-
+  if (false && retweetedStatusRaw !== undefined) {
+    return processRawRetweet(db, retweetedStatusRaw, tweeter);
   } else {
-    const tweet = Builders.TweetBuilder()
-      .id(tweetRaw.id)
-      .content(tweetRaw.text)
-      .date(moment(new Date(tweetRaw['created_at'])).format('YYYY-MM-DD HH:mm:ss'))
-      .likes(tweetRaw['favourite_count'] || 0)
-      .retweets(tweetRaw['retweet_count'] || 0)
-      .build();
-
-    return Promise.resolve(() => {
-      return upsertedTweeterPromise;
-    }).then(() => {
-      return upsertTweet(db, tweet);
-    }).then(() => {
-      return linkTweeterToTweet(db, tweeter, tweet);
-    }).then(() => {
-      return Promise.all(
-        tweetRaw.entities.hashtags.map((hashtagRaw) => {
-          const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
-          return upsertHashtag(db, hashtag).then((result) => {
-            return linkTweetToHashtag(db, tweet, hashtag);
-          });
-        })
-      );
-    }).then(() => {
-      return Promise.all(
-        tweetRaw.entities.user_mentions.map((mentionRaw) => {
-          const mentionedTweeter = makeTweeterFromRaw(mentionRaw);
-          return upsertTweeter(db, mentionedTweeter).then((result) => {
-            return linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
-          });
-        })
-      );
-    });
+    console.log('Process original tweet.');
+    return processRawOriginalTweet(db, tweetRaw, tweeter);
   };
 };
 
@@ -101,7 +117,7 @@ const processTweet = (db, tweetRaw) => {
  * @param query Query to search twitter
  */
 export const searchAndSave = (res, query) => {
-  T.get('search/tweets', { 'q': query, 'count': 1000 }, function (err, result, response) {
+  T.get('search/tweets', { 'q': query, 'count': 1 }, function (err, result, response) {
     Promise.all(
       result.statuses.map((tweetRaw) => {
         return processTweet(db, tweetRaw);
