@@ -24,7 +24,7 @@ const makeTweeterFromRaw = (raw) => {
 };
 
 export const searchAndSave = (res, query) => {
-  T.get('search/tweets', { 'q': query, count: 300 }, function (err, result, response) {
+  T.get('search/tweets', { 'q': query, 'count': 300 }, function (err, result, response) {
     let count = 0;
     result.statuses.forEach((tweetRaw) => {
       const userRaw = tweetRaw.user;

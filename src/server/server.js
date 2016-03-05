@@ -13,9 +13,9 @@ app.get('/orient/generate', (req, res) => {
   generateDatabase(res);
 });
 
-app.get('/orient', (req, res) => {
+app.get('/search/:query', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
-  exampleDatabaseCall(res);
+  exampleDatabaseCall(req, res);
 });
 
 app.get('/twit/:query', (req, res) => {
