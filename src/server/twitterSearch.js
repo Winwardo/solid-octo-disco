@@ -3,7 +3,7 @@ const moment = require('moment');
 import { exampleSearch } from './exampleSearch';
 import { db } from './orientdb';
 import * as Builders from '../shared/data/databaseObjects';
-import { linkTweetToHashtag, linkTweeterToTweet, linkTweetToTweeterViaMention, upsertHashtag, upsertTweet, upsertTweeter } from '../shared/data/databaseInsertActions';
+import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweetToTweeterViaMention, upsertHashtag, upsertTweet, upsertTweeter } from '../shared/data/databaseInsertActions';
 
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
@@ -15,6 +15,16 @@ var T = new Twit({
   'timeout_ms':           60 * 1000,  // optional HTTP request timeout to apply to all requests.
 });
 
+const makeTweetFromRaw = (raw) => {
+  return Builders.TweetBuilder()
+    .id(raw.id)
+    .content(raw.text)
+    .date(moment(new Date(raw.created_at)).format('YYYY-MM-DD HH:mm:ss'))
+    .likes(raw.favourite_count || 0)
+    .retweets(raw.retweet_count || 0)
+    .build();
+};
+
 const makeTweeterFromRaw = (raw) => {
   return Builders.TweeterBuilder()
     .id(raw.id)
@@ -23,43 +33,80 @@ const makeTweeterFromRaw = (raw) => {
     .build();
 };
 
+const processTweet = (tweetRaw, isRetweet = false) => {
+  const tweeter = makeTweeterFromRaw(tweetRaw.user);
+  const retweetedStatusRaw = tweetRaw.retweeted_status;
+
+  //const upsertedTweeterPromise = ;
+
+  if (retweetedStatusRaw !== undefined) {
+    // If this is a retweet, process the original tweet,
+    // then make this user point at it.
+    return upsertTweeter(db, tweeter)
+      .then(() => {
+        return processTweet(retweetedStatusRaw, true);
+      })
+      .then(() => {
+        return linkTweeterToRetweet(db, tweeter, makeTweetFromRaw(retweetedStatusRaw));
+      });
+  } else {
+    const tweet = Builders.TweetBuilder()
+      .id(tweetRaw.id)
+      .content(tweetRaw.text)
+      .date(moment(new Date(tweetRaw.created_at)).format('YYYY-MM-DD HH:mm:ss'))
+      .likes(tweetRaw.favourite_count || 0)
+      .retweets(tweetRaw.retweet_count || 0)
+      .build();
+
+    return upsertTweeter(db, tweeter).then((result) => {
+      return upsertTweet(db, tweet);
+    }).then(() => {
+      return linkTweeterToTweet(db, tweeter, tweet);
+    }).then(() => {
+      return Promise.all(
+        tweetRaw.entities.hashtags.map((hashtagRaw) => {
+          const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
+          return upsertHashtag(db, hashtag).then((result) => {
+            return linkTweetToHashtag(db, tweet, hashtag);
+          });
+        })
+      );
+    }).then(() => {
+      return Promise.all(
+        tweetRaw.entities.user_mentions.map((mentionRaw) => {
+          const mentionedTweeter = makeTweeterFromRaw(mentionRaw);
+          return upsertTweeter(db, mentionedTweeter).then((result) => {
+            return linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
+          });
+        })
+      );
+    });
+  }
+};
+
 export const searchAndSave = (res, query) => {
-  T.get('search/tweets', { 'q': query, 'count': 300 }, function (err, result, response) {
+  T.get('search/tweets', { 'q': query, 'count': 15 }, function (err, result, response) {
     let count = 0;
     result.statuses.forEach((tweetRaw) => {
-      const userRaw = tweetRaw.user;
-
-      const tweet = Builders.TweetBuilder()
-        .id(tweetRaw.id)
-        .content(tweetRaw.text)
-        .date(moment(new Date(tweetRaw.created_at)).format('YYYY-MM-DD HH:mm:ss'))
-        .likes(tweetRaw.favourite_count || 0)
-        .retweets(tweetRaw.retweet_count || 0)
-        .build();
-
-      const tweeter = makeTweeterFromRaw(userRaw);
-
-      upsertTweeter(db, tweeter).then((result) => {
-        upsertTweet(db, tweet).then((result) => {
-          linkTweeterToTweet(db, tweeter, tweet);
-        });
-      });
-
-      tweetRaw.entities.hashtags.forEach((hashtagRaw) => {
-        const hashtag = Builders.HashtagBuilder().content(hashtagRaw.text.toLowerCase()).build();
-        upsertHashtag(db, hashtag).then((result) => {
-          linkTweetToHashtag(db, tweet, hashtag);
-        });
-      });
-
-      tweetRaw.entities.user_mentions.forEach((mentionRaw) => {
-        const mentionedTweeter = makeTweeterFromRaw(mentionRaw);
-        upsertTweeter(db, mentionedTweeter).then((result) => {
-          linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
-        });
-      });
+      processTweet(tweetRaw);
     });
 
     res.end(JSON.stringify(result));
   });
 };
+
+export const stream = (req, res) => {
+  const stream = T.stream('statuses/filter', { 'track': req.params.query });
+
+  stream.on('tweet', (tweet) => {
+    processTweet(tweet);
+    console.log(tweet.text);
+    res.write(`${tweet.text}
+`);
+  });
+
+  setTimeout(() => {
+    stream.stop();
+    res.end('END');
+  }, 60000);
+};;

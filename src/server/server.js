@@ -1,7 +1,7 @@
 import express from 'express';
 import { exampleDatabaseCall } from './tweetFinder';
 import { generateDatabase } from './orientdb';
-import { searchAndSave } from './twitterSearch';
+import { searchAndSave, stream } from './twitterSearch';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,6 +21,11 @@ app.get('/search/:query', (req, res) => {
 app.get('/twit/:query', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
   searchAndSave(res, req.params.query);
+});
+
+app.get('/twit/stream/:query', (req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  stream(req, res);
 });
 
 app.get('/', (req, res) => {

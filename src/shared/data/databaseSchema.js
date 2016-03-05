@@ -38,6 +38,7 @@ export const schema = {
     ],
   },
   'TWEETED': EmptyEdge,
+  'RETWEETED': EmptyEdge,
   'FOLLOWS': EmptyEdge,
   'MENTIONS': EmptyEdge,
   'HAS_HASHTAG': EmptyEdge,
