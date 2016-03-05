@@ -3,7 +3,7 @@ var fs = require('fs');
 const webpack = require('webpack');
 const extend = require('extend');
 
-const production = process.env.NODE_ENV === 'production' ? true : false;
+const production = process.env.NODE_ENV === 'production';
 
 //
 // Common configuration chunk to be used for both
