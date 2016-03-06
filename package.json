@@ -30,7 +30,8 @@
     "moment": "^2.11.2",
     "orientjs": "^2.1.11",
     "react": "^0.14.7",
-    "react-dom": "^0.14.7"
+    "react-dom": "^0.14.7",
+    "style-loader": "^0.13.0"
   },
   "devDependencies": {
     "babel-cli": "^6.6.4",
@@ -58,7 +59,6 @@
     "webpack": "^1.12.14",
     "webpack-dev-middleware": "^1.5.1",
     "webpack-hot-middleware": "^2.9.1",
-    "twit": "^2.2.2",
-    "webpack": "^1.12.14"
+    "twit": "^2.2.2"
   }
 }

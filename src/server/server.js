@@ -23,7 +23,6 @@ if (!(process.env.NODE_ENV === 'production')) {
 
 app.use('/public', express.static('public'));
 app.use('/css', express.static('css'));
-app.use('/fonts', express.static('fonts'));
 
 app.get('/', (req, res) => {
   res.sendFile('index.html', { root: 'public' });
