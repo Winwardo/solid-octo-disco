@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MostUsedWords } from './view/mostUsedWords';
+import { MostUsedWords } from './results/MostUsedWords';
 import Header from './Header';
 import { mostFrequentWords, mostActiveUsers, exampleTweets } from './tweetAnalysis';
 
