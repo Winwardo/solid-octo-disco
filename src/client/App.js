@@ -11,7 +11,7 @@ const App = () => {
 			{/* <Search /> */}
 
 			<div style={{ width: '400px', float: 'right' }}>
-				<MostUsedWords words = {mostFrequentWords(exampleTweets.map((data) => data.tweet))} search=''/>
+				<MostUsedWords wordInfoList={mostFrequentWords(exampleTweets.map((data) => data.tweet))} search=''/>
 			</div>
 
 			{/* <Footer /> */}

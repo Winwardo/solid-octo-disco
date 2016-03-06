@@ -39,31 +39,28 @@ const ToggleAllWords = () => (
   <button className='ui button'>Hide all</button>
 );
 
-export class MostUsedWords extends Component {
-  filterWords() {
-    return this.props.words
-      .filter((word) => word.word.toLowerCase().includes(this.props.search.toLowerCase()))
+export const MostUsedWords = ({ wordInfoList, search }) => {
+  const filteredWords = () => {
+    return wordInfoList
+      .filter((wordInfo) => wordInfo.word.toLowerCase().includes(search.toLowerCase()))
       .slice(0, 100);
-  }
+  };
 
-  render() {
-    const self = this;
-    return (
-      <div>
-        <h3>Most frequent words</h3>
-        <div>
-          <div className='ui two column grid'>
-            <div className='column'>
-              <SlidingSearchBar />
-            </div>
-            <div className='right aligned column'>
-              <ToggleAllWords />
-            </div>
+  return (
+    <div>
+              <h3>Most frequent words</h3>
+              <div>
+                  <div className='ui two column grid'>
+                      <div className='column'>
+                          <SlidingSearchBar />
+                      </div>
+                      <div className='right aligned column'>
+                          <ToggleAllWords />
+                      </div>
+                  </div>
+                  <br/>
+                  <Words words={filteredWords()}/>
+              </div>
           </div>
-          <br/>
-          <Words words={this.filterWords()}/>
-        </div>
-      </div>
-    );
-  }
+  );
 };
