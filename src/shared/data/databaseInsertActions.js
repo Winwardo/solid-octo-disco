@@ -7,7 +7,7 @@ const runQueryOnImmutableObject = (db, query, objectToFlatten) => {
 export const upsertTweeter = (db, tweeter) => {
   return runQueryOnImmutableObject(
     db,
-    'UPDATE tweeter SET id=:id, name=:name, handle=:handle UPSERT WHERE handle=:handle',
+    'UPDATE tweeter SET id=:id, name=:name, handle=:handle UPSERT WHERE id=:id',
     tweeter);
 };
 
@@ -28,6 +28,17 @@ export const upsertHashtag = (db, hashtag) => {
 export const linkTweeterToTweet = (db, tweeter, tweet) => {
   return db.query(
     'CREATE EDGE TWEETED FROM (SELECT FROM tweeter WHERE id = :tweeterId) TO (SELECT FROM tweet WHERE id = :tweetId)',
+    {
+      'params': {
+        'tweetId': tweet.id(),
+        'tweeterId': tweeter.id(),
+      },
+    });
+};
+
+export const linkTweeterToRetweet = (db, tweeter, tweet) => {
+  return db.query(
+    'CREATE EDGE RETWEETED FROM (SELECT FROM tweeter WHERE id = :tweeterId) TO (SELECT FROM tweet WHERE id = :tweetId)',
     {
       'params': {
         'tweetId': tweet.id(),

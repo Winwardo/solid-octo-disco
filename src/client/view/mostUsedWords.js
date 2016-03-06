@@ -59,7 +59,7 @@ export const MostUsedWords = React.createClass({
         <div>
           <div className="ui two column grid">
             <div className="column">
-              <SlidingSearchBar parentComp={self}/>
+              <SlidingSearchBar parentComp={this}/>
             </div>
             <div className='right aligned column'>
               <ToggleAllWords />
