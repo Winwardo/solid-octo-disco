@@ -1,17 +1,17 @@
 @font-face {
     font-family: 'thumbsOk';
-    src:    url('fonts/thumbsOk.eot?bgcwiz');
-    src:    url('fonts/thumbsOk.eot?bgcwiz#iefix') format('embedded-opentype'),
-        url('fonts/thumbsOk.ttf?bgcwiz') format('truetype'),
-        url('fonts/thumbsOk.woff?bgcwiz') format('woff'),
-        url('fonts/thumbsOk.svg?bgcwiz#thumbsOk') format('svg');
+    src:    url('thumbsOk.eot?yd4z7j');
+    src:    url('thumbsOk.eot?yd4z7j#iefix') format('embedded-opentype'),
+        url('thumbsOk.ttf?yd4z7j') format('truetype'),
+        url('thumbsOk.woff?yd4z7j') format('woff'),
+        url('thumbsOk.svg?yd4z7j#thumbsOk') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 i {
     /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'thumbsOk' !important;
+    
     speak: none;
     font-style: normal;
     font-weight: normal;
@@ -25,6 +25,7 @@ i {
 }
 
 .icon-thumbs-ok:before {
+    font-family: 'thumbsOk' !important;
     content: "\1f44c";
 }
 
