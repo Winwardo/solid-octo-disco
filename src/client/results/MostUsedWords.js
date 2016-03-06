@@ -41,7 +41,7 @@ class WordItemList extends Component {
       <div style={{ height: '300px', overflowY: 'scroll' }}>
         <table className='ui very basic celled table'>
           <tbody>
-          { this.props.words.map((wordInfo) => <WordItem wordInfo={wordInfo} />) }
+          { this.props.words.map((wordInfo, id) => <WordItem key={id} wordInfo={wordInfo} />) }
           </tbody>
         </table>
       </div>
