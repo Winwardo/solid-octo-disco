@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { SlidingSearchBar } from './searchBar';
 
-const WordInfo = ({ wordInfo }) => (
+const WordItem = ({ wordInfo }) => (
   <tr>
     <td className='right aligned column'>{wordInfo.count}</td>
     <td className='left aligned column'>{wordInfo.word}</td>
@@ -13,7 +13,7 @@ const WordInfo = ({ wordInfo }) => (
   </tr>
 );
 
-class WordInfoList extends Component {
+class WordItemList extends Component {
   componentDidMount() {
     $('.ui.checkbox').checkbox();
   }
@@ -27,7 +27,7 @@ class WordInfoList extends Component {
       <div style={{ 'height': '300px', 'overflow-y': 'scroll' }}>
         <table className='ui very basic celled table'>
           <tbody>
-          { this.props.words.map((wordInfo) => <WordInfo wordInfo={wordInfo}></WordInfo>) }
+          { this.props.words.map((wordInfo) => <WordItem wordInfo={wordInfo}></WordItem>) }
           </tbody>
         </table>
       </div>
@@ -59,7 +59,7 @@ export const MostUsedWords = ({ wordInfoList, search }) => {
           </div>
         </div>
         <br/>
-        <WordInfoList words={filteredWords()}/>
+        <WordItemList words={filteredWords()}/>
       </div>
     </div>
   );
