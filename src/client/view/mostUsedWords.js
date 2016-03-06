@@ -47,13 +47,14 @@ export class MostUsedWords extends Component {
   }
 
   render() {
+    const self = this;
     return (
       <div>
         <h3>Most frequent words</h3>
         <div>
           <div className='ui two column grid'>
             <div className='column'>
-              <SlidingSearchBar parentComp={this}/>
+              <SlidingSearchBar />
             </div>
             <div className='right aligned column'>
               <ToggleAllWords />
