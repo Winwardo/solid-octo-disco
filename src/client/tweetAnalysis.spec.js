@@ -16,7 +16,7 @@ describe('#TweetAnalysis', () => {
     });
 
     it('counts words in a single tweet, most frequent first', () => {
-      const tweets = [{ 'content': 'one two two three three three' }];
+      const tweets = [{ 'content': 'one three two three two three' }];
       mostFrequentWords(tweets).should.deep.equal(exampleFrequentWords);
     });
 

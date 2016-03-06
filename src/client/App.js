@@ -1,23 +1,7 @@
 import React, { Component } from 'react';
 import { MostUsedWords } from './view/mostUsedWords';
 import Header from './Header';
-
-const exampleWords = [
-	{ 'word': 'three', 'count': 3 },
-	{ 'word': 'two', 'count': 2 },
-	{ 'word': 'one', 'count': 1 },
-	{ 'word': 'ten', 'count': 1 },
-	{ 'word': 'one', 'count': 1 },
-	{ 'word': 'one', 'count': 1 },
-	{ 'word': 'one', 'count': 1 },
-	{ 'word': 'one', 'count': 1 },
-	{ 'word': 'seven', 'count': 1 },
-	{ 'word': 'one', 'count': 1 },
-	{ 'word': 'one', 'count': 1 },
-	{ 'word': 'football', 'count': 1 },
-	{ 'word': 'one', 'count': 1 },
-	{ 'word': 'one', 'count': 1 },
-];
+import { mostFrequentWords, mostActiveUsers, exampleTweets } from './tweetAnalysis';
 
 const App = () => {
   return (
@@ -27,7 +11,7 @@ const App = () => {
 			{/* <Search /> */}
 
 			<div style={{ width: '400px', float: 'right' }}>
-				<MostUsedWords words = {exampleWords}/>
+				<MostUsedWords words = {mostFrequentWords(exampleTweets.map((data) => data.tweet))} />
 			</div>
 
 			{/* <Footer /> */}

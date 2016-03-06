@@ -46,9 +46,7 @@ export const MostUsedWords = React.createClass({
 
   filterWords() {
     return this.props.words
-      .filter((word) => {
-        return word.word.includes(this.state.search);
-      })
+      .filter((word) => word.word.toLowerCase().includes(this.state.search.toLowerCase()))
       .slice(0, 100);
   },
 
