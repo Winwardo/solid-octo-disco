@@ -13,14 +13,14 @@ const WordInfo = ({ wordInfo }) => (
   </tr>
 );
 
-class Words extends Component({
+class Words extends Component {
   componentDidMount() {
     $('.ui.checkbox').checkbox();
-  },
+  }
 
   componentDidUpdate() {
     $('.ui.checkbox').checkbox();
-  },
+  }
 
   render() {
     return (
@@ -32,23 +32,19 @@ class Words extends Component({
         </table>
       </div>
     );
-  },
-});
+  }
+};
 
 const ToggleAllWords = () => (
   <button className='ui button'>Hide all</button>
 );
 
-export class MostUsedWords extends Component({
-  getInitialState() {
-    return { 'search': '' };
-  },
-
+export class MostUsedWords extends Component {
   filterWords() {
     return this.props.words
-      .filter((word) => word.word.toLowerCase().includes(this.state.search.toLowerCase()))
+      .filter((word) => word.word.toLowerCase().includes(this.props.search.toLowerCase()))
       .slice(0, 100);
-  },
+  }
 
   render() {
     return (
@@ -68,5 +64,5 @@ export class MostUsedWords extends Component({
         </div>
       </div>
     );
-  },
-});
+  }
+};
