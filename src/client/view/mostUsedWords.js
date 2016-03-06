@@ -13,7 +13,7 @@ const WordInfo = ({ wordInfo }) => (
   </tr>
 );
 
-class Words extends Component {
+class WordInfoList extends Component {
   componentDidMount() {
     $('.ui.checkbox').checkbox();
   }
@@ -48,19 +48,19 @@ export const MostUsedWords = ({ wordInfoList, search }) => {
 
   return (
     <div>
-              <h3>Most frequent words</h3>
-              <div>
-                  <div className='ui two column grid'>
-                      <div className='column'>
-                          <SlidingSearchBar />
-                      </div>
-                      <div className='right aligned column'>
-                          <ToggleAllWords />
-                      </div>
-                  </div>
-                  <br/>
-                  <Words words={filteredWords()}/>
-              </div>
+      <h3>Most frequent words</h3>
+      <div>
+        <div className='ui two column grid'>
+          <div className='column'>
+            <SlidingSearchBar />
           </div>
+          <div className='right aligned column'>
+            <ToggleAllWords />
+          </div>
+        </div>
+        <br/>
+        <WordInfoList words={filteredWords()}/>
+      </div>
+    </div>
   );
 };
