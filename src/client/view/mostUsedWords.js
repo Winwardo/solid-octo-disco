@@ -1,5 +1,5 @@
 import React from 'react';
-import { CoolSearchBar } from './searchBar';
+import { SlidingSearchBar } from './searchBar';
 
 const WordInfo = ({ word, count }) => (
   <tr>
@@ -17,12 +17,14 @@ const Words = React.createClass({
   componentDidMount() {
     $('.ui.checkbox').checkbox();
   },
+
   componentDidUpdate() {
     $('.ui.checkbox').checkbox();
   },
+
   render() {
     return (
-      <div style={{'height': '300px', 'overflow-y': 'scroll'}}>
+      <div style={{ 'height': '300px', 'overflow-y': 'scroll' }}>
         <table className="ui very basic celled table">
           <tbody>
           {
@@ -41,13 +43,13 @@ const Words = React.createClass({
 
 const ToggleAllWords = () => (
   <button className="ui button">Hide all</button>
-)
-
+);
 
 export const MostUsedWords = React.createClass({
   getInitialState() {
     return { 'search': '' };
   },
+
   filterWords() {
     return this.props.words
       .filter((word) => {
@@ -55,6 +57,7 @@ export const MostUsedWords = React.createClass({
       })
       .slice(0, 100);
   },
+
   render() {
     const self = this;
     let search;
@@ -65,7 +68,7 @@ export const MostUsedWords = React.createClass({
         <div>
           <div className="ui two column grid">
             <div className="column">
-              <CoolSearchBar parentComp={self}/>
+              <SlidingSearchBar parentComp={self}/>
             </div>
             <div className='right aligned column'>
               <ToggleAllWords />
