@@ -6,8 +6,8 @@ const WordInfo = ({ wordInfo }) => (
     <td className='right aligned column'>{wordInfo.count}</td>
     <td className='left aligned column'>{wordInfo.word}</td>
     <td className='right aligned column'>
-      <div className="ui checkbox">
-        <input type="checkbox"  defaultChecked="true"/>
+      <div className='ui checkbox'>
+        <input type='checkbox'  defaultChecked='true'/>
       </div>
     </td>
   </tr>
@@ -25,7 +25,7 @@ const Words = React.createClass({
   render() {
     return (
       <div style={{ 'height': '300px', 'overflow-y': 'scroll' }}>
-        <table className="ui very basic celled table">
+        <table className='ui very basic celled table'>
           <tbody>
           { this.props.words.map((wordInfo) => <WordInfo wordInfo={wordInfo}></WordInfo>) }
           </tbody>
@@ -36,7 +36,7 @@ const Words = React.createClass({
 });
 
 const ToggleAllWords = () => (
-  <button className="ui button">Hide all</button>
+  <button className='ui button'>Hide all</button>
 );
 
 export const MostUsedWords = React.createClass({
@@ -55,8 +55,8 @@ export const MostUsedWords = React.createClass({
       <div>
         <h3>Most frequent words</h3>
         <div>
-          <div className="ui two column grid">
-            <div className="column">
+          <div className='ui two column grid'>
+            <div className='column'>
               <SlidingSearchBar parentComp={this}/>
             </div>
             <div className='right aligned column'>
