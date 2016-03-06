@@ -53,9 +53,6 @@ export const MostUsedWords = React.createClass({
   },
 
   render() {
-    const self = this;
-    let search;
-
     return (
       <div>
         <h3>Most frequent words</h3>
@@ -69,7 +66,7 @@ export const MostUsedWords = React.createClass({
             </div>
           </div>
           <br/>
-          <Words words={self.filterWords()}/>
+          <Words words={this.filterWords()}/>
         </div>
       </div>
     );
