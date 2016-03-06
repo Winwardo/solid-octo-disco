@@ -5,6 +5,7 @@
   "validateLineBreaks": null,
   "disallowQuotedKeysInObjects": false,
   "requireShorthandArrowFunctions": false,
+  "maximumLineLength": null,
 
   "excludeFiles": [
     "test/data/**",

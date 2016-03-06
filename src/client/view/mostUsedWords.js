@@ -1,10 +1,10 @@
 import React from 'react';
 import { SlidingSearchBar } from './searchBar';
 
-const WordInfo = ({ word, count }) => (
+const WordInfo = ({ wordInfo }) => (
   <tr>
-    <td className='right aligned column'>{count}</td>
-    <td className='left aligned column'>{word}</td>
+    <td className='right aligned column'>{wordInfo.count}</td>
+    <td className='left aligned column'>{wordInfo.word}</td>
     <td className='right aligned column'>
       <div className="ui checkbox">
         <input type="checkbox"  defaultChecked="true"/>
@@ -27,13 +27,7 @@ const Words = React.createClass({
       <div style={{ 'height': '300px', 'overflow-y': 'scroll' }}>
         <table className="ui very basic celled table">
           <tbody>
-          {
-            this.props.words.map((word) => {
-              return (
-                <WordInfo word={word.word} count={word.count}></WordInfo>
-              );
-            })
-          }
+          { this.props.words.map((wordInfo) => <WordInfo wordInfo={wordInfo}></WordInfo>) }
           </tbody>
         </table>
       </div>
