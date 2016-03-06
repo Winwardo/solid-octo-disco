@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 
 const WordInfo = ({ word, count }) => (
 		<tr>
+      <td className='right aligned column'>{count}</td>
 			<td className='left aligned column'>{word}</td>
-			<td className='right aligned column'>{count}</td>
 			<td className='right aligned column'>
 				<div className="ui checkbox">
 					<input type="checkbox"  defaultChecked="true"/>
@@ -14,28 +14,28 @@ const WordInfo = ({ word, count }) => (
 );
 
 const Words = React.createClass({
+  componentDidMount() {
+    $('.ui.checkbox').checkbox();
+  },
   componentDidUpdate() {
     $('.ui.checkbox').checkbox();
   },
 
   render() {
     return (
-    <table className="ui celled table">
-			<tbody>
-      {
-        this.props.words
-        .filter((word) => {
-          return word.word.includes(this.props.search);
-        })
-        .slice(0, 5)
-        .map((word) => {
-          return (
-            <WordInfo word={word.word} count={word.count}></WordInfo>
-          );
-        })
-      }
-      </tbody>
-    </table>
+      <div style={{'height': '300px', 'overflow-y': 'scroll'}}>
+        <table className="ui very basic celled table">
+          <tbody>
+          {
+            this.props.words.map((word) => {
+              return (
+                <WordInfo word={word.word} count={word.count}></WordInfo>
+              );
+            })
+          }
+          </tbody>
+        </table>
+      </div>
 		);
   },
 });
@@ -49,21 +49,24 @@ const CoolSearchBar = ({parentComp}) => (
 	</div>
 );
 
+const ToggleAllWords = () => (
+  <button className="ui button">Hide all</button>
+)
+
+
 const MostUsedWords = React.createClass({
   getInitialState() {
     return { 'search': '' };
   },
-
-  componentDidMount() {
-    $('.ui.checkbox').checkbox();
+  filterWords() {
+    return this.props.words
+      .filter((word) => {
+        return word.word.includes(this.state.search);
+      })
+      .slice(0, 100);
   },
-
-  changedSearch: function (e) {
-    //this.setState({ 'search': e.target.value });
-  },
-
   render() {
-    var self = this;
+    const self = this;
     let search;
 
     return (
@@ -75,10 +78,11 @@ const MostUsedWords = React.createClass({
             <CoolSearchBar parentComp={self}/>
           </div>
           <div className='right aligned column'>
-            <button className="ui button">Hide all</button>
+            <ToggleAllWords />
           </div>
         </div>
-        <Words words={self.props.words} search={self.state.search}/>
+        <br/>
+        <Words words={self.filterWords()}/>
       </div>
     </div>
     );
