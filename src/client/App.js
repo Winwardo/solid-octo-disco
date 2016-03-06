@@ -1,7 +1,31 @@
 import React, { Component } from 'react';
 
+const WordInfo = ({ word, count }) => (
+		<div className="row">
+			<div className='left aligned column'>{word}</div>
+			<div className='right aligned column'>{count}</div>
+			<div className='right aligned column'>
+				<div className="ui checkbox" onClickTodo='TODO: Send a redux event to hide tweets with this word'>
+					<input type="checkbox" />
+				</div>
+			</div>
+		</div>
+)
+
+const Words = ({words}) => (
+	<div className="ui three column grid">
+		{
+			words.map((word) => {
+				return (
+					<WordInfo word={word.word} count={word.count}></WordInfo>
+				);
+			})
+		}
+	</div>
+)
+
 const MostUsedWords = React.createClass({
-		'getInitialState': function () {
+		getInitialState() {
 			return {
 				showAllWords: true,
 				'words': [
@@ -11,10 +35,10 @@ const MostUsedWords = React.createClass({
 				]
 			};
 		},
-		'componentDidMount': () => {
+		componentDidMount() {
 			$(".ui.checkbox").checkbox();
 		},
-		'render': function () {
+		render() {
 			var self = this;
 			return (
 				<div>
@@ -27,29 +51,11 @@ const MostUsedWords = React.createClass({
 							<div className='right aligned column'>
 								<label htmlFor="showAllWords">Show all words:</label>
 								<div className="ui toggle checkbox">
-									<input type="checkbox" id="showAllWords"/>
+									<input type="checkbox"/>
 								</div>
 							</div>
 						</div>
-						<div>
-							<div className="ui three column grid">
-								{
-									self.state.words.map((word) => {
-										return (
-											<div className="row">
-												<div className='left aligned column'>{word.word}</div>
-												<div className='right aligned column'>{word.count}</div>
-												<div className='right aligned column'>
-													<div className="ui checkbox">
-														<input type="checkbox" />
-													</div>
-												</div>
-											</div>
-										);
-									})
-								}
-							</div>
-						</div>
+						<Words words={self.state.words}></Words>
 					</div>
 				</div>
 			);
