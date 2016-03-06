@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+
 const WordInfo = ({ word, count }) => (
 		<tr>
 			<td className='left aligned column'>{word}</td>
@@ -10,80 +11,79 @@ const WordInfo = ({ word, count }) => (
 				</div>
 			</td>
 		</tr>
-)
+);
 
 const Words = React.createClass({
-	componentDidUpdate(){
-		$(".ui.checkbox").checkbox();
-	},
-	render() {
-		return (
-			<table className="ui celled table">
-				<tbody>
-				{
-					this.props.words
-						.filter((word) => {
-							return word.word.includes(this.props.search);
-						})
-						.slice(0, 5)
-						.map((word) => {
-							return (
-								<WordInfo word={word.word} count={word.count}></WordInfo>
-							);
-						})
-				}
-				</tbody>
-			</table>
-		)
-	}
-})
+  componentDidUpdate() {
+    $('.ui.checkbox').checkbox();
+  },
 
-const CoolSearchBar = ({}) => (
+  render() {
+    return (
+    <table className="ui celled table">
+			<tbody>
+      {
+        this.props.words
+        .filter((word) => {
+          return word.word.includes(this.props.search);
+        })
+        .slice(0, 5)
+        .map((word) => {
+          return (
+            <WordInfo word={word.word} count={word.count}></WordInfo>
+          );
+        })
+      }
+      </tbody>
+    </table>
+		);
+  },
+});
+
+const CoolSearchBar = ({parentComp}) => (
 	<div>
 		<div className="ui fluid right icon input">
-			<input type="text" placeholder="Search..." />
+			<input type="text" placeholder="Search..." onChange={(e) => { parentComp.setState({ 'search': e.target.value }); }}/>
 			<i className="search icon"></i>
 		</div>
 	</div>
-)
+);
 
 const MostUsedWords = React.createClass({
-		getInitialState() {
-			return {'search': ''}
-		},
-		componentDidMount() {
-			$(".ui.checkbox").checkbox();
-		},
-		changedSearch: function(e) {
-			this.setState({'search': e.target.value})
-		},
-		render() {
-			var self = this;
-			let search;
+  getInitialState() {
+    return { 'search': '' };
+  },
 
-			return (
-				<div>
-					<h3>Most frequent words</h3>
-					<div>
-						<div className="ui two column grid">
-							<div className="column">
-								<div>
-									<div className="ui fluid right icon input">
-										<input type="text" placeholder="Search..." onChange={self.changedSearch}/>
-										<i className="search icon"></i>
-									</div>
-								</div>
-							</div>
-							<div className='right aligned column'>
-								<button className="ui button">Hide all</button>
-							</div>
-						</div>
-						<Words words={self.props.words} search={self.state.search}/>
-					</div>
-				</div>
-			);
-		}
-	});
+  componentDidMount() {
+    $('.ui.checkbox').checkbox();
+  },
+
+  changedSearch: function (e) {
+    //this.setState({ 'search': e.target.value });
+  },
+
+  render() {
+    var self = this;
+    let search;
+
+    return (
+    <div>
+      <h3>Most frequent words</h3>
+      <div>
+        <div className="ui two column grid">
+          <div className="column">
+            <CoolSearchBar parentComp={self}/>
+          </div>
+          <div className='right aligned column'>
+            <button className="ui button">Hide all</button>
+          </div>
+        </div>
+        <Words words={self.props.words} search={self.state.search}/>
+      </div>
+    </div>
+    );
+  },
+});
 
 const App = () => {
   return (
@@ -92,7 +92,7 @@ const App = () => {
 				<i className="circular users icon"></i>
 					Socto; Topher wins at life.
 			</h2>
-			<div style={{width: '400px', float: 'right'}}>
+			<div style={{ width: '400px', float: 'right' }}>
 			<MostUsedWords words = {[
 					{ 'word': 'three', 'count': 3 },
 					{ 'word': 'two', 'count': 2 },
