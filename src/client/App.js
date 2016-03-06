@@ -12,50 +12,55 @@ const WordInfo = ({ word, count }) => (
 		</div>
 )
 
-const Words = ({words}) => (
-	<div className="ui three column grid">
-		{
-			words.map((word) => {
-				return (
-					<WordInfo word={word.word} count={word.count}></WordInfo>
-				);
-			})
-		}
+const Words = ({words, showAllWords}) => (
+	<div>
+		<div>
+			{showAllWords}
+		</div>
+		<div className="ui three column grid">
+			{
+				words.map((word) => {
+					return (
+						<WordInfo word={word.word} count={word.count}></WordInfo>
+					);
+				})
+			}
+		</div>
+	</div>
+)
+
+const CoolSearchBar = ({}) => (
+	<div>
+		<i className="search icon"></i>
+		<div className="ui input">
+			<input type="text" placeholder="Search..." />
+		</div>
 	</div>
 )
 
 const MostUsedWords = React.createClass({
-		getInitialState() {
-			return {
-				showAllWords: true,
-				'words': [
-					{ 'word': 'three', 'count': 3 },
-					{ 'word': 'two', 'count': 2 },
-					{ 'word': 'one', 'count': 1 },
-				]
-			};
-		},
 		componentDidMount() {
 			$(".ui.checkbox").checkbox();
 		},
 		render() {
 			var self = this;
+			let showAll;
 			return (
 				<div>
 					<h3>Most frequent words</h3>
 					<div>
 						<div className="ui two column grid">
 							<div className="column">
-								<i className="search icon"></i>
+								<CoolSearchBar />
 							</div>
 							<div className='right aligned column'>
-								<label htmlFor="showAllWords">Show all words:</label>
+								<label htmlFor="showAllWords">Show all words: </label>
 								<div className="ui toggle checkbox">
 									<input type="checkbox"/>
 								</div>
 							</div>
 						</div>
-						<Words words={self.state.words}></Words>
+						<Words words={self.props.words} showAllWords={showAll} />
 					</div>
 				</div>
 			);
@@ -69,7 +74,13 @@ const App = () => {
 				<i className="circular users icon"></i>
 					Socto; Topher wins at life.
 			</h2>
-			<MostUsedWords></MostUsedWords>
+			<div style={{width: '400px', float: 'right'}}>
+			<MostUsedWords words = {[
+					{ 'word': 'three', 'count': 3 },
+					{ 'word': 'two', 'count': 2 },
+					{ 'word': 'one', 'count': 1 },
+				]}/>
+				</div>
 		</div>
 	);
 };
