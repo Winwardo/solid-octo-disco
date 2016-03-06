@@ -24,7 +24,7 @@ class WordItemList extends Component {
 
   render() {
     return (
-      <div style={{ 'height': '300px', 'overflow-y': 'scroll' }}>
+      <div style={{ height: '300px', overflowY: 'scroll' }}>
         <table className='ui very basic celled table'>
           <tbody>
           { this.props.words.map((wordInfo) => <WordItem wordInfo={wordInfo}></WordItem>) }

@@ -65,8 +65,7 @@ function wordCountToSortedList(wordCounts) {
     }
   }
 
-  result.sort((wordCount1, wordCount2) => { return wordCount1.count < wordCount2.count; });
-  return result;
+  return result.sort((wordCount1, wordCount2) => { return wordCount2.count - wordCount1.count; });
 };
 
 /**
