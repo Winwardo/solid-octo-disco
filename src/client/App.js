@@ -1,23 +1,27 @@
 import React, { Component } from 'react';
 
 const WordInfo = ({ word, count }) => (
-		<div className="row">
-			<div className='left aligned column'>{word}</div>
-			<div className='right aligned column'>{count}</div>
-			<div className='right aligned column'>
+		<tr>
+			<td className='left aligned column'>{word}</td>
+			<td className='right aligned column'>{count}</td>
+			<td className='right aligned column'>
 				<div className="ui checkbox" onClickTodo='TODO: Send a redux event to hide tweets with this word'>
 					<input type="checkbox" />
 				</div>
-			</div>
-		</div>
+			</td>
+		</tr>
 )
 
-const Words = ({words, showAllWords}) => (
-	<div>
-		<div>
-			{showAllWords}
-		</div>
-		<div className="ui three column grid">
+const Words = ({words}) => (
+	<table className="ui celled table">
+		<thead>
+			<tr>
+				<th>Word</th>
+				<th>Count</th>
+				<th>Hide this word</th>
+			</tr>
+		</thead>
+		<tbody>
 			{
 				words.map((word) => {
 					return (
@@ -25,8 +29,8 @@ const Words = ({words, showAllWords}) => (
 					);
 				})
 			}
-		</div>
-	</div>
+		</tbody>
+	</table>
 )
 
 const CoolSearchBar = ({}) => (
