@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { SlidingSearchBar } from './searchBar';
 
 const WordInfo = ({ wordInfo }) => (
@@ -13,7 +13,7 @@ const WordInfo = ({ wordInfo }) => (
   </tr>
 );
 
-const Words = React.createClass({
+class Words extends Component({
   componentDidMount() {
     $('.ui.checkbox').checkbox();
   },
@@ -39,7 +39,7 @@ const ToggleAllWords = () => (
   <button className='ui button'>Hide all</button>
 );
 
-export const MostUsedWords = React.createClass({
+export class MostUsedWords extends Component({
   getInitialState() {
     return { 'search': '' };
   },
