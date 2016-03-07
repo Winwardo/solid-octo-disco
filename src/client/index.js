@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import {combineReducers, compose, applyMiddleware, createStore } from 'redux';
+import { combineReducers, compose, applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import searchTerms from './search/SearchTermsReducer';
 
@@ -19,7 +19,7 @@ const finalStore = createStore(
   )
 );
 
-const rootEl = document.getElementById('root');
+const rootElement = document.getElementById('root');
 
 let render = () => {
   const App = require('./App').default;
@@ -27,7 +27,7 @@ let render = () => {
     <Provider store={finalStore}>
       <App />
     </Provider>,
-    rootEl
+    rootElement
   );
 };
 
@@ -40,7 +40,7 @@ if (module.hot) {
     const RedBox = require('redbox-react');
     ReactDOM.render(
       <RedBox error={error} />,
-      rootEl
+      rootElement
     );
   };
 

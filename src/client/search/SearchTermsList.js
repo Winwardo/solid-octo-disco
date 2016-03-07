@@ -8,7 +8,7 @@ const TermsList = ({ searchTerms }) => {
       {searchTerms.map(term => {
         return (
           <TermItem
-						key={term.id}
+            key={term.id}
             {...term}
           />
         );

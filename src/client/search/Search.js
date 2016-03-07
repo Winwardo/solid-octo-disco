@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Current from './Current';
+import CurrentQueryTerms from './CurrentQueryTerms';
 
 const Search = () => {
   return (
     <div className="ui left aligned container">
-      <Current />
+      <CurrentQueryTerms />
       <Filters />
     </div>
   );

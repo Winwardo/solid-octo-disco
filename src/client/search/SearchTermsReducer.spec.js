@@ -43,15 +43,15 @@ describe(SearchTermsReducer, () => {
 
     const stateAfter = [
 			{
-        id: 0,
-        query: 'Football',
-        paramTypes: ['mention'],
-        source: 'twitter',
+  id: 0,
+  query: 'Football',
+  paramTypes: ['mention'],
+  source: 'twitter',
 			}, {
-        id: 1,
-        query: 'Manchester',
-        paramTypes: ['hashtag', 'author'],
-        source: 'twitter',
+  id: 1,
+  query: 'Manchester',
+  paramTypes: ['hashtag', 'author'],
+  source: 'twitter',
 			},
 		];
 
