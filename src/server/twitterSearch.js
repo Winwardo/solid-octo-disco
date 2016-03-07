@@ -8,7 +8,7 @@ import { chainPromises } from '../shared/utilities';
 
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
-var T = new Twit({
+export const TwitAccess = new Twit({
   'consumer_key':         'YiSLB0kOlsTd21UGYT32YOUgg',
   'consumer_secret':      '78b5VrGzkcIkpmftLdlFwirraelPRq2t5bFlgEcMkfaQqQh1Mb',
   'access_token':         '1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68',
@@ -102,7 +102,7 @@ const linkTweetToMentions = (db, rawMentions, tweet) => {
 function processRawOriginalTweet(db, rawTweet, originalTweeter) {
   const tweet = buildTweetFromRaw(rawTweet);
   const rawHashtags = rawTweet.entities.hashtags;
-  const rawMentions = rawTweet.entities.hashtags;
+  const rawMentions = rawTweet.entities.user_mentions;
 
   return chainPromises(() => {
     return upsertTweet(db, tweet);
@@ -123,34 +123,49 @@ function processRawOriginalTweet(db, rawTweet, originalTweeter) {
  * the database.
  * @param db The OrientDB instance
  * @param rawTweet The original status object from the Twitter API
- * @returns {Promise.<T>}
+ * @returns {Promise.<TwitAccess>}
  */
-const processTweet = (db, rawTweet) => {
+const processTweet = (db, rawTweet, id) => {
   const tweeter = buildTweeterFromRaw(rawTweet.user);
   const rawRetweetedStatus = rawTweet.retweeted_status;
 
   if (rawRetweetedStatus !== undefined) {
-    return processRawRetweet(db, rawRetweetedStatus, tweeter);
+    return processRawRetweet(db, rawRetweetedStatus, tweeter)
+      .then(
+        (res) => {  },
+
+        (rej) => { console.warn('Rejected retweet #', id, rej); }
+      );
   } else {
-    console.log('Process original tweet.');
-    return processRawOriginalTweet(db, rawTweet, tweeter);
+    return processRawOriginalTweet(db, rawTweet, tweeter)
+      .then(
+        (res) => {  },
+
+        (rej) => { console.warn('Rejected tweet #', id, rej); }
+      );
   };
 };
 
 /**
  * Search the Twitter API for some query, saving and displaying the results.
- * @param res HTTP Response object
  * @param query Query to search twitter
  */
-export const searchAndSave = (res, query) => {
-  T.get('search/tweets', { 'q': query, 'count': 20 }, function (err, result, response) {
-    Promise.all(
-      result.statuses.map((rawTweet) => {
+export const searchAndSaveFromTwitter = (query, count = 300) => {
+  console.info(`Searching Twitter for query '${query}'.`);
+  return TwitAccess.get('search/tweets', { 'q': query, 'count': count })
+  .then((result) => {
+    console.info(`Twitter search for '${query}' successful.`);
+    return Promise.all(
+      result.data.statuses.map((rawTweet) => {
         return processTweet(db, rawTweet);
       })
-    ).then(() => {
-      res.end(JSON.stringify(result));
-    });
+    );
+  }, (rej) => { console.warn('Unable to search Twitter.', rej); });
+};;
+
+export const searchAndSaveResponse = (res, query) => {
+  return searchAndSaveFromTwitter(query).then((result) => {
+    res.end(JSON.stringify(result));
   });
 };
 
@@ -160,7 +175,7 @@ export const searchAndSave = (res, query) => {
  * @param res HTTP Response object
  */
 export const stream = (req, res) => {
-  const stream = T.stream('statuses/filter', { 'track': req.params.query });
+  const stream = TwitAccess.stream('statuses/filter', { 'track': req.params.query });
 
   stream.on('tweet', (tweet) => {
     processTweet(tweet);

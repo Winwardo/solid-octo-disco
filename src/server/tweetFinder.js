@@ -1,63 +1,85 @@
 import { db } from './orientdb';
 import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
-import { flattenImmutableObject } from '../shared/utilities';
+import { chainPromises, flattenImmutableObject } from '../shared/utilities';
+import { TwitAccess, searchAndSaveFromTwitter } from './twitterSearch';
 
 /**
- * Grab all tweets from the database, and show them with their authors.
- * @deprecated
- * @param response
+ * Searches our database for Tweets and returns them.
+ * If our search is not good enough, access Twitter directly to retrieve more tweets.
+ * @param req A HTTP Request object
+ * @param res A HTTP Response object
+ * @returns {Promise.<T>|*}
  */
-export const exampleDatabaseCall = (request, response) => {
-  db.query('SELECT FROM tweet WHERE content LUCENE :query LIMIT 20',
-    {
-      'params': {
-        'query': request.params.query + '~',
+export const searchQuery = (req, res) => {
+  const query = req.body[0].query;
+  return searchAndCollateResults(query)
+    .then(
+      (data) => {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(data));
       },
-    })
-    .then((tweetRecords) => {
-      const result = [];
 
-      const promises = tweetRecords.map((tweetRecord) => {
-        const rid = '' + tweetRecord['@rid'];
+      (rejection) => {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end('An unexpected internal error occurred.');
+        console.warn(`Unable to search for query '${query}'`, rejection);
+      }
+    );
+};
 
-        return db.query(
-          `SELECT FROM (TRAVERSE in(TWEETED) FROM (SELECT FROM ${rid})) WHERE @class = "Tweeter"`
-          )
-          .then((tweeterRecords) => {
-            const tweeterRecord = tweeterRecords[0];
-            const toReturn = {
-              'tweet':
-                flattenImmutableObject(
-                  TweetBuilder()
-                    .id(tweetRecord.id)
-                  .content(tweetRecord.content)
-                  .date(tweetRecord.date.toISOString())
-                  .likes(tweetRecord.likes)
-                  .retweets(tweeterRecord.retweets)
-                  .build()),
-              'tweeter':
-                flattenImmutableObject(
-                  TweeterBuilder()
-                    .id(tweeterRecord.id)
-                  .name(tweeterRecord.name)
-                  .handle(tweeterRecord.handle)
-                  .build()),
-            };
-
-            result.push(toReturn);
-          });
-      });
-
-      Promise.all(promises)
-        .then(() => {
-          response.end(
-            JSON.stringify(
-              result));
-        });
-
-    })
-    .error((error) => {
-      console.error('Major issues abound.');
-      response.end('Unable to connect to database.');
+const searchAndCollateResults = (query) => {
+  return searchDatabase(query)
+    .then((data) => {
+      return {
+        'data': {
+          'count': data.length,
+          'records': getTweetsAsResults(data),
+        },
+      };
     });
+};
+
+const searchDatabase = (query, alreadyAttemptedRefresh = false) => {
+  const tweetSelection = 'SELECT FROM tweet WHERE content LUCENE :query ORDER BY date DESC LIMIT 300';
+
+  return chainPromises(() => {
+    return db.query(tweetSelection, { 'params': { 'query': `${query}~` } });
+  }).then(
+    (tweetRecords) => {
+      const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 20;
+      if (shouldRequeryTwitter) {
+        return refreshFromTwitter(query);
+
+      } else {
+        return tweetRecords.map((tweetRecord) => {
+          return flattenImmutableObject(buildTweetFromDatabaseRecord(tweetRecord));
+        });
+      }
+    },
+
+    (rejection) => {
+      console.warn('Major error querying the database.', rejection);
+    }
+  );
+};
+
+const refreshFromTwitter = (query) => {
+  return searchAndSaveFromTwitter(query)
+    .then(() => {
+      return searchDatabase(query, true);
+    });
+};
+
+const buildTweetFromDatabaseRecord = (record) => {
+  return TweetBuilder()
+    .id(record.id)
+    .content(record.content)
+    .date(record.date.toISOString())
+    .likes(record.likes)
+    .retweets(record.retweets)
+    .build();
+};
+
+const getTweetsAsResults = (data) => {
+  return data.map((tweet) => { return { 'data': tweet, 'author': {}, 'source': 'twitter' }; });
 };
