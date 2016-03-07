@@ -1,23 +1,46 @@
 import 'babel-polyfill';
 import ReactDOM from 'react-dom';
 import React from 'react';
+import { combineReducers, compose, applyMiddleware, createStore } from 'redux';
+import { Provider } from 'react-redux';
+import searchTerms from './search/SearchTermsReducer';
 
-const rootEl = document.getElementById('root');
+const feedApp = combineReducers({
+  searchTerms,
+});
+
+const middlewares = [];
+
+const finalStore = createStore(
+  feedApp,
+  compose(
+    applyMiddleware(...middlewares),
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+  )
+);
+
+const rootElement = document.getElementById('root');
 
 let render = () => {
   const App = require('./App').default;
-  ReactDOM.render(<App />, rootEl);
+  ReactDOM.render(
+    <Provider store={finalStore}>
+      <App />
+    </Provider>,
+    rootElement
+  );
 };
 
 if (module.hot) {
   // Support hot reloading of components
-  // and display an overlay for runtime errors
   const renderApp = render;
+
+  // and display an overlay for runtime errors
   const renderError = (error) => {
     const RedBox = require('redbox-react');
     ReactDOM.render(
       <RedBox error={error} />,
-      rootEl
+      rootElement
     );
   };
 
