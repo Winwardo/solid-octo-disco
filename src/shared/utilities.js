@@ -1,5 +1,3 @@
-//import { Promise } from 'bluebird';
-
 /**
  * Converts an object of style {'a': {'b': c}, 'd': {'e': f}} to [{'b': c}, {'e': f}]
  * @param {Object} givenObject Any object.

@@ -81,5 +81,5 @@ const buildTweetFromDatabaseRecord = (record) => {
 };
 
 const getTweetsAsResults = (data) => {
-  return data.map((tweet) => { return { 'status': tweet, 'author': {}, 'source': 'twitter' }; });
+  return data.map((tweet) => { return { 'data': tweet, 'author': {}, 'source': 'twitter' }; });
 };

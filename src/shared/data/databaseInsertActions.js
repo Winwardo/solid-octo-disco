@@ -8,21 +8,21 @@ export const upsertTweeter = (db, tweeter) => {
   return runQueryOnImmutableObject(
     db,
     'UPDATE tweeter SET id=:id, name=:name, handle=:handle UPSERT WHERE id=:id',
-    tweeter).then(() => {}, (rej) => { console.log('^tweeter', rej); });
+    tweeter).then(() => {}, (rej) => { console.error('Upsert tweeter', rej); });
 };
 
 export const upsertTweet = (db, tweet) => {
   return runQueryOnImmutableObject(
     db,
     'UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets UPSERT WHERE id=:id',
-    tweet).then(() => {}, (rej) => { console.log('^tweet', rej); });
+    tweet).then(() => {}, (rej) => { console.error('Upsert tweet', rej); });
 };
 
 export const upsertHashtag = (db, hashtag) => {
   return runQueryOnImmutableObject(
     db,
     'UPDATE hashtag SET content=:content UPSERT WHERE content=:content',
-    hashtag).then(() => {}, (rej) => { console.log('^hashtag', rej); });
+    hashtag).then(() => {}, (rej) => { console.error('Upsert hashtag', rej); });
 };
 
 export const linkTweeterToTweet = (db, tweeter, tweet) => {
@@ -33,7 +33,7 @@ export const linkTweeterToTweet = (db, tweeter, tweet) => {
         'tweetId': tweet.id(),
         'tweeterId': tweeter.id(),
       },
-    }).then(() => {}, (rej) => { console.log('tweeter -> tweet', tweeter.handle(), tweet.content(), rej); });
+    }).then(() => {}, (rej) => { console.error('Link tweeter -> tweet', tweeter.handle(), tweet.content(), rej); });
 };
 
 export const linkTweeterToRetweet = (db, tweeter, tweet) => {
@@ -44,7 +44,7 @@ export const linkTweeterToRetweet = (db, tweeter, tweet) => {
         'tweetId': tweet.id(),
         'tweeterId': tweeter.id(),
       },
-    }).then(() => {}, (rej) => { console.log('tweeter -> retweet', rej); });
+    }).then(() => {}, (rej) => { console.error('Link tweeter -> retweet', rej); });
 };
 
 export const linkTweetToHashtag = (db, tweet, hashtag) => {
@@ -55,7 +55,7 @@ export const linkTweetToHashtag = (db, tweet, hashtag) => {
         'tweetId': tweet.id(),
         'hashtagContent': hashtag.content(),
       },
-    }).then(() => {}, (rej) => { console.log('tweet -> hashtag', rej); });
+    }).then(() => {}, (rej) => { console.error('Link tweet -> hashtag', rej); });
 };
 
 export const linkTweetToTweeterViaMention = (db, tweet, mentionedTweeter) => {
@@ -66,5 +66,5 @@ export const linkTweetToTweeterViaMention = (db, tweet, mentionedTweeter) => {
         'tweetId': tweet.id(),
         'mentionedTweeterId': mentionedTweeter.id(),
       },
-    }).then(() => {}, (rej) => { console.log('tweet -> tweeter', mentionedTweeter.handle(), tweet.content(), rej); });
+    }).then(() => {}, (rej) => { console.error('Link tweet -> tweeter', mentionedTweeter.handle(), tweet.content(), rej); });
 };
