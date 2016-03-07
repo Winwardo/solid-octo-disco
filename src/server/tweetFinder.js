@@ -80,40 +80,46 @@ export const searchQuery = (req, res, secondary = false) => {
     });
 }
 
-const doQuery = (query, results = [], secondary = false) => {
+const refreshFromTwitter = (query) => {
+  return searchAndSaveFromTwitter(query)
+    .then(() => {
+      return doQuery(query, true);
+    });
+}
+
+const doInnerQuery = (query, secondary) => {
   // First do an initial search of our database for relevant Tweets
-  const tweetSelection = 'SELECT FROM tweet WHERE content LUCENE :query ORDER BY date DESC LIMIT 300';
+  const tweetSelection = 'SELECT FROM tweet WHERE content LUCENE :query ORDER BY date DESC LIMIT 3';
 
   return chainPromises(() => {
     return db.query(tweetSelection, {'params': {'query': `${query}~`}});
-  })
-  .then((tweetRecords) => {
-    const shouldSearchTwitter = () => { return !secondary && tweetRecords.length <= 10; };
-    if (shouldSearchTwitter()) {
-      return searchAndSaveFromTwitter(query)
-      .then(() => {
-        return doQuery(query, results, true);
-      });
-    } else {
+  }).then(
+    (tweetRecords) => {
+      const shouldRequeryTwitter = !secondary && tweetRecords.length <= 10;
+      if (shouldRequeryTwitter) {
+        return refreshFromTwitter(query);
 
-      console.log("MAGIC")
-      // relevant results, see if they're good enough
-
-      // probably so, just splat them out
-      const thing = tweetRecords.map((tweetRecord) => {
-        return flattenImmutableObject(buildTweetFromDatabaseRecord(tweetRecord));
-      });
-      Array.prototype.push.apply(results, thing);
-
-
-
+      } else {
+        return tweetRecords.map((tweetRecord) => {
+          return flattenImmutableObject(buildTweetFromDatabaseRecord(tweetRecord));
+        });
+      }
+    },
+    (rejection) => {
+      console.warn("Major error querying the database.", rejection);
     }
-  }, (rej) => { console.log("db erro", rej); })
-  .then(() => {
-    return {
+  );
+}
+
+const doQuery = (query, secondary = false) => {
+  return doInnerQuery(query, secondary)
+    .then(
+      (STUFF) => {
+      //console.log(STUFF);
+      return {
         'data': {
-          'count': results.length,
-          'tweets': results
+          'count': STUFF.length,
+          'tweets': STUFF
         }
       }
   })
