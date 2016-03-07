@@ -4,7 +4,7 @@ import config from '../../webpack.config.js';
 import { searchQuery } from './tweetFinder';
 import { generateDatabase } from './orientdb';
 import { searchAndSaveResponse, stream } from './twitterSearch';
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,11 +18,12 @@ if (!(process.env.NODE_ENV === 'production')) {
   }));
 
   app.use(require('webpack-hot-middleware')(compiler));
-  // parse application/x-www-form-urlencoded
-  app.use(bodyParser.urlencoded({ extended: false }))
 
-// parse application/json
-  app.use(bodyParser.json())
+  // parse application/x-www-form-urlencoded
+  app.use(bodyParser.urlencoded({ extended: false }));
+
+  // parse application/json
+  app.use(bodyParser.json());
 }
 
 //--------------------------------------------------------------------------

@@ -21,27 +21,28 @@ export const searchQuery = (req, res, secondary = false) => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(data));
       },
+
       (rejection) => {
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end("An unexpected internal error occurred.");
+        res.end('An unexpected internal error occurred.');
         console.warn(`Unable to search for query '${query}'`, rejection);
       }
     );
-}
+};;
 
 const refreshFromTwitter = (query) => {
   return searchAndSaveFromTwitter(query)
     .then(() => {
       return doInnerQuery(query, true);
     });
-}
+};
 
 const doInnerQuery = (query, alreadyAttemptedRefresh) => {
   // First do an initial search of our database for relevant Tweets
   const tweetSelection = 'SELECT FROM tweet WHERE content LUCENE :query ORDER BY date DESC LIMIT 300';
 
   return chainPromises(() => {
-    return db.query(tweetSelection, {'params': {'query': `${query}~`}});
+    return db.query(tweetSelection, { 'params': { 'query': `${query}~` } });
   }).then(
     (tweetRecords) => {
       const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 10;
@@ -54,11 +55,12 @@ const doInnerQuery = (query, alreadyAttemptedRefresh) => {
         });
       }
     },
+
     (rejection) => {
-      console.warn("Major error querying the database.", rejection);
+      console.warn('Major error querying the database.', rejection);
     }
   );
-}
+};
 
 const doQuery = (query, secondary = false) => {
   return doInnerQuery(query, secondary)
@@ -67,9 +69,9 @@ const doQuery = (query, secondary = false) => {
         'data': {
           'count': data.length,
           'records':
-            data.map((tweet) => { return {'content': tweet, 'source': 'twitter'}; })
-        }
-      }
-    })
+            data.map((tweet) => { return { 'content': tweet, 'source': 'twitter' }; }),
+        },
+      };
+    });
 
-}
+};

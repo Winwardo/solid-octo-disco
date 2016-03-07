@@ -133,13 +133,15 @@ const processTweet = (db, rawTweet, id) => {
     return processRawRetweet(db, rawRetweetedStatus, tweeter)
       .then(
         (res) => {  },
-        (rej) => { console.warn("Rejected retweet #", id, rej); }
+
+        (rej) => { console.warn('Rejected retweet #', id, rej); }
       );
   } else {
     return processRawOriginalTweet(db, rawTweet, tweeter)
       .then(
         (res) => {  },
-        (rej) => { console.warn("Rejected tweet #", id, rej); }
+
+        (rej) => { console.warn('Rejected tweet #', id, rej); }
       );
   };
 };
@@ -152,14 +154,14 @@ export const searchAndSaveFromTwitter = (query, count = 300) => {
   console.info(`Searching Twitter for query '${query}'.`);
   return TwitAccess.get('search/tweets', { 'q': query, 'count': count })
   .then((result) => {
-    console.info(`Twitter search for '${query}' successful.`)
+    console.info(`Twitter search for '${query}' successful.`);
     return Promise.all(
       result.data.statuses.map((rawTweet) => {
         return processTweet(db, rawTweet);
       })
     );
-  }, (rej) => { console.warn("Unable to search Twitter.", rej); });
-}
+  }, (rej) => { console.warn('Unable to search Twitter.', rej); });
+};;
 
 export const searchAndSaveResponse = (res, query) => {
   return searchAndSaveFromTwitter(query).then((result) => {
