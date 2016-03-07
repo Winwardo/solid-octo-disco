@@ -148,7 +148,7 @@ const processTweet = (db, rawTweet, id) => {
  * Search the Twitter API for some query, saving and displaying the results.
  * @param query Query to search twitter
  */
-export const searchAndSave = (query, count = 300) => {
+export const searchAndSaveFromTwitter = (query, count = 300) => {
   return TwitAccess.get('search/tweets', { 'q': query, 'count': count })
   .then((result) => {
     return Promise.all(
@@ -160,7 +160,7 @@ export const searchAndSave = (query, count = 300) => {
 }
 
 export const searchAndSaveResponse = (res, query) => {
-  return searchAndSave(query).then((result) => {
+  return searchAndSaveFromTwitter(query).then((result) => {
     res.end(JSON.stringify(result));
   });
 };

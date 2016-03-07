@@ -1,8 +1,7 @@
 import { db } from './orientdb';
 import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
 import { chainPromises, flattenImmutableObject } from '../shared/utilities';
-import { TwitAccess, searchAndSave } from './twitterSearch';
-//import { Promise } from 'bluebird';
+import { TwitAccess, searchAndSaveFromTwitter } from './twitterSearch';
 
 /**
  * Grab all tweets from the database, and show them with their authors.
@@ -75,59 +74,26 @@ const buildTweetFromDatabaseRecord = (record) => {
 };
 
 export const searchQuery = (req, res, secondary = false) => {
-  return doQuery(req.body[0].query, [])
+  return doQuery(req.body[0].query)
     .then((data) => {
       res.end(JSON.stringify(data));
     });
 }
 
-const doQuery = (query, results, secondary = false) => {
-
-  //console.log(query);
-
-  //let results = [];
+const doQuery = (query, results = [], secondary = false) => {
   // First do an initial search of our database for relevant Tweets
   const tweetSelection = 'SELECT FROM tweet WHERE content LUCENE :query ORDER BY date DESC LIMIT 300';
 
   return chainPromises(() => {
-    return db.query(tweetSelection, {'params': {'query': query + '~'}});
+    return db.query(tweetSelection, {'params': {'query': `${query}~`}});
   })
   .then((tweetRecords) => {
-    //console.log(tweetRecords);
-
     const shouldSearchTwitter = () => { return !secondary && tweetRecords.length <= 10; };
     if (shouldSearchTwitter()) {
-
-      console.log("SCRAPEY TWITTEROO")
-      // no relevant results, search Twitter
-      //return TwitAccess.get('search/tweets', { 'q': query, 'count': 300 })
-      //.then((data) => {
-      //  return Promise.all(
-      //    data.data.statuses.map((rawTweet, id) => {
-      //      return processTweet(db, rawTweet, id);
-      //    })
-      //  );
-      //})
-      return searchAndSave(query)
-      .then(
-        (data) => {
-
-        console.log("OKAY SCRAPED TWITTER ")
-        //console.log(data.resp)
-        //console.log(Object.keys(data))
+      return searchAndSaveFromTwitter(query)
+      .then(() => {
         return doQuery(query, results, true);
-
-        return chainPromises(() => {
-          return {'thing': 'stuff'};
-        },
-          (rej) => {
-            console.log("REJECTED", rej);
-          }
-        )
       });
-
-
-
     } else {
 
       console.log("MAGIC")
