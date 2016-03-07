@@ -1,7 +1,7 @@
 import { db } from './orientdb';
 import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
 import { chainPromises, flattenImmutableObject } from '../shared/utilities';
-import { TwitAccess, processTweet } from './twitterSearch';
+import { TwitAccess, searchAndSave } from './twitterSearch';
 //import { Promise } from 'bluebird';
 
 /**
@@ -82,6 +82,7 @@ export const searchQuery = (req, res, secondary = false) => {
 }
 
 const doQuery = (query, results, secondary = false) => {
+
   //console.log(query);
 
   //let results = [];
@@ -94,26 +95,20 @@ const doQuery = (query, results, secondary = false) => {
   .then((tweetRecords) => {
     //console.log(tweetRecords);
 
-    if (!secondary && tweetRecords.length <= 100) {
-
+    const shouldSearchTwitter = () => { return !secondary && tweetRecords.length <= 10; };
+    if (shouldSearchTwitter()) {
 
       console.log("SCRAPEY TWITTEROO")
       // no relevant results, search Twitter
-      return TwitAccess.get('search/tweets', { 'q': query, 'count': 300 })
-      .then((data) => {
-        console.log("tweets:", data.data.statuses.length)
-        //console.log(data)
-        return Promise.all(
-          data.data.statuses.map((rawTweet, id) => {
-            //console.log("text", rawTweet.text, id)
-            return processTweet(db, rawTweet, id);
-          })
-        );
-
-        //return chainPromises(() => {
-        //  return {'thing': 'stuff'};
-        //});
-      })
+      //return TwitAccess.get('search/tweets', { 'q': query, 'count': 300 })
+      //.then((data) => {
+      //  return Promise.all(
+      //    data.data.statuses.map((rawTweet, id) => {
+      //      return processTweet(db, rawTweet, id);
+      //    })
+      //  );
+      //})
+      return searchAndSave(query)
       .then(
         (data) => {
 
@@ -147,7 +142,7 @@ const doQuery = (query, results, secondary = false) => {
 
 
     }
-  })
+  }, (rej) => { console.log("db erro", rej); })
   .then(() => {
     return {
         'data': {

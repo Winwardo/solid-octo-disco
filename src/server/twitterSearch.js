@@ -151,20 +151,26 @@ export const processTweet = (db, rawTweet, id) => {
   };
 };
 
+export const searchAndSave = (query) => {
+  return TwitAccess.get('search/tweets', { 'q': query, 'count': 300 })
+  .then((result) => {
+    //console.log(result.data);
+    return Promise.all(
+      result.data.statuses.map((rawTweet) => {
+        return processTweet(db, rawTweet);
+      })
+    );
+  }, (rej) => { console.log("rej", rej); });
+}
+
 /**
  * Search the Twitter API for some query, saving and displaying the results.
  * @param res HTTP Response object
  * @param query Query to search twitter
  */
-export const searchAndSave = (res, query) => {
-  TwitAccess.get('search/tweets', { 'q': query, 'count': 300 }, function (err, result, response) {
-    Promise.all(
-      result.statuses.map((rawTweet) => {
-        return processTweet(db, rawTweet);
-      })
-    ).then(() => {
-      res.end(JSON.stringify(result));
-    });
+export const searchAndSaveResponse = (res, query) => {
+  return searchAndSave(query).then((result) => {
+    res.end(JSON.stringify(result));
   });
 };
 
