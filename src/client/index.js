@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import searchTerms from './search/SearchTermsReducer';
 
 const feedApp = combineReducers({
-  searchTerms
+  searchTerms,
 });
 
 const middlewares = [];
@@ -26,7 +26,7 @@ let render = () => {
   ReactDOM.render(
     <Provider store={finalStore}>
       <App />
-    </Provider>, 
+    </Provider>,
     rootEl
   );
 };
@@ -34,6 +34,7 @@ let render = () => {
 if (module.hot) {
   // Support hot reloading of components
   const renderApp = render;
+
   // and display an overlay for runtime errors
   const renderError = (error) => {
     const RedBox = require('redbox-react');
