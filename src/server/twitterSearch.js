@@ -86,7 +86,6 @@ const linkTweetToMentions = (db, rawMentions, tweet) => {
   return Promise.all(
     rawMentions.map((rawMention) => {
       const mentionedTweeter = buildTweeterFromRaw(rawMention);
-      //console.log(rawMention);
       return upsertTweeter(db, mentionedTweeter).then((result) => {
         return linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
       });
@@ -106,19 +105,14 @@ function processRawOriginalTweet(db, rawTweet, originalTweeter) {
   const rawMentions = rawTweet.entities.user_mentions;
 
   return chainPromises(() => {
-    //console.log('upsert tweet', tweet.content())
     return upsertTweet(db, tweet);
   }).then(() => {
-    //console.log('upsert tweeter', originalTweeter.handle())
     return upsertTweeter(db, originalTweeter);
   }).then(() => {
-    //console.log('link')
     return linkTweeterToTweet(db, originalTweeter, tweet);
   }).then(() => {
-    //console.log('hashtag')
     return linkTweetToHashtags(db, rawHashtags, tweet);
   }).then(() => {
-    //console.log('mention')
     return linkTweetToMentions(db, rawMentions, tweet);
   });
 }
@@ -131,43 +125,40 @@ function processRawOriginalTweet(db, rawTweet, originalTweeter) {
  * @param rawTweet The original status object from the Twitter API
  * @returns {Promise.<TwitAccess>}
  */
-export const processTweet = (db, rawTweet, id) => {
+const processTweet = (db, rawTweet, id) => {
   const tweeter = buildTweeterFromRaw(rawTweet.user);
   const rawRetweetedStatus = rawTweet.retweeted_status;
 
   if (rawRetweetedStatus !== undefined) {
     return processRawRetweet(db, rawRetweetedStatus, tweeter)
       .then(
-        (res) => { /*console.log("resolved rt #", id)*/ },
-        (rej) => { console.log("rejected rt #", id, rej) }
+        (res) => {  },
+        (rej) => { console.warn("Rejected retweet #", id, rej); }
       );
   } else {
-    console.log('Process original tweet.');
     return processRawOriginalTweet(db, rawTweet, tweeter)
       .then(
-        (res) => { /*console.log("resolved #", id)*/ },
-        (rej) => { console.log("rejected #", id, rej) }
+        (res) => {  },
+        (rej) => { console.warn("Rejected tweet #", id, rej); }
       );
   };
 };
 
-export const searchAndSave = (query) => {
-  return TwitAccess.get('search/tweets', { 'q': query, 'count': 300 })
+/**
+ * Search the Twitter API for some query, saving and displaying the results.
+ * @param query Query to search twitter
+ */
+export const searchAndSave = (query, count = 300) => {
+  return TwitAccess.get('search/tweets', { 'q': query, 'count': count })
   .then((result) => {
-    //console.log(result.data);
     return Promise.all(
       result.data.statuses.map((rawTweet) => {
         return processTweet(db, rawTweet);
       })
     );
-  }, (rej) => { console.log("rej", rej); });
+  }, (rej) => { console.warn("Unable to search Twitter.", rej); });
 }
 
-/**
- * Search the Twitter API for some query, saving and displaying the results.
- * @param res HTTP Response object
- * @param query Query to search twitter
- */
 export const searchAndSaveResponse = (res, query) => {
   return searchAndSave(query).then((result) => {
     res.end(JSON.stringify(result));
