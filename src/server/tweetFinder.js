@@ -3,66 +3,6 @@ import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
 import { chainPromises, flattenImmutableObject } from '../shared/utilities';
 import { TwitAccess, searchAndSaveFromTwitter } from './twitterSearch';
 
-/**
- * Grab all tweets from the database, and show them with their authors.
- * @deprecated
- * @param response
- */
-export const exampleDatabaseCall = (request, response) => {
-  db.query('SELECT FROM tweet WHERE content LUCENE :query LIMIT 20',
-    {
-      'params': {
-        'query': request.params.query + '~',
-      },
-    })
-    .then((tweetRecords) => {
-      const result = [];
-
-      const promises = tweetRecords.map((tweetRecord) => {
-        const rid = '' + tweetRecord['@rid'];
-
-        return db.query(
-          `SELECT FROM (TRAVERSE in(TWEETED) FROM (SELECT FROM ${rid})) WHERE @class = "Tweeter"`
-          )
-          .then((tweeterRecords) => {
-            const tweeterRecord = tweeterRecords[0];
-            const toReturn = {
-              'tweet':
-                flattenImmutableObject(
-                  TweetBuilder()
-                    .id(tweetRecord.id)
-                  .content(tweetRecord.content)
-                  .date(tweetRecord.date.toISOString())
-                  .likes(tweetRecord.likes)
-                  .retweets(tweeterRecord.retweets)
-                  .build()),
-              'tweeter':
-                flattenImmutableObject(
-                  TweeterBuilder()
-                    .id(tweeterRecord.id)
-                  .name(tweeterRecord.name)
-                  .handle(tweeterRecord.handle)
-                  .build()),
-            };
-
-            result.push(toReturn);
-          });
-      });
-
-      Promise.all(promises)
-        .then(() => {
-          response.end(
-            JSON.stringify(
-              result));
-        });
-
-    })
-    .error((error) => {
-      console.error('Major issues abound.');
-      response.end('Unable to connect to database.');
-    });
-};
-
 const buildTweetFromDatabaseRecord = (record) => {
   return TweetBuilder()
     .id(record.id)
@@ -74,28 +14,37 @@ const buildTweetFromDatabaseRecord = (record) => {
 };
 
 export const searchQuery = (req, res, secondary = false) => {
-  return doQuery(req.body[0].query)
-    .then((data) => {
-      res.end(JSON.stringify(data));
-    });
+  const query = req.body[0].query;
+  return doQuery(query)
+    .then(
+      (data) => {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(data));
+      },
+      (rejection) => {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end("An unexpected internal error occurred.");
+        console.warn(`Unable to search for query '${query}'`, rejection);
+      }
+    );
 }
 
 const refreshFromTwitter = (query) => {
   return searchAndSaveFromTwitter(query)
     .then(() => {
-      return doQuery(query, true);
+      return doInnerQuery(query, true);
     });
 }
 
-const doInnerQuery = (query, secondary) => {
+const doInnerQuery = (query, alreadyAttemptedRefresh) => {
   // First do an initial search of our database for relevant Tweets
-  const tweetSelection = 'SELECT FROM tweet WHERE content LUCENE :query ORDER BY date DESC LIMIT 3';
+  const tweetSelection = 'SELECT FROM tweet WHERE content LUCENE :query ORDER BY date DESC LIMIT 300';
 
   return chainPromises(() => {
     return db.query(tweetSelection, {'params': {'query': `${query}~`}});
   }).then(
     (tweetRecords) => {
-      const shouldRequeryTwitter = !secondary && tweetRecords.length <= 10;
+      const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 10;
       if (shouldRequeryTwitter) {
         return refreshFromTwitter(query);
 
@@ -113,15 +62,14 @@ const doInnerQuery = (query, secondary) => {
 
 const doQuery = (query, secondary = false) => {
   return doInnerQuery(query, secondary)
-    .then(
-      (STUFF) => {
-      //console.log(STUFF);
+    .then((data) => {
       return {
         'data': {
-          'count': STUFF.length,
-          'tweets': STUFF
+          'count': data.length,
+          'records':
+            data.map((tweet) => { return {'content': tweet, 'source': 'twitter'}; })
         }
       }
-  })
+    })
 
 }

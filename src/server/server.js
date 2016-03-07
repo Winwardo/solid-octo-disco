@@ -38,16 +38,7 @@ app.get('/orient/generate', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
-  //res.writeHead(200, { 'Content-Type': 'application/json' });
-
-  //res.setHeader('Content-Type', 'text/plain')
-  //res.write('you posted:\n')
-  //res.end(JSON.stringify(req.body, null, 2))
-
-  //res.end(`hey ${req.body.query}`)
   searchQuery(req, res);
-
-  //exampleDatabaseCall(req, res);
 });
 
 app.get('/twit/:query', (req, res) => {

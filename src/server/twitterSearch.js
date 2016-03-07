@@ -149,8 +149,10 @@ const processTweet = (db, rawTweet, id) => {
  * @param query Query to search twitter
  */
 export const searchAndSaveFromTwitter = (query, count = 300) => {
+  console.info(`Searching Twitter for query '${query}'.`);
   return TwitAccess.get('search/tweets', { 'q': query, 'count': count })
   .then((result) => {
+    console.info(`Twitter search for '${query}' successful.`)
     return Promise.all(
       result.data.statuses.map((rawTweet) => {
         return processTweet(db, rawTweet);
