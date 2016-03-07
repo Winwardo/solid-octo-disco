@@ -12,7 +12,7 @@ import { TwitAccess, searchAndSaveFromTwitter } from './twitterSearch';
  */
 export const searchQuery = (req, res) => {
   const query = req.body[0].query;
-  return doQuery(query)
+  return searchAndCollateResults(query)
     .then(
       (data) => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -27,8 +27,8 @@ export const searchQuery = (req, res) => {
     );
 };
 
-const doQuery = (query, secondary = false) => {
-  return doInnerQuery(query, secondary)
+const searchAndCollateResults = (query) => {
+  return searchDatabase(query)
     .then((data) => {
       return {
         'data': {
@@ -39,18 +39,14 @@ const doQuery = (query, secondary = false) => {
     });
 };
 
-const getTweetsAsResults = (data) => {
-  return data.map((tweet) => { return { 'content': tweet, 'source': 'twitter' }; });
-};
-
-const doInnerQuery = (query, alreadyAttemptedRefresh) => {
+const searchDatabase = (query, alreadyAttemptedRefresh = false) => {
   const tweetSelection = 'SELECT FROM tweet WHERE content LUCENE :query ORDER BY date DESC LIMIT 300';
 
   return chainPromises(() => {
     return db.query(tweetSelection, { 'params': { 'query': `${query}~` } });
   }).then(
     (tweetRecords) => {
-      const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 10;
+      const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 20;
       if (shouldRequeryTwitter) {
         return refreshFromTwitter(query);
 
@@ -67,6 +63,13 @@ const doInnerQuery = (query, alreadyAttemptedRefresh) => {
   );
 };
 
+const refreshFromTwitter = (query) => {
+  return searchAndSaveFromTwitter(query)
+    .then(() => {
+      return searchDatabase(query, true);
+    });
+};
+
 const buildTweetFromDatabaseRecord = (record) => {
   return TweetBuilder()
     .id(record.id)
@@ -77,9 +80,6 @@ const buildTweetFromDatabaseRecord = (record) => {
     .build();
 };
 
-const refreshFromTwitter = (query) => {
-  return searchAndSaveFromTwitter(query)
-    .then(() => {
-      return doInnerQuery(query, true);
-    });
+const getTweetsAsResults = (data) => {
+  return data.map((tweet) => { return { 'status': tweet, 'author': {}, 'source': 'twitter' }; });
 };
