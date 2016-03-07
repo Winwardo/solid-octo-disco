@@ -2,31 +2,23 @@ export const addSearchTerm = (id, query) => {
 	const searchQuery = {
 		type: 'ADD_SEARCH_TERM',
 		id,
-		query,
 		source: 'twitter'
 	}
 
-	switch(query.startWith) {
+	switch(query.charAt(0)) {
 		case '#':
-			return [addQueryParamType(searchQuery, 'hashtag')];
+			return addQueryParamTypes(searchQuery, query.substring(1), ['hashtag']);
 		case '@':
-			return [
-				addQueryParamType(searchQuery, 'author'),
-				addQueryParamType(searchQuery, 'mention')
-			];  
+			return addQueryParamTypes(searchQuery, query.substring(1), ['author', 'mention']);  
 		default:
-			return [
-				addQueryParamType(searchQuery, 'author'),
-				addQueryParamType(searchQuery, 'hashtag'),
-				addQueryParamType(searchQuery, 'mention'),
-				addQueryParamType(searchQuery, 'keyword')
-			];
+			return addQueryParamTypes(searchQuery, query, ['author', 'hashtag', 'keyword', 'mention']);
 	}
 }
 
-const addQueryParamType = (query, paramType) => {
+const addQueryParamTypes = (searchQuery, query, paramTypes) => {
 	return {
-		...query,
-		paramType
+		...searchQuery,
+		query,
+		paramTypes
 	}
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { batchActions } from 'redux-batched-actions';
 import { addSearchTerm } from './SearchActions';
 
 let nextSearchTermId = 0;
@@ -50,7 +49,7 @@ let Current = ({ dispatch }) => {
 						}}
 						onKeyDown={(e) => {
 							if(e.keyCode == 13) {
-								dispatch(batchActions(addSearchTerm(nextSearchTermId++, searchKeyword.value)))
+								dispatch(addSearchTerm(nextSearchTermId++, searchKeyword.value));
 								searchKeyword.value = '';
 							}
 						}}/>

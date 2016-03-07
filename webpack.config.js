@@ -48,8 +48,7 @@ const serverConfig = extend(true, {}, config, {
   },
   externals: [nodeModules, {
     '../../webpack.config.js': 'commonjs ' + require.resolve(__filename)
-  }],
-  plugins: [],
+  }]
 });
 
 //

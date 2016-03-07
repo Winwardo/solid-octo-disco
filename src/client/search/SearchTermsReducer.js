@@ -16,7 +16,7 @@ const SearchTermReducer = (state, action) => {
 			return {
 				id: action.id,
 				query: action.query,
-				paramType: action.paramType,
+				paramTypes: action.paramTypes,
 				source: action.source
 			};
 		default:

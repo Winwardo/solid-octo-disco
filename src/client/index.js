@@ -1,21 +1,30 @@
 import 'babel-polyfill';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import {combineReducers, createStore } from 'redux';
+import {combineReducers, compose, applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { enableBatching } from 'redux-batched-actions';
 import searchTerms from './search/SearchTermsReducer';
 
 const feedApp = combineReducers({
   searchTerms
 });
 
+const middlewares = [];
+
+const finalStore = createStore(
+  feedApp,
+  compose(
+    applyMiddleware(...middlewares),
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+  )
+);
+
 const rootEl = document.getElementById('root');
 
 let render = () => {
   const App = require('./App').default;
   ReactDOM.render(
-    <Provider store={createStore(enableBatching(feedApp))}>
+    <Provider store={finalStore}>
       <App />
     </Provider>, 
     rootEl
