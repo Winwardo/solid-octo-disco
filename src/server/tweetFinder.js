@@ -1,6 +1,7 @@
 import { db } from './orientdb';
 import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
-import { flattenImmutableObject } from '../shared/utilities';
+import { chainPromises, flattenImmutableObject } from '../shared/utilities';
+import { TwitAccess, processTweet } from './twitterSearch';
 
 /**
  * Grab all tweets from the database, and show them with their authors.
@@ -61,3 +62,68 @@ export const exampleDatabaseCall = (request, response) => {
       response.end('Unable to connect to database.');
     });
 };
+
+const buildTweetFromDatabaseRecord = (record) => {
+  return TweetBuilder()
+    .id(record.id)
+    .content(record.content)
+    .date(record.date.toISOString())
+    .likes(record.likes)
+    .retweets(record.retweets)
+    .build();
+};
+
+export const searchQuery = (req, res, secondary = false) => {
+  return doQuery(req.body[0].query)
+    .then((data) => {
+      res.end(JSON.stringify(data));
+    });
+}
+
+const doQuery = (query, secondary = false) => {
+  //console.log(query);
+
+  let results = [];
+  // First do an initial search of our database for relevant Tweets
+  const tweetSelection = 'SELECT FROM tweet WHERE content LUCENE :query ORDER BY date DESC LIMIT 20';
+
+  return chainPromises(() => {
+    return db.query(tweetSelection, {'params': {'query': query + '~'}});
+  })
+  .then((tweetRecords) => {
+    //console.log(tweetRecords);
+
+    if (false && !secondary && tweetRecords.length <= 10) {
+      console.log("SCRAPEY TWITTEROO")
+      // no relevant results, search Twitter
+      return TwitAccess.get('search/tweets', { 'q': query, 'count': 100 }, function (err, result, response) {
+        return Promise.all(
+          result.statuses.map((rawTweet) => {
+            return processTweet(db, rawTweet);
+          })
+        );
+      })
+      .then((data) => {
+        return searchQuery(req, res, true);
+        //console.log("OKAY SCRAPED TWITTER")
+      });
+    } else {
+      // relevant results, see if they're good enough
+
+      // probably so, just splat them out
+      const thing = tweetRecords.map((tweetRecord) => {
+        return flattenImmutableObject(buildTweetFromDatabaseRecord(tweetRecord));
+      });
+      Array.prototype.push.apply(results, thing);
+    }
+  })
+  .then(() => {
+    return {
+        'data': {
+          'count': results.length,
+          'tweets': results
+        }
+      }
+  })
+
+}

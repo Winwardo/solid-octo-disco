@@ -8,7 +8,7 @@ import { chainPromises } from '../shared/utilities';
 
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
-var T = new Twit({
+export const TwitAccess = new Twit({
   'consumer_key':         'YiSLB0kOlsTd21UGYT32YOUgg',
   'consumer_secret':      '78b5VrGzkcIkpmftLdlFwirraelPRq2t5bFlgEcMkfaQqQh1Mb',
   'access_token':         '1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68',
@@ -123,9 +123,9 @@ function processRawOriginalTweet(db, rawTweet, originalTweeter) {
  * the database.
  * @param db The OrientDB instance
  * @param rawTweet The original status object from the Twitter API
- * @returns {Promise.<T>}
+ * @returns {Promise.<TwitAccess>}
  */
-const processTweet = (db, rawTweet) => {
+export const processTweet = (db, rawTweet) => {
   const tweeter = buildTweeterFromRaw(rawTweet.user);
   const rawRetweetedStatus = rawTweet.retweeted_status;
 
@@ -143,7 +143,7 @@ const processTweet = (db, rawTweet) => {
  * @param query Query to search twitter
  */
 export const searchAndSave = (res, query) => {
-  T.get('search/tweets', { 'q': query, 'count': 20 }, function (err, result, response) {
+  TwitAccess.get('search/tweets', { 'q': query, 'count': 20 }, function (err, result, response) {
     Promise.all(
       result.statuses.map((rawTweet) => {
         return processTweet(db, rawTweet);
@@ -160,7 +160,7 @@ export const searchAndSave = (res, query) => {
  * @param res HTTP Response object
  */
 export const stream = (req, res) => {
-  const stream = T.stream('statuses/filter', { 'track': req.params.query });
+  const stream = TwitAccess.stream('statuses/filter', { 'track': req.params.query });
 
   stream.on('tweet', (tweet) => {
     processTweet(tweet);

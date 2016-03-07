@@ -1,9 +1,10 @@
 import express from 'express';
 import webpack from 'webpack';
 import config from '../../webpack.config.js';
-import { exampleDatabaseCall } from './tweetFinder';
+import { searchQuery } from './tweetFinder';
 import { generateDatabase } from './orientdb';
 import { searchAndSave, stream } from './twitterSearch';
+var bodyParser = require('body-parser')
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,6 +18,11 @@ if (!(process.env.NODE_ENV === 'production')) {
   }));
 
   app.use(require('webpack-hot-middleware')(compiler));
+  // parse application/x-www-form-urlencoded
+  app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+  app.use(bodyParser.json())
 }
 
 //--------------------------------------------------------------------------
@@ -31,9 +37,17 @@ app.get('/orient/generate', (req, res) => {
   generateDatabase(res);
 });
 
-app.get('/search/:query', (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'application/json' });
-  exampleDatabaseCall(req, res);
+app.post('/search', (req, res) => {
+  //res.writeHead(200, { 'Content-Type': 'application/json' });
+
+  //res.setHeader('Content-Type', 'text/plain')
+  //res.write('you posted:\n')
+  //res.end(JSON.stringify(req.body, null, 2))
+
+  //res.end(`hey ${req.body.query}`)
+  searchQuery(req, res);
+
+  //exampleDatabaseCall(req, res);
 });
 
 app.get('/twit/:query', (req, res) => {
