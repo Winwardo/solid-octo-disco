@@ -3,17 +3,14 @@ import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
 import { chainPromises, flattenImmutableObject } from '../shared/utilities';
 import { TwitAccess, searchAndSaveFromTwitter } from './twitterSearch';
 
-const buildTweetFromDatabaseRecord = (record) => {
-  return TweetBuilder()
-    .id(record.id)
-    .content(record.content)
-    .date(record.date.toISOString())
-    .likes(record.likes)
-    .retweets(record.retweets)
-    .build();
-};
-
-export const searchQuery = (req, res, secondary = false) => {
+/**
+ * Searches our database for Tweets and returns them.
+ * If our search is not good enough, access Twitter directly to retrieve more tweets.
+ * @param req A HTTP Request object
+ * @param res A HTTP Response object
+ * @returns {Promise.<T>|*}
+ */
+export const searchQuery = (req, res) => {
   const query = req.body[0].query;
   return doQuery(query)
     .then(
@@ -28,17 +25,22 @@ export const searchQuery = (req, res, secondary = false) => {
         console.warn(`Unable to search for query '${query}'`, rejection);
       }
     );
-};;
+};
 
-const refreshFromTwitter = (query) => {
-  return searchAndSaveFromTwitter(query)
-    .then(() => {
-      return doInnerQuery(query, true);
+const doQuery = (query, secondary = false) => {
+  return doInnerQuery(query, secondary)
+    .then((data) => {
+      return {
+        'data': {
+          'count': data.length,
+          'records':
+            data.map((tweet) => { return { 'content': tweet, 'source': 'twitter' }; }),
+        },
+      };
     });
 };
 
 const doInnerQuery = (query, alreadyAttemptedRefresh) => {
-  // First do an initial search of our database for relevant Tweets
   const tweetSelection = 'SELECT FROM tweet WHERE content LUCENE :query ORDER BY date DESC LIMIT 300';
 
   return chainPromises(() => {
@@ -62,16 +64,19 @@ const doInnerQuery = (query, alreadyAttemptedRefresh) => {
   );
 };
 
-const doQuery = (query, secondary = false) => {
-  return doInnerQuery(query, secondary)
-    .then((data) => {
-      return {
-        'data': {
-          'count': data.length,
-          'records':
-            data.map((tweet) => { return { 'content': tweet, 'source': 'twitter' }; }),
-        },
-      };
-    });
+const buildTweetFromDatabaseRecord = (record) => {
+  return TweetBuilder()
+    .id(record.id)
+    .content(record.content)
+    .date(record.date.toISOString())
+    .likes(record.likes)
+    .retweets(record.retweets)
+    .build();
+};
 
+const refreshFromTwitter = (query) => {
+  return searchAndSaveFromTwitter(query)
+    .then(() => {
+      return doInnerQuery(query, true);
+    });
 };
