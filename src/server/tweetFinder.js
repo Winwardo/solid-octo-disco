@@ -33,11 +33,14 @@ const doQuery = (query, secondary = false) => {
       return {
         'data': {
           'count': data.length,
-          'records':
-            data.map((tweet) => { return { 'content': tweet, 'source': 'twitter' }; }),
+          'records': getTweetsAsResults(data),
         },
       };
     });
+};
+
+const getTweetsAsResults = (data) => {
+  return data.map((tweet) => { return { 'content': tweet, 'source': 'twitter' }; });
 };
 
 const doInnerQuery = (query, alreadyAttemptedRefresh) => {
