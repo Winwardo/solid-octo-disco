@@ -21,30 +21,30 @@ export const groupedCountWords = (countedWords) => {
   const wordCount = [];
 
   for (const wordInfo of countedWords) {
-    const normalised = wordInfo.word.toLowerCase();
+    const normalisedWord = wordInfo.word.toLowerCase();
 
-    let defaultWordInfo = {
-      'word': normalised,
-      'count': wordInfo.count,
-      'makeup': [
-        {
-          'word': wordInfo.word,
-          'count': wordInfo.count,
-        },
-      ],
-    };
     let found = false;
-
-    for (const wordInfo2 of wordCount) {
-      if (wordInfo2.word === normalised) {
+    for (const innerWordInfo of wordCount) {
+      if (innerWordInfo.word === normalisedWord) {
         found = true;
-        wordInfo2.count += wordInfo.count;
-        wordInfo2.makeup.push(wordInfo);
+        innerWordInfo.count += wordInfo.count;
+        innerWordInfo.makeup.push(wordInfo);
       }
     }
 
     if (!found) {
-      wordCount.push(defaultWordInfo);
+      wordCount.push(
+        {
+          'word': normalisedWord,
+          'count': wordInfo.count,
+          'makeup': [
+            {
+              'word': wordInfo.word,
+              'count': wordInfo.count,
+            },
+          ],
+        }
+      );
     };
   };
 
