@@ -54,8 +54,14 @@ const WordItem = ({ wordInfo }) => (
   <div>
     <div className='title'>
       <div className="ui grid">
-        <div className="two wide right aligned column"><div className='statistic'>{wordInfo.count}</div></div>
-        <div className="twelve wide column">{wordInfo.word} <i className='dropdown icon' /></div>
+        <div className="two wide right aligned column">
+          <div className='statistic'>
+            {wordInfo.count}
+          </div>
+        </div>
+        <div className="fourteen wide column">
+          {wordInfo.word} <i className='dropdown icon' />
+        </div>
       </div>
     </div>
     <div className='content'>
@@ -65,6 +71,7 @@ const WordItem = ({ wordInfo }) => (
             wordInfo.makeup.map((makeupInfo) => (
                   <tr>
                     <td className='right aligned' style={{width: '60px'}}>{Math.round(makeupInfo.count / wordInfo.count * 100)}%</td>
+                    <td className='right aligned' style={{width: '60px'}}>{makeupInfo.count}</td>
                     <td>{makeupInfo.word}</td>
                     <td>
                       <div className="ui checkbox">

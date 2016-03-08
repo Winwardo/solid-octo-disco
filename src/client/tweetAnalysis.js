@@ -48,7 +48,7 @@ export const groupedCountWords = (countedWords) => {
     };
   };
 
-  return wordCount;
+  return wordCount.sort((wordCount1, wordCount2) => { return wordCount2.count - wordCount1.count; });
 };
 
 /**
