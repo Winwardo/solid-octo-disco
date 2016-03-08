@@ -23,19 +23,19 @@ const DATABASE_NAME = 'footballers1';
 const insertClass = (db, name, superclass, properties) => {
   db.class.create(name, superclass).then((clazz) => {
     const transformedProperties = properties.map((input) => {
-      return { 'name': input[0], 'type': input[1], 'mandatory': true };
+      return { 'name': input.name, 'type': input.type, 'mandatory': true };
     });
 
     // Add the properties to the class
     clazz.property.create(transformedProperties).then(() => {
       properties.forEach((input) => {
         // Add Lucene fulltext indexes to some properties
-        if (input.length >= 3) {
+        if (input.index !== 'none') {
           db.index.create({
-            'name': `${name}.${input[0]}`,
-            'type': 'FULLTEXT ENGINE LUCENE',
+            'name': `${name}.${input.name}`,
+            'type': input.index,
             'class': name,
-            'properties': input[0]
+            'properties': input.name,
           });
         };
       });
@@ -50,7 +50,7 @@ const insertClass = (db, name, superclass, properties) => {
           'name': `${name}.unique`,
           'class': name,
           'properties': ['in', 'out'],
-          'type': 'UNIQUE'
+          'type': 'UNIQUE',
         });
       });
     }

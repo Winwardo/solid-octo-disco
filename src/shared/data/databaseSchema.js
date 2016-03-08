@@ -7,6 +7,9 @@ const Vertex = 'V';
 
 const None = [];
 
+const NO_INDEX = 'none';
+const LUCENE = 'FULLTEXT ENGINE LUCENE';
+
 const EmptyEdge = {
   'superclass': Edge,
   'properties': None,
@@ -16,25 +19,25 @@ export const schema = {
   'Tweet': {
     'superclass': Vertex,
     'properties': [
-      ['id', Integer],
-      ['content', String, true],
-      ['date', Datetime],
-      ['likes', Integer],
-      ['retweets', Integer],
+      { 'name': 'id', 'type': Integer, 'index': NO_INDEX },
+      { 'name': 'content', 'type': String, 'index': LUCENE },
+      { 'name': 'date', 'type': Datetime, 'index': NO_INDEX },
+      { 'name': 'likes', 'type': Integer, 'index': NO_INDEX },
+      { 'name': 'retweets', 'type': Integer, 'index': NO_INDEX },
     ],
   },
   'Tweeter': {
     'superclass': Vertex,
     'properties': [
-      ['id', Integer],
-      ['name', String, true],
-      ['handle', String],
+      { 'name': 'id', 'type': Integer, 'index': NO_INDEX },
+      { 'name': 'name', 'type': String, 'index': LUCENE },
+      { 'name': 'handle', 'type': String, 'index': NO_INDEX },
     ],
   },
   'Hashtag': {
     'superclass': Vertex,
     'properties': [
-      ['content', String, true],
+      { 'name': 'content', 'type': String, 'index': LUCENE },
     ],
   },
   'TWEETED': EmptyEdge,
