@@ -5,7 +5,7 @@ import SlidingSearchBar from './SearchBar';
 let MostUsedWords = ({ wordInfoList, search, mostUsedWords }) => {
   const filteredWords = () => {
     return wordInfoList
-      .filter((wordInfo) => wordInfo.word.toLowerCase().includes(mostUsedWords.filterTerm))
+      .filter((wordInfo) => wordInfo.word.toLowerCase().includes(mostUsedWords.filterTerm.toLowerCase()))
       .slice(0, 100);
   };
 

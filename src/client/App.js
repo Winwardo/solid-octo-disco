@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Header from './Header';
 import Search from './search/Search';
-import { MostUsedWords } from './results/MostUsedWords';
+import MostUsedWords from './results/MostUsedWords';
 import { mostFrequentWords, mostActiveUsers, exampleTweets } from './tweetAnalysis';
 
 const App = () => {
