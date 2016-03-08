@@ -33,8 +33,9 @@ const insertClass = (db, name, superclass, properties) => {
         if (input.length >= 3) {
           db.index.create({
             'name': `${name}.${input[0]}`,
-            'type': 'FULLTEXT',
-            'engine': 'LUCENE',
+            'type': 'FULLTEXT ENGINE LUCENE',
+            'class': name,
+            'properties': input[0]
           });
         };
       });
@@ -45,7 +46,12 @@ const insertClass = (db, name, superclass, properties) => {
         { 'name': 'out', 'type': 'LINK' },
         { 'name': 'in', 'type': 'LINK' },
       ]).then(() => {
-        db.execute(`CREATE INDEX unique_${name} ON ${name} (in, out) UNIQUE;`);
+        return db.index.create({
+          'name': `${name}.unique`,
+          'class': name,
+          'properties': ['in', 'out'],
+          'type': 'UNIQUE'
+        });
       });
     }
 
