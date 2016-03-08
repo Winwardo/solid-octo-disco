@@ -4,9 +4,11 @@ import React from 'react';
 import { combineReducers, compose, applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import searchTerms from './search/SearchTermsReducer';
+import mostUsedWords from './results/mostUsedWordsReducer';
 
 const feedApp = combineReducers({
   searchTerms,
+  mostUsedWords
 });
 
 const middlewares = [];
