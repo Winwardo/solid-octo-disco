@@ -8,7 +8,7 @@ import mostUsedWords from './results/mostUsedWordsReducer';
 
 const feedApp = combineReducers({
   searchTerms,
-  mostUsedWords
+  mostUsedWords,
 });
 
 const middlewares = [];

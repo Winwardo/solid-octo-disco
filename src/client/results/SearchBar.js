@@ -10,7 +10,7 @@ let SlidingSearchBar = ({ dispatch, searchFor }) => {
       }}/>
       <i className='search icon'></i>
     </div>
-  )
+  );
 };
 
 SlidingSearchBar = connect()(SlidingSearchBar);
