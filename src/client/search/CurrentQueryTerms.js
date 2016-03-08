@@ -41,19 +41,18 @@ let CurrentQueryTerms = ({ dispatch }) => {
 
   return (
     <div className="row ui raised segment">
-			<div style={{ cursor: 'text' }} onClick={onClick}>
-				<SearchTermsList />
-				<div id="searchKeywordContainer" className="ui fluid big transparent input" style={keywordContainerStyle}>
+      <div style={{ cursor: 'text' }} onClick={onClick}>
+        <SearchTermsList />
+        <div id="searchKeywordContainer" className="ui fluid big transparent input" style={keywordContainerStyle}>
           <input id="searchKeyword" type="text" placeholder="Search a keyword or hashtag"
-						ref={(node) => { searchKeyword = node; }}
-
-						onBlur={onBlur}
-						onKeyDown={onKeyDown} />
-					<i className="link remove circle icon"></i>
-				</div>
-			</div>
+            ref={(node) => { searchKeyword = node; }}
+            onBlur={onBlur}
+            onKeyDown={onKeyDown} />
+          <i className="link remove circle icon"></i>
+        </div>
+      </div>
     </div>
-	);
+  );
 };
 
 CurrentQueryTerms = connect()(CurrentQueryTerms);
