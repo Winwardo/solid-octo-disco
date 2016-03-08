@@ -24,18 +24,14 @@ export const groupedCountWords = (countedWords) => {
       'makeup': [
         {
           'word': wordInfo.word,
-          'count': wordInfo.count
-        }
-      ]
+          'count': wordInfo.count,
+        },
+      ],
     };
     let found = false;
 
-    //console.log("wc", wordCount)
     for (const wordInfo2 of wordCount) {
-      //console.log("wordInfo2", wordInfo2)
-      //console.log(wordInfo2.word, normalised)
       if (wordInfo2.word === normalised) {
-        //console.log("FOUND");
         found = true;
         wordInfo2.count += wordInfo.count;
         wordInfo2.makeup.push(wordInfo);
@@ -43,11 +39,8 @@ export const groupedCountWords = (countedWords) => {
     }
 
     if (!found) {
-      //console.log("pushing")
-      wordCount.push(defaultWordInfo)
-      console.log(wordCount);
-    }
-
+      wordCount.push(defaultWordInfo);
+    };
   };
 
   return wordCount;
