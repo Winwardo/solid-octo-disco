@@ -1,5 +1,6 @@
 import OrientDB from 'orientjs';
 import { schema } from './../shared/data/databaseSchema';
+import { chainPromises } from '../shared/utilities';
 
 // Credentials should be stored in a hidden config file, or in environment variables.
 // As this is a student project, for simplicity, they will reside here.
@@ -20,41 +21,71 @@ const DATABASE_NAME = 'footballers1';
  * @param properties Fields on the class, like 'name' or 'content', with their types.
  *   e.g. [['name', 'String'], ['birthday', 'Datetime']]
  */
-const insertClass = (db, name, superclass, properties) => {
-  db.class.create(name, superclass).then((clazz) => {
+const insertClass = (db, name, data) => {
+  const superclass = data.superclass;
+  const properties = data.properties;
+
+  return chainPromises(() => {
+    return db.class.create(name, superclass);
+  }).then((clazz) => {
+
     const transformedProperties = properties.map((input) => {
-      return { 'name': input.name, 'type': input.type, 'mandatory': true };
+      return { ...input, 'mandatory': true };
     });
+
+    console.log(transformedProperties);
 
     // Add the properties to the class
-    clazz.property.create(transformedProperties).then(() => {
-      properties.forEach((input) => {
-        // Add Lucene fulltext indexes to some properties
-        if (input.index !== 'none') {
-          db.index.create({
-            'name': `${name}.${input.name}`,
-            'type': input.index,
-            'class': name,
-            'properties': input.name,
-          });
-        };
-      });
-    });
+    return clazz.property.create(transformedProperties);
+  }).then(() => {
+    // Add indexes
+    return Promise.all(data.indexes.map((index) => {
+      console.log('a');
 
-    if (superclass === 'E') {
-      clazz.property.create([
-        { 'name': 'out', 'type': 'LINK' },
-        { 'name': 'in', 'type': 'LINK' },
-      ]).then(() => {
-        return db.index.create({
-          'name': `${name}.unique`,
-          'class': name,
-          'properties': ['in', 'out'],
-          'type': 'UNIQUE',
-        });
-      });
-    }
+      const defaults = {
+        'name': `${name}.${index.properties.join('_')}`,
+        'class': name,
+      };
 
+      console.log('b');
+      const indexToInsert = { ...defaults, ...index };
+      console.log('c');
+
+      console.log(defaults);
+      console.log(indexToInsert);
+
+      return db.index.create(indexToInsert);
+    }));
+
+    //return Promise.all(properties.map((input) => {
+    //  // Add Lucene fulltext indexes to some properties
+    //  if (input.index !== 'none') {
+    //    return db.index.create({
+    //        'name': `${name}.${input.name}`,
+    //        'type': input.index,
+    //        'class': name,
+    //        'properties': input.name,
+    //      });
+    //  };
+    //}));
+  }).then(() => {
+    //if (superclass === 'E') {
+    //  return chainPromises(() => {
+    //    return clazz.property.create([
+    //      { 'name': 'out', 'type': 'LINK' },
+    //      { 'name': 'in', 'type': 'LINK' },
+    //    ]);
+    //  }).then(() => {
+    //    return db.index.create({
+    //        'name': `${name}.unique`,
+    //        'class': name,
+    //        'properties': ['in', 'out'],
+    //        'type': 'UNIQUE',
+    //      });
+    //  });
+    //}
+  }).catch((error) => {
+    console.warn(`Error: Unable to generate class ${name};`, error.message);
   });
 };
 
@@ -66,7 +97,7 @@ const insertClass = (db, name, superclass, properties) => {
 const insertClassesFromSchema = (db, schema) => {
   Object.keys(schema).forEach((name) => {
     const clazz = schema[name];
-    insertClass(db, name, clazz.superclass, clazz.properties);
+    insertClass(db, name, clazz);
   });
 };
 
