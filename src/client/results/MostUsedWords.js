@@ -2,15 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SlidingSearchBar from './SearchBar';
 
-const mapStateToProps = (state) => {
-  return {
-    mostUsedWords: state.mostUsedWords,
-  };
-};
-
-export const MostUsedWords = connect(mapStateToProps)(({ wordInfoList, search, mostUsedWords }) => {
-  console.log(mostUsedWords);
-
+let MostUsedWords = ({ wordInfoList, search, mostUsedWords }) => {
   const filteredWords = () => {
     return wordInfoList
       .filter((wordInfo) => wordInfo.word.toLowerCase().includes(mostUsedWords.filterTerm))
@@ -34,7 +26,7 @@ export const MostUsedWords = connect(mapStateToProps)(({ wordInfoList, search, m
       </div>
     </div>
   );
-});
+};
 
 class WordItemList extends Component {
   componentDidMount() {
@@ -74,4 +66,11 @@ const ToggleAllWords = () => (
   <button className='ui button'>Hide all</button>
 );
 
-//MostUsedWords = connect()(MostUsedWords);
+const mapStateToProps = (state) => {
+  return {
+    mostUsedWords: state.mostUsedWords,
+  };
+};
+
+MostUsedWords = connect(mapStateToProps)(MostUsedWords);
+export default MostUsedWords;
