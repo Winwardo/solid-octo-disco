@@ -1,5 +1,5 @@
 import { should } from 'chai';
-import { mostFrequentWords, mostActiveUsers } from './tweetAnalysis';
+import { mostFrequentWords, mostActiveUsers, groupedCountWords } from './tweetAnalysis';
 should();
 
 describe('#TweetAnalysis', () => {
@@ -30,6 +30,35 @@ describe('#TweetAnalysis', () => {
       mostFrequentWords(tweets).should.deep.equal(exampleFrequentWords);
     });
 
+    it('can conflate words of different cases together', () => {
+      const exampleCountedWords = [
+        { 'word': 'football', 'count': 10 },
+        { 'word': 'Football', 'count': 5 },
+        { 'word': 'FOOTBALL', 'count': 5 },
+        { 'word': 'liverpool', 'count': 5 },
+      ];
+
+      groupedCountWords(exampleCountedWords).should.deep.equal(
+        [
+          {
+            'word': 'football',
+            'count': 15,
+            'makeup': [
+              { 'word': 'football', 'count': 10 },
+              { 'word': 'Football', 'count': 5 },
+              { 'word': 'FOOTBALL', 'count': 5 },
+            ],
+          },
+          {
+            'word': 'liverpool',
+            'count': 5,
+            'makeup': [
+              { 'word': 'liverpool', 'count': 5 },
+            ],
+          },
+        ]
+      );
+    });
   });
 
   describe('Most active users counter', () => {

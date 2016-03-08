@@ -56,7 +56,7 @@ const WordItem = ({ wordInfo }) => (
     <td className='left aligned column'>{wordInfo.word}</td>
     <td className='right aligned column'>
       <div className='ui checkbox'>
-        <input type='checkbox'  defaultChecked='true'/>
+        <input type='checkbox' defaultChecked='true'/>
       </div>
     </td>
   </tr>
