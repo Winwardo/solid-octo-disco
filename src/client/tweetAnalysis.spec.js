@@ -30,19 +30,83 @@ describe('#TweetAnalysis', () => {
       mostFrequentWords(tweets).should.deep.equal(exampleFrequentWords);
     });
 
-    it('can conflate words of different cases together', () => {
-      const exampleCountedWords = [
+    it('can conflate words of different cases together with one word', () => {
+      const exampleCountedAndSortedWords = [
         { 'word': 'football', 'count': 10 },
-        { 'word': 'Football', 'count': 5 },
-        { 'word': 'FOOTBALL', 'count': 5 },
-        { 'word': 'liverpool', 'count': 5 },
       ];
 
-      groupedCountWords(exampleCountedWords).should.deep.equal(
+      groupedCountWords(exampleCountedAndSortedWords).should.deep.equal(
+        [
+          {
+            'word': 'football',
+            'count': 10,
+            'makeup': [
+              { 'word': 'football', 'count': 10 },
+            ],
+          },
+        ]
+      );
+    });
+
+    it('can conflate words of different cases together with one uppercase word', () => {
+      const exampleCountedAndSortedWords = [
+        { 'word': 'FOOTBALL', 'count': 10 },
+      ];
+
+      groupedCountWords(exampleCountedAndSortedWords).should.deep.equal(
+        [
+          {
+            'word': 'football',
+            'count': 10,
+            'makeup': [
+              { 'word': 'FOOTBALL', 'count': 10 },
+            ],
+          },
+        ]
+      );
+    });
+
+    it('can conflate words of different cases together with one uppercase word and one lower case', () => {
+      const exampleCountedAndSortedWords = [
+        { 'word': 'FOOTBALL', 'count': 10 },
+        { 'word': 'football', 'count': 5 },
+      ];
+
+      groupedCountWords(exampleCountedAndSortedWords).should.deep.equal(
         [
           {
             'word': 'football',
             'count': 15,
+            'makeup': [
+              { 'word': 'FOOTBALL', 'count': 10 },
+              { 'word': 'football', 'count': 5 },
+            ],
+          },
+        ]
+      );
+    });
+
+    it('can conflate words of different cases together in a complex example', () => {
+      const exampleCountedAndSortedWords = [
+        { 'word': 'MANCHESTER', 'count': 16 },
+        { 'word': 'football', 'count': 10 },
+        { 'word': 'liverpool', 'count': 7 },
+        { 'word': 'Football', 'count': 5 },
+        { 'word': 'FOOTBALL', 'count': 5 },
+      ];
+
+      groupedCountWords(exampleCountedAndSortedWords).should.deep.equal(
+        [
+          {
+            'word': 'manchester',
+            'count': 16,
+            'makeup': [
+              { 'word': 'MANCHESTER', 'count': 16 },
+            ],
+          },
+          {
+            'word': 'football',
+            'count': 20,
             'makeup': [
               { 'word': 'football', 'count': 10 },
               { 'word': 'Football', 'count': 5 },
@@ -51,9 +115,9 @@ describe('#TweetAnalysis', () => {
           },
           {
             'word': 'liverpool',
-            'count': 5,
+            'count': 7,
             'makeup': [
-              { 'word': 'liverpool', 'count': 5 },
+              { 'word': 'liverpool', 'count': 7 },
             ],
           },
         ]
