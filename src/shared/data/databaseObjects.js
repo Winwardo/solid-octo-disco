@@ -7,11 +7,11 @@ import { schema } from './databaseSchema';
  * @param name Schema object name
  * @returns {Object} e.g. {'name': null, 'age': null}
  */
-const convertSchemaObjectToClass = (name) => {
+export const convertSchemaObjectToClass = (name, schema) => {
   const newObject = {};
   const schemaObject = schema[name];
   schemaObject.properties.forEach((property) => {
-    newObject[property[0]] = null;
+    newObject[property.name] = null;
   });
   return newObject;
 };
@@ -23,7 +23,7 @@ const convertSchemaObjectToClass = (name) => {
  */
 const generateBuilder = (name) => {
   return BuilderDecorator.BuilderDecorator(
-		convertSchemaObjectToClass(name),
+		convertSchemaObjectToClass(name, schema),
 		{ 'allFieldsMustBeSet': true }
 	);
 };

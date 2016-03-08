@@ -1,7 +1,7 @@
 import { should } from 'chai';
 import * as actions from './SearchActions';
 
-describe('search actions', () => {
+describe('#SearchActions', () => {
   it('should create an action to add a hashtag', () => {
     const id = 0;
     const query = '#Footy';

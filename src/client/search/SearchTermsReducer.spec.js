@@ -2,7 +2,7 @@ import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
 import SearchTermsReducer from './SearchTermsReducer';
 
-describe(SearchTermsReducer, () => {
+describe('#SearchTermsReducer', () => {
   it('should add a hashtag search term', () => {
     const stateBefore = [];
     const action = {
