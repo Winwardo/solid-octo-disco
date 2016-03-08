@@ -42,7 +42,7 @@ class WordItemList extends Component {
   render() {
     return (
       <div style={{ height: '300px', overflowY: 'scroll' }}>
-        <div className='ui fluid accordion' style={{overflow:'hidden'}}>
+        <div className='ui fluid accordion' style={{ overflow:'hidden' }}>
           { this.props.words.map((wordInfo, id) => <WordItem key={id} wordInfo={wordInfo} />) }
         </div>
       </div>
@@ -70,8 +70,8 @@ const WordItem = ({ wordInfo }) => (
           {
             wordInfo.makeup.map((makeupInfo) => (
                   <tr>
-                    <td className='right aligned' style={{width: '60px'}}>{Math.round(makeupInfo.count / wordInfo.count * 100)}%</td>
-                    <td className='right aligned' style={{width: '60px'}}>{makeupInfo.count}</td>
+                    <td className='right aligned' style={{ width: '60px' }}>{Math.round(makeupInfo.count / wordInfo.count * 100)}%</td>
+                    <td className='right aligned' style={{ width: '60px' }}>{makeupInfo.count}</td>
                     <td>{makeupInfo.word}</td>
                     <td>
                       <div className="ui checkbox">
