@@ -31,54 +31,55 @@ let MostUsedWords = ({ wordInfoList, search, mostUsedWords }) => {
 class WordItemList extends Component {
   componentDidMount() {
     $('.ui.checkbox').checkbox();
-    $('.ui.haspopup').popup();
+    $('.ui.accordion').accordion();
   }
 
   componentDidUpdate() {
     $('.ui.checkbox').checkbox();
-    $('.ui.haspopup').popup();
+    $('.ui.accordion').accordion();
   }
 
   render() {
     return (
       <div style={{ height: '300px', overflowY: 'scroll' }}>
-        <table className='ui very basic celled table'>
-          <tbody>
+        <div className='ui fluid accordion' style={{overflow:'hidden'}}>
           { this.props.words.map((wordInfo, id) => <WordItem key={id} wordInfo={wordInfo} />) }
-          </tbody>
-        </table>
+        </div>
       </div>
     );
   }
 };
 
 const WordItem = ({ wordInfo }) => (
-  <tr>
-    <td className='right aligned column'>{wordInfo.count}</td>
-    <td className='left aligned column'>
-      <div className='ui haspopup'>{wordInfo.word}</div>
-      <div className='ui popup'>
-        <table className='ui very basic celled table'>
-          <tbody>
-            {
-              wordInfo.makeup.map((makeupInfo) => (
+  <div>
+    <div className='title'>
+      <div className="ui grid">
+        <div className="two wide right aligned column"><div className='statistic'>{wordInfo.count}</div></div>
+        <div className="twelve wide column">{wordInfo.word} <i className='dropdown icon' /></div>
+      </div>
+    </div>
+    <div className='content'>
+      <table className='ui very basic celled table'>
+        <tbody>
+          {
+            wordInfo.makeup.map((makeupInfo) => (
                   <tr>
-                    <td className='right aligned column'>{Math.round(makeupInfo.count / wordInfo.count * 100)}%</td>
+                    <td className='right aligned' style={{width: '60px'}}>{Math.round(makeupInfo.count / wordInfo.count * 100)}%</td>
                     <td>{makeupInfo.word}</td>
+                    <td>
+                      <div className="ui checkbox">
+                        <label>Show</label>
+                        <input type="checkbox" name="example" checked="true"/>
+                      </div>
+                    </td>
                   </tr>
-                )
               )
-            }
-          </tbody>
-        </table>
-      </div>
-    </td>
-    <td className='right aligned column'>
-      <div className='ui checkbox'>
-        <input type='checkbox' defaultChecked='true'/>
-      </div>
-    </td>
-  </tr>
+            )
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
 );
 
 const ToggleAllWords = () => (
