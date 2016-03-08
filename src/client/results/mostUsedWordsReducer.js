@@ -1,7 +1,7 @@
 const MostUsedWordsReducer = (state = {'filterTerm': ''}, action) => {
   switch (action.type) {
-    case 'UPDATE_MOST_USED_WORDS_FILTER':
-      return {...state, 'filterTerm': action.value}
+    case 'UPDATE_SEARCH_MOST_USED_WORDS_FILTER':
+      return {...state, 'filterTerm': action.filterTerm}
     default:
       return state;
   };

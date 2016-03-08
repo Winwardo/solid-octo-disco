@@ -6,7 +6,7 @@ describe('#MostUsedWordsReducer', () => {
   it('should add the given search term', () => {
     const stateBefore = {};
     const action = {
-      type: 'UPDATE_MOST_USED_WORDS_FILTER',
+      type: 'UPDATE_SEARCH_MOST_USED_WORDS_FILTER',
       value: 'Football',
     };
 
