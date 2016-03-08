@@ -35,7 +35,7 @@ export const mostActiveUsers = (tweets) => {
 function countWords(tweets) {
   const wordCount = {};
   for (const tweet of tweets) {
-    for (const word of tweet.content.split(/[ !,.?"']/)) {
+    for (const word of tweet.content.split(/[ !,.?"'=]/)) {
       const trimmed = word.trim();
       if (trimmed !== '') {
         // ~~ will convert floats to integer,
