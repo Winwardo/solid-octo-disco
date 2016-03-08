@@ -3,20 +3,20 @@ import deepFreeze from 'deep-freeze';
 import MostUsedTermsReducer from './mostUsedWordsReducer';
 
 describe('#MostUsedWordsReducer', () => {
-  it('should add the given search term', () => {
-    const stateBefore = {};
-    const action = {
-      type: 'UPDATE_SEARCH_MOST_USED_WORDS_FILTER',
-      value: 'Football',
-    };
+    it('should add the given search term', () => {
+      const stateBefore = {};
+      const action = {
+        type: 'UPDATE_SEARCH_MOST_USED_WORDS_FILTER',
+        value: 'Football',
+      };
 
-    const stateAfter = {
-      'filterTerm': 'Football'
-    }
+      const stateAfter = {
+        'filterTerm': 'Football'
+      }
 
-    deepFreeze(stateBefore);
-    deepFreeze(action);
+      deepFreeze(stateBefore);
+      deepFreeze(action);
 
-    MostUsedTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+      MostUsedTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+    });
   });
-});
