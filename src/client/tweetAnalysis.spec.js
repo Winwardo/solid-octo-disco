@@ -98,19 +98,19 @@ describe('#TweetAnalysis', () => {
       groupedCountWords(exampleCountedAndSortedWords).should.deep.equal(
         [
           {
-            'word': 'manchester',
-            'count': 16,
-            'makeup': [
-              { 'word': 'MANCHESTER', 'count': 16 },
-            ],
-          },
-          {
             'word': 'football',
             'count': 20,
             'makeup': [
               { 'word': 'football', 'count': 10 },
               { 'word': 'Football', 'count': 5 },
               { 'word': 'FOOTBALL', 'count': 5 },
+            ],
+          },
+          {
+            'word': 'manchester',
+            'count': 16,
+            'makeup': [
+              { 'word': 'MANCHESTER', 'count': 16 },
             ],
           },
           {
