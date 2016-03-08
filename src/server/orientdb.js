@@ -17,9 +17,7 @@ const DATABASE_NAME = 'footballers1';
  * It will not override existing classes.
  * @param db The OrientDb instance
  * @param name The name of the new class, like 'Tweet'
- * @param superclass The superclass, usually 'V' or 'E'
- * @param properties Fields on the class, like 'name' or 'content', with their types.
- *   e.g. [['name', 'String'], ['birthday', 'Datetime']]
+ * @param classSchema The schema of the class
  */
 const insertClass = (db, name, classSchema) => {
   const superclass = classSchema.superclass;
