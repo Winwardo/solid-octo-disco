@@ -1,5 +1,5 @@
 import { should } from 'chai';
-import { convertSchemaObjectToClass } from './databaseObjects'
+import { convertSchemaObjectToClass } from './databaseObjects';
 import { schema } from './databaseSchema';
 
 describe('#DatabaseObject', () => {
@@ -10,4 +10,4 @@ describe('#DatabaseObject', () => {
     exampleClass.should.include.keys(['id', 'content', 'date', 'likes', 'retweets']);
     exampleClass.should.not.include.keys(['some', 'other', 'keys']);
   });
-})
+});

@@ -46,6 +46,7 @@ let CurrentQueryTerms = ({ dispatch }) => {
         <div id="searchKeywordContainer" className="ui fluid big transparent input" style={keywordContainerStyle}>
           <input id="searchKeyword" type="text" placeholder="Search a keyword or hashtag"
             ref={(node) => { searchKeyword = node; }}
+
             onBlur={onBlur}
             onKeyDown={onKeyDown} />
           <i className="link remove circle icon"></i>
