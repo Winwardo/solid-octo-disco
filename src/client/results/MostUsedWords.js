@@ -31,10 +31,12 @@ let MostUsedWords = ({ wordInfoList, search, mostUsedWords }) => {
 class WordItemList extends Component {
   componentDidMount() {
     $('.ui.checkbox').checkbox();
+    $('.ui.haspopup').popup();
   }
 
   componentDidUpdate() {
     $('.ui.checkbox').checkbox();
+    $('.ui.haspopup').popup();
   }
 
   render() {
@@ -53,7 +55,24 @@ class WordItemList extends Component {
 const WordItem = ({ wordInfo }) => (
   <tr>
     <td className='right aligned column'>{wordInfo.count}</td>
-    <td className='left aligned column'>{wordInfo.word}</td>
+    <td className='left aligned column'>
+      <div className='ui haspopup'>{wordInfo.word}</div>
+      <div className='ui popup'>
+        <table className='ui very basic celled table'>
+          <tbody>
+            {
+              wordInfo.makeup.map((makeupInfo) => (
+                  <tr>
+                    <td className='right aligned column'>{Math.round(makeupInfo.count / wordInfo.count * 100)}%</td>
+                    <td>{makeupInfo.word}</td>
+                  </tr>
+                )
+              )
+            }
+          </tbody>
+        </table>
+      </div>
+    </td>
     <td className='right aligned column'>
       <div className='ui checkbox'>
         <input type='checkbox' defaultChecked='true'/>

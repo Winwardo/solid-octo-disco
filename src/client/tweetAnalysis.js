@@ -12,6 +12,11 @@ export const mostFrequentWords = (tweets) => {
   return wordCountToSortedList(countWords(tweets, stopList));
 };
 
+/**
+ * Given counted words, return a new list with counts broken down by word casing
+ * @param countedWords
+ * @returns {Array}
+ */
 export const groupedCountWords = (countedWords) => {
   const wordCount = [];
 
