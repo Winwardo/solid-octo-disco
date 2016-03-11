@@ -1,12 +1,54 @@
 import { flattenObjectToArray } from './../shared/utilities';
 
+// http://www.ranks.nl/stopwords
+const stopList = ['a', 'about', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', "aren't", 'as', 'at', 'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by', "can't", 'cannot', 'could', "couldn't", 'did', "didn't", 'do', 'does', "doesn't", 'doing', "don't", 'down', 'during', 'each', 'few', 'for', 'from', 'further', 'had', "hadn't", 'has', "hasn't", 'have', "haven't", 'having', 'he', "he'd", "he'll", "he's", 'her', 'here', "here's", 'hers', 'herself', 'him', 'himself', 'his', 'how', "how's", 'i', "i'd", "i'll", "i'm", "i've", 'if', 'in', 'into', 'is', "isn't", 'it', "it's", 'its', 'itself', "let's", 'me', 'more', 'most', "mustn't", 'my', 'myself', 'no', 'nor', 'not', 'of', 'off', 'on', 'once', 'only', 'or', 'other', 'ought', 'our', 'ours	ourselves', 'out', 'over', 'own', 'same', "shan't", 'she', "she'd", "she'll", "she's", 'should', "shouldn't", 'so', 'some', 'such', 'than', 'that', "that's", 'the', 'their', 'theirs', 'them', 'themselves', 'then', 'there', "there's", 'these', 'they', "they'd", "they'll", "they're", "they've", 'this', 'those', 'through', 'to', 'too', 'under', 'until', 'up', 'very', 'was', "wasn't", 'we', "we'd", "we'll", "we're", "we've", 'were', "weren't", 'what', "what's", 'when', "when's", 'where', "where's", 'which', 'while', 'who', "who's", 'whom', 'why', "why's", 'with', "won't", 'would', "wouldn't", 'you', "you'd", "you'll", "you're", "you've", 'your', 'yours', 'yourself', 'yourselves'];
+
 /**
  * Given a list of Tweet objects, return a sorted list of the most frequent words in them
  * @param tweets
  * @returns {Array}
  */
 export const mostFrequentWords = (tweets) => {
-  return wordCountToSortedList(countWords(tweets));
+  return wordCountToSortedList(countWords(tweets, stopList));
+};
+
+/**
+ * Given counted words, return a new list with counts broken down by word casing
+ * @param countedWords
+ * @returns {Array}
+ */
+export const groupedCountWords = (countedWords) => {
+  const wordCount = [];
+
+  for (const wordInfo of countedWords) {
+    const normalisedWord = wordInfo.word.toLowerCase();
+
+    let found = false;
+    for (const innerWordInfo of wordCount) {
+      if (innerWordInfo.word === normalisedWord) {
+        found = true;
+        innerWordInfo.count += wordInfo.count;
+        innerWordInfo.makeup.push(wordInfo);
+      }
+    }
+
+    if (!found) {
+      wordCount.push(
+        {
+          'word': normalisedWord,
+          'count': wordInfo.count,
+          'makeup': [
+            {
+              'word': wordInfo.word,
+              'count': wordInfo.count,
+            },
+          ],
+        }
+      );
+    };
+  };
+
+  return wordCount.sort((wordCount1, wordCount2) => { return wordCount2.count - wordCount1.count; });
 };
 
 /**
@@ -32,12 +74,17 @@ export const mostActiveUsers = (tweets) => {
  * @param tweets An array of Tweet objects
  * @returns {{}} e.g. {'hello': 5, 'world': 8}
  */
-function countWords(tweets) {
+function countWords(tweets, stopList = []) {
   const wordCount = {};
   for (const tweet of tweets) {
-    for (const word of tweet.content.split(/[ !,.?"']/)) {
+    for (const word of tweet.content.split(/[ !,.?"'=]/)) {
       const trimmed = word.trim();
-      if (trimmed !== '') {
+      const lowerCase = trimmed.toLowerCase();
+      if (
+        (lowerCase !== '') &&
+        (stopList.indexOf(lowerCase) === -1) &&
+        lowerCase.length > 1
+      ) {
         // ~~ will convert floats to integer,
         // but importantly quickly convert undefined to 0
         wordCount[trimmed] = ~~wordCount[trimmed] + 1;
