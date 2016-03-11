@@ -18,7 +18,7 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: ['hashtag'],
       source: 'twitter',
-    },];
+    }, ];
 
     deepFreeze(stateBefore);
     deepFreeze(action);
@@ -32,7 +32,7 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: ['mention'],
       source: 'twitter',
-    },];
+    }, ];
     const action = {
       type: 'ADD_SEARCH_TERM',
       id: 1,

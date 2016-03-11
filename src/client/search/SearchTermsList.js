@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-const TermsList = ({ searchTerms }) => {
+const TermsList = ({ searchTerms, showSearchTerm }) => {
   return (
-    <div>
+    <div onClick={showSearchTerm}>
       <i className="icon search"></i>
       {searchTerms.map(term => {
         return (

@@ -29,15 +29,15 @@ i {
     content: "\1f44c";
 }
 
-#searchKeyword::-webkit-input-placeholder {
+#addSearchTerm::-webkit-input-placeholder {
     color:    #999;
 }
-#searchKeyword:-moz-placeholder {
+#addSearchTerm:-moz-placeholder {
     color:    #999;
 }
-#searchKeyword::-moz-placeholder {
+#addSearchTerm::-moz-placeholder {
     color:    #999;
 }
-#searchKeyword:-ms-input-placeholder {
+#addSearchTerm:-ms-input-placeholder {
     color:    #999;
 }  
