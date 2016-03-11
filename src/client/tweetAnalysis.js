@@ -82,7 +82,7 @@ function countWords(tweets, stopList = []) {
       const lowerCase = trimmed.toLowerCase();
       if (
         (lowerCase !== '') &&
-        (stopList.indexOf(lowerCase) == -1) &&
+        (stopList.indexOf(lowerCase) === -1) &&
         lowerCase.length > 1
       ) {
         // ~~ will convert floats to integer,

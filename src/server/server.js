@@ -18,13 +18,13 @@ if (!(process.env.NODE_ENV === 'production')) {
   }));
 
   app.use(require('webpack-hot-middleware')(compiler));
-
-  // parse application/x-www-form-urlencoded
-  app.use(bodyParser.urlencoded({ extended: false }));
-
-  // parse application/json
-  app.use(bodyParser.json());
 }
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
 
 //--------------------------------------------------------------------------
 
