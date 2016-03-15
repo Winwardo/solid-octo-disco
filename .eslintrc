@@ -1,6 +1,16 @@
 {
+  "parser": "babel-eslint",
   "extends": "airbnb",
+  "env": {
+      "browser": true,
+      "node": true,
+      "mocha": true,
+      "jquery": true
+  },
   "rules": {
-    "comma-dangle": 0
+      "indent": [2, 2],
+      "no-console": 0,
+      "no-alert": 0,
+      "comma-dangle": 0
   }
 }
