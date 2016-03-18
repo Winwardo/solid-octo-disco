@@ -9,15 +9,14 @@ import { chainPromises } from '../shared/utilities';
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
 export const TWITTER_ENABLED = false;
-const twitDisable = TWITTER_ENABLED ? '' : 'DISABLED';
 
-  export const TwitAccess = new Twit({
-    'access_token': '1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68' + twitDisable,
-    'access_token_secret': 'ceYqZAulg2MT89Jw11rA44FOwHOFcEccFv9HXFIG9ckJf',
-    'consumer_key': 'YiSLB0kOlsTd21UGYT32YOUgg',
-    'consumer_secret': '78b5VrGzkcIkpmftLdlFwirraelPRq2t5bFlgEcMkfaQqQh1Mb',
-    'timeout_ms': 60 * 1000,  // optional HTTP request timeout to apply to all requests.
-  });
+export const TwitAccess = new Twit({
+  'access_token': '1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68',
+  'access_token_secret': 'ceYqZAulg2MT89Jw11rA44FOwHOFcEccFv9HXFIG9ckJf',
+  'consumer_key': 'YiSLB0kOlsTd21UGYT32YOUgg',
+  'consumer_secret': '78b5VrGzkcIkpmftLdlFwirraelPRq2t5bFlgEcMkfaQqQh1Mb',
+  'timeout_ms': 60 * 1000,  // optional HTTP request timeout to apply to all requests.
+});
 
 /**
  * Convert some raw status from the Twitter API into a proper immutable Tweet object.
