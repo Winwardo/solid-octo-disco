@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch';
+
 /**
  * Converts an object of style {'a': {'b': c}, 'd': {'e': f}} to [{'b': c}, {'e': f}]
  * @param {Object} givenObject Any object.
@@ -49,3 +51,32 @@ export const chainPromises = (callback) => {
     resolve(callback());
   });
 };
+
+/**
+ * Generates the boilerplate headers for a JSON POST request
+ * @param body The body of the request, e.g. {'query': 'liverpool'}
+ * @returns {{method: string, headers: {Accept: string, Content-Type: string}, body: *}}
+ */
+export const makePostHeader = (body) => {
+  if (typeof body === 'object') {
+    body = JSON.stringify(body);
+  }
+
+  return {
+    'method': 'POST',
+    'headers': {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body,
+  };
+};;
+
+/**
+ * Creates a JSON POST fetch promise with a given url and body
+ * @param url Where to POST, e.g. '/search'
+ * @param body The body of the request, e.g. {'query': 'liverpool'}
+ */
+export const fetchPost = (url, body) => {
+  return fetch(url, makePostHeader(body));
+};;

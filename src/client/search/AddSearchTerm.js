@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addSearchTerm } from './SearchActions';
+import { addSearchTerm, invalidateFeedResults } from './SearchActions';
 
 let nextSearchTermId = 0;
 
@@ -22,12 +22,15 @@ let AddSearchTerm = ({ dispatch }) => {
         onBlur={() => {
           $('#searchTermContainer').slideUp('fast');
         }}
+
         onKeyDown={(e) => {
           if (e.keyCode === 13) {
             dispatch(addSearchTerm(nextSearchTermId++, e.target.value));
+            dispatch(invalidateFeedResults());
             e.target.value = '';
           }
         }}
+
       />
       <i className="link remove circle icon"></i>
     </div>

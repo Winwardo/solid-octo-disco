@@ -1,5 +1,5 @@
 import { should } from 'chai';
-import { flattenObjectToArray, flattenImmutableObject } from './utilities';
+import { flattenObjectToArray, flattenImmutableObject, makePostHeader, fetchPost } from './utilities';
 should();
 
 describe('#Utilities', () => {
@@ -46,6 +46,31 @@ describe('#Utilities', () => {
         },
       });
 
+    });
+
+  });
+
+  describe('HTTP request creator', () => {
+    it('can create a simple POST request', () => {
+      makePostHeader('hello').should.deep.equal({
+        'method': 'POST',
+        'headers': {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        'body': 'hello',
+      });
+    });
+
+    it('can create a simple POST request given an object', () => {
+      makePostHeader({ 'a': 'b' }).should.deep.equal({
+        'method': 'POST',
+        'headers': {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        'body': '{"a":"b"}',
+      });
     });
 
   });

@@ -2,16 +2,18 @@ import 'babel-polyfill';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { combineReducers, compose, applyMiddleware, createStore } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
-import searchTerms from './search/SearchTermsReducer';
+import { searchReducer, feedReducer } from './search/SearchReducer';
 import mostUsedWords from './results/mostUsedWordsReducer';
 
 const feedApp = combineReducers({
-  searchTerms,
-  mostUsedWords,
+  'search': searchReducer,
+  'mostUsedWords': mostUsedWords,
+  'feed': feedReducer,
 });
 
-const middlewares = [];
+const middlewares = [thunkMiddleware];
 
 const finalStore = createStore(
   feedApp,

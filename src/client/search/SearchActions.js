@@ -1,6 +1,9 @@
+import { fetchPost, chainPromises } from '../../shared/utilities';
+
+export const ADD_SEARCH_TERM = 'ADD_SEARCH_TERM';
 export const addSearchTerm = (id, query) => {
   const searchQuery = {
-    type: 'ADD_SEARCH_TERM',
+    type: ADD_SEARCH_TERM,
     id,
     source: 'twitter',
   };
@@ -13,12 +16,33 @@ export const addSearchTerm = (id, query) => {
     default:
       return addQueryParamTypes(searchQuery, query, ['author', 'hashtag', 'keyword', 'mention']);
   }
-};;
+};
 
 const addQueryParamTypes = (searchQuery, query, paramTypes) => {
   return {
     ...searchQuery,
     query,
     paramTypes,
+  };
+};
+
+export const INVALIDATE_FEED_RESULTS = 'INVALIDATE_FEED_RESULTS';
+export const invalidateFeedResults = () => {
+  return (dispatch, getState) => {
+    dispatch({ 'type': INVALIDATE_FEED_RESULTS });
+    dispatch(searchApiForFeed(getState().search));
+  };
+};
+
+export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
+export const searchApiForFeed = (searchTerms) => {
+  return (dispatch) => {
+    return chainPromises(() => {
+      return fetchPost('/search', searchTerms);
+    }).then(response => {
+      return response.json();
+    }).then(json => {
+      dispatch({ 'type': RECEIVE_FEED_RESULTS, 'data': json });
+    });
   };
 };
