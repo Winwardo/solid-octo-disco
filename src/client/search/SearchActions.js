@@ -1,4 +1,4 @@
-import { fetchPost } from '../../shared/utilities';
+import { fetchPost, chainPromises } from '../../shared/utilities';
 
 export const ADD_SEARCH_TERM = 'ADD_SEARCH_TERM';
 export const addSearchTerm = (id, query) => {
@@ -27,21 +27,22 @@ const addQueryParamTypes = (searchQuery, query, paramTypes) => {
 };
 
 export const INVALIDATE_FEED_RESULTS = 'INVALIDATE_FEED_RESULTS';
-export function invalidateFeedResults() {
-  return function (dispatch, getState) {
+export const invalidateFeedResults = () => {
+  return (dispatch, getState) => {
     dispatch({ 'type': INVALIDATE_FEED_RESULTS });
     dispatch(searchApiForFeed(getState().searchTerms));
   };
 };
 
-export const UPDATE_SEARCH_RESULTS = 'UPDATE_SEARCH_RESULTS';
-export function searchApiForFeed(searchTerms) {
-  return function (dispatch) {
-    return fetchPost('/search', searchTerms)
-    .then(response => {
+export const UPDATE_FEED_RESULTS = 'UPDATE_FEED_RESULTS';
+export const searchApiForFeed = (searchTerms) => {
+  return (dispatch) => {
+    return chainPromises(() => {
+      return fetchPost('/search', searchTerms);
+    }).then(response => {
       return response.json();
     }).then(json => {
-      dispatch({ 'type': UPDATE_SEARCH_RESULTS, 'data': json });
+      dispatch({ 'type': UPDATE_FEED_RESULTS, 'data': json });
     });
   };
-}
+};
