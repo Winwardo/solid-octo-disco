@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addSearchTerm, fetchStuff } from './SearchActions';
+import { addSearchTerm, invalidateFeedResults } from './SearchActions';
 
 let nextSearchTermId = 0;
 
@@ -25,7 +25,7 @@ let AddSearchTerm = ({ dispatch }) => {
         onKeyDown={(e) => {
           if (e.keyCode === 13) {
             dispatch(addSearchTerm(nextSearchTermId++, e.target.value));
-            dispatch(fetchStuff(e.target.value));
+            dispatch(invalidateFeedResults());
             e.target.value = '';
           }
         }}
