@@ -1,3 +1,4 @@
+
 import { ADD_SEARCH_TERM, RECEIVE_FEED_RESULTS, DELETE_SEARCH_TERM } from './searchActions';
 
 export const searchTermsReducer = (state = [], action) => {
@@ -9,7 +10,8 @@ export const searchTermsReducer = (state = [], action) => {
     ];
   case DELETE_SEARCH_TERM: {
     if (state.length === 1) return [];
-    const termIndex = state.findIndex(term => term.id === action.id);
+
+    const termIndex = state.map(term => (term.id)).indexOf(action.id);
     return [
       ...state.slice(0, termIndex),
       ...state.slice(termIndex + 1)
