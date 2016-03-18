@@ -4,13 +4,13 @@ import config from '../../webpack.config.js';
 import { searchQuery } from './tweetFinder';
 import { generateDatabase } from './orientdb';
 import { searchAndSaveResponse, stream } from './twitterSearch';
-var bodyParser = require('body-parser');
+import bodyParser from 'body-parser';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-//In development hotload React using webpack-hot-middleware
-if (!(process.env.NODE_ENV === 'production')) {
+// In development hotload React using webpack-hot-middleware
+if ((process.env.NODE_ENV === 'development')) {
   const compiler = webpack(config[1]);
   app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
@@ -59,5 +59,5 @@ app.listen(port, (err) => {
     return;
   }
 
-  console.log('Server running at http://localhost:' + port);
+  console.log(`Server running at http://localhost:${port}`);
 });
