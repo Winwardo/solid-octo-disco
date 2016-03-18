@@ -6,7 +6,7 @@ export const searchReducer = (state = [], action) => {
       return [
           ...state,
           SearchTermReducer(undefined, action),
-        ]
+        ];
     default:
       return state;
   };
@@ -16,8 +16,8 @@ export const feedReducer = (state = [], action) => {
   switch (action.type) {
     case RECEIVE_FEED_RESULTS:
       return {
-          'posts': action.data
-        }
+          'posts': action.data,
+        };
     default:
       return state;
   };

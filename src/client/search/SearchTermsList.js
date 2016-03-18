@@ -27,7 +27,6 @@ const TermItem = ({ query, source, paramTypes }) => {
 };
 
 const mapStateToProps = (state) => {
-  console.log(state)
   return {
     searchTerms: state.search,
   };

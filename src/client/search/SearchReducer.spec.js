@@ -19,7 +19,7 @@ describe('#searchReducer', () => {
       query: 'Football',
       paramTypes: ['hashtag'],
       source: 'twitter',
-    }, ];
+    },];
 
     deepFreeze(stateBefore);
     deepFreeze(action);
@@ -33,7 +33,7 @@ describe('#searchReducer', () => {
       query: 'Football',
       paramTypes: ['mention'],
       source: 'twitter',
-    }, ];
+    },];
     const action = {
       type: ADD_SEARCH_TERM,
       id: 1,
@@ -53,8 +53,8 @@ describe('#searchReducer', () => {
         query: 'Manchester',
         paramTypes: ['hashtag', 'author'],
         source: 'twitter',
-			},
-		];
+      },
+      ];
 
     deepFreeze(stateBefore);
     deepFreeze(action);
@@ -66,35 +66,35 @@ describe('#searchReducer', () => {
 describe('#feedReducer', () => {
   it('should fill an empty posts with the new data when receiving feed results', () => {
     const stateBefore = {
-      'posts': []
+      'posts': [],
     };
-    const newPosts = [{'data': 'something'}];
-    const action = {'type': RECEIVE_FEED_RESULTS, 'data': newPosts};
+    const newPosts = [{ 'data': 'something' }];
+    const action = { 'type': RECEIVE_FEED_RESULTS, 'data': newPosts };
 
     deepFreeze(stateBefore);
     deepFreeze(action);
 
     const stateAfter = {
-      'posts': newPosts
-    }
+      'posts': newPosts,
+    };
 
     feedReducer(stateBefore, action).should.deep.equal(stateAfter);
   });
 
   it('should overwrite existing posts with the new data when receiving feed results', () => {
     const stateBefore = {
-      'posts': [{'data': 'before data'}, {'data': 'more stuff'}]
+      'posts': [{ 'data': 'before data' }, { 'data': 'more stuff' }],
     };
-    const newPosts = [{'data': 'something'}];
-    const action = {'type': RECEIVE_FEED_RESULTS, 'data': newPosts};
+    const newPosts = [{ 'data': 'something' }];
+    const action = { 'type': RECEIVE_FEED_RESULTS, 'data': newPosts };
 
     deepFreeze(stateBefore);
     deepFreeze(action);
 
     const stateAfter = {
-      'posts': newPosts
-    }
+      'posts': newPosts,
+    };
 
     feedReducer(stateBefore, action).should.deep.equal(stateAfter);
   });
-})
+});
