@@ -30,7 +30,7 @@ export const INVALIDATE_FEED_RESULTS = 'INVALIDATE_FEED_RESULTS';
 export const invalidateFeedResults = () => {
   return (dispatch, getState) => {
     dispatch({ 'type': INVALIDATE_FEED_RESULTS });
-    dispatch(searchApiForFeed(getState().searchTerms));
+    dispatch(searchApiForFeed(getState().search));
   };
 };
 

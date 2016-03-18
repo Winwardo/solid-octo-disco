@@ -1,8 +1,8 @@
 import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
-import SearchTermsReducer from './SearchTermsReducer';
+import { searchReducer } from './SearchReducer';
 
-describe('#SearchTermsReducer', () => {
+describe('#searchReducer', () => {
   it('should add a hashtag search term', () => {
     const stateBefore = [];
     const action = {
@@ -23,7 +23,7 @@ describe('#SearchTermsReducer', () => {
     deepFreeze(stateBefore);
     deepFreeze(action);
 
-    SearchTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+    searchReducer(stateBefore, action).should.deep.equal(stateAfter);
   });
 
   it('should add a new query to existing queries', () => {
@@ -58,6 +58,6 @@ describe('#SearchTermsReducer', () => {
     deepFreeze(stateBefore);
     deepFreeze(action);
 
-    SearchTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+    searchReducer(stateBefore, action).should.deep.equal(stateAfter);
   });
 });
