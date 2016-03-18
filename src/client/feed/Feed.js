@@ -23,14 +23,9 @@ const FeedItem = ({ content }) => {
           content.source === 'twitter' ? <i className="twitter icon" /> : ''
         }
       </div>
-      <div className="core">
-        <div className="header">{content.author.name}</div>
-        <div className="content">
-          {
-            content.source === 'twitter' ? <Tweet content={content} /> : ''
-          }
-        </div>
-      </div>
+      {
+        content.source === 'twitter' ? <Tweet content={content} /> : ''
+      }
     </div>
   );
 };
@@ -43,12 +38,18 @@ class Tweet extends Component {
   render() {
     const content = this.props.content;
     return (
-      <div>
+      <div className="content">
+        <div className="header">{content.author.name}</div>
+        &nbsp;
+        <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
+        <br />
         {content.data.content}
 
         <div className="meta">
           <span className="date">
-            {moment(content.data.date).calendar()}
+            <a href={`//twitter.com/${content.author.handle}/status/${content.data.id}`}>
+              {moment(content.data.date).calendar()}
+            </a>
           </span>
           |
           <span className="likes popup" data-title="Likes">
