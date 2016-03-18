@@ -1,36 +1,63 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { deleteSearchTerm } from './searchActions';
+// import { getParamTypeIcon } from '../../shared/utilities';
 
-const TermsList = ({ searchTerms, showSearchTerm }) => {
-  return (
-    <div onClick={showSearchTerm}>
-      <i className="icon search"></i>
-      {searchTerms.map(term => {
-        return (
-          <TermItem
-            key={term.id}
-            {...term}
-          />
-        );
-      })}
-    </div>
-	);
-};
+const TermsList = ({ searchTerms, showSearchTerm, onSearchTermClick }) => (
+  <div onClick={showSearchTerm}>
+    <i className="icon search"></i>
+    {searchTerms.map(term => (
+      <TermItem
+        key={term.id}
+        {...term}
+        onClick={() => onSearchTermClick(term.id)}
+      />
+    ))}
+  </div>
+);
 
-const TermItem = ({ query, source, paramTypes }) => {
+const TermItem = ({ onClick, query, source, paramTypes }) => {
+  let termClass = 'ui large image ';
+  switch (source) {
+  case 'twitter':
+    termClass += 'blue label';
+    break;
+  default:
+    termClass += 'label';
+  }
+
+  // const paramTypeIcons = paramTypes.map((paramTypeText) => {
+  //   const paramIcon = getParamTypeIcon(paramTypeText);
+  //   if (paramIcon.length > 1) {
+  //     return <i className={paramIcon}></i>;
+  //   }
+  //   return <i className="icon">{paramIcon}</i>;
+  // });
+
   return (
-    <a className="ui label">
+    <a className={termClass}>
+      <i className="twitter icon"></i>
       {query}
-      <i className="delete icon"></i>
+      <div className="detail" onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+      >
+        <i className="delete icon"></i>
+      </div>
     </a>
   );
 };
 
-const mapStateToProps = (state) => {
-  console.log(state)
-  return {
-    searchTerms: state.search,
-  };
-};
+const mapStateToProps = (state) => ({ searchTerms: state.searchTerms });
 
-export default connect(mapStateToProps)(TermsList);
+const mapDispatchToProps = (dispatch) => ({
+  onSearchTermClick: (id) => {
+    dispatch(deleteSearchTerm(id));
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TermsList);
