@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch';
+import { fetchPost } from '../../shared/utilities';
 
 export const ADD_SEARCH_TERM = 'ADD_SEARCH_TERM';
 export const addSearchTerm = (id, query) => {
@@ -30,23 +30,15 @@ export const INVALIDATE_FEED_RESULTS = 'INVALIDATE_FEED_RESULTS';
 export function invalidateFeedResults() {
   return function (dispatch, getState) {
     dispatch({ 'type': INVALIDATE_FEED_RESULTS });
-    dispatch(searchOrientThing(getState().searchTerms));
+    dispatch(searchApiForFeed(getState().searchTerms));
   };
 };
 
-const POST_HEADERS = {
-  'Accept': 'application/json',
-  'Content-Type': 'application/json',
-};
-
 export const UPDATE_SEARCH_RESULTS = 'UPDATE_SEARCH_RESULTS';
-export function searchOrientThing(searchTerms) {
+export function searchApiForFeed(searchTerms) {
   return function (dispatch) {
-    return fetch('/search', {
-      'method': 'POST',
-      'headers': POST_HEADERS,
-      'body': JSON.stringify(searchTerms),
-    }).then(response => {
+    return fetchPost('/search', searchTerms)
+    .then(response => {
       return response.json();
     }).then(json => {
       dispatch({ 'type': UPDATE_SEARCH_RESULTS, 'data': json });
