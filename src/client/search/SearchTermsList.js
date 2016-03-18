@@ -3,20 +3,20 @@ import { connect } from 'react-redux';
 import { deleteSearchTerm } from './searchActions';
 // import { getParamTypeIcon } from '../../shared/utilities';
 
-const TermsList = ({ searchTerms, showSearchTerm, onSearchTermClick }) => (
+const TermsList = ({ searchTerms, showSearchTerm, onSearchTermDeleteClick }) => (
   <div onClick={showSearchTerm}>
     <i className="icon search"></i>
     {searchTerms.map(term => (
       <TermItem
         key={term.id}
         {...term}
-        onClick={() => onSearchTermClick(term.id)}
+        onDeleteClick={() => onSearchTermDeleteClick(term.id)}
       />
     ))}
   </div>
 );
 
-const TermItem = ({ onClick, query, source, paramTypes }) => {
+const TermItem = ({ onDeleteClick, query, source, paramTypes }) => {
   let termClass = 'ui large image ';
   switch (source) {
   case 'twitter':
@@ -26,6 +26,7 @@ const TermItem = ({ onClick, query, source, paramTypes }) => {
     termClass += 'label';
   }
 
+  // TODO edit
   // const paramTypeIcons = paramTypes.map((paramTypeText) => {
   //   const paramIcon = getParamTypeIcon(paramTypeText);
   //   if (paramIcon.length > 1) {
@@ -40,7 +41,7 @@ const TermItem = ({ onClick, query, source, paramTypes }) => {
       {query}
       <div className="detail" onClick={(e) => {
         e.stopPropagation();
-        onClick();
+        onDeleteClick();
       }}
       >
         <i className="delete icon"></i>
@@ -52,7 +53,7 @@ const TermItem = ({ onClick, query, source, paramTypes }) => {
 const mapStateToProps = (state) => ({ searchTerms: state.searchTerms });
 
 const mapDispatchToProps = (dispatch) => ({
-  onSearchTermClick: (id) => {
+  onSearchTermDeleteClick: (id) => {
     dispatch(deleteSearchTerm(id));
   }
 });
