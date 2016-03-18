@@ -28,28 +28,28 @@ const addQueryParamTypes = (searchQuery, query, paramTypes) => {
 
 export const INVALIDATE_FEED_RESULTS = 'INVALIDATE_FEED_RESULTS';
 export function invalidateFeedResults() {
-  return function(dispatch, getState) {
-    dispatch({'type': INVALIDATE_FEED_RESULTS});
-    dispatch(searchOrientThing(getState().searchTerms))
+  return function (dispatch, getState) {
+    dispatch({ 'type': INVALIDATE_FEED_RESULTS });
+    dispatch(searchOrientThing(getState().searchTerms));
   };
 };
 
 const POST_HEADERS = {
   'Accept': 'application/json',
-    'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
 };
 
 export const UPDATE_SEARCH_RESULTS = 'UPDATE_SEARCH_RESULTS';
 export function searchOrientThing(searchTerms) {
-  return function(dispatch) {
-    return fetch("/search", {
+  return function (dispatch) {
+    return fetch('/search', {
       'method': 'POST',
       'headers': POST_HEADERS,
-      'body': JSON.stringify(searchTerms)
+      'body': JSON.stringify(searchTerms),
     }).then(response => {
-      return response.json()
+      return response.json();
     }).then(json => {
-      dispatch({'type': UPDATE_SEARCH_RESULTS, 'data': json});
+      dispatch({ 'type': UPDATE_SEARCH_RESULTS, 'data': json });
     });
-  }
+  };
 }
