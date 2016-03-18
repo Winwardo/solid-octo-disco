@@ -155,7 +155,7 @@ const processTweet = (db, rawTweet, id) => {
 export const searchAndSaveFromTwitter = (query, count = 300) => {
   if (TWITTER_ENABLED) {
     console.info(`Searching Twitter for query '${query}'.`);
-    return TwitAccess.get('search/tweets', {'q': query, 'count': count})
+    return TwitAccess.get('search/tweets', { 'q': query, 'count': count })
       .then((result) => {
         console.info(`Twitter search for '${query}' successful.`);
         return Promise.all(

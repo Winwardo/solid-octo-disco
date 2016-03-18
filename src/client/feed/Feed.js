@@ -2,43 +2,44 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-const Feed = ({feed}) => {
+const Feed = ({ feed }) => {
   return (
     <div>
       <h3>Search results</h3>
       <div className="ui divided items">
         {
-          feed.posts.map((feedItem) => {return (<FeedItem content={feedItem}/>)})
+          feed.posts.map((feedItem) => {return (<FeedItem content={feedItem}/>);})
         }
       </div>
     </div>
   );
 };
 
-const FeedItem = ({content}) => {
+const FeedItem = ({ content }) => {
   return (
     <div className="item">
-      <div className="meta" style={{minWidth: '40px', textAlign: 'center', verticalAlign: 'middle'}}>
+      <div className="meta" style={{ minWidth: '40px', textAlign: 'center', verticalAlign: 'middle' }}>
         {
-          content.source === "twitter" ? <i className="twitter icon" /> : ""
+          content.source === 'twitter' ? <i className="twitter icon" /> : ''
         }
       </div>
       <div className="core">
         <div className="header">{content.author.name}</div>
         <div className="content">
           {
-            content.source === "twitter" ? <Tweet content={content} /> : ""
+            content.source === 'twitter' ? <Tweet content={content} /> : ''
           }
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 class Tweet extends Component {
   componentDidMount() {
     $('.popup').popup();
   }
+
   render() {
     const content = this.props.content;
     return (
@@ -59,7 +60,7 @@ class Tweet extends Component {
           </span>
         </div>
       </div>
-    )
+    );
   }
 }
 

@@ -56,6 +56,7 @@ const searchDatabase = (query, alreadyAttemptedRefresh = false) => {
     (resolved) => {
       return resolved;
     },
+
     (rejection) => {
       console.warn('Major error querying the database.', rejection);
     }
@@ -96,5 +97,5 @@ const buildTweetFromDatabaseRecord = (record) => {
 
 const getTweetsAsResults = (data) => {
   return data.map((tweet) => {
-    return { 'data': tweet.tweet, 'author': tweet.author, 'source': 'twitter' }; });
+  return { 'data': tweet.tweet, 'author': tweet.author, 'source': 'twitter' }; });
 };
