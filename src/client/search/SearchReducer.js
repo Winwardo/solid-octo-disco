@@ -1,4 +1,4 @@
-import { ADD_SEARCH_TERM, UPDATE_FEED_RESULTS } from './SearchActions';
+import { ADD_SEARCH_TERM, RECEIVE_FEED_RESULTS } from './SearchActions';
 
 export const searchReducer = (state = [], action) => {
   switch (action.type) {
@@ -14,7 +14,7 @@ export const searchReducer = (state = [], action) => {
 
 export const feedReducer = (state = [], action) => {
   switch (action.type) {
-    case UPDATE_FEED_RESULTS:
+    case RECEIVE_FEED_RESULTS:
       return {
           'posts': action.data
         }
