@@ -40,7 +40,7 @@ const searchAndCollateResults = (query) => {
 };
 
 const searchDatabase = (query, alreadyAttemptedRefresh = false) => {
-  const tweetSelection = 'SELECT FROM tweet WHERE content LUCENE :query ORDER BY date DESC LIMIT 300';
+  const tweetSelection = 'SELECT * FROM (TRAVERSE in(\'TWEETED\') FROM (SELECT FROM tweet WHERE content LUCENE :query ORDER BY date DESC)) LIMIT 300';
 
   return chainPromises(() => {
     return db.query(tweetSelection, { 'params': { 'query': `${query}~` } });
@@ -51,9 +51,18 @@ const searchDatabase = (query, alreadyAttemptedRefresh = false) => {
         return refreshFromTwitter(query);
 
       } else {
-        return tweetRecords.map((tweetRecord) => {
-          return flattenImmutableObject(buildTweetFromDatabaseRecord(tweetRecord));
-        });
+        const results = [];
+        for (let i = 0; i < tweetRecords.length; i += 2) {
+          console.log("--")
+          console.log("i", tweetRecords[i]);
+          console.log("i+1", tweetRecords[i+1]);
+
+          results.push({
+            'tweet': flattenImmutableObject(buildTweetFromDatabaseRecord(tweetRecords[i])),
+            'author': {'name': 'bob'},
+          });
+        }
+        return results;
       }
     },
 
@@ -81,5 +90,7 @@ const buildTweetFromDatabaseRecord = (record) => {
 };
 
 const getTweetsAsResults = (data) => {
-  return data.map((tweet) => { return { 'data': tweet, 'author': {}, 'source': 'twitter' }; });
+  return data.map((tweet) => {
+    console.log(tweet);
+    return { 'data': tweet.tweet, 'author': tweet.author, 'source': 'twitter' }; });
 };
