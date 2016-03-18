@@ -58,20 +58,20 @@ describe('#Utilities', () => {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        'body': 'hello'
-      })
-    })
+        'body': 'hello',
+      });
+    });
 
     it('can create a simple POST request given an object', () => {
-      makePostHeader({'a': 'b'}).should.deep.equal({
+      makePostHeader({ 'a': 'b' }).should.deep.equal({
         'method': 'POST',
         'headers': {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        'body': '{"a":"b"}'
-      })
-    })
+        'body': '{"a":"b"}',
+      });
+    });
 
   });
 

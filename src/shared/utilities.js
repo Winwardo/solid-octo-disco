@@ -68,9 +68,9 @@ export const makePostHeader = (body) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    body
-  }
-}
+    body,
+  };
+};;
 
 /**
  * Creates a JSON POST fetch promise with a given url and body
@@ -79,4 +79,4 @@ export const makePostHeader = (body) => {
  */
 export const fetchPost = (url, body) => {
   return fetch(url, makePostHeader(body));
-}
+};;
