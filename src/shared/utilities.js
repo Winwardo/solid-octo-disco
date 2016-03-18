@@ -81,7 +81,7 @@ export const fetchPost = (url, body) => (
   fetch(url, makePostHeader(body))
 );
 
-/*
+/**
  *
  * Returns a semantic icon name or character to represent seachParamTypes
  * eg. hashtag = #, mention = @
