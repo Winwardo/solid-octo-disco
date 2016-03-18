@@ -8,13 +8,16 @@ import { chainPromises } from '../shared/utilities';
 
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
-export const TwitAccess = new Twit({
-  'consumer_key':         'YiSLB0kOlsTd21UGYT32YOUgg',
-  'consumer_secret':      '78b5VrGzkcIkpmftLdlFwirraelPRq2t5bFlgEcMkfaQqQh1Mb',
-  'access_token':         '1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68',
-  'access_token_secret':  'ceYqZAulg2MT89Jw11rA44FOwHOFcEccFv9HXFIG9ckJf',
-  'timeout_ms':           60 * 1000,  // optional HTTP request timeout to apply to all requests.
-});
+export const TWITTER_ENABLED = false;
+const twitDisable = TWITTER_ENABLED ? '' : 'DISABLED';
+
+  export const TwitAccess = new Twit({
+    'access_token': '1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68' + twitDisable,
+    'access_token_secret': 'ceYqZAulg2MT89Jw11rA44FOwHOFcEccFv9HXFIG9ckJf',
+    'consumer_key': 'YiSLB0kOlsTd21UGYT32YOUgg',
+    'consumer_secret': '78b5VrGzkcIkpmftLdlFwirraelPRq2t5bFlgEcMkfaQqQh1Mb',
+    'timeout_ms': 60 * 1000,  // optional HTTP request timeout to apply to all requests.
+  });
 
 /**
  * Convert some raw status from the Twitter API into a proper immutable Tweet object.
@@ -151,16 +154,23 @@ const processTweet = (db, rawTweet, id) => {
  * @param query Query to search twitter
  */
 export const searchAndSaveFromTwitter = (query, count = 300) => {
-  console.info(`Searching Twitter for query '${query}'.`);
-  return TwitAccess.get('search/tweets', { 'q': query, 'count': count })
-  .then((result) => {
-    console.info(`Twitter search for '${query}' successful.`);
-    return Promise.all(
-      result.data.statuses.map((rawTweet) => {
-        return processTweet(db, rawTweet);
-      })
-    );
-  }, (rej) => { console.warn('Unable to search Twitter.', rej); });
+  if (TWITTER_ENABLED) {
+    console.info(`Searching Twitter for query '${query}'.`);
+    return TwitAccess.get('search/tweets', {'q': query, 'count': count})
+      .then((result) => {
+        console.info(`Twitter search for '${query}' successful.`);
+        return Promise.all(
+          result.data.statuses.map((rawTweet) => {
+            return processTweet(db, rawTweet);
+          })
+        );
+      }, (rej) => {
+        console.warn('Unable to search Twitter.', rej);
+      });
+  } else {
+    console.info(`Twitter disabled, not searching query '${query}'.`);
+    return Promise.resolve();
+  }
 };;
 
 export const searchAndSaveResponse = (res, query) => {

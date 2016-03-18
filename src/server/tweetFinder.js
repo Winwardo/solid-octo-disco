@@ -46,7 +46,7 @@ const searchDatabase = (query, alreadyAttemptedRefresh = false) => {
     return db.query(tweetSelection, { 'params': { 'query': `${query}~` } });
   }).then(
     (tweetRecords) => {
-      const shouldRequeryTwitter = false && !alreadyAttemptedRefresh && tweetRecords.length <= 20;
+      const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 20;
       if (shouldRequeryTwitter) {
         return refreshFromTwitter(query);
 
