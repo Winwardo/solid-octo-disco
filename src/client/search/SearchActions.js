@@ -30,11 +30,11 @@ export const INVALIDATE_FEED_RESULTS = 'INVALIDATE_FEED_RESULTS';
 export const invalidateFeedResults = () => {
   return (dispatch, getState) => {
     dispatch({ 'type': INVALIDATE_FEED_RESULTS });
-    dispatch(searchApiForFeed(getState().searchTerms));
+    dispatch(searchApiForFeed(getState().search));
   };
 };
 
-export const UPDATE_FEED_RESULTS = 'UPDATE_FEED_RESULTS';
+export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
 export const searchApiForFeed = (searchTerms) => {
   return (dispatch) => {
     return chainPromises(() => {
@@ -42,7 +42,7 @@ export const searchApiForFeed = (searchTerms) => {
     }).then(response => {
       return response.json();
     }).then(json => {
-      dispatch({ 'type': UPDATE_FEED_RESULTS, 'data': json });
+      dispatch({ 'type': RECEIVE_FEED_RESULTS, 'data': json });
     });
   };
 };
