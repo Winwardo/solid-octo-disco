@@ -12,11 +12,19 @@ const App = () => {
 
 			<Search />
 
-			<Feed />
+      <div className="ui grid">
+        <div className="four wide column">
+          <h3>Most frequent users</h3>
+        </div>
 
-			<div style={{ width: '400px', float: 'right' }}>
-				<MostUsedWords wordInfoList={groupedCountWords(mostFrequentWords(exampleTweets.map((data) => data.tweet)))} search=''/>
-			</div>
+        <div className="eight wide column">
+          <Feed />
+        </div>
+
+        <div className="four wide column">
+          <MostUsedWords wordInfoList={groupedCountWords(mostFrequentWords(exampleTweets.map((data) => data.tweet)))} search=''/>
+        </div>
+      </div>
 
 			{/* <Footer /> */}
 		</div>
