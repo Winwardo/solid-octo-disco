@@ -1,9 +1,9 @@
 const path = require('path');
-var fs = require('fs');
+const fs = require('fs');
 const webpack = require('webpack');
 const extend = require('extend');
 
-const production = process.env.NODE_ENV === 'production';
+const development = process.env.NODE_ENV === 'development';
 
 //
 // Common configuration chunk to be used for both
@@ -19,12 +19,12 @@ const config = {
       }
     ]
   },
-  debug: !production
-}
+  debug: development
+};
 
 // Calculate external dependencies for Webpack. Webpack searches for these
 // packages in the node_modules instead of packing them into the bundle.
-var nodeModules = {};
+const nodeModules = {};
 fs.readdirSync('node_modules')
   .forEach(function(mod) {
     if (mod !== '.bin') {
@@ -56,33 +56,33 @@ const serverConfig = extend(true, {}, config, {
 // -----------------------------------------------------------------------------
 const clientConfig = extend(true, {}, config, {
   devtool: 'eval',
-  entry: production ? './src/client/index.js' : 
-  [
-    'eventsource-polyfill', //necessary evil for hot loading with IE
+  entry: development ? [
+    'eventsource-polyfill', // necessary evil for hot loading with IE
     'webpack-hot-middleware/client',
-    './src/client/index.js' 
-  ],
+    './src/client/index.js'
+  ] :
+  './src/client/index.js',
   output: {
     path: path.join(__dirname, 'public'),
     filename: 'bundle.js',
     publicPath: '/public/'
   },
-  plugins: production ? [
-      new webpack.optimize.DedupePlugin(),
-      new webpack.optimize.UglifyJsPlugin({
-        compress: {
+  plugins: development ? [
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin()
+  ] : [
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
           // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-          screw_ie8: true,
+        screw_ie8: true,
 
           // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
-          warnings: false,
-        },
-      }),
-      new webpack.optimize.AggressiveMergingPlugin(),
-    ] : [
-      new webpack.optimize.OccurenceOrderPlugin(),
-      new webpack.HotModuleReplacementPlugin()
-    ]
+        warnings: false,
+      },
+    }),
+    new webpack.optimize.AggressiveMergingPlugin(),
+  ]
 });
 
-module.exports = [ serverConfig, clientConfig ];
+module.exports = [serverConfig, clientConfig];
