@@ -6,12 +6,10 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import searchTerms from './search/SearchTermsReducer';
 import mostUsedWords from './results/mostUsedWordsReducer';
-import feed from './feed/feedReducer';
 
 const feedApp = combineReducers({
   searchTerms,
   mostUsedWords,
-  feed,
 });
 
 const middlewares = [thunkMiddleware];
