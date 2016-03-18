@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import { ADD_SEARCH_TERM, RECEIVE_FEED_RESULTS, DELETE_SEARCH_TERM } from './searchActions';
 
 export const searchTermsReducer = (state = [], action) => {
