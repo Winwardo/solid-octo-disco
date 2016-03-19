@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addSearchTerm, invalidateFeedResults } from './SearchActions';
+import { addSearchTerm, invalidateFeedResults } from './searchActions';
 
 let nextSearchTermId = 0;
 
