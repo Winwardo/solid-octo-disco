@@ -1,4 +1,4 @@
-import { fetchPost, chainPromises } from '../../shared/utilities';
+import { fetchPost, chainPromises, createTwitterParamTypes } from '../../shared/utilities';
 
 export const ADD_SEARCH_TERM = 'ADD_SEARCH_TERM';
 export const addSearchTerm = (id, query) => {
@@ -10,11 +10,23 @@ export const addSearchTerm = (id, query) => {
 
   switch (query.charAt(0)) {
   case '#':
-    return addQueryParamTypes(searchQuery, query.substring(1), ['hashtag']);
+    return addQueryParamTypes(
+      searchQuery,
+      query.substring(1),
+      createTwitterParamTypes(['hashtag'])
+    );
   case '@':
-    return addQueryParamTypes(searchQuery, query.substring(1), ['author', 'mention']);
+    return addQueryParamTypes(
+      searchQuery,
+      query.substring(1),
+      createTwitterParamTypes(['author', 'mention'])
+    );
   default:
-    return addQueryParamTypes(searchQuery, query, ['author', 'hashtag', 'keyword', 'mention']);
+    return addQueryParamTypes(
+      searchQuery,
+      query,
+      createTwitterParamTypes(['author', 'hashtag', 'keyword', 'mention'])
+    );
   }
 };
 
@@ -45,4 +57,11 @@ export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';
 export const deleteSearchTerm = (id) => ({
   type: DELETE_SEARCH_TERM,
   id
+});
+
+export const EDIT_SEARCH_TERM_PARAMTYPE_SELECTION = 'EDIT_SEARCH_TERM_PARAMTYPE_SELECTION';
+export const editSearchTermParamTypeSelection = (id, paramTypeName) => ({
+  type: EDIT_SEARCH_TERM_PARAMTYPE_SELECTION,
+  id,
+  paramTypeName
 });

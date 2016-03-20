@@ -1,5 +1,6 @@
 import { should } from 'chai';
 import * as actions from './searchActions';
+import { createTwitterParamTypes } from '../../shared/utilities';
 
 describe('#SearchActions', () => {
   it('should create an action to add a hashtag', () => {
@@ -11,7 +12,7 @@ describe('#SearchActions', () => {
       type: 'ADD_SEARCH_TERM',
       id,
       query: expectedQuery,
-      paramTypes: ['hashtag'],
+      paramTypes: createTwitterParamTypes(['hashtag']),
       source: 'twitter',
     };
 
@@ -27,7 +28,7 @@ describe('#SearchActions', () => {
       type: 'ADD_SEARCH_TERM',
       id,
       query: expectedQuery,
-      paramTypes: ['author', 'mention'],
+      paramTypes: createTwitterParamTypes(['author', 'mention']),
       source: 'twitter',
     };
 
@@ -43,7 +44,7 @@ describe('#SearchActions', () => {
       type: 'ADD_SEARCH_TERM',
       id,
       query: expectedQuery,
-      paramTypes: ['author', 'hashtag', 'keyword', 'mention'],
+      paramTypes: createTwitterParamTypes(['author', 'hashtag', 'keyword', 'mention']),
       source: 'twitter',
     };
 

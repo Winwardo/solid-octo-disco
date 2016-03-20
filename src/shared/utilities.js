@@ -82,13 +82,35 @@ export const fetchPost = (url, body) => (
 );
 
 /**
- *
+ * Creates the paramTypes for a Twitter specific search term.
+ * @param array of strings representing search paramaterTypes
+ * @returns array of objects representing search terms with meta data
+ */
+export const createTwitterParamTypes = (paramTypesText) => [{
+  name: 'author',
+  selected: paramTypesText.indexOf('author') > -1,
+  icon: getParamTypeIcon('author')
+}, {
+  name: 'hashtag',
+  selected: paramTypesText.indexOf('hashtag') > -1,
+  icon: getParamTypeIcon('hashtag')
+}, {
+  name: 'keyword',
+  selected: paramTypesText.indexOf('keyword') > -1,
+  icon: getParamTypeIcon('keyword')
+}, {
+  name: 'mention',
+  selected: paramTypesText.indexOf('mention') > -1,
+  icon: getParamTypeIcon('mention')
+}];
+
+/**
  * Returns a semantic icon name or character to represent seachParamTypes
  * eg. hashtag = #, mention = @
  * @param string which represents a paramtype
  * @returns single character or semantic icon class
  */
-export const getParamTypeIcon = (paramType) => {
+const getParamTypeIcon = (paramType) => {
   switch (paramType) {
   case 'author':
     return 'user icon';
@@ -97,7 +119,7 @@ export const getParamTypeIcon = (paramType) => {
   case 'keyword':
     return 'file text icon';
   case 'mention':
-    return '@';
+    return 'at icon';
   default:
     return '?';
   }
