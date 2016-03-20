@@ -55,7 +55,7 @@ describe('#SearchActions', () => {
 
     const expectedAction = {
       type: actions.DELETE_SEARCH_TERM,
-      id
+      id,
     };
 
     actions.deleteSearchTerm(id).should.deep.equal(expectedAction);
