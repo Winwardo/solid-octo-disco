@@ -44,5 +44,5 @@ export const searchApiForFeed = (searchTerms) =>
 export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';
 export const deleteSearchTerm = (id) => ({
   type: DELETE_SEARCH_TERM,
-  id
+  id,
 });
