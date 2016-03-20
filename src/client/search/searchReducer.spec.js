@@ -1,7 +1,11 @@
 import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
 import { searchTermsReducer } from './searchReducer';
-import { ADD_SEARCH_TERM, DELETE_SEARCH_TERM } from './searchActions';
+import {
+  ADD_SEARCH_TERM, DELETE_SEARCH_TERM,
+  TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION
+} from './searchActions';
+import { createTwitterParamTypes } from '../../shared/utilities';
 
 describe('#SearchTermsReducer', () => {
   it('should add a hashtag search term', () => {
@@ -17,7 +21,7 @@ describe('#SearchTermsReducer', () => {
     const stateAfter = [{
       id: 0,
       query: 'Football',
-      paramTypes: ['hashtag'],
+      paramTypes: createTwitterParamTypes(['hashtag']),
       source: 'twitter',
     }];
 
@@ -31,7 +35,7 @@ describe('#SearchTermsReducer', () => {
     const stateBefore = [{
       id: 0,
       query: 'Football',
-      paramTypes: ['mention'],
+      paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
     }];
     const action = {
@@ -45,12 +49,12 @@ describe('#SearchTermsReducer', () => {
     const stateAfter = [{
       id: 0,
       query: 'Football',
-      paramTypes: ['mention'],
+      paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
     }, {
       id: 1,
       query: 'Manchester',
-      paramTypes: ['hashtag', 'author'],
+      paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
     }];
 
@@ -64,7 +68,7 @@ describe('#SearchTermsReducer', () => {
     const stateBefore = [{
       id: 0,
       query: 'Football',
-      paramTypes: ['mention'],
+      paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
     }];
     const action = {
@@ -84,12 +88,12 @@ describe('#SearchTermsReducer', () => {
     const stateBefore = [{
       id: 0,
       query: 'Football',
-      paramTypes: ['mention'],
+      paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
     }, {
       id: 1,
       query: 'Manchester',
-      paramTypes: ['hashtag', 'author'],
+      paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
     }];
     const action = {
@@ -100,7 +104,7 @@ describe('#SearchTermsReducer', () => {
     const stateAfter = [{
       id: 1,
       query: 'Manchester',
-      paramTypes: ['hashtag', 'author'],
+      paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
     }];
 
@@ -108,5 +112,9 @@ describe('#SearchTermsReducer', () => {
     deepFreeze(action);
 
     searchTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('should edit term paramType with id', () => {
+
   });
 });

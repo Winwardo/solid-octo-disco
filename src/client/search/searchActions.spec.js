@@ -1,6 +1,5 @@
 import { should } from 'chai';
 import * as actions from './searchActions';
-import { createTwitterParamTypes } from '../../shared/utilities';
 
 describe('#SearchActions', () => {
   it('should create an action to add a hashtag', () => {
@@ -12,7 +11,7 @@ describe('#SearchActions', () => {
       type: 'ADD_SEARCH_TERM',
       id,
       query: expectedQuery,
-      paramTypes: createTwitterParamTypes(['hashtag']),
+      paramTypes: ['hashtag'],
       source: 'twitter',
     };
 
@@ -28,7 +27,7 @@ describe('#SearchActions', () => {
       type: 'ADD_SEARCH_TERM',
       id,
       query: expectedQuery,
-      paramTypes: createTwitterParamTypes(['author', 'mention']),
+      paramTypes: ['author', 'mention'],
       source: 'twitter',
     };
 
@@ -44,7 +43,7 @@ describe('#SearchActions', () => {
       type: 'ADD_SEARCH_TERM',
       id,
       query: expectedQuery,
-      paramTypes: createTwitterParamTypes(['author', 'hashtag', 'keyword', 'mention']),
+      paramTypes: ['author', 'hashtag', 'keyword', 'mention'],
       source: 'twitter',
     };
 
@@ -60,5 +59,19 @@ describe('#SearchActions', () => {
     };
 
     actions.deleteSearchTerm(id).should.deep.equal(expectedAction);
+  });
+
+  it('should create an action to toggle a search term with id paramtype selection', () => {
+    const id = 1;
+    const paramTypeName = 'author';
+
+    const expectedAction = {
+      type: actions.TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION,
+      id,
+      paramTypeName
+    };
+
+    actions.toggleSearchTermParamTypeSelection(id, paramTypeName)
+      .should.deep.equal(expectedAction);
   });
 });
