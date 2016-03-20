@@ -46,11 +46,11 @@ export const flattenImmutableObject = (givenObject) => {
  * @param callback Must return a Promise.
  * @returns {Promise}
  */
-export const chainPromises = (callback) => {
-  return new Promise((resolve) => {
+export const chainPromises = (callback) => (
+  new Promise((resolve) => {
     resolve(callback());
-  });
-};
+  })
+);
 
 /**
  * Generates the boilerplate headers for a JSON POST request
@@ -63,20 +63,42 @@ export const makePostHeader = (body) => {
   }
 
   return {
-    'method': 'POST',
-    'headers': {
-      'Accept': 'application/json',
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     body,
   };
-};;
+};
 
 /**
  * Creates a JSON POST fetch promise with a given url and body
  * @param url Where to POST, e.g. '/search'
  * @param body The body of the request, e.g. {'query': 'liverpool'}
  */
-export const fetchPost = (url, body) => {
-  return fetch(url, makePostHeader(body));
-};;
+export const fetchPost = (url, body) => (
+  fetch(url, makePostHeader(body))
+);
+
+/**
+ *
+ * Returns a semantic icon name or character to represent seachParamTypes
+ * eg. hashtag = #, mention = @
+ * @param string which represents a paramtype
+ * @returns single character or semantic icon class
+ */
+export const getParamTypeIcon = (paramType) => {
+  switch (paramType) {
+  case 'author':
+    return 'user icon';
+  case 'hashtag':
+    return '#';
+  case 'keyword':
+    return 'file text icon';
+  case 'mention':
+    return '@';
+  default:
+    return '?';
+  }
+};

@@ -1,5 +1,5 @@
 import { should } from 'chai';
-import * as actions from './SearchActions';
+import * as actions from './searchActions';
 
 describe('#SearchActions', () => {
   it('should create an action to add a hashtag', () => {
@@ -48,5 +48,16 @@ describe('#SearchActions', () => {
     };
 
     actions.addSearchTerm(id, query).should.deep.equal(expectedAction);
+  });
+
+  it('should create an action to delete search term with id', () => {
+    const id = 1;
+
+    const expectedAction = {
+      type: actions.DELETE_SEARCH_TERM,
+      id
+    };
+
+    actions.deleteSearchTerm(id).should.deep.equal(expectedAction);
   });
 });
