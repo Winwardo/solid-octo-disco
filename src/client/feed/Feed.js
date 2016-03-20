@@ -2,30 +2,29 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-const Feed = ({ feed }) => {
-  return (
-    <div>
-      <h3>Search results</h3>
-      <div className="ui divided items">
-        {
-          feed.posts.map((feedItem) => {return (<FeedItem content={feedItem}/>);})
-        }
-      </div>
+const Feed = ({ feed }) => (
+  <div>
+    <h3>Search results</h3>
+    <div className="ui divided items">
+      {
+        feed.map((feedItem) => {return (<FeedItem content={feedItem}/>);})
+      }
     </div>
-  );
-};
+  </div>
+);
 
 const FeedItem = ({ content }) => {
+  let post;
+  switch (content.source) {
+    case 'twitter': post = <Tweet content={content}/>;
+  };
+
   return (
     <div className="item">
       <div className="meta" style={{ minWidth: '40px', textAlign: 'center', verticalAlign: 'middle' }}>
-        {
-          content.source === 'twitter' ? <i className="twitter icon" /> : ''
-        }
+        <i className={`${content.source} icon`}/>
       </div>
-      {
-        content.source === 'twitter' ? <Tweet content={content} /> : ''
-      }
+      {post}
     </div>
   );
 };
@@ -40,8 +39,8 @@ class Tweet extends Component {
     return (
       <div className="content">
         <div className="header">{content.author.name}</div>
-        &nbsp;
-        <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
+         
+                                                                                                                                <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
         <br />
         {content.data.content}
 
