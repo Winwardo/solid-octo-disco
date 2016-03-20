@@ -7,7 +7,7 @@ const Feed = ({ feed }) => (
     <h3>Search results</h3>
     <div className="ui divided items">
       {
-        feed.map((feedItem) => {return (<FeedItem content={feedItem}/>);})
+        feed.map((feedItem) => (<FeedItem content={feedItem}/>))
       }
     </div>
   </div>
@@ -38,9 +38,7 @@ class Tweet extends Component {
     const content = this.props.content;
     return (
       <div className="content">
-        <div className="header">{content.author.name}</div>
-         
-                                                                                                                                <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
+        <div className="header">{content.author.name}</div>                                                      <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
         <br />
         {content.data.content}
 
