@@ -1,6 +1,6 @@
 {
   "source": "./src",
-  "destination": "./esdoc",
+  "destination": "./documentation",
   "test": {
   	"type": "mocha",
   	"source": "./src",

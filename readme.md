@@ -18,6 +18,8 @@ Team repo.
 * `npm test`: Generates a `coverage.html` showing test line coverage for travis to send code coverage to codacity.
 * `npm run test-quick`: Quick runner for local testing.
 
+* `npm run doc`: Generate this documentation.
+
 ### Getting Started
 run:
 ```
