@@ -14,7 +14,8 @@
     "build": "gulp build",
     "watch": "gulp watch",
     "dev": "cross-env NODE_ENV=development gulp run",
-    "start": "node build/server.js"
+    "start": "node build/server.js",
+    "doc": "esdoc -c esdoc.json"
   },
   "author": [
     "Topher Winward",
