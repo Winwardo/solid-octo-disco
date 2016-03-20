@@ -25,10 +25,10 @@ export const TwitAccess = new Twit({
  */
 const buildTweetFromRaw = (rawTweet) => {
   return Builders.TweetBuilder()
-    .id(rawTweet.id)
+    .id(rawTweet.id_str)
     .content(rawTweet.text)
     .date(moment(new Date(rawTweet.created_at)).format('YYYY-MM-DD HH:mm:ss'))
-    .likes(rawTweet.favourite_count || 0)
+    .likes(rawTweet.favourites_count || 0)
     .retweets(rawTweet.retweet_count || 0)
     .build();
 };
@@ -40,7 +40,7 @@ const buildTweetFromRaw = (rawTweet) => {
  */
 const buildTweeterFromRaw = (rawTweeter) => {
   return Builders.TweeterBuilder()
-    .id(rawTweeter.id)
+    .id(rawTweeter.id_str)
     .name(rawTweeter.name)
     .handle(rawTweeter.screen_name)
     .build();
@@ -155,7 +155,7 @@ const processTweet = (db, rawTweet, id) => {
 export const searchAndSaveFromTwitter = (query, count = 300) => {
   if (TWITTER_ENABLED) {
     console.info(`Searching Twitter for query '${query}'.`);
-    return TwitAccess.get('search/tweets', {'q': query, 'count': count})
+    return TwitAccess.get('search/tweets', { 'q': query, 'count': count })
       .then((result) => {
         console.info(`Twitter search for '${query}' successful.`);
         return Promise.all(
