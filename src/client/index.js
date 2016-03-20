@@ -4,13 +4,13 @@ import React from 'react';
 import { combineReducers, compose, applyMiddleware, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
-import { searchReducer, feedReducer } from './search/SearchReducer';
+import { searchTermsReducer, feedReducer } from './search/searchReducer';
 import mostUsedWords from './results/mostUsedWordsReducer';
 
 const feedApp = combineReducers({
-  'search': searchReducer,
-  'mostUsedWords': mostUsedWords,
-  'feed': feedReducer,
+  searchTerms: searchTermsReducer,
+  mostUsedWords,
+  feed: feedReducer,
 });
 
 const middlewares = [thunkMiddleware];
@@ -59,6 +59,6 @@ if (module.hot) {
   module.hot.accept('./App', () => {
     setTimeout(render);
   });
-};
+}
 
 render();
