@@ -115,6 +115,38 @@ describe('#SearchTermsReducer', () => {
   });
 
   it('should edit term paramType with id', () => {
+    const stateBefore = [{
+      id: 0,
+      query: 'Football',
+      paramTypes: createTwitterParamTypes(['mention']),
+      source: 'twitter',
+    }, {
+      id: 1,
+      query: 'Manchester',
+      paramTypes: createTwitterParamTypes(['hashtag', 'author']),
+      source: 'twitter',
+    }];
+    const action = {
+      type: TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION,
+      id: 0,
+      paramTypeName: 'author'
+    };
 
+    const stateAfter = [{
+      id: 0,
+      query: 'Football',
+      paramTypes: createTwitterParamTypes(['author', 'mention']),
+      source: 'twitter',
+    }, {
+      id: 1,
+      query: 'Manchester',
+      paramTypes: createTwitterParamTypes(['hashtag', 'author']),
+      source: 'twitter',
+    }];
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    searchTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
   });
 });

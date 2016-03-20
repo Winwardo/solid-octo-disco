@@ -1,8 +1,9 @@
 import { should } from 'chai';
+import deepFreeze from 'deep-freeze';
 import {
   flattenObjectToArray, flattenImmutableObject,
   makePostHeader,
-  createTwitterParamTypes
+  createTwitterParamTypes, toggleParamType
 } from './utilities';
 should();
 
@@ -73,7 +74,7 @@ describe('#Utilities', () => {
     });
   });
 
-  describe('paramType builder', () => {
+  describe('paramType object functions', () => {
     it('can create a twitter specific paramTypes object for search terms', () => {
       createTwitterParamTypes(['hashtag', 'keyword']).should.deep.equal([{
         name: 'author',
@@ -92,6 +93,15 @@ describe('#Utilities', () => {
         selected: false,
         icon: 'at icon'
       }]);
+    });
+
+    it('can toggle a paramType with the paramTypeName to toggle', () => {
+      const paramTypesBefore = createTwitterParamTypes(['hashtag', 'keyword']);
+      const paramTypesExpected = createTwitterParamTypes(['hashtag']);
+
+      deepFreeze(paramTypesBefore);
+
+      toggleParamType(paramTypesBefore, 'keyword').should.deep.equal(paramTypesExpected);
     });
   });
 });

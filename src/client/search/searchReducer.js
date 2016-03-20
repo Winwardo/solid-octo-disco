@@ -3,7 +3,7 @@ import {
   ADD_SEARCH_TERM, TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION, DELETE_SEARCH_TERM,
   RECEIVE_FEED_RESULTS
 } from './searchActions';
-import { createTwitterParamTypes } from '../../shared/utilities';
+import { createTwitterParamTypes, toggleParamType } from '../../shared/utilities';
 
 export const searchTermsReducer = (state = [], action) => {
   switch (action.type) {
@@ -42,20 +42,9 @@ const searchTermReducer = (state, action) => {
       return state;
     }
 
-    const newParamTypes = state.paramTypes.map((paramType) => {
-      if (paramType.name !== action.paramTypeName) {
-        return paramType;
-      }
-
-      return {
-        ...paramType,
-        selection: !paramType.selection
-      };
-    });
-
     return {
       ...state,
-      newParamTypes
+      paramTypes: toggleParamType(state.paramTypes, action.paramTypeName)
     };
   }
   default:

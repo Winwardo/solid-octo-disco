@@ -108,7 +108,7 @@ export const createTwitterParamTypes = (paramTypesText) => [{
  * Returns a semantic icon name or character to represent seachParamTypes
  * eg. hashtag = #, mention = @
  * @param string which represents a paramtype
- * @returns single character or semantic icon class
+ * @returns char or string representing paramType (could be semantic icon class)
  */
 const getParamTypeIcon = (paramType) => {
   switch (paramType) {
@@ -124,3 +124,23 @@ const getParamTypeIcon = (paramType) => {
     return '?';
   }
 };
+
+/**
+ * Returns a copy of the paramTypes with the name of the passed
+ * in paramType toggled
+ * @param paramTypes array
+ * @param paramTypeToggleName which is the paramType you want to toggle
+ * @returns copy of paramtypes with the paramTypeToggleName paramType toggled
+ */
+export const toggleParamType = (paramTypes, paramTypeToggleName) => (
+  paramTypes.map((paramType) => {
+    if (paramType.name !== paramTypeToggleName) {
+      return paramType;
+    }
+
+    return {
+      ...paramType,
+      selected: !paramType.selected
+    };
+  })
+);
