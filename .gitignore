@@ -45,4 +45,4 @@ lib/orientdb/databases
 lib/orientdb/log
 
 # Documentation
-esdoc/*
+documentation/*
