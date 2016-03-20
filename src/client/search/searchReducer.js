@@ -1,3 +1,4 @@
+
 import { ADD_SEARCH_TERM, RECEIVE_FEED_RESULTS, DELETE_SEARCH_TERM } from './searchActions';
 
 export const searchTermsReducer = (state = [], action) => {
@@ -5,11 +6,20 @@ export const searchTermsReducer = (state = [], action) => {
     case ADD_SEARCH_TERM:
       return [
         ...state,
-        SearchTermReducer(undefined, action),
+        searchTermReducer(undefined, action),
       ];
+    case DELETE_SEARCH_TERM: {
+      if (state.length === 1) return [];
+
+      const termIndex = state.map(term => (term.id)).indexOf(action.id);
+      return [
+        ...state.slice(0, termIndex),
+        ...state.slice(termIndex + 1)
+      ];
+    }
     default:
       return state;
-  };
+  }
 };
 
 export const feedReducer = (state = [], action) => {
@@ -18,7 +28,7 @@ export const feedReducer = (state = [], action) => {
       return action.data.data.records;
     default:
       return state;
-  };
+  }
 };
 
 const searchTermReducer = (state, action) => {
@@ -32,5 +42,5 @@ const searchTermReducer = (state, action) => {
       };
     default:
       return state;
-  };
+  }
 };
