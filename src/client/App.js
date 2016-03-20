@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Header from './Header';
 import Search from './search/Search';
 import Feed from './feed/Feed'
 import MostUsedWords from './results/MostUsedWords';
 import { groupedCountWords, mostFrequentWords, mostActiveUsers, exampleTweets } from './tweetAnalysis';
 
-const App = () => {
+const App = ({state}) => {
   return (
 		<div>
 			<Header />
@@ -22,7 +23,7 @@ const App = () => {
         </div>
 
         <div className="four wide column">
-          <MostUsedWords wordInfoList={groupedCountWords(mostFrequentWords(exampleTweets.map((data) => data.tweet)))} search=''/>
+          <MostUsedWords wordInfoList={groupedCountWords(mostFrequentWords(state.feed.map((post) => post.data)))} search=''/>
         </div>
       </div>
 
@@ -31,4 +32,8 @@ const App = () => {
 	);
 };
 
-export default App;
+const mapStateToProps = (state) => {
+  return {state};
+};
+
+export default connect(mapStateToProps)(App);
