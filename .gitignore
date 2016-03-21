@@ -43,3 +43,6 @@ build
 # Database data
 lib/orientdb/databases
 lib/orientdb/log
+
+# Documentation
+documentation/*
