@@ -44,7 +44,7 @@ export const searchApiForFeed = (searchTerms) =>
 export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';
 export const deleteSearchTerm = (id) => ({
   type: DELETE_SEARCH_TERM,
-  id
+  id,
 });
 
 export const TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION = 'TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION';

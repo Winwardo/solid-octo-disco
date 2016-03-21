@@ -40,21 +40,21 @@ const searchAndCollateResults = (query) => {
 };
 
 const searchDatabase = (query, alreadyAttemptedRefresh = false) => {
-  const tweetSelection = 'SELECT FROM tweet WHERE content LUCENE :query ORDER BY date DESC LIMIT 300';
+  const tweetSelection = 'SELECT *, in(\'TWEETED\').id AS authorId, in(\'TWEETED\').name AS authorName, in(\'TWEETED\').handle AS authorHandle FROM tweet WHERE content LUCENE :query ORDER BY date DESC UNWIND authorId, authorName, authorHandle LIMIT 300';
 
   return chainPromises(() => {
     return db.query(tweetSelection, { 'params': { 'query': `${query}~` } });
-  }).then(
-    (tweetRecords) => {
-      const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 20;
-      if (shouldRequeryTwitter) {
-        return refreshFromTwitter(query);
+  }).then((tweetRecords) => {
+    const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 20;
+    if (shouldRequeryTwitter) {
+      return refreshFromTwitter(query);
 
-      } else {
-        return tweetRecords.map((tweetRecord) => {
-          return flattenImmutableObject(buildTweetFromDatabaseRecord(tweetRecord));
-        });
-      }
+    } else {
+      return tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord));
+    }
+  }).then(
+    (resolved) => {
+      return resolved;
     },
 
     (rejection) => {
@@ -70,6 +70,21 @@ const refreshFromTwitter = (query) => {
     });
 };
 
+const makeTweetAndAuthorFromDatabaseTweetRecord = (tweetRecord) => {
+  return {
+    'tweet': flattenImmutableObject(buildTweetFromDatabaseRecord(tweetRecord)),
+    'author': flattenImmutableObject(buildTweeterFromDatabaseTweetRecord(tweetRecord)),
+  };
+};
+
+const buildTweeterFromDatabaseTweetRecord = (record) => {
+  return TweeterBuilder()
+    .id(record.authorId)
+    .name(record.authorName)
+    .handle(record.authorHandle)
+    .build();
+};
+
 const buildTweetFromDatabaseRecord = (record) => {
   return TweetBuilder()
     .id(record.id)
@@ -81,5 +96,6 @@ const buildTweetFromDatabaseRecord = (record) => {
 };
 
 const getTweetsAsResults = (data) => {
-  return data.map((tweet) => { return { 'data': tweet, 'author': {}, 'source': 'twitter' }; });
+  return data.map((tweet) => {
+  return { 'data': tweet.tweet, 'author': tweet.author, 'source': 'twitter' }; });
 };

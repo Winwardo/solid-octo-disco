@@ -7,7 +7,6 @@ const Vertex = 'V';
 
 const None = [];
 
-const NO_INDEX = 'none';
 const LUCENE = 'FULLTEXT ENGINE LUCENE';
 const UNIQUE = 'UNIQUE';
 
@@ -26,7 +25,7 @@ export const schema = {
   'Tweet': {
     'superclass': Vertex,
     'properties': [
-      { 'name': 'id', 'type': Integer },
+      { 'name': 'id', 'type': String },
       { 'name': 'content', 'type': String },
       { 'name': 'date', 'type': Datetime },
       { 'name': 'likes', 'type': Integer },
@@ -39,9 +38,9 @@ export const schema = {
   'Tweeter': {
     'superclass': Vertex,
     'properties': [
-      { 'name': 'id', 'type': Integer, 'index': NO_INDEX },
-      { 'name': 'name', 'type': String, 'index': LUCENE },
-      { 'name': 'handle', 'type': String, 'index': NO_INDEX },
+      { 'name': 'id', 'type': String },
+      { 'name': 'name', 'type': String },
+      { 'name': 'handle', 'type': String },
     ],
     'indexes': [
       { 'properties': ['name'], 'type': LUCENE, },

@@ -1,4 +1,3 @@
-
 import {
   ADD_SEARCH_TERM, TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION, DELETE_SEARCH_TERM,
   RECEIVE_FEED_RESULTS
@@ -55,9 +54,7 @@ const searchTermReducer = (state, action) => {
 export const feedReducer = (state = [], action) => {
   switch (action.type) {
   case RECEIVE_FEED_RESULTS:
-    return {
-      posts: action.data
-    };
+    return action.data.data.records;
   default:
     return state;
   }
