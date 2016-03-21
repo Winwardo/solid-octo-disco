@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-const TermItem = ({ onDeleteClick, onToggleParamTypeClick, query, source, paramTypes }) => (
-  <div className="ui multiple compact dropdown labeled icon violet button"
+const TermItem = ({ onDeleteClick, onToggleParamTypeClick, query, source, paramTypes, id }) => (
+  <div id={`paramTypes${id}`} className="ui multiple compact dropdown labeled icon violet button"
     onClick={(ee) => ee.stopPropagation()}
   >
     <span>
@@ -13,15 +13,18 @@ const TermItem = ({ onDeleteClick, onToggleParamTypeClick, query, source, paramT
     }}
     ></i>
     <TermItemMenu
+      termId={id}
       paramTypes={paramTypes}
-      onToggleParamType={(paramTypeToggle) => onToggleParamTypeClick(paramTypeToggle)}
+      onToggleParamType={(paramTypeToggle) => {
+        onToggleParamTypeClick(paramTypeToggle);
+      }}
     />
   </div>
 );
 
 class TermItemMenu extends Component {
   componentDidMount() {
-    $('.ui.dropdown')
+    $(`#paramTypes${this.props.termId}`)
       .dropdown({
         action: (value, text) => {
           this.props.onToggleParamType(text);
@@ -39,8 +42,7 @@ class TermItemMenu extends Component {
       }
       return (
         <div key={id} data-value={paramType.name} className="item">
-          {content} HELLO
-          {id}
+          {content}
           {paramType.name}
         </div>
       );

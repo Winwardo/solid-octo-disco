@@ -11,12 +11,11 @@ const TermsList = ({
     <i className="icon search"></i>
     {searchTerms.map(term => (
       <TermItem
+        onToggleParamTypeClick={(paramTypeToggle) =>
+          onSearchTermParamTypeToggleClick(term.id, paramTypeToggle)
+        }
         key={term.id}
         {...term}
-        onToggleParamTypeClick={(paramTypeToggle) => {
-          console.log(term);
-          return onSearchTermParamTypeToggleClick(term.id, paramTypeToggle);
-        }}
         onDeleteClick={() => onSearchTermDeleteClick(term.id)}
       />
     ))}
@@ -26,11 +25,11 @@ const TermsList = ({
 const mapStateToProps = (state) => ({ searchTerms: state.searchTerms });
 
 const mapDispatchToProps = (dispatch) => ({
-  onSearchTermDeleteClick: (id) => {
-    dispatch(deleteSearchTerm(id));
-  },
   onSearchTermParamTypeToggleClick: (id, paramTypeName) => {
     dispatch(toggleSearchTermParamTypeSelection(id, paramTypeName));
+  },
+  onSearchTermDeleteClick: (id) => {
+    dispatch(deleteSearchTerm(id));
   }
 });
 
