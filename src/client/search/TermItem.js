@@ -14,6 +14,7 @@ const TermItem = ({ onDeleteClick, onToggleParamTypeClick, query, source, paramT
     ></i>
     <TermItemMenu
       termId={id}
+      highlightColor={source === 'twitter' ? 'blue' : ''}
       paramTypes={paramTypes}
       onToggleParamType={(paramTypeToggle) => {
         onToggleParamTypeClick(paramTypeToggle);
@@ -26,6 +27,7 @@ class TermItemMenu extends Component {
   componentDidMount() {
     $(`#paramTypes${this.props.termId}`)
       .dropdown({
+        transition: 'drop',
         action: (value, text) => {
           this.props.onToggleParamType(text);
         }
@@ -34,16 +36,17 @@ class TermItemMenu extends Component {
 
   render() {
     const menuItems = this.props.paramTypes.map((paramType, id) => {
-      let content;
+      let paramTypeIcon;
+      const highlighted = paramType.selected ? this.props.highlightColor : 'black';
       if (paramType.icon.length > 1) {
-        content = <i className={paramType.icon}></i>;
+        paramTypeIcon = <i className={`inverted ${highlighted} circular ${paramType.icon}`}></i>;
       } else {
-        content = <i className="icon">{paramType.icon}</i>;
+        paramTypeIcon = <i className={`inverted ${highlighted} circular icon`}>{paramType.icon}</i>;
       }
       return (
         <div key={id} data-value={paramType.name} className="item">
-          {content}
-          {paramType.name}
+          {paramTypeIcon}
+          <span className={`ui ${highlighted} label`}>{paramType.name}</span>
         </div>
       );
     });
