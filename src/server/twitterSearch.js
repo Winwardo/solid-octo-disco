@@ -2,7 +2,8 @@ const Twit = require('twit');
 const moment = require('moment');
 import { db } from './orientdb';
 import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweetToTweeterViaMention,
-  upsertHashtag, upsertTweet, upsertTweeter
+  linkTweetToPlace, linkPlaceToCountry,
+  upsertHashtag, upsertTweet, upsertTweeter, upsertPlace, upsertCountry
 } from '../shared/data/databaseInsertActions';
 import * as Builders from '../shared/data/databaseObjects';
 import { newPromiseChain } from '../shared/utilities';
@@ -31,6 +32,8 @@ const buildTweetFromRaw = (rawTweet) => {
     .date(moment(new Date(rawTweet.created_at)).format('YYYY-MM-DD HH:mm:ss'))
     .likes(rawTweet.favourites_count)
     .retweets(rawTweet.retweet_count)
+    .longitude(rawTweet.geo.coordinates[0] || rawTweet.coordinates.coordinates[0] || 0)
+    .latitude(rawTweet.geo.coordinates[1] || rawTweet.coordinates.coordinates[1] || 0)
     .build();
 };
 
@@ -46,6 +49,14 @@ const buildTweeterFromRaw = (rawTweeter) => {
     .handle(rawTweeter.screen_name)
     .build();
 };
+
+const buildPlaceFromRaw = (rawPlace) => (
+  Builders.PlaceBuilder()
+    .id(rawPlace.id)
+    .name(rawPlace.name)
+    .full_name(rawPlace.full_name)
+    .type(rawPlace.place_type)
+);
 
 /**
  * Given some raw status we know is a retweet, insert it and add a RETWEETED link.
@@ -107,10 +118,34 @@ function processRawOriginalTweet(db, rawTweet, originalTweeter) {
   return newPromiseChain()
     .then(() => upsertTweet(db, tweet))
     .then(() => upsertTweeter(db, originalTweeter))
+    .then(() => linkTweetToPlace(db, tweet, rawTweet.place))
     .then(() => linkTweeterToTweet(db, originalTweeter, tweet))
     .then(() => linkTweetToHashtags(db, rawHashtags, tweet))
     .then(() => linkTweetToMentions(db, rawMentions, tweet));
 }
+
+/**
+ * Given a tweet, if it has a place upsert the place and link it to a country
+ * @param db the OrientDB instance
+ * @param tweet A processed tweet to link to a place
+ * @param rawTweet A raw tweet's place property from the Twitter API
+ * @returns {Promise}
+ */
+const linkTweetToPlace = (db, tweet, rawPlace) => {
+  if (rawPlace) {
+    const place = buildPlaceFromRaw(rawPlace);
+    const country = Builders.CountryBuilder()
+      .code(rawPlace.country_code)
+      .name(rawPlace.country);
+
+    return newPromiseChain()
+      .then(() => upsertPlace(db, place))
+      .then(() => upsertCountry(db, country))
+      .then(() => linkTweetToPlace(db, tweet, place))
+      .then(() => linkPlaceToCountry(db, place, country));
+  }
+  return Promise.resolve();
+};
 
 /**
  * Given a raw tweet, extract information about the tweeter,

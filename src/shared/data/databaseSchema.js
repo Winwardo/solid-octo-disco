@@ -65,8 +65,6 @@ export const schema = {
       { name: 'name', type: String },
       { name: 'full_name', type: String },
       { name: 'type', type: String },
-      { name: 'type', type: String },
-      { name: 'type', type: String },
     ],
     indexes: [
       { properties: ['full_name'], type: LUCENE, },
