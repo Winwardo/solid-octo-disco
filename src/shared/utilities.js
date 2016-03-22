@@ -84,7 +84,7 @@ export const fetchPost = (url, body) => (
 /**
  * Creates the paramTypes for a Twitter specific search term.
  * @param array of strings representing search paramaterTypes
- * @returns array of objects representing search terms with meta data
+ * @returns [{Object}] representing search terms with meta data
  */
 export const createTwitterParamTypes = (selectedParamTypes) =>
   ['author', 'hashtag', 'keyword', 'mention']
@@ -94,7 +94,7 @@ const makeParamType = (selectedParamTypes, type) => ({
   name: type,
   selected: selectedParamTypes.indexOf(type) > -1,
   icon: getParamTypeIcon(type)
-})
+});
 
 /**
  * Returns a semantic icon name or character to represent seachParamTypes
