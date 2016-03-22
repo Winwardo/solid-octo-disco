@@ -1,31 +1,26 @@
 import React, { Component } from 'react';
 
 const TermItem = ({ onDeleteClick, onToggleParamTypeClick, query, source, paramTypes, id }) => (
-  <div id={`paramTypes${id}`} className="ui multiple compact dropdown labeled icon violet button"
-    onClick={(ee) => ee.stopPropagation()}
+  <div data-id={id} className="ui multiple compact dropdown labeled icon violet button"
+    onClick={(e) => e.stopPropagation()}
   >
     <span>
       <i className={`${source} icon`}></i>
       {query}
     </span>
-    <i className="delete icon" onClick={() => {
-      onDeleteClick();
-    }}
-    ></i>
+    <i className="delete icon" onClick={() => onDeleteClick()}></i>
     <TermItemMenu
       termId={id}
       highlightColor={source === 'twitter' ? 'blue' : ''}
       paramTypes={paramTypes}
-      onToggleParamType={(paramTypeToggle) => {
-        onToggleParamTypeClick(paramTypeToggle);
-      }}
+      onToggleParamType={(paramTypeToggle) => onToggleParamTypeClick(paramTypeToggle)}
     />
   </div>
 );
 
 class TermItemMenu extends Component {
   componentDidMount() {
-    $(`#paramTypes${this.props.termId}`)
+    $(`.ui.dropdown[data-id="${this.props.termId}"]`)
       .dropdown({
         transition: 'drop',
         action: (value, text) => {
