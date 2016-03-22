@@ -26,15 +26,36 @@ export const TwitAccess = new Twit({
  * @returns {ImmutableTweet}
  */
 const buildTweetFromRaw = (rawTweet) => {
+  const latLong = findLatitudeLongitude(rawTweet);
   return Builders.TweetBuilder()
     .id(rawTweet.id_str)
     .content(rawTweet.text)
     .date(moment(new Date(rawTweet.created_at)).format('YYYY-MM-DD HH:mm:ss'))
-    .likes(rawTweet.favourites_count)
+    .likes(rawTweet.favorite_count)
     .retweets(rawTweet.retweet_count)
-    .longitude(rawTweet.geo.coordinates[0] || rawTweet.coordinates.coordinates[0] || 0)
-    .latitude(rawTweet.geo.coordinates[1] || rawTweet.coordinates.coordinates[1] || 0)
+    .latitude(latLong[0])
+    .longitude(latLong[1])
     .build();
+};
+
+/**
+  * Finds if Latitude/Longitude coordinates exist in raw tweet, otherwise return 0.0 for both
+  * @param rawTweet From the Twitter API.
+  * @returns [latitude, longitude]
+  */
+const findLatitudeLongitude = (rawTweet) => {
+  if (rawTweet.geo) {
+    return [rawTweet.geo.coordinate[0], rawTweet.geo.coordinate[1]];
+  } else if (rawTweet.coordinates) {
+    return [rawTweet.coordinates.coordinate[1], rawTweet.coordinates.coordinate[0]];
+  } else if (rawTweet.place) {
+    return [
+      rawTweet.place.bounding_box.coordinates[0][0][1],
+      rawTweet.place.bounding_box.coordinates[0][0][0]
+    ];
+  } else {
+    return [0.0, 0.0];
+  }
 };
 
 /**
@@ -56,6 +77,7 @@ const buildPlaceFromRaw = (rawPlace) => (
     .name(rawPlace.name)
     .full_name(rawPlace.full_name)
     .type(rawPlace.place_type)
+    .build()
 );
 
 /**
@@ -118,8 +140,8 @@ function processRawOriginalTweet(db, rawTweet, originalTweeter) {
   return newPromiseChain()
     .then(() => upsertTweet(db, tweet))
     .then(() => upsertTweeter(db, originalTweeter))
-    .then(() => linkTweetToPlace(db, tweet, rawTweet.place))
     .then(() => linkTweeterToTweet(db, originalTweeter, tweet))
+    .then(() => linkTweetToLocation(db, tweet, rawTweet.place))
     .then(() => linkTweetToHashtags(db, rawHashtags, tweet))
     .then(() => linkTweetToMentions(db, rawMentions, tweet));
 }
@@ -131,12 +153,13 @@ function processRawOriginalTweet(db, rawTweet, originalTweeter) {
  * @param rawTweet A raw tweet's place property from the Twitter API
  * @returns {Promise}
  */
-const linkTweetToPlace = (db, tweet, rawPlace) => {
+const linkTweetToLocation = (db, tweet, rawPlace) => {
   if (rawPlace) {
     const place = buildPlaceFromRaw(rawPlace);
     const country = Builders.CountryBuilder()
       .code(rawPlace.country_code)
-      .name(rawPlace.country);
+      .name(rawPlace.country)
+      .build();
 
     return newPromiseChain()
       .then(() => upsertPlace(db, place))

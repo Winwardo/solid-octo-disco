@@ -36,7 +36,7 @@ export const upsertCountry = (db, country) => (
   runQueryOnImmutableObject(
     db,
     'UPDATE country SET code=:code, name=:name UPSERT WHERE code=:code',
-    country).then(() => {}, (rej) => console.error('Upsert Place', rej))
+    country).then(() => {}, (rej) => {console.error('Upsert Place', rej);})
 );
 
 export const linkTweeterToTweet = (db, tweeter, tweet) => {
@@ -85,21 +85,21 @@ export const linkTweetToTweeterViaMention = (db, tweet, mentionedTweeter) => {
 
 export const linkTweetToPlace = (db, tweet, place) => (
   db.query(
-    'CREATE EDGE HAS_PLACE (SELECT FROM tweet WHERE id = :tweetId) TO (SELECT FROM place WHERE id = :placeId)',
+    'CREATE EDGE HAS_PLACE FROM (SELECT FROM tweet WHERE id = :tweetId) TO (SELECT FROM place WHERE id = :placeId)',
     {
       params: {
         tweetId: tweet.id(),
         placeId: place.id()
       },
     }).then(
-      () => {},
+      (success) => {console.log(success)},
       (rej) => console.error('Link tweet -> place', place.full_name(), tweet.content(), rej)
     )
 );
 
 export const linkPlaceToCountry = (db, place, country) => (
   db.query(
-    'CREATE EDGE IN_COUNTRY (SELECT FROM place WHERE id = :placeId) TO (SELECT FROM place WHERE code = :countryCode)',
+    'CREATE EDGE IN_COUNTRY FROM (SELECT FROM place WHERE id = :placeId) TO (SELECT FROM country WHERE code = :countryCode)',
     {
       params: {
         placeId: place.id(),
@@ -107,6 +107,6 @@ export const linkPlaceToCountry = (db, place, country) => (
       },
     }).then(
       () => {},
-      (rej) => console.error('Link tweet -> place', place.full_name(), country.name(), rej)
+      (rej) => console.error('Link place -> country', place.full_name(), country.name(), rej)
     )
 );
