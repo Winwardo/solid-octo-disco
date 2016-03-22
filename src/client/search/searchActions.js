@@ -45,3 +45,10 @@ export const deleteSearchTerm = (id) => ({
   type: DELETE_SEARCH_TERM,
   id,
 });
+
+export const TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION = 'TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION';
+export const toggleSearchTermParamTypeSelection = (id, paramTypeName) => ({
+  type: TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION,
+  id,
+  paramTypeName
+});
