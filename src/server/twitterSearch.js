@@ -1,10 +1,11 @@
 const Twit = require('twit');
 const moment = require('moment');
-import { exampleSearch } from './exampleSearch';
 import { db } from './orientdb';
-import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweetToTweeterViaMention, upsertHashtag, upsertTweet, upsertTweeter } from '../shared/data/databaseInsertActions';
+import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweetToTweeterViaMention,
+  upsertHashtag, upsertTweet, upsertTweeter
+} from '../shared/data/databaseInsertActions';
 import * as Builders from '../shared/data/databaseObjects';
-import { chainPromises } from '../shared/utilities';
+import { newPromiseChain } from '../shared/utilities';
 
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
@@ -57,13 +58,10 @@ function processRawRetweet(db, rawRetweet, retweeter) {
   const originalTweeter = buildTweeterFromRaw(rawRetweet.user);
   const originalTweet = buildTweeterFromRaw(rawRetweet);
 
-  return chainPromises(() => {
-    return upsertTweeter(db, retweeter);
-  }).then(() => {
-    return processRawOriginalTweet(db, rawRetweet, originalTweeter);
-  }).then(() => {
-    return linkTweeterToRetweet(db, retweeter, originalTweet);
-  });
+  return newPromiseChain()
+    .then(() => upsertTweeter(db, retweeter))
+    .then(() => processRawOriginalTweet(db, rawRetweet, originalTweeter))
+    .then(() => linkTweeterToRetweet(db, retweeter, originalTweet));
 }
 
 /**
@@ -106,17 +104,12 @@ function processRawOriginalTweet(db, rawTweet, originalTweeter) {
   const rawHashtags = rawTweet.entities.hashtags;
   const rawMentions = rawTweet.entities.user_mentions;
 
-  return chainPromises(() => {
-    return upsertTweet(db, tweet);
-  }).then(() => {
-    return upsertTweeter(db, originalTweeter);
-  }).then(() => {
-    return linkTweeterToTweet(db, originalTweeter, tweet);
-  }).then(() => {
-    return linkTweetToHashtags(db, rawHashtags, tweet);
-  }).then(() => {
-    return linkTweetToMentions(db, rawMentions, tweet);
-  });
+  return newPromiseChain()
+    .then(() => upsertTweet(db, tweet))
+    .then(() => upsertTweeter(db, originalTweeter))
+    .then(() => linkTweeterToTweet(db, originalTweeter, tweet))
+    .then(() => linkTweetToHashtags(db, rawHashtags, tweet))
+    .then(() => linkTweetToMentions(db, rawMentions, tweet));
 }
 
 /**

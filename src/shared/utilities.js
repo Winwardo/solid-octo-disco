@@ -46,9 +46,9 @@ export const flattenImmutableObject = (givenObject) => {
  * @param callback Must return a Promise.
  * @returns {Promise}
  */
-export const chainPromises = (callback) => (
+export const newPromiseChain = () => (
   new Promise((resolve) => {
-    resolve(callback());
+    resolve();
   })
 );
 

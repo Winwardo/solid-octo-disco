@@ -1,6 +1,6 @@
 import OrientDB from 'orientjs';
 import { schema } from './../shared/data/databaseSchema';
-import { chainPromises } from '../shared/utilities';
+import { newPromiseChain } from '../shared/utilities';
 
 // Credentials should be stored in a hidden config file, or in environment variables.
 // As this is a student project, for simplicity, they will reside here.
@@ -23,31 +23,37 @@ const insertClass = (db, name, classSchema) => {
   const superclass = classSchema.superclass;
   const properties = classSchema.properties;
 
-  return chainPromises(() => {
-    return db.class.create(name, superclass);
-  }).then((clazz) => {
-    const transformedProperties = properties.map((input) => {
-      return { ...input, 'mandatory': true };
-    });
-
-    // Add the properties to the class
-    return clazz.property.create(transformedProperties);
-  }).then(() => {
+  return newPromiseChain()
+  .then(() => db.class.create(name, superclass))
+  .then((clazz) => createClassProperties(clazz, properties))
+  .then(() => (
     // Add indexes
-    return Promise.all(classSchema.indexes.map((index) => {
+    Promise.all(classSchema.indexes.map((index) => {
       const defaults = {
-        'name': `${name}.${index.properties.join('_')}`,
-        'class': name,
+       'name': `${name}.${index.properties.join('_')}`,
+       'class': name,
       };
       const indexToInsert = { ...defaults, ...index };
 
       return db.index.create(indexToInsert);
-    }));
-  }).then(() => {
-    console.log(`Successfully generated class ${name}.`);
-  }).catch((error) => {
-    console.warn(`Error: Unable to generate class ${name};`, error.message);
-  });
+    }))
+  ))
+  .then(() => console.log(`Successfully generated class ${name}.`))
+  .catch((error) => console.warn(`Error: Unable to generate class ${name};`, error.message));
+};
+
+/**
+ * Add the properties to the db class
+ * @param class The db OrientDb class
+ * @param properties The class paramater's properties
+ */
+const createClassProperties = (clazz, properties) => {
+  const transformedProperties = properties.map((input) => (
+    { ...input, 'mandatory': true }
+  ));
+
+  // Add the properties to the class
+  return clazz.property.create(transformedProperties);
 };
 
 /**

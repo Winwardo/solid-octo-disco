@@ -1,7 +1,7 @@
 import { db } from './orientdb';
 import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
-import { chainPromises, flattenImmutableObject } from '../shared/utilities';
-import { TwitAccess, searchAndSaveFromTwitter } from './twitterSearch';
+import { newPromiseChain, flattenImmutableObject } from '../shared/utilities';
+import { searchAndSaveFromTwitter } from './twitterSearch';
 
 /**
  * Searches our database for Tweets and returns them.
@@ -42,25 +42,22 @@ const searchAndCollateResults = (query) => {
 const searchDatabase = (query, alreadyAttemptedRefresh = false) => {
   const tweetSelection = 'SELECT *, in(\'TWEETED\').id AS authorId, in(\'TWEETED\').name AS authorName, in(\'TWEETED\').handle AS authorHandle FROM tweet WHERE content LUCENE :query ORDER BY date DESC UNWIND authorId, authorName, authorHandle LIMIT 300';
 
-  return chainPromises(() => {
-    return db.query(tweetSelection, { 'params': { 'query': `${query}~` } });
-  }).then((tweetRecords) => {
-    const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 20;
-    if (shouldRequeryTwitter) {
-      return refreshFromTwitter(query);
+  return newPromiseChain()
+    .then(() => db.query(tweetSelection, { 'params': { 'query': `${query}~` } }))
+    .then((tweetRecords) => refreshFromTwitterOrMakeTweets(alreadyAttemptedRefresh, query, tweetRecords))
+    .then(
+      (resolved) => resolved,
+      (rejection) => console.warn('Major error querying the database.', rejection)
+    );
+};
 
-    } else {
-      return tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord));
-    }
-  }).then(
-    (resolved) => {
-      return resolved;
-    },
-
-    (rejection) => {
-      console.warn('Major error querying the database.', rejection);
-    }
-  );
+const refreshFromTwitterOrMakeTweets = (alreadyAttemptedRefresh, query, tweetRecords) => {
+  const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 20;
+  if (shouldRequeryTwitter) {
+    return refreshFromTwitter(query);
+  } else {
+    return tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord));
+  }
 };
 
 const refreshFromTwitter = (query) => {
