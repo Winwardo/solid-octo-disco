@@ -28,8 +28,8 @@ const buildTweetFromRaw = (rawTweet) => {
     .id(rawTweet.id_str)
     .content(rawTweet.text)
     .date(moment(new Date(rawTweet.created_at)).format('YYYY-MM-DD HH:mm:ss'))
-    .likes(rawTweet.favourites_count || 0)
-    .retweets(rawTweet.retweet_count || 0)
+    .likes(rawTweet.favourites_count)
+    .retweets(rawTweet.retweet_count)
     .build();
 };
 
