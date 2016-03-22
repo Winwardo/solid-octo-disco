@@ -1,4 +1,4 @@
-import { fetchPost, chainPromises } from '../../shared/utilities';
+import { fetchPost, newPromiseChain } from '../../shared/utilities';
 
 export const ADD_SEARCH_TERM = 'ADD_SEARCH_TERM';
 export const addSearchTerm = (id, query) => {
@@ -34,15 +34,21 @@ export const invalidateFeedResults = () =>
 export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
 export const searchApiForFeed = (searchTerms) =>
 (dispatch) => (
-  chainPromises(() => (fetchPost('/search', searchTerms)))
+  newPromiseChain()
+  .then(() => (fetchPost('/search', searchTerms)))
   .then(response => (response.json()))
-  .then(json => {
-    dispatch({ type: RECEIVE_FEED_RESULTS, data: json });
-  })
+  .then(json => dispatch({ type: RECEIVE_FEED_RESULTS, data: json }))
 );
 
 export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';
 export const deleteSearchTerm = (id) => ({
   type: DELETE_SEARCH_TERM,
   id,
+});
+
+export const TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION = 'TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION';
+export const toggleSearchTermParamTypeSelection = (id, paramTypeName) => ({
+  type: TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION,
+  id,
+  paramTypeName
 });

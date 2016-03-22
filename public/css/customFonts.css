@@ -11,7 +11,7 @@
 
 i {
     /* use !important to prevent issues with browser extensions that change fonts */
-    
+
     speak: none;
     font-style: normal;
     font-weight: normal;
@@ -29,6 +29,16 @@ i {
     content: "\1f44c";
 }
 
+.ui.labeled.icon.button {
+  padding-left:1.5em!important;
+  padding-right:4.07142857em!important;
+}
+
+.ui.labeled.icon.button>.icon {
+  left:auto;
+  right:0;
+}
+
 #addSearchTerm::-webkit-input-placeholder {
     color:    #999;
 }
@@ -40,4 +50,4 @@ i {
 }
 #addSearchTerm:-ms-input-placeholder {
     color:    #999;
-}  
+}

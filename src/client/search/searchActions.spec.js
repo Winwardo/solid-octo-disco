@@ -60,4 +60,18 @@ describe('#SearchActions', () => {
 
     actions.deleteSearchTerm(id).should.deep.equal(expectedAction);
   });
+
+  it('should create an action to toggle a search term with id paramtype selection', () => {
+    const id = 1;
+    const paramTypeName = 'author';
+
+    const expectedAction = {
+      type: actions.TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION,
+      id,
+      paramTypeName
+    };
+
+    actions.toggleSearchTermParamTypeSelection(id, paramTypeName)
+      .should.deep.equal(expectedAction);
+  });
 });
