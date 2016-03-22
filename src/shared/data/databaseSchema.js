@@ -87,4 +87,6 @@ export const schema = {
   'FOLLOWS': EmptyEdge,
   'MENTIONS': EmptyEdge,
   'HAS_HASHTAG': EmptyEdge,
+  'HAS_PLACE': EmptyEdge,
+  'IN_COUNTRY': EmptyEdge,
 };
