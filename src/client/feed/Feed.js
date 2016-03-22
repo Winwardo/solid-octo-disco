@@ -4,7 +4,7 @@ import moment from 'moment';
 
 const Feed = ({ feed }) => (
   <div>
-    <h3>Search results</h3>
+    <h3>Search results, showing {feed.length} posts.</h3>
     <div className="ui divided items">
       {
         feed.map((feedItem) => (<FeedItem content={feedItem}/>))

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SlidingSearchBar from './SearchBar';
+import { hideMostUsedWord, showMostUsedWord } from './mostUsedWordsActions';
 
 let MostUsedWords = ({ wordInfoList, search, mostUsedWords }) => {
   const filteredWords = () => {
@@ -43,24 +44,24 @@ class WordItemList extends Component {
     return (
       <div style={{ height: '300px', overflowY: 'scroll' }}>
         <div className='ui fluid accordion' style={{ overflow:'hidden' }}>
-          { this.props.words.map((wordInfo, id) => <WordItem key={id} wordInfo={wordInfo} />) }
+          { this.props.words.map((wordInfo, id) => <ConflatedWordItem key={id} conflatedWordInfo={wordInfo} />) }
         </div>
       </div>
     );
   }
 };
 
-const WordItem = ({ wordInfo }) => (
+const ConflatedWordItem = ({ key, conflatedWordInfo }) => (
   <div>
     <div className='title'>
       <div className="ui grid">
         <div className="two wide right aligned column">
           <div className='statistic'>
-            {wordInfo.count}
+            {conflatedWordInfo.count}
           </div>
         </div>
         <div className="fourteen wide column">
-          {wordInfo.word} <i className='dropdown icon' />
+          {conflatedWordInfo.word} <i className='dropdown icon' />
         </div>
       </div>
     </div>
@@ -68,26 +69,37 @@ const WordItem = ({ wordInfo }) => (
       <table className='ui very basic celled table'>
         <tbody>
           {
-            wordInfo.makeup.map((makeupInfo) => (
-                  <tr>
-                    <td className='right aligned' style={{ width: '60px' }}>{Math.round(makeupInfo.count / wordInfo.count * 100)}%</td>
-                    <td className='right aligned' style={{ width: '60px' }}>{makeupInfo.count}</td>
-                    <td>{makeupInfo.word}</td>
-                    <td>
-                      <div className="ui checkbox">
-                        <label>Show</label>
-                        <input type="checkbox" name="example" checked="true"/>
-                      </div>
-                    </td>
-                  </tr>
-              )
-            )
+            conflatedWordInfo.makeup.map((makeupInfo) => (
+              <WordItem makeupInfo={makeupInfo} conflatedWordCount={conflatedWordInfo.count} />
+            ))
           }
         </tbody>
       </table>
     </div>
   </div>
 );
+
+let WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => (
+  <tr>
+    <td className='right aligned' style={{ width: '60px' }}>{Math.round(makeupInfo.count / conflatedWordCount * 100)}%</td>
+    <td className='right aligned' style={{ width: '60px' }}>{makeupInfo.count}</td>
+    <td>{makeupInfo.word}</td>
+    <td>
+      <div className="ui checkbox" onClick={(e) => {
+        const isNowChecked = $($(e.target).parent().children()[0]).is(':checked');
+        if (isNowChecked) {
+          dispatch(showMostUsedWord(makeupInfo.word));
+        } else {
+          dispatch(hideMostUsedWord(makeupInfo.word));
+        };
+      }}>
+        <label>Show</label>
+        <input type="checkbox" name="example" checked="true" />
+      </div>
+    </td>
+  </tr>
+)
+WordItem = connect()(WordItem);
 
 const ToggleAllWords = () => (
   <button className='ui button'>Hide all</button>
