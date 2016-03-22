@@ -82,13 +82,27 @@ export const fetchPost = (url, body) => (
 );
 
 /**
- *
+ * Creates the paramTypes for a Twitter specific search term.
+ * @param array of strings representing search paramaterTypes
+ * @returns [{Object}] representing search terms with meta data
+ */
+export const createTwitterParamTypes = (selectedParamTypes) =>
+  ['author', 'hashtag', 'keyword', 'mention']
+    .map((paramType) => makeParamType(selectedParamTypes, paramType));
+
+const makeParamType = (selectedParamTypes, type) => ({
+  name: type,
+  selected: selectedParamTypes.indexOf(type) > -1,
+  icon: getParamTypeIcon(type)
+});
+
+/**
  * Returns a semantic icon name or character to represent seachParamTypes
  * eg. hashtag = #, mention = @
  * @param string which represents a paramtype
- * @returns single character or semantic icon class
+ * @returns char or string representing paramType (could be semantic icon class)
  */
-export const getParamTypeIcon = (paramType) => {
+const getParamTypeIcon = (paramType) => {
   switch (paramType) {
   case 'author':
     return 'user icon';
@@ -97,8 +111,28 @@ export const getParamTypeIcon = (paramType) => {
   case 'keyword':
     return 'file text icon';
   case 'mention':
-    return '@';
+    return 'at icon';
   default:
     return '?';
   }
 };
+
+/**
+ * Returns a copy of the paramTypes with the name of the passed
+ * in paramType toggled
+ * @param paramTypes array
+ * @param paramTypeToggleName which is the paramType you want to toggle
+ * @returns copy of paramtypes with the paramTypeToggleName paramType toggled
+ */
+export const toggleParamType = (paramTypes, paramTypeToggleName) => (
+  paramTypes.map((paramType) => {
+    if (paramType.name !== paramTypeToggleName) {
+      return paramType;
+    }
+
+    return {
+      ...paramType,
+      selected: !paramType.selected
+    };
+  })
+);

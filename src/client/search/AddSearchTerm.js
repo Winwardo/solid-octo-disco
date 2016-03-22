@@ -22,7 +22,6 @@ let AddSearchTerm = ({ dispatch }) => {
         onBlur={() => {
           $('#searchTermContainer').slideUp('fast');
         }}
-
         onKeyDown={(e) => {
           if (e.keyCode === 13) {
             dispatch(addSearchTerm(nextSearchTermId++, e.target.value));
