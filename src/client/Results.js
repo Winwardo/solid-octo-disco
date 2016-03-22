@@ -20,9 +20,7 @@ let Results = ({ feed }) => (
   </div>
 );
 
-const mapStateToProps = (state) => {
-  return { feed: state.feed };
-};
+const mapStateToProps = (state) => ({ feed: state.feed });
 
 Results = connect(mapStateToProps)(Results);
 export default Results;
