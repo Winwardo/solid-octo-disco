@@ -1,7 +1,7 @@
 import { flattenImmutableObject } from '../utilities';
 
 const runQueryOnImmutableObject = (db, query, objectToFlatten) =>
-  db.query(query, { 'params': flattenImmutableObject(objectToFlatten) });
+  db.query(query, { params: flattenImmutableObject(objectToFlatten) });
 
 export const upsertTweeter = (db, tweeter) => (
   runQueryOnImmutableObject(
@@ -47,9 +47,9 @@ export const linkTweeterToTweet = (db, tweeter, tweet) => (
   db.query(
     'CREATE EDGE TWEETED FROM (SELECT FROM tweeter WHERE id = :tweeterId) TO (SELECT FROM tweet WHERE id = :tweetId)',
     {
-      'params': {
-        'tweetId': tweet.id(),
-        'tweeterId': tweeter.id(),
+      params: {
+        tweetId: tweet.id(),
+        tweeterId: tweeter.id(),
       },
     }).then(() => {}, (rej) => { console.error('Link tweeter -> tweet', tweeter.handle(), tweet.content(), rej); })
 );
@@ -58,9 +58,9 @@ export const linkTweeterToRetweet = (db, tweeter, tweet) => (
   db.query(
     'CREATE EDGE RETWEETED FROM (SELECT FROM tweeter WHERE id = :tweeterId) TO (SELECT FROM tweet WHERE id = :tweetId)',
     {
-      'params': {
-        'tweetId': tweet.id(),
-        'tweeterId': tweeter.id(),
+      params: {
+        tweetId: tweet.id(),
+        tweeterId: tweeter.id(),
       },
     }).then(() => {}, (rej) => { console.error('Link tweeter -> retweet', rej); })
 );
@@ -69,9 +69,9 @@ export const linkTweetToHashtag = (db, tweet, hashtag) => (
   db.query(
     'CREATE EDGE HAS_HASHTAG FROM (SELECT FROM tweet WHERE id = :tweetId) TO (SELECT FROM hashtag WHERE content = :hashtagContent)',
     {
-      'params': {
-        'tweetId': tweet.id(),
-        'hashtagContent': hashtag.content(),
+      params: {
+        tweetId: tweet.id(),
+        hashtagContent: hashtag.content(),
       },
     }).then(() => {}, (rej) => { console.error('Link tweet -> hashtag', rej); })
 );
@@ -80,9 +80,9 @@ export const linkTweetToTweeterViaMention = (db, tweet, mentionedTweeter) => (
   db.query(
     'CREATE EDGE MENTIONS FROM (SELECT FROM tweet WHERE id = :tweetId) TO (SELECT FROM tweeter WHERE id = :mentionedTweeterId)',
     {
-      'params': {
-        'tweetId': tweet.id(),
-        'mentionedTweeterId': mentionedTweeter.id(),
+      params: {
+        tweetId: tweet.id(),
+        mentionedTweeterId: mentionedTweeter.id(),
       },
     }).then(() => {}, (rej) => { console.error('Link tweet -> tweeter', mentionedTweeter.handle(), tweet.content(), rej); })
 );

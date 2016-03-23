@@ -49,7 +49,7 @@ app.get('/twit/:query', (req, res) => {
 
 app.get('/exampleTwitterJson', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
-  TwitAccess.get('search/tweets', { 'q': 'Brussels', 'count': 300 })
+  TwitAccess.get('search/tweets', { q: 'Brussels', count: 300 })
     .then(tweets => res.end(JSON.stringify(tweets.data.statuses)));
 });
 

@@ -7,7 +7,9 @@
   "maximumLineLength": null,
   "disallowSpacesInsideArrayBrackets": null,
   "disallowSpacesInsideBrackets": null,
+  "disallowQuotedKeysInObjects": true,
   "requirePaddingNewLinesAfterBlocks": false,
+  "requireQuotedKeysInObjects": false,
 
   "excludeFiles": [
     "test/data/**",

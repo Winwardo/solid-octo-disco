@@ -31,9 +31,9 @@ const searchAndCollateResults = (query) => (
   searchDatabase(query)
     .then((data) => (
       {
-        'data': {
-          'count': data.length,
-          'records': getTweetsAsResults(data),
+        data: {
+          count: data.length,
+          records: getTweetsAsResults(data),
         },
       }
     ))
@@ -43,7 +43,7 @@ const searchDatabase = (query, alreadyAttemptedRefresh = false) => {
   const tweetSelection = 'SELECT *, in(\'TWEETED\').id AS authorId, in(\'TWEETED\').name AS authorName, in(\'TWEETED\').handle AS authorHandle FROM tweet WHERE content LUCENE :query ORDER BY date DESC UNWIND authorId, authorName, authorHandle LIMIT 300';
 
   return newPromiseChain()
-    .then(() => db.query(tweetSelection, { 'params': { 'query': `${query}~` } }))
+    .then(() => db.query(tweetSelection, { params: { query: `${query}~` } }))
     .then((tweetRecords) => refreshFromTwitterOrMakeTweets(alreadyAttemptedRefresh, query, tweetRecords))
     .then(
       (resolved) => resolved,
@@ -67,8 +67,8 @@ const refreshFromTwitter = (query) => (
 
 const makeTweetAndAuthorFromDatabaseTweetRecord = (tweetRecord) => (
   {
-    'tweet': flattenImmutableObject(buildTweetFromDatabaseRecord(tweetRecord)),
-    'author': flattenImmutableObject(buildTweeterFromDatabaseTweetRecord(tweetRecord)),
+    tweet: flattenImmutableObject(buildTweetFromDatabaseRecord(tweetRecord)),
+    author: flattenImmutableObject(buildTweeterFromDatabaseTweetRecord(tweetRecord)),
   }
 );
 
@@ -94,6 +94,6 @@ const buildTweetFromDatabaseRecord = (record) => (
 
 const getTweetsAsResults = (data) => (
   data.map(
-    (tweet) => ({ 'data': tweet.tweet, 'author': tweet.author, 'source': 'twitter' })
+    (tweet) => ({ data: tweet.tweet, author: tweet.author, source: 'twitter' })
   )
 );

@@ -23,7 +23,7 @@ export const convertSchemaObjectToClass = (name, schema) => {
  */
 const generateBuilder = (name) => BuilderDecorator.BuilderDecorator(
   convertSchemaObjectToClass(name, schema),
-  { 'allFieldsMustBeSet': true }
+  { allFieldsMustBeSet: true }
 );
 
 // ----------------------
