@@ -19,30 +19,20 @@ const Feed = ({ feed, hiddenWords }) => {
   );
 }
 
-const filterPostsForFeed = (feed, hiddenWords) => {
-  return feed.filter((feedItem) => {
-    switch (feedItem.source) {
-      case 'twitter':
-      {
-        const content = feedItem.data.content;
+const filterPostsForFeed = (feed, hiddenWords) => (
+  feed.filter((feedItem) => {
+    const content = feedItem.data.content;
 
-        // If we can find the chosen hidden word in this tweet, block the post
-        for (const hiddenWord in hiddenWords) {
-          if (content.indexOf(hiddenWord) > -1) {
-            return false;
-          }
-        }
-
-        return true;
-      }
-
-      default:
-      {
+    // If we can find the chosen hidden word in this tweet, block the post
+    for (const hiddenWord in hiddenWords) {
+      if (content.indexOf(hiddenWord) > -1) {
         return false;
       }
     }
-  });
-};
+
+    return true;
+  }
+));
 
 const FeedItem = ({ content }) => {
   let post;
@@ -93,9 +83,9 @@ class Tweet extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state) => ({
   feed: state.feed,
   hiddenWords: state.mostUsedWords.wordsToHide,
-};
+});
 
 export default connect(mapStateToProps)(Feed);
