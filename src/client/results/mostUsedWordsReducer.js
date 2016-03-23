@@ -20,10 +20,11 @@ const MostUsedWordsReducer = (state = { filterTerm: '', wordsToHide: [] }, actio
       }else {
         return {
           ...state,
-          wordsToHide: [...state.wordsToHide, action.word]
-        }
+          wordsToHide: [...state.wordsToHide, action.word],
+        };
       }
     }
+
     default:
       return state;
   };

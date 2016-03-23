@@ -17,7 +17,7 @@ const Feed = ({ feed, hiddenWords }) => {
       </div>
     </div>
   );
-}
+};
 
 const filterPostsForFeed = (feed, hiddenWords) => (
   feed.filter((feedItem) => {

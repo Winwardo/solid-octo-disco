@@ -8,6 +8,6 @@ export const updateMostUsedWordsSearch = (searchFor, filterTerm) => ({
 export const toggleMostUsedWord = (word) => {
   return {
     type: TOGGLE_MOST_USED_WORD,
-      word,
-  }
+    word,
+  };
 };

@@ -43,7 +43,7 @@ describe('#MostUsedWordsReducer', () => {
 
     it('should not conflate similar hidden words', () => {
       const stateBefore = {
-        wordsToHide: ['lEmOn']
+        wordsToHide: ['lEmOn'],
       };
       const action = {
         type: TOGGLE_MOST_USED_WORD,
@@ -51,7 +51,7 @@ describe('#MostUsedWordsReducer', () => {
       };
 
       const stateAfter = {
-        wordsToHide: ['lEmOn','LeMoN'],
+        wordsToHide: ['lEmOn', 'LeMoN'],
       };
 
       deepFreeze(stateBefore);
@@ -70,7 +70,7 @@ describe('#MostUsedWordsReducer', () => {
       };
 
       const stateAfter = {
-        wordsToHide: []
+        wordsToHide: [],
       };
 
       deepFreeze(stateBefore);
