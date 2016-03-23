@@ -4,10 +4,10 @@
 
   "validateLineBreaks": null,
   "disallowQuotedKeysInObjects": false,
-  "requireShorthandArrowFunctions": false,
   "maximumLineLength": null,
   "disallowSpacesInsideArrayBrackets": null,
   "disallowSpacesInsideBrackets": null,
+  "requirePaddingNewLinesAfterBlocks": false,
 
   "excludeFiles": [
     "test/data/**",

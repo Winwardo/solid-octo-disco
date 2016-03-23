@@ -27,17 +27,17 @@ export const searchQuery = (req, res) => {
     );
 };
 
-const searchAndCollateResults = (query) => {
-  return searchDatabase(query)
-    .then((data) => {
-      return {
+const searchAndCollateResults = (query) => (
+  searchDatabase(query)
+    .then((data) => (
+      {
         'data': {
           'count': data.length,
           'records': getTweetsAsResults(data),
         },
-      };
-    });
-};
+      }
+    ))
+);
 
 const searchDatabase = (query, alreadyAttemptedRefresh = false) => {
   const tweetSelection = 'SELECT *, in(\'TWEETED\').id AS authorId, in(\'TWEETED\').name AS authorName, in(\'TWEETED\').handle AS authorHandle FROM tweet WHERE content LUCENE :query ORDER BY date DESC UNWIND authorId, authorName, authorHandle LIMIT 300';
@@ -60,30 +60,28 @@ const refreshFromTwitterOrMakeTweets = (alreadyAttemptedRefresh, query, tweetRec
   }
 };
 
-const refreshFromTwitter = (query) => {
-  return searchAndSaveFromTwitter(query)
-    .then(() => {
-      return searchDatabase(query, true);
-    });
-};
+const refreshFromTwitter = (query) => (
+  searchAndSaveFromTwitter(query)
+    .then(() => searchDatabase(query, true))
+);
 
-const makeTweetAndAuthorFromDatabaseTweetRecord = (tweetRecord) => {
-  return {
+const makeTweetAndAuthorFromDatabaseTweetRecord = (tweetRecord) => (
+  {
     'tweet': flattenImmutableObject(buildTweetFromDatabaseRecord(tweetRecord)),
     'author': flattenImmutableObject(buildTweeterFromDatabaseTweetRecord(tweetRecord)),
-  };
-};
+  }
+);
 
-const buildTweeterFromDatabaseTweetRecord = (record) => {
-  return TweeterBuilder()
+const buildTweeterFromDatabaseTweetRecord = (record) => (
+  TweeterBuilder()
     .id(record.authorId)
     .name(record.authorName)
     .handle(record.authorHandle)
-    .build();
-};
+    .build()
+);
 
-const buildTweetFromDatabaseRecord = (record) => {
-  return TweetBuilder()
+const buildTweetFromDatabaseRecord = (record) => (
+  TweetBuilder()
     .id(record.id)
     .content(record.content)
     .date(record.date.toISOString())
@@ -91,10 +89,11 @@ const buildTweetFromDatabaseRecord = (record) => {
     .retweets(record.retweets)
     .longitude(record.longitude)
     .latitude(record.latitude)
-    .build();
-};
+    .build()
+);
 
-const getTweetsAsResults = (data) => {
-  return data.map((tweet) => {
-  return { 'data': tweet.tweet, 'author': tweet.author, 'source': 'twitter' }; });
-};
+const getTweetsAsResults = (data) => (
+  data.map(
+    (tweet) => ({ 'data': tweet.tweet, 'author': tweet.author, 'source': 'twitter' })
+  )
+);

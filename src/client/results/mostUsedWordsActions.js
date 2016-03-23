@@ -5,9 +5,7 @@ export const updateMostUsedWordsSearch = (searchFor, filterTerm) => ({
   filterTerm,
 });
 
-export const toggleMostUsedWord = (word) => {
-  return {
-    type: TOGGLE_MOST_USED_WORD,
-    word,
-  };
-};
+export const toggleMostUsedWord = (word) => ({
+  type: TOGGLE_MOST_USED_WORD,
+  word,
+});

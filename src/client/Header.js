@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
-const Header = () => {
-  return (
-  <div className="ui three item menu borderless">
+const Header = () => (
+	<div className="ui three item menu borderless">
 		<h1 className="item">
 			Socto
 			<i className="icon-thumbs-ok"></i>
@@ -21,7 +20,6 @@ const Header = () => {
 			</div>
 		</div>
 	</div>
-  );
-};
+);
 
 export default Header;
