@@ -94,10 +94,8 @@ class Tweet extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
-    feed: state.feed,
-    hiddenWords: state.mostUsedWords.wordsToHide,
-  };
+  feed: state.feed,
+  hiddenWords: state.mostUsedWords.wordsToHide,
 };
 
 export default connect(mapStateToProps)(Feed);
