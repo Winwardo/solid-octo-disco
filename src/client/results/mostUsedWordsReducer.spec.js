@@ -37,8 +37,8 @@ describe('#MostUsedWordsReducer', () => {
         }
       };
 
-      //deepFreeze(stateBefore);
-      //deepFreeze(action);
+      deepFreeze(stateBefore);
+      deepFreeze(action);
 
       MostUsedTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
     });
@@ -61,8 +61,8 @@ describe('#MostUsedWordsReducer', () => {
         }
       };
 
-      //deepFreeze(stateBefore);
-      //deepFreeze(action);
+      deepFreeze(stateBefore);
+      deepFreeze(action);
 
       MostUsedTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
     });
@@ -84,8 +84,8 @@ describe('#MostUsedWordsReducer', () => {
         }
       };
 
-      //deepFreeze(stateBefore);
-      //deepFreeze(action);
+      deepFreeze(stateBefore);
+      deepFreeze(action);
 
       MostUsedTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
     });
@@ -106,8 +106,8 @@ describe('#MostUsedWordsReducer', () => {
         }
       };
 
-      //deepFreeze(stateBefore);
-      //deepFreeze(action);
+      deepFreeze(stateBefore);
+      deepFreeze(action);
 
       MostUsedTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
     });
@@ -127,8 +127,8 @@ describe('#MostUsedWordsReducer', () => {
         }
       };
 
-      //deepFreeze(stateBefore);
-      //deepFreeze(action);
+      deepFreeze(stateBefore);
+      deepFreeze(action);
 
       MostUsedTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
     });
