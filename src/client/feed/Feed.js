@@ -2,16 +2,32 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-const Feed = ({ feed }) => (
-  <div>
-    <h3>Search results, showing {feed.length} posts.</h3>
-    <div className="ui divided items">
-      {
-        feed.map((feedItem) => (<FeedItem content={feedItem}/>))
+const Feed = ({ feed, hiddenWords }) => {
+  const filteredFeed = feed.filter((feedItem) => {
+    if (feedItem.source === 'twitter') {
+      const content = feedItem.data.content;
+      for (const hiddenWord in hiddenWords) {
+        if (content.indexOf(hiddenWord) > -1) {
+          return false;
+        }
       }
+    }
+    return true;
+  });
+
+  return (
+    <div>
+      <h3>Search results, showing {filteredFeed.length} posts.</h3>
+      (Hiding {feed.length - filteredFeed.length} posts)
+      <div className="ui divided items">
+        {
+          filteredFeed
+            .map((feedItem) => (<FeedItem content={feedItem}/>))
+        }
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const FeedItem = ({ content }) => {
   let post;
@@ -65,6 +81,7 @@ class Tweet extends Component {
 const mapStateToProps = (state) => {
   return {
     feed: state.feed,
+    hiddenWords: state.mostUsedWords.wordsToHide,
   };
 };
 

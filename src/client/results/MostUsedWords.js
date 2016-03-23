@@ -16,7 +16,7 @@ let MostUsedWords = ({ wordInfoList, search, mostUsedWords }) => {
       <div>
         <div className='ui two column grid'>
           <div className='column'>
-            <SlidingSearchBar searchFor='MOST_USED_WORDS_FILTER' />
+            <SlidingSearchBar searchFor='MOST_USED_WORDS_FILTER' currentValue={mostUsedWords.filterTerm} />
           </div>
           <div className='right aligned column'>
             <ToggleAllWords />
