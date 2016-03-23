@@ -23,7 +23,7 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: createTwitterParamTypes(['hashtag']),
       source: 'twitter',
-    },];
+    }, ];
 
     deepFreeze(stateBefore);
     deepFreeze(action);
@@ -37,7 +37,7 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
-    },];
+    }, ];
     const action = {
       type: ADD_SEARCH_TERM,
       id: 1,
@@ -56,7 +56,7 @@ describe('#SearchTermsReducer', () => {
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
-    },];
+    }, ];
 
     deepFreeze(stateBefore);
     deepFreeze(action);
@@ -70,7 +70,7 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
-    },];
+    }, ];
     const action = {
       type: DELETE_SEARCH_TERM,
       id: 0,
@@ -95,7 +95,7 @@ describe('#SearchTermsReducer', () => {
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
-    },];
+    }, ];
     const action = {
       type: DELETE_SEARCH_TERM,
       id: 0,
@@ -106,7 +106,7 @@ describe('#SearchTermsReducer', () => {
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
-    },];
+    }, ];
 
     deepFreeze(stateBefore);
     deepFreeze(action);
@@ -125,7 +125,7 @@ describe('#SearchTermsReducer', () => {
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
-    },];
+    }, ];
     const action = {
       type: TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION,
       id: 0,
@@ -142,7 +142,7 @@ describe('#SearchTermsReducer', () => {
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
-    },];
+    }, ];
 
     deepFreeze(stateBefore);
     deepFreeze(action);
