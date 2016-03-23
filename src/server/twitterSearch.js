@@ -2,7 +2,8 @@ const Twit = require('twit');
 const moment = require('moment');
 import { db } from './orientdb';
 import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweetToTweeterViaMention,
-  upsertHashtag, upsertTweet, upsertTweeter
+  linkTweetToPlace, linkPlaceToCountry,
+  upsertHashtag, upsertTweet, upsertTweeter, upsertPlace, upsertCountry
 } from '../shared/data/databaseInsertActions';
 import * as Builders from '../shared/data/databaseObjects';
 import { newPromiseChain } from '../shared/utilities';
@@ -25,13 +26,45 @@ export const TwitAccess = new Twit({
  * @returns {ImmutableTweet}
  */
 const buildTweetFromRaw = (rawTweet) => {
+  const coordinates = findLatitudeLongitude(rawTweet);
   return Builders.TweetBuilder()
     .id(rawTweet.id_str)
     .content(rawTweet.text)
     .date(moment(new Date(rawTweet.created_at)).format('YYYY-MM-DD HH:mm:ss'))
-    .likes(rawTweet.favourites_count || 0)
-    .retweets(rawTweet.retweet_count || 0)
+    .likes(rawTweet.favorite_count)
+    .retweets(rawTweet.retweet_count)
+    .latitude(coordinates.latitude)
+    .longitude(coordinates.longitude)
     .build();
+};
+
+/**
+  * Finds if Latitude/Longitude coordinates exist in raw tweet, otherwise return 0.0 for both
+  * @param rawTweet From the Twitter API.
+  * @returns [latitude, longitude]
+  */
+const findLatitudeLongitude = (rawTweet) => {
+  if (rawTweet.geo) {
+    return {
+      latitude: rawTweet.geo.coordinate[0],
+      longitude: rawTweet.geo.coordinate[1]
+    };
+  } else if (rawTweet.coordinates) {
+    return {
+      latitude: rawTweet.coordinates.coordinate[1],
+      longitude: rawTweet.coordinates.coordinate[0]
+    };
+  } else if (rawTweet.place) {
+    return {
+      latitude: rawTweet.place.bounding_box.coordinates[0][0][1],
+      longitude: rawTweet.place.bounding_box.coordinates[0][0][0]
+    };
+  }
+
+  return {
+    latitude: 0.0,
+    longitude: 0.0
+  };
 };
 
 /**
@@ -46,6 +79,15 @@ const buildTweeterFromRaw = (rawTweeter) => {
     .handle(rawTweeter.screen_name)
     .build();
 };
+
+const buildPlaceFromRaw = (rawPlace) => (
+  Builders.PlaceBuilder()
+    .id(rawPlace.id)
+    .name(rawPlace.name)
+    .full_name(rawPlace.full_name)
+    .type(rawPlace.place_type)
+    .build()
+);
 
 /**
  * Given some raw status we know is a retweet, insert it and add a RETWEETED link.
@@ -108,9 +150,34 @@ function processRawOriginalTweet(db, rawTweet, originalTweeter) {
     .then(() => upsertTweet(db, tweet))
     .then(() => upsertTweeter(db, originalTweeter))
     .then(() => linkTweeterToTweet(db, originalTweeter, tweet))
+    .then(() => linkTweetToLocation(db, tweet, rawTweet.place))
     .then(() => linkTweetToHashtags(db, rawHashtags, tweet))
     .then(() => linkTweetToMentions(db, rawMentions, tweet));
 }
+
+/**
+ * Given a tweet, if it has a place upsert the place and link it to a country
+ * @param db the OrientDB instance
+ * @param tweet A processed tweet to link to a place
+ * @param rawTweet A raw tweet's place property from the Twitter API
+ * @returns {Promise}
+ */
+const linkTweetToLocation = (db, tweet, rawPlace) => {
+  if (rawPlace) {
+    const place = buildPlaceFromRaw(rawPlace);
+    const country = Builders.CountryBuilder()
+      .code(rawPlace.country_code)
+      .name(rawPlace.country)
+      .build();
+
+    return newPromiseChain()
+      .then(() => upsertPlace(db, place))
+      .then(() => upsertCountry(db, country))
+      .then(() => linkTweetToPlace(db, tweet, place))
+      .then(() => linkPlaceToCountry(db, place, country));
+  }
+  return Promise.resolve();
+};
 
 /**
  * Given a raw tweet, extract information about the tweeter,

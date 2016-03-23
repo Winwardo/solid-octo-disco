@@ -3,7 +3,7 @@ import webpack from 'webpack';
 import config from '../../webpack.config.js';
 import { searchQuery } from './tweetFinder';
 import { generateDatabase } from './orientdb';
-import { searchAndSaveResponse, stream } from './twitterSearch';
+import { searchAndSaveResponse, stream, TwitAccess } from './twitterSearch';
 import bodyParser from 'body-parser';
 
 const app = express();
@@ -45,6 +45,12 @@ app.post('/search', (req, res) => {
 app.get('/twit/:query', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
   searchAndSaveResponse(res, req.params.query);
+});
+
+app.get('/exampleTwitterJson', (req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  TwitAccess.get('search/tweets', { 'q': 'Brussels', 'count': 300 })
+    .then(tweets => res.end(JSON.stringify(tweets.data.statuses)));
 });
 
 app.get('/twit/stream/:query', (req, res) => {

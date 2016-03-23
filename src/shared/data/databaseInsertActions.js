@@ -14,7 +14,7 @@ export const upsertTweeter = (db, tweeter) => {
 export const upsertTweet = (db, tweet) => {
   return runQueryOnImmutableObject(
     db,
-    'UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets UPSERT WHERE id=:id',
+    'UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets, longitude=:longitude, latitude=:latitude UPSERT WHERE id=:id',
     tweet).then(() => {}, (rej) => { console.error('Upsert tweet', rej); });
 };
 
@@ -24,6 +24,20 @@ export const upsertHashtag = (db, hashtag) => {
     'UPDATE hashtag SET content=:content UPSERT WHERE content=:content',
     hashtag).then(() => {}, (rej) => { console.error('Upsert hashtag', rej); });
 };
+
+export const upsertPlace = (db, place) => (
+  runQueryOnImmutableObject(
+    db,
+    'UPDATE place SET id=:id, name=:name, full_name=:full_name, type=:type UPSERT WHERE id=:id',
+    place).then(() => {}, (rej) => console.error('Upsert Place', rej))
+);
+
+export const upsertCountry = (db, country) => (
+  runQueryOnImmutableObject(
+    db,
+    'UPDATE country SET code=:code, name=:name UPSERT WHERE code=:code',
+    country).then(() => {}, (rej) => {console.error('Upsert Place', rej);})
+);
 
 export const linkTweeterToTweet = (db, tweeter, tweet) => {
   return db.query(
@@ -68,3 +82,31 @@ export const linkTweetToTweeterViaMention = (db, tweet, mentionedTweeter) => {
       },
     }).then(() => {}, (rej) => { console.error('Link tweet -> tweeter', mentionedTweeter.handle(), tweet.content(), rej); });
 };
+
+export const linkTweetToPlace = (db, tweet, place) => (
+  db.query(
+    'CREATE EDGE HAS_PLACE FROM (SELECT FROM tweet WHERE id = :tweetId) TO (SELECT FROM place WHERE id = :placeId)',
+    {
+      params: {
+        tweetId: tweet.id(),
+        placeId: place.id()
+      },
+    }).then(
+      (success) => {console.log(success)},
+      (rej) => console.error('Link tweet -> place', place.full_name(), tweet.content(), rej)
+    )
+);
+
+export const linkPlaceToCountry = (db, place, country) => (
+  db.query(
+    'CREATE EDGE IN_COUNTRY FROM (SELECT FROM place WHERE id = :placeId) TO (SELECT FROM country WHERE code = :countryCode)',
+    {
+      params: {
+        placeId: place.id(),
+        countryCode: country.code(),
+      },
+    }).then(
+      () => {},
+      (rej) => console.error('Link place -> country', place.full_name(), country.name(), rej)
+    )
+);
