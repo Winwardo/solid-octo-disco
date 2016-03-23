@@ -2,18 +2,22 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-const Feed = ({ feed, hiddenWords }) => (
-  <div>
-    <h3>Search results, showing {filteredFeed.length} posts.</h3>
-    (Hiding {feed.length - filteredFeed.length} posts)
-    <div className="ui divided items">
-      {
-        filterPostsForFeed(feed, hiddenWords)
-          .map((feedItem) => (<FeedItem content={feedItem}/>))
-      }
+const Feed = ({ feed, hiddenWords }) => {
+  const filteredFeed = filterPostsForFeed(feed, hiddenWords);
+
+  return (
+    <div>
+      <h3>Search results, showing {filteredFeed.length} posts.</h3>
+      (Hiding {feed.length - filteredFeed.length} posts)
+      <div className="ui divided items">
+        {
+          filteredFeed
+            .map((feedItem) => (<FeedItem content={feedItem}/>))
+        }
+      </div>
     </div>
-  </div>
-);
+  );
+}
 
 const filterPostsForFeed = (feed, hiddenWords) => {
   return feed.filter((feedItem) => {
