@@ -6,6 +6,8 @@
   "disallowQuotedKeysInObjects": false,
   "requireShorthandArrowFunctions": false,
   "maximumLineLength": null,
+  "disallowSpacesInsideArrayBrackets": null,
+  "disallowSpacesInsideBrackets": null,
 
   "excludeFiles": [
     "test/data/**",

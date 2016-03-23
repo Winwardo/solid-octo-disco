@@ -39,7 +39,7 @@ describe('#Utilities', () => {
       const exampleImmutableObject = {
         thing: () => ({
           inner: () => ('okay'),
-        })
+        }),
       };
 
       flattenImmutableObject(exampleImmutableObject, true).should.deep.equal({
@@ -76,23 +76,30 @@ describe('#Utilities', () => {
 
   describe('paramType object functions', () => {
     it('can create a twitter specific paramTypes object for search terms', () => {
-      createTwitterParamTypes(['hashtag', 'keyword']).should.deep.equal([{
-        name: 'author',
-        selected: false,
-        icon: 'user icon'
-      }, {
-        name: 'hashtag',
-        selected: true,
-        icon: '#'
-      }, {
-        name: 'keyword',
-        selected: true,
-        icon: 'file text icon'
-      }, {
-        name: 'mention',
-        selected: false,
-        icon: 'at icon'
-      }]);
+      createTwitterParamTypes(['hashtag', 'keyword']).should.deep.equal(
+        [
+          {
+            name: 'author',
+            selected: false,
+            icon: 'user icon',
+          },
+          {
+            name: 'hashtag',
+            selected: true,
+            icon: '#',
+          },
+          {
+            name: 'keyword',
+            selected: true,
+            icon: 'file text icon',
+          },
+          {
+            name: 'mention',
+            selected: false,
+            icon: 'at icon',
+          },
+        ]
+      );
     });
 
     it('can toggle a paramType with the paramTypeName to toggle', () => {
