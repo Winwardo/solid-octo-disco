@@ -4,11 +4,11 @@ import SlidingSearchBar from './SearchBar';
 import { toggleMostUsedWord, showMostUsedWord } from './mostUsedWordsActions';
 
 let MostUsedWords = ({ wordInfoList, search, mostUsedWords }) => {
-  const filteredWords = () => {
-    return wordInfoList
+  const filteredWords = () => (
+    wordInfoList
       .filter((wordInfo) => wordInfo.word.toLowerCase().includes(mostUsedWords.filterTerm.toLowerCase()))
-      .slice(0, 100);
-  };
+      .slice(0, 100)
+  );
 
   return (
     <div>
@@ -100,11 +100,9 @@ const ToggleAllWords = () => (
   <button className='ui button'>Hide all</button>
 );
 
-const mapStateToProps = (state) => {
-  return {
-    mostUsedWords: state.mostUsedWords,
-  };
-};
+const mapStateToProps = (state) => ({
+  mostUsedWords: state.mostUsedWords,
+});
 
 MostUsedWords = connect(mapStateToProps)(MostUsedWords);
 export default MostUsedWords;

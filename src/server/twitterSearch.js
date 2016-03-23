@@ -47,23 +47,23 @@ const findLatitudeLongitude = (rawTweet) => {
   if (rawTweet.geo) {
     return {
       latitude: rawTweet.geo.coordinate[0],
-      longitude: rawTweet.geo.coordinate[1]
+      longitude: rawTweet.geo.coordinate[1],
     };
   } else if (rawTweet.coordinates) {
     return {
       latitude: rawTweet.coordinates.coordinate[1],
-      longitude: rawTweet.coordinates.coordinate[0]
+      longitude: rawTweet.coordinates.coordinate[0],
     };
   } else if (rawTweet.place) {
     return {
       latitude: rawTweet.place.bounding_box.coordinates[0][0][1],
-      longitude: rawTweet.place.bounding_box.coordinates[0][0][0]
+      longitude: rawTweet.place.bounding_box.coordinates[0][0][0],
     };
   }
 
   return {
     latitude: 0.0,
-    longitude: 0.0
+    longitude: 0.0,
   };
 };
 
@@ -72,13 +72,13 @@ const findLatitudeLongitude = (rawTweet) => {
  * @param rawTweeter From the Twitter API.
  * @returns {ImmutableTweet}
  */
-const buildTweeterFromRaw = (rawTweeter) => {
-  return Builders.TweeterBuilder()
+const buildTweeterFromRaw = (rawTweeter) => (
+  Builders.TweeterBuilder()
     .id(rawTweeter.id_str)
     .name(rawTweeter.name)
     .handle(rawTweeter.screen_name)
-    .build();
-};
+    .build()
+);
 
 const buildPlaceFromRaw = (rawPlace) => (
   Builders.PlaceBuilder()
@@ -96,7 +96,7 @@ const buildPlaceFromRaw = (rawPlace) => (
  * @param retweeter An immutable Tweeter object
  * @returns {Promise}
  */
-function processRawRetweet(db, rawRetweet, retweeter) {
+const processRawRetweet = (db, rawRetweet, retweeter) => {
   const originalTweeter = buildTweeterFromRaw(rawRetweet.user);
   const originalTweet = buildTweeterFromRaw(rawRetweet);
 
@@ -104,7 +104,7 @@ function processRawRetweet(db, rawRetweet, retweeter) {
     .then(() => upsertTweeter(db, retweeter))
     .then(() => processRawOriginalTweet(db, rawRetweet, originalTweeter))
     .then(() => linkTweeterToRetweet(db, retweeter, originalTweet));
-}
+};
 
 /**
  * Link a tweet to all of its hashtags
@@ -113,27 +113,30 @@ function processRawRetweet(db, rawRetweet, retweeter) {
  * @param tweet
  * @returns {Promise}
  */
-const linkTweetToHashtags = (db, rawHashtags, tweet) => {
-  return Promise.all(
+const linkTweetToHashtags = (db, rawHashtags, tweet) => (
+  Promise.all(
     rawHashtags.map((rawHashtag) => {
       const hashtag = Builders.HashtagBuilder().content(rawHashtag.text.toLowerCase()).build();
-      return upsertHashtag(db, hashtag).then((result) => {
-        return linkTweetToHashtag(db, tweet, hashtag);
-      });
-    })
-  );
-};
 
-const linkTweetToMentions = (db, rawMentions, tweet) => {
-  return Promise.all(
+      return newPromiseChain()
+        .then(() => upsertHashtag(db, hashtag))
+        .then((result) => linkTweetToHashtag(db, tweet, hashtag));
+    })
+  )
+);
+
+const linkTweetToMentions = (db, rawMentions, tweet) => (
+  Promise.all(
     rawMentions.map((rawMention) => {
       const mentionedTweeter = buildTweeterFromRaw(rawMention);
-      return upsertTweeter(db, mentionedTweeter).then((result) => {
-        return linkTweetToTweeterViaMention(db, tweet, mentionedTweeter);
-      });
+
+      return newPromiseChain()
+        .then(() => upsertTweeter(db, mentionedTweeter))
+        .then((result) => linkTweetToTweeterViaMention(db, tweet, mentionedTweeter));
     })
-  );
-};
+  )
+);
+
 /**
  * Given a raw status we know is not a retweet, insert it and upsert the user.
  * @param db The OrientDB instance
@@ -141,7 +144,7 @@ const linkTweetToMentions = (db, rawMentions, tweet) => {
  * @param originalTweeter An immutable Tweeter object
  * @returns {Promise}
  */
-function processRawOriginalTweet(db, rawTweet, originalTweeter) {
+const processRawOriginalTweet = (db, rawTweet, originalTweeter) => {
   const tweet = buildTweetFromRaw(rawTweet);
   const rawHashtags = rawTweet.entities.hashtags;
   const rawMentions = rawTweet.entities.user_mentions;
@@ -153,7 +156,7 @@ function processRawOriginalTweet(db, rawTweet, originalTweeter) {
     .then(() => linkTweetToLocation(db, tweet, rawTweet.place))
     .then(() => linkTweetToHashtags(db, rawHashtags, tweet))
     .then(() => linkTweetToMentions(db, rawMentions, tweet));
-}
+};
 
 /**
  * Given a tweet, if it has a place upsert the place and link it to a country
@@ -176,6 +179,7 @@ const linkTweetToLocation = (db, tweet, rawPlace) => {
       .then(() => linkTweetToPlace(db, tweet, place))
       .then(() => linkPlaceToCountry(db, place, country));
   }
+
   return Promise.resolve();
 };
 
@@ -219,9 +223,7 @@ export const searchAndSaveFromTwitter = (query, count = 300) => {
       .then((result) => {
         console.info(`Twitter search for '${query}' successful.`);
         return Promise.all(
-          result.data.statuses.map((rawTweet) => {
-            return processTweet(db, rawTweet);
-          })
+          result.data.statuses.map((rawTweet) => processTweet(db, rawTweet))
         );
       }, (rej) => {
         console.warn('Unable to search Twitter.', rej);
@@ -230,13 +232,13 @@ export const searchAndSaveFromTwitter = (query, count = 300) => {
     console.info(`Twitter disabled, not searching query '${query}'.`);
     return Promise.resolve();
   }
-};;
-
-export const searchAndSaveResponse = (res, query) => {
-  return searchAndSaveFromTwitter(query).then((result) => {
-    res.end(JSON.stringify(result));
-  });
 };
+
+export const searchAndSaveResponse = (res, query) => (
+  searchAndSaveFromTwitter(query).then((result) => {
+    res.end(JSON.stringify(result));
+  })
+);
 
 /**
  * Connect to the Twitter Stream API for one minute, processing all results.

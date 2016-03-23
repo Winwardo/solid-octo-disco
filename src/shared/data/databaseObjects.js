@@ -21,12 +21,10 @@ export const convertSchemaObjectToClass = (name, schema) => {
  * @param name e.g. 'Tweet'
  * @returns {Builder}
  */
-const generateBuilder = (name) => {
-  return BuilderDecorator.BuilderDecorator(
-		convertSchemaObjectToClass(name, schema),
-		{ 'allFieldsMustBeSet': true }
-	);
-};
+const generateBuilder = (name) => BuilderDecorator.BuilderDecorator(
+  convertSchemaObjectToClass(name, schema),
+  { 'allFieldsMustBeSet': true }
+);
 
 // ----------------------
 
