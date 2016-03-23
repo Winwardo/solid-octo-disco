@@ -1,23 +1,29 @@
-import { HIDE_MOST_USED_WORD, SHOW_MOST_USED_WORD } from './mostUsedWordsActions';
+import { TOGGLE_MOST_USED_WORD } from './mostUsedWordsActions';
 
-const MostUsedWordsReducer = (state = { filterTerm: '', wordsToHide: {} }, action) => {
+const MostUsedWordsReducer = (state = { filterTerm: '', wordsToHide: [] }, action) => {
   switch (action.type) {
     case 'UPDATE_SEARCH_MOST_USED_WORDS_FILTER':
       return { ...state, filterTerm: action.filterTerm };
-    case HIDE_MOST_USED_WORD:
-      {
-        const result = { ...state, wordsToHide: Object.assign({}, state.wordsToHide) };
-        result.wordsToHide[action.word] = true;
-        return result;
-      }
+    case TOGGLE_MOST_USED_WORD:
+    {
+      const termIndex = state.wordsToHide.indexOf(action.word);
+      if (termIndex > -1) {
+        let newWordsToHide = [
+          ...state.wordsToHide.slice(0, termIndex),
+          ...state.wordsToHide.slice(termIndex + 1),
+        ];
 
-    case SHOW_MOST_USED_WORD:
-      {
-        const result = { ...state, wordsToHide: Object.assign({}, state.wordsToHide) };
-        delete result.wordsToHide[action.word];
-        return result;
+        return {
+          ...state,
+          wordsToHide: newWordsToHide,
+        };
+      }else {
+        return {
+          ...state,
+          wordsToHide: [...state.wordsToHide, action.word]
+        }
       }
-
+    }
     default:
       return state;
   };
