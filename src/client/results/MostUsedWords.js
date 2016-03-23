@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SlidingSearchBar from './SearchBar';
-import { hideMostUsedWord, showMostUsedWord } from './mostUsedWordsActions';
+import { toggleMostUsedWord, showMostUsedWord } from './mostUsedWordsActions';
 
 let MostUsedWords = ({ wordInfoList, search, mostUsedWords }) => {
   const filteredWords = () => {
@@ -79,31 +79,21 @@ const ConflatedWordItem = ({ key, conflatedWordInfo }) => (
   </div>
 );
 
-let WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => {
-  let checkbox;
-
-  return (
-    <tr>
-      <td className='right aligned' style={{ width: '60px' }}>{Math.round(makeupInfo.count / conflatedWordCount * 100)}%</td>
-      <td className='right aligned' style={{ width: '60px' }}>{makeupInfo.count}</td>
-      <td>{makeupInfo.word}</td>
-      <td>
-        <div className="ui checkbox" onClick={(e) => {
-          const isNowChecked = $(checkbox).is(':checked');
-
-          if (isNowChecked) {
-            dispatch(showMostUsedWord(makeupInfo.word));
-          } else {
-            dispatch(hideMostUsedWord(makeupInfo.word));
-          };
-        }}>
-          <label>Show</label>
-          <input type="checkbox" name="example" checked="true" ref={(node) => checkbox = node } />
-        </div>
-      </td>
-    </tr>
-  );
-}
+let WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => (
+  <tr>
+    <td className='right aligned' style={{ width: '60px' }}>{Math.round(makeupInfo.count / conflatedWordCount * 100)}%</td>
+    <td className='right aligned' style={{ width: '60px' }}>{makeupInfo.count}</td>
+    <td>{makeupInfo.word}</td>
+    <td>
+      <div className="ui checkbox" onClick={(e) => {
+        dispatch(toggleMostUsedWord(makeupInfo.word));
+      }}>
+        <label>Show</label>
+        <input type="checkbox" name="example" checked="true" />
+      </div>
+    </td>
+  </tr>
+);
 WordItem = connect()(WordItem);
 
 const ToggleAllWords = () => (

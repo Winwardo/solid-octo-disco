@@ -24,7 +24,7 @@ const filterPostsForFeed = (feed, hiddenWords) => (
     const content = feedItem.data.content;
 
     // If we can find the chosen hidden word in this tweet, block the post
-    for (const hiddenWord in hiddenWords) {
+    for (const hiddenWord of hiddenWords) {
       if (content.indexOf(hiddenWord) > -1) {
         return false;
       }
