@@ -26,15 +26,15 @@ export const TwitAccess = new Twit({
  * @returns {ImmutableTweet}
  */
 const buildTweetFromRaw = (rawTweet) => {
-  const latLong = findLatitudeLongitude(rawTweet);
+  const coordinates = findLatitudeLongitude(rawTweet);
   return Builders.TweetBuilder()
     .id(rawTweet.id_str)
     .content(rawTweet.text)
     .date(moment(new Date(rawTweet.created_at)).format('YYYY-MM-DD HH:mm:ss'))
     .likes(rawTweet.favorite_count)
     .retweets(rawTweet.retweet_count)
-    .latitude(latLong[0])
-    .longitude(latLong[1])
+    .latitude(coordinates.latitude)
+    .longitude(coordinates.longitude)
     .build();
 };
 
@@ -45,17 +45,26 @@ const buildTweetFromRaw = (rawTweet) => {
   */
 const findLatitudeLongitude = (rawTweet) => {
   if (rawTweet.geo) {
-    return [rawTweet.geo.coordinate[0], rawTweet.geo.coordinate[1]];
+    return {
+      latitude: rawTweet.geo.coordinate[0],
+      longitude: rawTweet.geo.coordinate[1]
+    };
   } else if (rawTweet.coordinates) {
-    return [rawTweet.coordinates.coordinate[1], rawTweet.coordinates.coordinate[0]];
+    return {
+      latitude: rawTweet.coordinates.coordinate[1],
+      longitude: rawTweet.coordinates.coordinate[0]
+    };
   } else if (rawTweet.place) {
-    return [
-      rawTweet.place.bounding_box.coordinates[0][0][1],
-      rawTweet.place.bounding_box.coordinates[0][0][0]
-    ];
-  } else {
-    return [0.0, 0.0];
+    return {
+      latitude: rawTweet.place.bounding_box.coordinates[0][0][1],
+      longitude: rawTweet.place.bounding_box.coordinates[0][0][0]
+    };
   }
+
+  return {
+    latitude: 0.0,
+    longitude: 0.0
+  };
 };
 
 /**
