@@ -4,7 +4,6 @@
 
   "validateLineBreaks": null,
   "disallowQuotedKeysInObjects": false,
-  "requireShorthandArrowFunctions": false,
   "maximumLineLength": null,
   "disallowSpacesInsideArrayBrackets": null,
   "disallowSpacesInsideBrackets": null,
