@@ -68,7 +68,7 @@ describe('#SearchActions', () => {
     const expectedAction = {
       type: actions.TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION,
       id,
-      paramTypeName
+      paramTypeName,
     };
 
     actions.toggleSearchTermParamTypeSelection(id, paramTypeName)

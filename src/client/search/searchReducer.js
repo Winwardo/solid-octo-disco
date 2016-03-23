@@ -19,9 +19,10 @@ export const searchTermsReducer = (state = [], action) => {
     const termIndex = state.map(term => (term.id)).indexOf(action.id);
     return [
       ...state.slice(0, termIndex),
-      ...state.slice(termIndex + 1)
+      ...state.slice(termIndex + 1),
     ];
   }
+
   default:
     return state;
   }
@@ -43,9 +44,10 @@ const searchTermReducer = (state, action) => {
 
     return {
       ...state,
-      paramTypes: toggleParamType(state.paramTypes, action.paramTypeName)
+      paramTypes: toggleParamType(state.paramTypes, action.paramTypeName),
     };
   }
+
   default:
     return state;
   }

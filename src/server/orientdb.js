@@ -27,11 +27,12 @@ const insertClass = (db, name, classSchema) => {
   .then(() => db.class.create(name, superclass))
   .then((clazz) => createClassProperties(clazz, properties))
   .then(() => (
+
     // Add indexes
     Promise.all(classSchema.indexes.map((index) => {
       const defaults = {
-       'name': `${name}.${index.properties.join('_')}`,
-       'class': name,
+        'name': `${name}.${index.properties.join('_')}`,
+        'class': name,
       };
       const indexToInsert = { ...defaults, ...index };
 

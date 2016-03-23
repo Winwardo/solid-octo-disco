@@ -98,7 +98,7 @@ let WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => (
       </div>
     </td>
   </tr>
-)
+);
 WordItem = connect()(WordItem);
 
 const ToggleAllWords = () => (

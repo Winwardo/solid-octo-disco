@@ -5,7 +5,7 @@ import { deleteSearchTerm, toggleSearchTermParamTypeSelection } from './searchAc
 
 const TermsList = ({
   searchTerms, showSearchTerm,
-  onSearchTermDeleteClick, onSearchTermParamTypeToggleClick
+  onSearchTermDeleteClick, onSearchTermParamTypeToggleClick,
 }) => (
   <div onClick={showSearchTerm}>
     <i className="icon search"></i>
@@ -28,9 +28,10 @@ const mapDispatchToProps = (dispatch) => ({
   onSearchTermParamTypeToggleClick: (id, paramTypeName) => {
     dispatch(toggleSearchTermParamTypeSelection(id, paramTypeName));
   },
+
   onSearchTermDeleteClick: (id) => {
     dispatch(deleteSearchTerm(id));
-  }
+  },
 });
 
 export default connect(

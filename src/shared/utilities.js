@@ -93,7 +93,7 @@ export const createTwitterParamTypes = (selectedParamTypes) =>
 const makeParamType = (selectedParamTypes, type) => ({
   name: type,
   selected: selectedParamTypes.indexOf(type) > -1,
-  icon: getParamTypeIcon(type)
+  icon: getParamTypeIcon(type),
 });
 
 /**
@@ -132,7 +132,7 @@ export const toggleParamType = (paramTypes, paramTypeToggleName) => (
 
     return {
       ...paramType,
-      selected: !paramType.selected
+      selected: !paramType.selected,
     };
   })
 );

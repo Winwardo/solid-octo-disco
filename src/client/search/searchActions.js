@@ -50,5 +50,5 @@ export const TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION = 'TOGGLE_SEARCH_TERM_PARAMT
 export const toggleSearchTermParamTypeSelection = (id, paramTypeName) => ({
   type: TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION,
   id,
-  paramTypeName
+  paramTypeName,
 });

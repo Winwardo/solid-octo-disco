@@ -25,7 +25,7 @@ class TermItemMenu extends Component {
         transition: 'drop',
         action: (value, text) => {
           this.props.onToggleParamType(text);
-        }
+        },
       });
   }
 
@@ -38,6 +38,7 @@ class TermItemMenu extends Component {
       } else {
         paramTypeIcon = <i className={`inverted ${highlighted} circular icon`}>{paramType.icon}</i>;
       }
+
       return (
         <div key={id} data-value={paramType.name} className="item">
           {paramTypeIcon}

@@ -10,12 +10,14 @@ const MostUsedWordsReducer = (state = { filterTerm: '', wordsToHide: {} }, actio
         result.wordsToHide[action.word] = true;
         return result;
       }
+
     case SHOW_MOST_USED_WORD:
       {
         const result = { ...state, wordsToHide: Object.assign({}, state.wordsToHide) };
         delete result.wordsToHide[action.word];
         return result;
       }
+
     default:
       return state;
   };

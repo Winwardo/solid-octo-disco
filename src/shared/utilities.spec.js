@@ -39,7 +39,7 @@ describe('#Utilities', () => {
       const exampleImmutableObject = {
         thing: () => ({
           inner: () => ('okay'),
-        })
+        }),
       };
 
       flattenImmutableObject(exampleImmutableObject, true).should.deep.equal({
@@ -79,20 +79,19 @@ describe('#Utilities', () => {
       createTwitterParamTypes(['hashtag', 'keyword']).should.deep.equal([{
         name: 'author',
         selected: false,
-        icon: 'user icon'
+        icon: 'user icon',
       }, {
         name: 'hashtag',
         selected: true,
-        icon: '#'
+        icon: '#',
       }, {
         name: 'keyword',
         selected: true,
-        icon: 'file text icon'
+        icon: 'file text icon',
       }, {
         name: 'mention',
         selected: false,
-        icon: 'at icon'
-      }]);
+        icon: 'at icon',
     });
 
     it('can toggle a paramType with the paramTypeName to toggle', () => {

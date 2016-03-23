@@ -24,7 +24,7 @@ describe('#MostUsedWordsReducer', () => {
   describe('Hiding words', () => {
     it('should add a hidden word', () => {
       const stateBefore = {
-        wordsToHide: {}
+        wordsToHide: {},
       };
       const action = {
         type: HIDE_MOST_USED_WORD,
@@ -33,8 +33,8 @@ describe('#MostUsedWordsReducer', () => {
 
       const stateAfter = {
         wordsToHide: {
-          LeMoN: true
-        }
+          LeMoN: true,
+        },
       };
 
       deepFreeze(stateBefore);
@@ -47,7 +47,7 @@ describe('#MostUsedWordsReducer', () => {
       const stateBefore = {
         wordsToHide: {
           lEmOn: true,
-        }
+        },
       };
       const action = {
         type: HIDE_MOST_USED_WORD,
@@ -58,7 +58,7 @@ describe('#MostUsedWordsReducer', () => {
         wordsToHide: {
           lEmOn: true,
           LeMoN: true,
-        }
+        },
       };
 
       deepFreeze(stateBefore);
@@ -70,8 +70,8 @@ describe('#MostUsedWordsReducer', () => {
     it('should stay the same if trying to hide an already hidden word', () => {
       const stateBefore = {
         wordsToHide: {
-          LEMON: true
-        }
+          LEMON: true,
+        },
       };
       const action = {
         type: HIDE_MOST_USED_WORD,
@@ -80,8 +80,8 @@ describe('#MostUsedWordsReducer', () => {
 
       const stateAfter = {
         wordsToHide: {
-          LEMON: true
-        }
+          LEMON: true,
+        },
       };
 
       deepFreeze(stateBefore);
@@ -93,8 +93,8 @@ describe('#MostUsedWordsReducer', () => {
     it('should show/remove a hidden word', () => {
       const stateBefore = {
         wordsToHide: {
-          LEMON: true
-        }
+          LEMON: true,
+        },
       };
       const action = {
         type: SHOW_MOST_USED_WORD,
@@ -103,7 +103,7 @@ describe('#MostUsedWordsReducer', () => {
 
       const stateAfter = {
         wordsToHide: {
-        }
+        },
       };
 
       deepFreeze(stateBefore);
@@ -115,7 +115,7 @@ describe('#MostUsedWordsReducer', () => {
     it('should stay the same if trying to show a non-hidden word', () => {
       const stateBefore = {
         wordsToHide: {
-        }
+        },
       };
       const action = {
         type: SHOW_MOST_USED_WORD,
@@ -124,7 +124,7 @@ describe('#MostUsedWordsReducer', () => {
 
       const stateAfter = {
         wordsToHide: {
-        }
+        },
       };
 
       deepFreeze(stateBefore);

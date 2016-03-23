@@ -11,7 +11,8 @@ const Feed = ({ feed, hiddenWords }) => {
           return false;
         }
       }
-    }
+    };
+
     return true;
   });
 
