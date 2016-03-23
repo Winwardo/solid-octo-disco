@@ -1,7 +1,7 @@
 export const TOGGLE_MOST_USED_WORD = 'TOGGLE_MOST_USED_WORD';
 
 export const updateMostUsedWordsSearch = (searchFor, filterTerm) => ({
-  'type': `UPDATE_SEARCH_${searchFor}`,
+  type: `UPDATE_SEARCH_${searchFor}`,
   filterTerm,
 });
 

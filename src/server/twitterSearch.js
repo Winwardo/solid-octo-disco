@@ -13,11 +13,11 @@ import { newPromiseChain } from '../shared/utilities';
 export const TWITTER_ENABLED = false;
 
 export const TwitAccess = new Twit({
-  'access_token': '1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68',
-  'access_token_secret': 'ceYqZAulg2MT89Jw11rA44FOwHOFcEccFv9HXFIG9ckJf',
-  'consumer_key': 'YiSLB0kOlsTd21UGYT32YOUgg',
-  'consumer_secret': '78b5VrGzkcIkpmftLdlFwirraelPRq2t5bFlgEcMkfaQqQh1Mb',
-  'timeout_ms': 60 * 1000,  // optional HTTP request timeout to apply to all requests.
+  access_token: '1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68',
+  access_token_secret: 'ceYqZAulg2MT89Jw11rA44FOwHOFcEccFv9HXFIG9ckJf',
+  consumer_key: 'YiSLB0kOlsTd21UGYT32YOUgg',
+  consumer_secret: '78b5VrGzkcIkpmftLdlFwirraelPRq2t5bFlgEcMkfaQqQh1Mb',
+  timeout_ms: 60 * 1000,  // optional HTTP request timeout to apply to all requests.
 });
 
 /**
@@ -219,7 +219,7 @@ const processTweet = (db, rawTweet, id) => {
 export const searchAndSaveFromTwitter = (query, count = 300) => {
   if (TWITTER_ENABLED) {
     console.info(`Searching Twitter for query '${query}'.`);
-    return TwitAccess.get('search/tweets', { 'q': query, 'count': count })
+    return TwitAccess.get('search/tweets', { q: query, count: count })
       .then((result) => {
         console.info(`Twitter search for '${query}' successful.`);
         return Promise.all(
@@ -246,7 +246,7 @@ export const searchAndSaveResponse = (res, query) => (
  * @param res HTTP Response object
  */
 export const stream = (req, res) => {
-  const stream = TwitAccess.stream('statuses/filter', { 'track': req.params.query });
+  const stream = TwitAccess.stream('statuses/filter', { track: req.params.query });
 
   stream.on('tweet', (tweet) => {
     processTweet(tweet);

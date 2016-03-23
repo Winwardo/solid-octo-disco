@@ -31,8 +31,8 @@ const insertClass = (db, name, classSchema) => {
     // Add indexes
     Promise.all(classSchema.indexes.map((index) => {
       const defaults = {
-        'name': `${name}.${index.properties.join('_')}`,
-        'class': name,
+        name: `${name}.${index.properties.join('_')}`,
+        class: name,
       };
       const indexToInsert = { ...defaults, ...index };
 
@@ -50,7 +50,7 @@ const insertClass = (db, name, classSchema) => {
  */
 const createClassProperties = (clazz, properties) => {
   const transformedProperties = properties.map((input) => (
-    { ...input, 'mandatory': true }
+    { ...input, mandatory: true }
   ));
 
   // Add the properties to the class
