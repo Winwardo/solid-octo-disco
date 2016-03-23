@@ -1,34 +1,18 @@
 import React, { Component } from 'react';
 import Header from './Header';
 import Search from './search/Search';
-import Feed from './feed/Feed'
-import MostUsedWords from './results/MostUsedWords';
-import { groupedCountWords, mostFrequentWords, mostActiveUsers, exampleTweets } from './tweetAnalysis';
+import Results from './Results.js';
 
-const App = () => {
-  return (
-		<div>
-			<Header />
+const App = ({ feed }) => (
+  <div>
+    <Header />
 
-			<Search />
+    <Search />
 
-      <div className="ui grid">
-        <div className="four wide column">
-          <h3>Most frequent users</h3>
-        </div>
+    <Results />
 
-        <div className="eight wide column">
-          <Feed />
-        </div>
-
-        <div className="four wide column">
-          <MostUsedWords wordInfoList={groupedCountWords(mostFrequentWords(exampleTweets.map((data) => data.tweet)))} search=''/>
-        </div>
-      </div>
-
-			{/* <Footer /> */}
-		</div>
-	);
-};
+    {/* <Footer /> *//* <Footer /> */}
+  </div>
+);
 
 export default App;
