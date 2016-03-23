@@ -89,6 +89,8 @@ const buildTweetFromDatabaseRecord = (record) => {
     .date(record.date.toISOString())
     .likes(record.likes)
     .retweets(record.retweets)
+    .longitude(record.longitude)
+    .latitude(record.latitude)
     .build();
 };
 

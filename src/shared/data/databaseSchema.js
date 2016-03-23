@@ -1,6 +1,7 @@
 const Integer = 'Integer';
 const String = 'String';
 const Datetime = 'Datetime';
+const Double = 'Double';
 
 const Edge = 'E';
 const Vertex = 'V';
@@ -30,6 +31,8 @@ export const schema = {
       { 'name': 'date', 'type': Datetime },
       { 'name': 'likes', 'type': Integer },
       { 'name': 'retweets', 'type': Integer },
+      { 'name': 'longitude', 'type': Double },
+      { 'name': 'latitude', 'type': Double },
     ],
     'indexes': [
       { 'properties': ['content'], 'type': LUCENE, },
@@ -55,9 +58,33 @@ export const schema = {
       { 'properties': ['content'], 'type': LUCENE, },
     ],
   },
+  Place: {
+    superclass: Vertex,
+    properties: [
+      { name: 'id', type: String },
+      { name: 'name', type: String },
+      { name: 'full_name', type: String },
+      { name: 'type', type: String },
+    ],
+    indexes: [
+      { properties: ['full_name'], type: LUCENE, },
+    ],
+  },
+  Country: {
+    superclass: Vertex,
+    properties: [
+      { name: 'code', type: String },
+      { name: 'name', type: String },
+    ],
+    indexes: [
+      { properties: ['name'], type: LUCENE, },
+    ],
+  },
   'TWEETED': EmptyEdge,
   'RETWEETED': EmptyEdge,
   'FOLLOWS': EmptyEdge,
   'MENTIONS': EmptyEdge,
   'HAS_HASHTAG': EmptyEdge,
+  'HAS_PLACE': EmptyEdge,
+  'IN_COUNTRY': EmptyEdge,
 };
