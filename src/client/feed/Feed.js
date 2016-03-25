@@ -14,11 +14,17 @@ class Feed extends Component {
 
   render() {
     const filteredFeed = filterPostsForFeed(this.props.feed, this.props.hiddenWords);
+    const hiddenPostCount = this.props.feed.length - filteredFeed.length;
+
+    let hiddenPostMessage;
+    if (hiddenPostCount > 0) {
+      hiddenPostMessage = (<span>Hiding {hiddenPostCount} posts</span>);
+    }
 
     return (
       <div>
         <h3>Search results, showing {filteredFeed.length} posts.</h3>
-        (Hiding {this.props.feed.length - filteredFeed.length} posts)
+        {hiddenPostMessage}
         <div className = "ui divided items">
           {filteredFeed.map((feedItem, id) => (<FeedItem content = {feedItem} key = {feedItem.data.id}/>))}
         </div>
