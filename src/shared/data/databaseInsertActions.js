@@ -126,8 +126,8 @@ export const linkPlaceToCountry = (db, place, country) => (
 
 const expectRejection = (rejection, expect, from, to) => {
   if (rejection.message.indexOf(expect) > -1) {
-    console.info('Tweet already linked to hashtag.')
+    console.info('Tweet already linked to hashtag.');
   } else {
     console.error(`Unexpected error linking ${from} => ${to}.`, rejection);
   }
-}
+};

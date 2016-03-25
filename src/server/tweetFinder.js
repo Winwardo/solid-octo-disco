@@ -10,8 +10,8 @@ import { searchAndSaveFromTwitter } from './twitterSearch';
  * @param res A HTTP Response object
  * @returns {Promise.<T>|*}
  */
-export const searchQuery = (req, res) => {
-  return newPromiseChain()
+export const searchQuery = (req, res) => (
+  newPromiseChain()
     .then(() => Promise.all(req.body.map((queryItem) => searchDatabase(queryItem.query))))
     .then((tweetResultsForAllQueries) => splatTogether(tweetResultsForAllQueries, 'OR'))
     .then((splattedTweets) => getTweetsAsResults(splattedTweets))
@@ -26,36 +26,34 @@ export const searchQuery = (req, res) => {
         res.end('An unexpected internal error occurred.');
         console.warn(`Unable to search for query '${query}'`, rejection);
       }
-    );
-};
+    )
+);
 
 const splatTogether = (allTweetResults, type) => {
   if (type === 'OR') {
-    console.log("OR");
     return unionTweets(allTweetResults);
   } else {
     throw(`Undefined splatting of type ${type} occurred. Type should be 'AND' or 'OR'.`);
   }
-}
+};
 
 const unionTweets = (allTweetResults) => {
-  console.log("allTweetsEve")
   const dict = {};
+
+  // Create a dictionary of all Tweets, effectively cancelling out any duplicates
   allTweetResults.forEach((tweetList) =>
     tweetList.forEach((tweetData) =>
       dict[tweetData.tweet.id] = tweetData
     )
   );
-  console.log("b");
 
   const union = [];
   for (const key in dict) {
-    union.push(dict[key])
+    union.push(dict[key]);
   }
 
-  console.log("unioned");
   return union;
-}
+};
 
 const searchAndCollateResults = (query) => (
   searchDatabase(query)
@@ -67,7 +65,7 @@ const resultsToPresentableOutput = (results) => (
     data: {
       count: results.length,
       records: results,
-    }
+    },
   }
 );
 
