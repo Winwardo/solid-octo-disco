@@ -86,6 +86,7 @@ let WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => (
     <td>{makeupInfo.word}</td>
     <td>
       <div className="ui checkbox" onClick={(e) => {
+        NProgress.start();
         dispatch(toggleMostUsedWord(makeupInfo.word));
       }}>
         <label>Show</label>

@@ -9,6 +9,7 @@ class Feed extends Component {
 
   componentDidUpdate() {
     $('.popup').popup();
+    NProgress.done();
   }
 
   render() {
