@@ -10,7 +10,7 @@ import { newPromiseChain } from '../shared/utilities';
 
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
-export const TWITTER_ENABLED = false;
+export const TWITTER_ENABLED = true;
 
 export const TwitAccess = new Twit({
   access_token: '1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68',
@@ -44,21 +44,25 @@ const buildTweetFromRaw = (rawTweet) => {
   * @returns [latitude, longitude]
   */
 const findLatitudeLongitude = (rawTweet) => {
-  if (rawTweet.geo) {
-    return {
-      latitude: rawTweet.geo.coordinate[0],
-      longitude: rawTweet.geo.coordinate[1],
-    };
-  } else if (rawTweet.coordinates) {
-    return {
-      latitude: rawTweet.coordinates.coordinate[1],
-      longitude: rawTweet.coordinates.coordinate[0],
-    };
-  } else if (rawTweet.place) {
-    return {
-      latitude: rawTweet.place.bounding_box.coordinates[0][0][1],
-      longitude: rawTweet.place.bounding_box.coordinates[0][0][0],
-    };
+  try {
+    if (rawTweet.geo) {
+      return {
+        latitude: rawTweet.geo.coordinate[0],
+        longitude: rawTweet.geo.coordinate[1],
+      };
+    } else if (rawTweet.coordinates) {
+      return {
+        latitude: rawTweet.coordinates.coordinate[1],
+        longitude: rawTweet.coordinates.coordinate[0],
+      };
+    } else if (rawTweet.place) {
+      return {
+        latitude: rawTweet.place.bounding_box.coordinates[0][0][1],
+        longitude: rawTweet.place.bounding_box.coordinates[0][0][0],
+      };
+    }
+  } catch (err) {
+    console.warn(`Error parsing geo-location data in tweet #${rawTweet.id_str}.`);
   }
 
   return {
@@ -198,15 +202,13 @@ const processTweet = (db, rawTweet, id) => {
   if (rawRetweetedStatus !== undefined) {
     return processRawRetweet(db, rawRetweetedStatus, tweeter)
       .then(
-        (res) => {  },
-
+        (res) => { },
         (rej) => { console.warn('Rejected retweet #', id, rej); }
       );
   } else {
     return processRawOriginalTweet(db, rawTweet, tweeter)
       .then(
         (res) => {  },
-
         (rej) => { console.warn('Rejected tweet #', id, rej); }
       );
   };
@@ -220,14 +222,17 @@ export const searchAndSaveFromTwitter = (query, count = 300) => {
   if (TWITTER_ENABLED) {
     console.info(`Searching Twitter for query '${query}'.`);
     return TwitAccess.get('search/tweets', { q: query, count: count })
-      .then((result) => {
-        console.info(`Twitter search for '${query}' successful.`);
-        return Promise.all(
-          result.data.statuses.map((rawTweet) => processTweet(db, rawTweet))
-        );
-      }, (rej) => {
-        console.warn('Unable to search Twitter.', rej);
-      });
+      .then(
+        (result) => {
+          console.info(`Twitter search for '${query}' successful.`);
+          return Promise.all(
+            result.data.statuses.map((rawTweet) => processTweet(db, rawTweet))
+          );
+        },
+        (rej) => {
+          console.warn('Unable to search Twitter.', rej);
+        }
+      );
   } else {
     console.info(`Twitter disabled, not searching query '${query}'.`);
     return Promise.resolve();
