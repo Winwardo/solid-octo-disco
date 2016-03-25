@@ -23,7 +23,7 @@ class Feed extends Component {
 
     return (
       <div>
-        <h3>Search results, showing {filteredFeed.length} posts.</h3>
+        <h3>Search results, showing {filteredFeed.length} unique posts.</h3>
         {hiddenPostMessage}
         <div className = "ui divided items">
           {filteredFeed.map((feedItem, id) => (<FeedItem content = {feedItem} key = {feedItem.data.id}/>))}

@@ -75,7 +75,12 @@ const resultsToPresentableOutput = (results) => (
 
 const searchDatabase = (searchObject, alreadyAttemptedRefresh = false) => (
   newPromiseChain()
-    .then(() => Promise.all([searchByParamType(searchObject, 'keyword')]))
+    .then(() => Promise.all(
+      searchObject.paramTypes
+        .filter((paramType) => paramType.selected)
+        .map((paramType) => searchByParamType(searchObject, paramType.name))
+      )
+    )
     .then((searchResults) => searchResults.reduce((previous, current) => previous.concat(current)))
     .then((tweetRecords) => refreshFromTwitterOrMakeTweets(alreadyAttemptedRefresh, searchObject, tweetRecords))
     .then(
@@ -87,15 +92,53 @@ const searchDatabase = (searchObject, alreadyAttemptedRefresh = false) => (
 const searchByParamType = (searchObject, paramType) => {
   switch (paramType) {
     case 'keyword': return searchByKeyword(searchObject.query);
+    case 'author': return searchByAuthor(searchObject.query);
+    case 'mention': return searchByMention(searchObject.query);
+    case 'hashtag': return searchByHashtag(searchObject.query);
   }
 
   throw(`Invalid paramType for database Tweet searching: '${paramType}'. Should be [author, hashtag, keyword, mention].`);
 }
 
 const searchByKeyword = (keyword) => {
-  console.log("sbkw", keyword);
-  const tweetSelection = 'SELECT *, in(\'TWEETED\').id AS authorId, in(\'TWEETED\').name AS authorName, in(\'TWEETED\').handle AS authorHandle FROM tweet WHERE content LUCENE :query ORDER BY date DESC UNWIND authorId, authorName, authorHandle LIMIT :limit';
+  const tweetSelection = makeTweetQuerySelectingFrom(
+    'SELECT FROM tweet WHERE content LUCENE :query'
+  );
   return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+}
+
+const searchByAuthor = (keyword) => {
+  const tweetSelection = makeTweetQuerySelectingFrom(
+    'TRAVERSE out(\'TWEETED\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
+  );
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+}
+
+const searchByMention = (keyword) => {
+  const tweetSelection = makeTweetQuerySelectingFrom(
+    'TRAVERSE in(\'MENTIONS\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
+  );
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+}
+
+const searchByHashtag = (keyword) => {
+  const tweetSelection = makeTweetQuerySelectingFrom(
+    'TRAVERSE in(\'HAS_HASHTAG\') FROM (SELECT FROM hashtag WHERE content LUCENE :query)'
+  );
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+}
+
+const makeTweetQuerySelectingFrom = (from) => {
+  return `SELECT `
+    + `  *` // All the tweet data
+    + `, in(\'TWEETED\').id AS authorId ` // Now the tweet info
+    + `, in(\'TWEETED\').name AS authorName `
+    + `, in(\'TWEETED\').handle AS authorHandle `
+    + ` FROM (${from}) ` // Selected from a subset of tweets
+    + ` WHERE @class = \'Tweet\' ` // Don't accidentally select authors or hastags etc
+    + ` ORDER BY date DESC ` // Might be irrelevant
+    + ` UNWIND authorId, authorName, authorHandle ` // Converts from ['Steve'] to 'Steve'
+    + ` LIMIT :limit `; // Don't select too many results
 }
 
 const refreshFromTwitterOrMakeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => {
