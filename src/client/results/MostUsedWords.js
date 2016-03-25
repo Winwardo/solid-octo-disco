@@ -44,7 +44,7 @@ class WordItemList extends Component {
     return (
       <div style={{ height: '300px', overflowY: 'scroll' }}>
         <div className='ui fluid accordion' style={{ overflow:'hidden' }}>
-          { this.props.words.map((wordInfo, id) => <ConflatedWordItem key={id} conflatedWordInfo={wordInfo} />) }
+          { this.props.words.map((wordInfo) => <ConflatedWordItem key={wordInfo.word} conflatedWordInfo={wordInfo} />) }
         </div>
       </div>
     );
@@ -70,7 +70,7 @@ const ConflatedWordItem = ({ key, conflatedWordInfo }) => (
         <tbody>
           {
             conflatedWordInfo.makeup.map((makeupInfo) => (
-              <WordItem makeupInfo={makeupInfo} conflatedWordCount={conflatedWordInfo.count} />
+              <WordItem key={makeupInfo.word} makeupInfo={makeupInfo} conflatedWordCount={conflatedWordInfo.count} />
             ))
           }
         </tbody>

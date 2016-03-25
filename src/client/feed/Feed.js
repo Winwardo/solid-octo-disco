@@ -2,21 +2,28 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-const Feed = ({ feed, hiddenWords }) => {
-  const filteredFeed = filterPostsForFeed(feed, hiddenWords);
+class Feed extends Component {
+  componentDidMount() {
+    $('.popup').popup();
+  }
 
-  return (
-    <div>
-      <h3>Search results, showing {filteredFeed.length} posts.</h3>
-      (Hiding {feed.length - filteredFeed.length} posts)
-      <div className="ui divided items">
-        {
-          filteredFeed
-            .map((feedItem) => (<FeedItem content={feedItem}/>))
-        }
+  componentDidUpdate() {
+    $('.popup').popup();
+  }
+
+  render() {
+    const filteredFeed = filterPostsForFeed(this.props.feed, this.props.hiddenWords);
+
+    return (
+      <div>
+        <h3>Search results, showing {filteredFeed.length} posts.</h3>
+        (Hiding {this.props.feed.length - filteredFeed.length} posts)
+        <div className = "ui divided items">
+          {filteredFeed.map((feedItem, id) => (<FeedItem content = {feedItem} key = {feedItem.data.id}/>))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 const filterPostsForFeed = (feed, hiddenWords) => {
@@ -55,38 +62,29 @@ const FeedItem = ({ content }) => {
   );
 };
 
-class Tweet extends Component {
-  componentDidMount() {
-    $('.popup').popup();
-  }
+const Tweet = ({content}) => (
+  <div className="content">
+    <div className="header">{content.author.name}</div>                                                      <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
+    <br />
+    {content.data.content}
 
-  render() {
-    const content = this.props.content;
-    return (
-      <div className="content">
-        <div className="header">{content.author.name}</div>                                                      <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
-        <br />
-        {content.data.content}
-
-        <div className="meta">
-          <span className="date">
-            <a href={`//twitter.com/${content.author.handle}/status/${content.data.id}`}>
-              {moment(content.data.date).calendar()}
-            </a>
-          </span>
-          |
-          <span className="likes popup" data-title="Likes">
-            <i className="like icon"/>{content.data.likes}
-          </span>
-          |
-          <span className="retweets popup" data-title="Retweets">
-            <i className="retweet icon"/>{content.data.retweets}
-          </span>
-        </div>
-      </div>
-    );
-  }
-}
+    <div className="meta">
+      <span className="date">
+        <a href={`//twitter.com/${content.author.handle}/status/${content.data.id}`}>
+          {moment(content.data.date).calendar()}
+        </a>
+      </span>
+      |
+      <span className="likes popup" data-title="Likes">
+        <i className="like icon"/>{content.data.likes}
+      </span>
+      |
+      <span className="retweets popup" data-title="Retweets">
+        <i className="retweet icon"/>{content.data.retweets}
+      </span>
+    </div>
+  </div>
+);
 
 const mapStateToProps = (state) => ({
   feed: state.feed,
