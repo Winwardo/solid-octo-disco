@@ -37,6 +37,15 @@ const splatTogether = (allTweetResults, type) => {
   }
 };
 
+/**
+ * Given a list of resultLists, union all the Tweets together.
+ * That is, given the following list of Tweet ids:
+ *  [[1,2], [2, 3], [1, 4, 5]]
+ * return
+ *  [1,2,3,4,5]
+ * @param {Array[]} allTweetResults - A list of Tweet result lists.
+ * @return {[tweetDatas]} A list of unique Tweets
+ */
 export const unionTweets = (allTweetResults) => {
   const dict = {};
 
