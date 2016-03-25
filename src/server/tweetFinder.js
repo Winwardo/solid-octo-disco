@@ -11,14 +11,16 @@ import { searchAndSaveFromTwitter } from './twitterSearch';
  * @returns {Promise.<T>|*}
  */
 export const searchQuery = (req, res) => {
-  const query = req.body[0].query;
-  return searchAndCollateResults(query)
+  return newPromiseChain()
+    .then(() => Promise.all(req.body.map((queryItem) => searchDatabase(queryItem.query))))
+    .then((tweetResultsForAllQueries) => splatTogether(tweetResultsForAllQueries, 'OR'))
+    .then((splattedTweets) => getTweetsAsResults(splattedTweets))
+    .then((tweetsAsResults) => resultsToPresentableOutput(tweetsAsResults))
     .then(
-      (data) => {
+      (presentableTweets) => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(data));
+        res.end(JSON.stringify(presentableTweets));
       },
-
       (rejection) => {
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end('An unexpected internal error occurred.');
@@ -27,23 +29,53 @@ export const searchQuery = (req, res) => {
     );
 };
 
+const splatTogether = (allTweetResults, type) => {
+  if (type === 'OR') {
+    console.log("OR");
+    return unionTweets(allTweetResults);
+  } else {
+    throw(`Undefined splatting of type ${type} occurred. Type should be 'AND' or 'OR'.`);
+  }
+}
+
+const unionTweets = (allTweetResults) => {
+  console.log("allTweetsEve")
+  const dict = {};
+  allTweetResults.forEach((tweetList) =>
+    tweetList.forEach((tweetData) =>
+      dict[tweetData.tweet.id] = tweetData
+    )
+  );
+  console.log("b");
+
+  const union = [];
+  for (const key in dict) {
+    union.push(dict[key])
+  }
+
+  console.log("unioned");
+  return union;
+}
+
 const searchAndCollateResults = (query) => (
   searchDatabase(query)
-    .then((data) => (
-      {
-        data: {
-          count: data.length,
-          records: getTweetsAsResults(data),
-        },
-      }
-    ))
+    .then((data) => resultsToPresentableOutput(data))
+);
+
+const resultsToPresentableOutput = (results) => (
+  {
+    data: {
+      count: results.length,
+      records: results,
+    }
+  }
 );
 
 const searchDatabase = (query, alreadyAttemptedRefresh = false) => {
-  const tweetSelection = 'SELECT *, in(\'TWEETED\').id AS authorId, in(\'TWEETED\').name AS authorName, in(\'TWEETED\').handle AS authorHandle FROM tweet WHERE content LUCENE :query ORDER BY date DESC UNWIND authorId, authorName, authorHandle LIMIT 300';
+  const tweetSelection = 'SELECT *, in(\'TWEETED\').id AS authorId, in(\'TWEETED\').name AS authorName, in(\'TWEETED\').handle AS authorHandle FROM tweet WHERE content LUCENE :query ORDER BY date DESC UNWIND authorId, authorName, authorHandle LIMIT :limit';
 
   return newPromiseChain()
-    .then(() => db.query(tweetSelection, { params: { query: `${query}~` } }))
+    .then(() => db.query(tweetSelection, { params: { query: `${query}~`, limit: 300 } }))
     .then((tweetRecords) => refreshFromTwitterOrMakeTweets(alreadyAttemptedRefresh, query, tweetRecords))
     .then(
       (resolved) => resolved,
