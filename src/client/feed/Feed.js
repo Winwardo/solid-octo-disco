@@ -19,20 +19,25 @@ const Feed = ({ feed, hiddenWords }) => {
   );
 };
 
-const filterPostsForFeed = (feed, hiddenWords) => (
-  feed.filter((feedItem) => {
-    const content = feedItem.data.content;
-
-    // If we can find the chosen hidden word in this tweet, block the post
-    for (const hiddenWord of hiddenWords) {
-      if (content.indexOf(hiddenWord) > -1) {
-        return false;
-      }
-    }
-
-    return true;
+const filterPostsForFeed = (feed, hiddenWords) => {
+  if (hiddenWords.length === 0) {
+    return feed;
   }
-));
+
+  return feed.filter((feedItem) => {
+      const content = feedItem.data.content;
+
+      // If we can find the chosen hidden word in this tweet, block the post
+      for (const hiddenWord of hiddenWords) {
+        if (content.indexOf(hiddenWord) > -1) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+  )
+};
 
 const FeedItem = ({ content }) => {
   let post;
