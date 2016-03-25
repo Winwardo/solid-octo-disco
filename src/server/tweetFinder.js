@@ -64,11 +64,6 @@ export const unionTweets = (allTweetResults) => {
   return union;
 };
 
-const searchAndCollateResults = (query) => (
-  searchDatabase(query)
-    .then((data) => resultsToPresentableOutput(data))
-);
-
 const resultsToPresentableOutput = (results) => (
   {
     data: {
