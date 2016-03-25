@@ -37,7 +37,7 @@ const splatTogether = (allTweetResults, type) => {
   }
 };
 
-const unionTweets = (allTweetResults) => {
+export const unionTweets = (allTweetResults) => {
   const dict = {};
 
   // Create a dictionary of all Tweets, effectively cancelling out any duplicates
