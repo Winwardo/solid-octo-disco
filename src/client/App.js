@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Header from './Header';
 import Search from './search/Search';
-import Results from './Results.js';
+import Results from './results/Results.js';
 
-const App = ({ feed }) => (
+const App = () => (
   <div>
     <Header />
 
