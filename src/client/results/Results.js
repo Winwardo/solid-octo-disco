@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Feed from './feed/Feed';
-import MostUsedWords from './results/MostUsedWords';
-import { groupedCountWords, mostFrequentWords, mostActiveUsers, exampleTweets } from './tweetAnalysis';
+import Feed from './Feed';
+import MostUsedWords from './MostUsedWords';
+import { groupedCountWords, mostFrequentWords, mostActiveUsers } from './../tweetAnalysis';
 
 let Results = ({ feed }) => (
   <div className="ui grid">
@@ -15,7 +15,9 @@ let Results = ({ feed }) => (
     </div>
 
     <div className="four wide column">
-      <MostUsedWords wordInfoList={groupedCountWords(mostFrequentWords(feed.map((post) => post.data)))} search=''/>
+      <MostUsedWords search=""
+        wordInfoList={groupedCountWords(mostFrequentWords(feed.map((post) => post.data)))}
+      />
     </div>
   </div>
 );

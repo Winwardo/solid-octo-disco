@@ -133,16 +133,32 @@ describe('#TweetAnalysis', () => {
 
     it('returns the Tweeter and their tweets', () => {
       const tweets = [
-        { tweeter: 1, content: 'hello world' },
-        { tweeter: 1, content: 'second tweet' },
+        {
+          author: {
+            id: 1,
+            name: 'example',
+            handle: 'exampleHandle',
+          },
+          data: { content: 'hello world' },
+        }, {
+          author: {
+            id: 1,
+            name: 'example',
+            handle: 'exampleHandle',
+          },
+          data: { content: 'second tweet' }, },
       ];
       mostActiveUsers(tweets).should.deep.equal(
         [
           {
-            tweeter: 1,
-            tweets: [
-              { tweeter: 1, content: 'hello world' },
-              { tweeter: 1, content: 'second tweet' },
+            author: {
+              id: 1,
+              name: 'example',
+              handle: 'exampleHandle',
+            },
+            posts: [
+              { content: 'hello world' },
+              { content: 'second tweet' },
             ],
           },
         ]
@@ -151,39 +167,87 @@ describe('#TweetAnalysis', () => {
 
     it('returns the Tweeter and their tweets, sorted by most active first', () => {
       const tweets = [
-        { tweeter: 1, content: 'hey there' },
-        { tweeter: 2, content: 'hello world' },
-        { tweeter: 1, content: 'im second' },
-        { tweeter: 2, content: 'second tweet' },
-        { tweeter: 3, content: 'im third' },
-        { tweeter: 2, content: 'im first' },
+        {
+          author: {
+            id: 2,
+            name: 'example2',
+            handle: 'exampleHandle2',
+          },
+          data: { content: 'hello world' },
+        }, {
+          author: {
+            id: 1,
+            name: 'example',
+            handle: 'exampleHandle',
+          },
+          data: { content: 'hey there' },
+        }, {
+          author: {
+            id: 1,
+            name: 'example',
+            handle: 'exampleHandle',
+          },
+          data: { content: 'I am second' },
+        }, {
+          author: {
+            id: 2,
+            name: 'example2',
+            handle: 'exampleHandle2',
+          },
+          data: { content: 'second tweet' },
+        }, {
+          author: {
+            id: 3,
+            name: 'example3',
+            handle: 'exampleHandle3',
+          },
+          data: { content: 'I am third' },
+        }, {
+          author: {
+            id: 2,
+            name: 'example2',
+            handle: 'exampleHandle2',
+          },
+          data: { content: 'I am first' },
+        },
       ];
       mostActiveUsers(tweets).should.deep.equal(
         [
           {
-            tweeter: 2,
-            tweets: [
-              { tweeter: 2, content: 'hello world' },
-              { tweeter: 2, content: 'second tweet' },
-              { tweeter: 2, content: 'im first' },
+            author: {
+              id: 2,
+              name: 'example2',
+              handle: 'exampleHandle2',
+            },
+            posts: [
+              { content: 'hello world' },
+              { content: 'second tweet' },
+              { content: 'I am first' },
             ],
           },
           {
-            tweeter: 1,
-            tweets: [
-              { tweeter: 1, content: 'hey there' },
-              { tweeter: 1, content: 'im second' },
+            author: {
+              id: 1,
+              name: 'example',
+              handle: 'exampleHandle',
+            },
+            posts: [
+              { content: 'hey there' },
+              { content: 'I am second' },
             ],
           },
           {
-            tweeter: 3,
-            tweets: [
-              { tweeter: 3, content: 'im third' },
+            author: {
+              id: 3,
+              name: 'example3',
+              handle: 'exampleHandle3',
+            },
+            posts: [
+              { content: 'I am third' },
             ],
           },
         ]
       );
     });
-
   });
 });
