@@ -70,9 +70,12 @@ export const mostActiveUsers = (tweets) => (
  */
 const categoriseByUser = (posts) => (
   posts.reduce((userPostCount, post) => {
-    const categorizedUserIndex = userPostCount.findIndex((categorizedUserPost) => (
-      categorizedUserPost.author.id === post.author.id
-    ));
+    let categorizedUserIndex = -1;
+    userPostCount.forEach((categorizedUserPost, index) => {
+      if (categorizedUserPost.author.id === post.author.id) {
+        categorizedUserIndex = index;
+      }
+    });
 
     if (categorizedUserIndex === -1) {
       userPostCount.push({
