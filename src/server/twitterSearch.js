@@ -10,7 +10,7 @@ import { newPromiseChain } from '../shared/utilities';
 
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
-export const TWITTER_ENABLED = false;
+export const TWITTER_ENABLED = true;
 
 export const TwitAccess = new Twit({
   access_token: '1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68',
