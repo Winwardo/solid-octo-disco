@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import { should } from 'chai';
 import { mostFrequentWords, mostActiveUsers, groupedCountWords } from './tweetAnalysis';
 should();
