@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import moment from 'moment';
 
 const Feed = ({ feed, hiddenWords }) => {
@@ -16,10 +15,7 @@ const Feed = ({ feed, hiddenWords }) => {
         </div>
       </div>
       <div className="ui divided items">
-        {
-          filteredFeed
-            .map((feedItem) => (<FeedItem content={feedItem} />))
-        }
+        {filteredFeed.map((feedItem) => (<FeedItem content={feedItem} />))}
       </div>
     </div>
   );
@@ -43,13 +39,15 @@ const filterPostsForFeed = (feed, hiddenWords) => (
 const FeedItem = ({ content }) => {
   let post;
   switch (content.source) {
-    case 'twitter': post = <Tweet content={content}/>;
-  };
+  case 'twitter': post = <Tweet content={content} />;
+  }
 
   return (
     <div className="item">
-      <div className="meta" style={{ minWidth: '40px', textAlign: 'center', verticalAlign: 'middle' }}>
-        <i className={`${content.source} icon`}/>
+      <div className="meta"
+        style={{ minWidth: '40px', textAlign: 'center', verticalAlign: 'middle' }}
+      >
+        <i className={`${content.source} icon`} />
       </div>
       {post}
     </div>
@@ -65,7 +63,8 @@ class Tweet extends Component {
     const content = this.props.content;
     return (
       <div className="content">
-        <div className="header">{content.author.name}</div>                                                      <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
+        <div className="header">{content.author.name}</div>
+        <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
         <br />
         {content.data.content}
 
@@ -77,11 +76,11 @@ class Tweet extends Component {
           </span>
           |
           <span className="likes popup" data-title="Likes">
-            <i className="like icon"/>{content.data.likes}
+            <i className="like icon" />{content.data.likes}
           </span>
           |
           <span className="retweets popup" data-title="Retweets">
-            <i className="retweet icon"/>{content.data.retweets}
+            <i className="retweet icon" />{content.data.retweets}
           </span>
         </div>
       </div>
@@ -89,9 +88,4 @@ class Tweet extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  feed: state.feed,
-  hiddenWords: state.mostUsedWords.wordsToHide,
-});
-
-export default connect(mapStateToProps)(Feed);
+export default Feed;

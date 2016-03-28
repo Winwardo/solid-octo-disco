@@ -4,7 +4,7 @@ import Feed from './Feed';
 import MostUsedWords from './MostUsedWords';
 import { groupedCountWords, mostFrequentWords, mostActiveUsers } from './../tweetAnalysis';
 
-let Results = ({ feed }) => {
+let Results = ({ feed, mostUsedWords }) => {
   if (feed.length === 0) {
     return (
       <div className="ui violet inverted center aligned segment">
@@ -24,11 +24,11 @@ let Results = ({ feed }) => {
       </div>
 
       <div className="eight wide column">
-        <Feed />
+        <Feed feed={feed} hiddenWords={mostUsedWords.wordsToHide} />
       </div>
 
       <div className="four wide column">
-        <MostUsedWords search=""
+        <MostUsedWords filterTerm={mostUsedWords.filterTerm}
           wordInfoList={groupedCountWords(mostFrequentWords(feed.map((post) => post.data)))}
         />
       </div>
@@ -36,7 +36,10 @@ let Results = ({ feed }) => {
   );
 };
 
-const mapStateToProps = (state) => ({ feed: state.feed });
+const mapStateToProps = (state) => ({
+  feed: state.feed,
+  mostUsedWords: state.mostUsedWords,
+});
 
 Results = connect(mapStateToProps)(Results);
 export default Results;

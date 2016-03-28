@@ -1,10 +1,10 @@
-import { TOGGLE_MOST_USED_WORD } from './mostUsedWordsActions';
+import { TOGGLE_MOST_USED_WORD, UPDATE_SEARCH_MOST_USED_WORDS_FILTER } from './resultsActions';
 
 const MostUsedWordsReducer = (state = { filterTerm: '', wordsToHide: [] }, action) => {
   switch (action.type) {
-    case 'UPDATE_SEARCH_MOST_USED_WORDS_FILTER':
-      return { ...state, filterTerm: action.filterTerm };
-    case TOGGLE_MOST_USED_WORD:
+  case UPDATE_SEARCH_MOST_USED_WORDS_FILTER:
+    return { ...state, filterTerm: action.filterTerm };
+  case TOGGLE_MOST_USED_WORD:
     {
       const termIndex = state.wordsToHide.indexOf(action.word);
       if (termIndex > -1) {
@@ -17,7 +17,7 @@ const MostUsedWordsReducer = (state = { filterTerm: '', wordsToHide: [] }, actio
           ...state,
           wordsToHide: newWordsToHide,
         };
-      }else {
+      } else {
         return {
           ...state,
           wordsToHide: [...state.wordsToHide, action.word],
@@ -25,9 +25,9 @@ const MostUsedWordsReducer = (state = { filterTerm: '', wordsToHide: [] }, actio
       }
     }
 
-    default:
-      return state;
-  };
+  default:
+    return state;
+  }
 };
 
 export default MostUsedWordsReducer;
