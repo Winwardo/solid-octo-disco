@@ -43,8 +43,8 @@ const ConflatedWordItem = ({ conflatedWordInfo }) => (
       <table className="ui very basic celled table">
         <tbody>
           {
-            conflatedWordInfo.makeup.map((makeupInfo) => (
-              <WordItem makeupInfo={makeupInfo} conflatedWordCount={conflatedWordInfo.count} />
+            conflatedWordInfo.makeup.map((makeupInfo, id) => (
+              <WordItem key={id} makeupInfo={makeupInfo} conflatedWordCount={conflatedWordInfo.count} />
             ))
           }
         </tbody>
@@ -61,11 +61,11 @@ let WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => (
     <td className="right aligned" style={{ width: '60px' }}>{makeupInfo.count}</td>
     <td>{makeupInfo.word}</td>
     <td>
-      <div className="ui checkbox" onClick={() => {
+      <div className="ui checkbox" onClick={(e) => {
         dispatch(toggleMostUsedWord(makeupInfo.word));
       }}>
         <label>Show</label>
-        <input type="checkbox" name="example" checked />
+        <input type="checkbox" name="example" defaultChecked="true" />
       </div>
     </td>
   </tr>
