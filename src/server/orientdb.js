@@ -27,6 +27,7 @@ const insertClass = (db, name, classSchema) => {
     .then(() => db.class.create(name, superclass))
     .then((clazz) => createClassProperties(clazz, properties))
     .then(() => (
+
       // Add indexes
       Promise.all(classSchema.indexes.map((index) => {
         const defaults = {

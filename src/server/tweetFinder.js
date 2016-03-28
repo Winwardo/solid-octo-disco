@@ -87,7 +87,7 @@ const searchDatabase = (searchObject, alreadyAttemptedRefresh = false) => (
       (resolved) => resolved,
       (rejection) => console.warn('Major error querying the database.', rejection)
     )
-)
+);
 
 const searchByParamType = (searchObject, paramType) => {
   switch (paramType) {
@@ -98,48 +98,48 @@ const searchByParamType = (searchObject, paramType) => {
   }
 
   throw(`Invalid paramType for database Tweet searching: '${paramType}'. Should be [author, hashtag, keyword, mention].`);
-}
+};
 
 const searchByKeyword = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'SELECT FROM tweet WHERE content LUCENE :query'
   );
   return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
-}
+};
 
 const searchByAuthor = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE out(\'TWEETED\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
   );
   return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
-}
+};
 
 const searchByMention = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE in(\'MENTIONS\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
   );
   return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
-}
+};
 
 const searchByHashtag = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE in(\'HAS_HASHTAG\') FROM (SELECT FROM hashtag WHERE content LUCENE :query)'
   );
   return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
-}
+};
 
-const makeTweetQuerySelectingFrom = (from) => {
-  return `SELECT `
+const makeTweetQuerySelectingFrom = (from) => (
+  `SELECT `
     + `  *` // All the tweet data
-    + `, in(\'TWEETED\').id AS authorId ` // Now the tweet info
-    + `, in(\'TWEETED\').name AS authorName `
-    + `, in(\'TWEETED\').handle AS authorHandle `
+    + `, in('TWEETED').id AS authorId ` // Now the tweet info
+    + `, in('TWEETED').name AS authorName `
+    + `, in('TWEETED').handle AS authorHandle `
     + ` FROM (${from}) ` // Selected from a subset of tweets
-    + ` WHERE @class = \'Tweet\' ` // Don't accidentally select authors or hastags etc
+    + ` WHERE @class = 'Tweet' ` // Don't accidentally select authors or hastags etc
     + ` ORDER BY date DESC ` // Might be irrelevant
     + ` UNWIND authorId, authorName, authorHandle ` // Converts from ['Steve'] to 'Steve'
-    + ` LIMIT :limit `; // Don't select too many results
-}
+    + ` LIMIT :limit ` // Don't select too many results
+);
 
 const refreshFromTwitterOrMakeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => {
   const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 20;
