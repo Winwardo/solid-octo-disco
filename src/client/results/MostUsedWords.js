@@ -5,11 +5,9 @@ import WordItemsList from './WordItemsList';
 import { updateMostUsedwordsSearch } from './resultsActions';
 
 const MostUsedWords = ({ dispatch, wordInfoList, filterTerm }) => {
-  const filteredItems = wordInfoList.filter((wordInfo) =>
-        wordInfo.word
-          .toLowerCase()
-          .includes(filterTerm.toLowerCase()))
-      .slice(0, 100);
+  const filteredItems = wordInfoList.filter(
+    (wordInfo) => wordInfo.word.toLowerCase().includes(filterTerm.toLowerCase())
+  ).slice(0, 100);
 
   return (
     <MostFrequent title="Most Used Words"
