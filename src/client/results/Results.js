@@ -10,7 +10,7 @@ let Results = ({ feed }) => {
       <div className="ui violet inverted center aligned segment">
         <h2 className="ui inverted header">
           <div className="sub header">
-            Start using Socto by typing into the seach bar or by using the filters
+            Start using Socto by typing into the search bar or by using the filters.
           </div>
         </h2>
       </div>

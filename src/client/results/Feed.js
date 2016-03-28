@@ -12,7 +12,7 @@ const Feed = ({ feed, hiddenWords }) => {
           <h3>Search results</h3>
         </div>
         <div className="right aligned column">
-          showing {filteredFeed.length}/{feed.length} posts
+          Showing {filteredFeed.length}/{feed.length} posts
         </div>
       </div>
       <div className="ui divided items">
