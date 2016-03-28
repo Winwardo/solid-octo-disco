@@ -7,12 +7,18 @@ const Feed = ({ feed, hiddenWords }) => {
 
   return (
     <div>
-      <h3>Search results, showing {filteredFeed.length} posts.</h3>
-      (Hiding {feed.length - filteredFeed.length} posts)
+      <div className="ui two column grid">
+        <div className="column">
+          <h3>Search results</h3>
+        </div>
+        <div className="right aligned column">
+          Showing {filteredFeed.length}/{feed.length} posts
+        </div>
+      </div>
       <div className="ui divided items">
         {
           filteredFeed
-            .map((feedItem) => (<FeedItem content={feedItem}/>))
+            .map((feedItem) => (<FeedItem content={feedItem} />))
         }
       </div>
     </div>
