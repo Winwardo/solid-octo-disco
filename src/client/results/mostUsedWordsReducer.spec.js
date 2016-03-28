@@ -1,7 +1,7 @@
 import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
 import MostUsedTermsReducer from './mostUsedWordsReducer';
-import { TOGGLE_MOST_USED_WORD, SHOW_MOST_USED_WORD } from './mostUsedWordsActions';
+import { TOGGLE_MOST_USED_WORD } from './resultsActions';
 
 describe('#MostUsedWordsReducer', () => {
   it('should add the given search term', () => {
@@ -78,6 +78,5 @@ describe('#MostUsedWordsReducer', () => {
 
       MostUsedTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
     });
-
   });
 });
