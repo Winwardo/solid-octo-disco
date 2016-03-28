@@ -32,7 +32,7 @@ export const upsertPlace = (db, place) => (
     db,
     'UPDATE place SET id=:id, name=:name, full_name=:full_name, type=:type UPSERT WHERE id=:id',
     place
-  ).then(() => {}, (rej) => console.error('Upsert Place', rej))
+  ).then(() => {}, (rej) => console.error('Upsert place', rej))
 );
 
 export const upsertCountry = (db, country) => (
@@ -40,7 +40,7 @@ export const upsertCountry = (db, country) => (
     db,
     'UPDATE country SET code=:code, name=:name UPSERT WHERE code=:code',
     country
-  ).then(() => {}, (rej) => {console.error('Upsert Place', rej);})
+  ).then(() => {}, (rej) => {console.error('Upsert country', rej);})
 );
 
 export const linkTweeterToTweet = (db, tweeter, tweet) => (
@@ -51,7 +51,10 @@ export const linkTweeterToTweet = (db, tweeter, tweet) => (
         tweetId: tweet.id(),
         tweeterId: tweeter.id(),
       },
-    }).then(() => {}, (rej) => { console.error('Link tweeter -> tweet', tweeter.handle(), tweet.content(), rej); })
+    }).then(
+      () => {},
+      (rej) => expectRejection(rej, 'TWEETED.in_out', 'tweeter', 'tweet'),
+    )
 );
 
 export const linkTweeterToRetweet = (db, tweeter, tweet) => (
@@ -73,7 +76,10 @@ export const linkTweetToHashtag = (db, tweet, hashtag) => (
         tweetId: tweet.id(),
         hashtagContent: hashtag.content(),
       },
-    }).then(() => {}, (rej) => { console.error('Link tweet -> hashtag', rej); })
+    }).then(
+      () => {},
+      (rej) => expectRejection(rej, 'HAS_HASHTAG.in_out', 'tweet', 'hashtag'),
+    )
 );
 
 export const linkTweetToTweeterViaMention = (db, tweet, mentionedTweeter) => (
@@ -84,7 +90,10 @@ export const linkTweetToTweeterViaMention = (db, tweet, mentionedTweeter) => (
         tweetId: tweet.id(),
         mentionedTweeterId: mentionedTweeter.id(),
       },
-    }).then(() => {}, (rej) => { console.error('Link tweet -> tweeter', mentionedTweeter.handle(), tweet.content(), rej); })
+    }).then(
+      () => {},
+      (rej) => expectRejection(rej, 'MENTIONS.in_out', 'tweet', 'mentioned tweeter'),
+    )
 );
 
 export const linkTweetToPlace = (db, tweet, place) => (
@@ -96,9 +105,8 @@ export const linkTweetToPlace = (db, tweet, place) => (
         placeId: place.id(),
       },
     }).then(
-      (success) => {console.log(success);},
-
-      (rej) => console.error('Link tweet -> place', place.full_name(), tweet.content(), rej)
+      () => {},
+      (rej) => expectRejection(rej, 'HAS_PLACE.in_out', 'tweet', 'place'),
     )
 );
 
@@ -112,6 +120,14 @@ export const linkPlaceToCountry = (db, place, country) => (
       },
     }).then(
       () => {},
-      (rej) => console.error('Link place -> country', place.full_name(), country.name(), rej)
+      (rej) => expectRejection(rej, 'IN_COUNTRY.in_out', 'place', 'country'),
     )
 );
+
+const expectRejection = (rejection, expect, from, to) => {
+  if (rejection.message.indexOf(expect) > -1) {
+    console.info('Tweet already linked to hashtag.');
+  } else {
+    console.error(`Unexpected error linking ${from} => ${to}.`, rejection);
+  }
+};

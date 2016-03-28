@@ -10,40 +10,74 @@ import { searchAndSaveFromTwitter } from './twitterSearch';
  * @param res A HTTP Response object
  * @returns {Promise.<T>|*}
  */
-export const searchQuery = (req, res) => {
-  const query = req.body[0].query;
-  return searchAndCollateResults(query)
+export const searchQuery = (req, res) => (
+  newPromiseChain()
+    .then(() => Promise.all(req.body.map((queryItem) => searchDatabase(queryItem.query))))
+    .then((tweetResultsForAllQueries) => splatTogether(tweetResultsForAllQueries, 'OR'))
+    .then((splattedTweets) => getTweetsAsResults(splattedTweets))
+    .then((tweetsAsResults) => resultsToPresentableOutput(tweetsAsResults))
     .then(
-      (data) => {
+      (presentableTweets) => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(data));
+        res.end(JSON.stringify(presentableTweets));
       },
-
       (rejection) => {
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end('An unexpected internal error occurred.');
         console.warn(`Unable to search for query '${query}'`, rejection);
       }
-    );
+    )
+);
+
+const splatTogether = (allTweetResults, type) => {
+  if (type === 'OR') {
+    return unionTweets(allTweetResults);
+  } else {
+    throw(`Undefined splatting of type ${type} occurred. Type should be 'AND' or 'OR'.`);
+  }
 };
 
-const searchAndCollateResults = (query) => (
-  searchDatabase(query)
-    .then((data) => (
-      {
-        data: {
-          count: data.length,
-          records: getTweetsAsResults(data),
-        },
-      }
-    ))
+/**
+ * Given a list of resultLists, union all the Tweets together.
+ * That is, given the following list of Tweet ids:
+ *  [[1,2], [2, 3], [1, 4, 5]]
+ * return
+ *  [1,2,3,4,5]
+ * @param {Array[]} allTweetResults - A list of Tweet result lists.
+ * @return {[tweetDatas]} A list of unique Tweets
+ */
+export const unionTweets = (allTweetResults) => {
+  const dict = {};
+
+  // Create a dictionary of all Tweets, effectively cancelling out any duplicates
+  allTweetResults.forEach((tweetList) =>
+    tweetList.forEach((tweetData) =>
+      dict[tweetData.tweet.id] = tweetData
+    )
+  );
+
+  const union = [];
+  for (const key in dict) {
+    union.push(dict[key]);
+  }
+
+  return union;
+};
+
+const resultsToPresentableOutput = (results) => (
+  {
+    data: {
+      count: results.length,
+      records: results,
+    },
+  }
 );
 
 const searchDatabase = (query, alreadyAttemptedRefresh = false) => {
-  const tweetSelection = 'SELECT *, in(\'TWEETED\').id AS authorId, in(\'TWEETED\').name AS authorName, in(\'TWEETED\').handle AS authorHandle FROM tweet WHERE content LUCENE :query ORDER BY date DESC UNWIND authorId, authorName, authorHandle LIMIT 300';
+  const tweetSelection = 'SELECT *, in(\'TWEETED\').id AS authorId, in(\'TWEETED\').name AS authorName, in(\'TWEETED\').handle AS authorHandle FROM tweet WHERE content LUCENE :query ORDER BY date DESC UNWIND authorId, authorName, authorHandle LIMIT :limit';
 
   return newPromiseChain()
-    .then(() => db.query(tweetSelection, { params: { query: `${query}~` } }))
+    .then(() => db.query(tweetSelection, { params: { query: `${query}~`, limit: 300 } }))
     .then((tweetRecords) => refreshFromTwitterOrMakeTweets(alreadyAttemptedRefresh, query, tweetRecords))
     .then(
       (resolved) => resolved,
