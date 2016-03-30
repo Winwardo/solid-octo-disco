@@ -9,12 +9,12 @@ const words = (state = { filterTerm: '', toHide: [] }, action) => {
   case UPDATE_MOST_USED_WORDS_SEARCH_FILTER:
     return {
       ...state,
-      filterTerm: action.filterTerm
+      filterTerm: action.filterTerm,
     };
   case TOGGLE_MOST_USED_WORD:
     return {
       ...state,
-      toHide: toggleArrayElement(state.toHide, action.word)
+      toHide: toggleArrayElement(state.toHide, action.word),
     };
   default:
     return state;
@@ -26,12 +26,12 @@ const users = (state = { filterTerm: '', toHide: [] }, action) => {
   case UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER:
     return {
       ...state,
-      filterTerm: action.filterTerm
+      filterTerm: action.filterTerm,
     };
   case TOGGLE_MOST_ACTIVE_USER:
     return {
       ...state,
-      toHide: toggleArrayElement(state.toHide, action.userId)
+      toHide: toggleArrayElement(state.toHide, action.userId),
     };
   default:
     return state;
@@ -52,5 +52,5 @@ const toggleArrayElement = (array, element) => {
 
 export default combineReducers({
   words,
-  users
+  users,
 });

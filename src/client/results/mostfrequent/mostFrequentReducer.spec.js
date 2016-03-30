@@ -9,12 +9,12 @@ import {
 const initialState = {
   words: {
     filterTerm: '',
-    toHide: []
+    toHide: [],
   },
   users: {
     filterTerm: '',
-    toHide: []
-  }
+    toHide: [],
+  },
 };
 
 describe('#MostFrequentReducer', () => {
@@ -26,12 +26,12 @@ describe('#MostFrequentReducer', () => {
       const stateAfter = {
         words: {
           filterTerm: 'Football',
-          toHide: []
+          toHide: [],
         },
         users: {
           filterTerm: '',
-          toHide: []
-        }
+          toHide: [],
+        },
       };
 
       deepFreeze(stateBefore);
@@ -48,12 +48,12 @@ describe('#MostFrequentReducer', () => {
         const stateAfter = {
           words: {
             filterTerm: '',
-            toHide: ['LeMoN']
+            toHide: ['LeMoN'],
           },
           users: {
             filterTerm: '',
-            toHide: []
-          }
+            toHide: [],
+          },
         };
 
         deepFreeze(stateBefore);
@@ -66,24 +66,24 @@ describe('#MostFrequentReducer', () => {
         const stateBefore = {
           words: {
             filterTerm: '',
-            toHide: ['lEmOn']
+            toHide: ['lEmOn'],
           },
           users: {
             filterTerm: '',
-            toHide: []
-          }
+            toHide: [],
+          },
         };
         const action = toggleMostUsedWord('LeMoN');
 
         const stateAfter = {
           words: {
             filterTerm: '',
-            toHide: ['lEmOn', 'LeMoN']
+            toHide: ['lEmOn', 'LeMoN'],
           },
           users: {
             filterTerm: '',
-            toHide: []
-          }
+            toHide: [],
+          },
         };
 
         deepFreeze(stateBefore);
@@ -96,12 +96,12 @@ describe('#MostFrequentReducer', () => {
         const stateBefore = {
           words: {
             filterTerm: '',
-            toHide: ['LEMON']
+            toHide: ['LEMON'],
           },
           users: {
             filterTerm: '',
-            toHide: []
-          }
+            toHide: [],
+          },
         };
         const action = toggleMostUsedWord('LEMON');
 
@@ -123,12 +123,12 @@ describe('#MostFrequentReducer', () => {
       const stateAfter = {
         words: {
           filterTerm: '',
-          toHide: []
+          toHide: [],
         },
         users: {
           filterTerm: 'Football',
-          toHide: []
-        }
+          toHide: [],
+        },
       };
 
       deepFreeze(stateBefore);
@@ -145,12 +145,12 @@ describe('#MostFrequentReducer', () => {
         const stateAfter = {
           words: {
             filterTerm: '',
-            toHide: []
+            toHide: [],
           },
           users: {
             filterTerm: '',
-            toHide: ['12345']
-          }
+            toHide: ['12345'],
+          },
         };
 
         deepFreeze(stateBefore);
@@ -163,12 +163,12 @@ describe('#MostFrequentReducer', () => {
         const stateBefore = {
           words: {
             filterTerm: '',
-            toHide: []
+            toHide: [],
           },
           users: {
             filterTerm: '',
-            toHide: ['12345']
-          }
+            toHide: ['12345'],
+          },
         };
         const action = toggleMostActiveUser('12345');
 

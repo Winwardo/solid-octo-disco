@@ -44,7 +44,7 @@ let Results = ({ feed, mostFrequent }) => {
 
 const mapStateToProps = (state) => ({
   feed: state.feed,
-  mostFrequent: state.mostFrequent
+  mostFrequent: state.mostFrequent,
 });
 
 Results = connect(mapStateToProps)(Results);
