@@ -47,6 +47,7 @@ export const schema = {
     ],
     indexes: [
       { properties: ['name'], type: LUCENE, },
+      { properties: ['handle'], type: LUCENE, },
     ],
   },
   Hashtag: {

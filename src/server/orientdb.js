@@ -24,23 +24,23 @@ const insertClass = (db, name, classSchema) => {
   const properties = classSchema.properties;
 
   return newPromiseChain()
-  .then(() => db.class.create(name, superclass))
-  .then((clazz) => createClassProperties(clazz, properties))
-  .then(() => (
+    .then(() => db.class.create(name, superclass))
+    .then((clazz) => createClassProperties(clazz, properties))
+    .then(() => (
 
-    // Add indexes
-    Promise.all(classSchema.indexes.map((index) => {
-      const defaults = {
-        name: `${name}.${index.properties.join('_')}`,
-        class: name,
-      };
-      const indexToInsert = { ...defaults, ...index };
+      // Add indexes
+      Promise.all(classSchema.indexes.map((index) => {
+        const defaults = {
+          name: `${name}.${index.properties.join('_')}`,
+          class: name,
+        };
+        const indexToInsert = { ...defaults, ...index };
 
-      return db.index.create(indexToInsert);
-    }))
-  ))
-  .then(() => console.log(`Successfully generated class ${name}.`))
-  .catch((error) => console.warn(`Error: Unable to generate class ${name};`, error.message));
+        return db.index.create(indexToInsert);
+      }))
+    ))
+    .then(() => console.log(`Successfully generated class ${name}.`))
+    .catch((error) => console.warn(`Error: Unable to generate class ${name};`, error.message));
 };
 
 /**
