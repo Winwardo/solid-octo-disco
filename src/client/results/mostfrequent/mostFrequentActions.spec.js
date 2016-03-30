@@ -1,22 +1,22 @@
 import { should } from 'chai';
 import {
-  UPDATE_SEARCH_MOST_USED_WORDS_FILTER, updateMostUsedwordsSearch,
-  UPDATE_SEARCH_MOST_ACTIVE_USERS_FILTER, updateActiveUsersSearch,
+  UPDATE_MOST_USED_WORDS_SEARCH_FILTER, updateMostUsedwordsSearch,
+  UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER, updateActiveUsersSearch,
   TOGGLE_MOST_USED_WORD, toggleMostUsedWord,
   TOGGLE_MOST_ACTIVE_USER, toggleMostActiveUser
-} from './resultsActions';
+} from './mostFrequentActions';
 
-describe('#ResultsActions', () => {
+describe('#MostFrequentActions', () => {
   it('should create a correct search for most  used words', () => {
     updateMostUsedwordsSearch('filter').should.deep.equal({
-      type: UPDATE_SEARCH_MOST_USED_WORDS_FILTER,
+      type: UPDATE_MOST_USED_WORDS_SEARCH_FILTER,
       filterTerm: 'filter',
     });
   });
 
   it('should create a correct search for most active user', () => {
     updateActiveUsersSearch('filter').should.deep.equal({
-      type: UPDATE_SEARCH_MOST_ACTIVE_USERS_FILTER,
+      type: UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER,
       filterTerm: 'filter',
     });
   });

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import MostFrequent from './../MostFrequent';
-import { updateActiveUsersSearch } from './../../resultsActions';
+import { updateActiveUsersSearch } from './../mostFrequentActions';
 import UserItemsList from './UserItemsList';
 
 const MostActiveUsers = ({ dispatch, userInfoList, filterTerm }) => {

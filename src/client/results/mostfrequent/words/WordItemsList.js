@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { toggleMostUsedWord } from './../../resultsActions';
+import { toggleMostUsedWord } from './../mostFrequentActions';
 
 class WordItemsList extends Component {
   componentDidMount() {

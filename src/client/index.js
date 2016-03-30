@@ -5,13 +5,11 @@ import { combineReducers, compose, applyMiddleware, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { searchTermsReducer, feedReducer } from './search/searchReducer';
-import mostUsedWords from './results/mostfrequent/words/mostUsedWordsReducer';
-import mostActiveUsers from './results/mostfrequent/users/mostActiveUsersReducer';
+import mostFrequentReducer from './results/mostfrequent/mostFrequentReducer';
 
 const feedApp = combineReducers({
   searchTerms: searchTermsReducer,
-  mostUsedWords,
-  mostActiveUsers,
+  mostFrequent: mostFrequentReducer,
   feed: feedReducer,
 });
 

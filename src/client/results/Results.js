@@ -5,7 +5,7 @@ import MostUsedWords from './mostfrequent/words/MostUsedWords';
 import MostActiveUsers from './mostfrequent/users/MostActiveUsers';
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
 
-let Results = ({ feed, mostUsedWords, mostActiveUsers }) => {
+let Results = ({ feed, mostFrequent }) => {
   if (feed.length === 0) {
     return (
       <div className="ui violet inverted center aligned segment">
@@ -21,20 +21,20 @@ let Results = ({ feed, mostUsedWords, mostActiveUsers }) => {
   return (
     <div className="ui grid">
       <div className="four wide column">
-        <MostActiveUsers filterTerm={mostActiveUsers.filterTerm}
+        <MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
           userInfoList={mostFrequentUsers(feed)}
         />
       </div>
 
       <div className="eight wide column">
         <Feed feed={feed}
-          hiddenWords={mostUsedWords.wordsToHide}
-          hiddenUsers={mostActiveUsers.usersToHide}
+          hiddenWords={mostFrequent.words.toHide}
+          hiddenUsers={mostFrequent.users.toHide}
         />
       </div>
 
       <div className="four wide column">
-        <MostUsedWords filterTerm={mostUsedWords.filterTerm}
+        <MostUsedWords filterTerm={mostFrequent.words.filterTerm}
           wordInfoList={groupedCountWords(mostFrequentWords(feed.map((post) => post.data)))}
         />
       </div>
@@ -44,8 +44,7 @@ let Results = ({ feed, mostUsedWords, mostActiveUsers }) => {
 
 const mapStateToProps = (state) => ({
   feed: state.feed,
-  mostUsedWords: state.mostUsedWords,
-  mostActiveUsers: state.mostActiveUsers,
+  mostFrequent: state.mostFrequent
 });
 
 Results = connect(mapStateToProps)(Results);

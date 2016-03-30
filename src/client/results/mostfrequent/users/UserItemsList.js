@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { toggleMostActiveUser } from './../../resultsActions';
+import { toggleMostActiveUser } from './../mostFrequentActions';
 
 class UserItemsList extends Component {
   componentDidMount() {
