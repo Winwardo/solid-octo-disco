@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import MostFrequent from './MostFrequent';
+import MostFrequent from './../MostFrequent';
+import { updateMostUsedwordsSearch } from './../../resultsActions';
 import WordItemsList from './WordItemsList';
-import { updateMostUsedwordsSearch } from './resultsActions';
 
 const MostUsedWords = ({ dispatch, wordInfoList, filterTerm }) => {
   const filteredItems = wordInfoList.filter(

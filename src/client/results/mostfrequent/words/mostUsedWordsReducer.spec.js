@@ -1,15 +1,12 @@
 import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
-import MostUsedTermsReducer from './mostUsedWordsReducer';
-import { TOGGLE_MOST_USED_WORD } from './resultsActions';
+import mostUsedWordsReducer from './mostUsedWordsReducer';
+import { updateMostUsedwordsSearch, toggleMostUsedWord } from './../../resultsActions';
 
 describe('#MostUsedWordsReducer', () => {
   it('should add the given search term', () => {
     const stateBefore = {};
-    const action = {
-      type: 'UPDATE_SEARCH_MOST_USED_WORDS_FILTER',
-      filterTerm: 'Football',
-    };
+    const action = updateMostUsedwordsSearch('Football');
 
     const stateAfter = {
       filterTerm: 'Football',
@@ -18,7 +15,7 @@ describe('#MostUsedWordsReducer', () => {
     deepFreeze(stateBefore);
     deepFreeze(action);
 
-    MostUsedTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+    mostUsedWordsReducer(stateBefore, action).should.deep.equal(stateAfter);
   });
 
   describe('Toggling of hidden words', () => {
@@ -26,10 +23,7 @@ describe('#MostUsedWordsReducer', () => {
       const stateBefore = {
         wordsToHide: [],
       };
-      const action = {
-        type: TOGGLE_MOST_USED_WORD,
-        word: 'LeMoN',
-      };
+      const action = toggleMostUsedWord('LeMoN');
 
       const stateAfter = {
         wordsToHide: ['LeMoN'],
@@ -38,17 +32,14 @@ describe('#MostUsedWordsReducer', () => {
       deepFreeze(stateBefore);
       deepFreeze(action);
 
-      MostUsedTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+      mostUsedWordsReducer(stateBefore, action).should.deep.equal(stateAfter);
     });
 
     it('should not conflate similar hidden words', () => {
       const stateBefore = {
         wordsToHide: ['lEmOn'],
       };
-      const action = {
-        type: TOGGLE_MOST_USED_WORD,
-        word: 'LeMoN',
-      };
+      const action = toggleMostUsedWord('LeMoN');
 
       const stateAfter = {
         wordsToHide: ['lEmOn', 'LeMoN'],
@@ -57,17 +48,14 @@ describe('#MostUsedWordsReducer', () => {
       deepFreeze(stateBefore);
       deepFreeze(action);
 
-      MostUsedTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+      mostUsedWordsReducer(stateBefore, action).should.deep.equal(stateAfter);
     });
 
     it('should show/remove a hidden word', () => {
       const stateBefore = {
         wordsToHide: ['LEMON'],
       };
-      const action = {
-        type: TOGGLE_MOST_USED_WORD,
-        word: 'LEMON',
-      };
+      const action = toggleMostUsedWord('LEMON');
 
       const stateAfter = {
         wordsToHide: [],
@@ -76,7 +64,7 @@ describe('#MostUsedWordsReducer', () => {
       deepFreeze(stateBefore);
       deepFreeze(action);
 
-      MostUsedTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+      mostUsedWordsReducer(stateBefore, action).should.deep.equal(stateAfter);
     });
   });
 });

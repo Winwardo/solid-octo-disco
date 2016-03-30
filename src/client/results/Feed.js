@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 
-const Feed = ({ feed, hiddenWords }) => {
-  const filteredFeed = filterPostsForFeed(feed, hiddenWords);
+const Feed = ({ feed, hiddenWords, hiddenUsers }) => {
+  const filteredFeed = filterPostsForFeed(feed, hiddenWords, hiddenUsers);
 
   return (
     <div>
@@ -21,13 +21,20 @@ const Feed = ({ feed, hiddenWords }) => {
   );
 };
 
-const filterPostsForFeed = (feed, hiddenWords) => (
+const filterPostsForFeed = (feed, hiddenWords, hiddenUsers) => (
   feed.filter((feedItem) => {
     const content = feedItem.data.content;
+    const authorId = feedItem.author.id;
 
     // If we can find the chosen hidden word in this tweet, block the post
     for (const hiddenWord of hiddenWords) {
       if (content.indexOf(hiddenWord) > -1) {
+        return false;
+      }
+    }
+
+    for (const hiddenUser of hiddenUsers) {
+      if (authorId === hiddenUser) {
         return false;
       }
     }

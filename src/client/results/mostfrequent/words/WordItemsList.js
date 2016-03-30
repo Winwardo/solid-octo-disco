@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { toggleMostUsedWord } from './resultsActions';
+import { toggleMostUsedWord } from './../../resultsActions';
 
 class WordItemsList extends Component {
   componentDidMount() {
@@ -61,7 +61,7 @@ let WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => (
     <td className="right aligned" style={{ width: '60px' }}>{makeupInfo.count}</td>
     <td>{makeupInfo.word}</td>
     <td>
-      <div className="ui checkbox" onClick={(e) => {
+      <div className="ui checkbox" onClick={() => {
         dispatch(toggleMostUsedWord(makeupInfo.word));
       }}>
         <label>Show</label>

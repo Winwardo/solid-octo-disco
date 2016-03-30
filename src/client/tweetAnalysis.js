@@ -55,12 +55,10 @@ export const groupedCountWords = (countedWords) => {
  * @param tweets
  * @returns {Array}\
  */
-export const mostActiveUsers = (tweets) => (
-  categoriseByUser(tweets).sort(
-    (tweetList1, tweetList2) => (
-      tweetList1.posts.length < tweetList2.posts.length
-    )
-  )
+export const mostFrequentUsers = (tweets) => (
+  categoriseByUser(tweets).sort((tweetList1, tweetList2) => (
+    tweetList2.posts.length - tweetList1.posts.length
+  ))
 );
 
 /**
@@ -81,6 +79,7 @@ const categoriseByUser = (posts) => (
       userPostCount.push({
         author: post.author,
         posts: [post.data],
+        source: post.source,
       });
     } else {
       userPostCount[categorizedUserIndex].posts.push(post.data);

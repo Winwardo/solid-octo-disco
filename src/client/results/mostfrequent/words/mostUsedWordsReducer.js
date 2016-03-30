@@ -1,4 +1,4 @@
-import { TOGGLE_MOST_USED_WORD, UPDATE_SEARCH_MOST_USED_WORDS_FILTER } from './resultsActions';
+import { TOGGLE_MOST_USED_WORD, UPDATE_SEARCH_MOST_USED_WORDS_FILTER } from './../../resultsActions';
 
 const MostUsedWordsReducer = (state = { filterTerm: '', wordsToHide: [] }, action) => {
   switch (action.type) {
@@ -8,7 +8,7 @@ const MostUsedWordsReducer = (state = { filterTerm: '', wordsToHide: [] }, actio
     {
       const termIndex = state.wordsToHide.indexOf(action.word);
       if (termIndex > -1) {
-        let newWordsToHide = [
+        const newWordsToHide = [
           ...state.wordsToHide.slice(0, termIndex),
           ...state.wordsToHide.slice(termIndex + 1),
         ];
