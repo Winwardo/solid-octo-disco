@@ -55,6 +55,7 @@ const FeedItem = ({ content }) => {
            style={{ minWidth: '40px', textAlign: 'center', verticalAlign: 'middle' }}
       >
         <i className={`${content.source} icon`} />
+        <br />
       </div>
       {post}
     </div>
@@ -68,9 +69,17 @@ class Tweet extends Component {
 
   render() {
     const content = this.props.content;
+
+    let goldStar;
+    if (content.data.likes + content.data.retweets > 10) {
+      goldStar = (<i className="yellow star icon popup" data-title="Popular tweet"/>);
+    }
+
     return (
       <div className="content">
+        {goldStar}
         <div className="header">{content.author.name}</div>
+        &nbsp;
         <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
         <br />
         {content.data.content}
