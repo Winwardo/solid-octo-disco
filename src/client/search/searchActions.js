@@ -39,6 +39,7 @@ export const searchApiForFeed = (searchTerms) =>
     .then(() => (fetchPost('/search', searchTerms)))
     .then(response => (response.json()))
     .then(json => dispatch({ type: RECEIVE_FEED_RESULTS, data: json }))
+    .then(() => NProgress.done())
 );
 
 export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';
