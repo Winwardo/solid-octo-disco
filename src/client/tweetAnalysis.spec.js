@@ -43,6 +43,24 @@ describe('#TweetAnalysis', () => {
       ]);
     });
 
+    it('correctly identifies @mentions', () => {
+      const tweets = [{ content: 'one, @Winwardo two' }];
+      mostFrequentWords(tweets).should.deep.equal([
+        { word: 'one', count: 1 },
+        { word: '@Winwardo', count: 1 },
+        { word: 'two', count: 1 },
+      ]);
+    });
+
+    it('correctly identifies #hashtags', () => {
+      const tweets = [{ content: 'one, #FOOTBALL two' }];
+      mostFrequentWords(tweets).should.deep.equal([
+        { word: 'one', count: 1 },
+        { word: '#FOOTBALL', count: 1 },
+        { word: 'two', count: 1 },
+      ]);
+    });
+
     it('can conflate words of different cases together with one word', () => {
       const exampleCountedAndSortedWords = [
         { word: 'football', count: 10 },

@@ -93,7 +93,7 @@ const categoriseByUser = (posts) => (
 
 /**
  * Given some list of tweets, create a dictionary of how often each word appears.
- * Correctly matches https://t.co/~ URLs.
+ * Correctly matches https://t.co/~ URLs, @mentions and #hashtags
  * Punctuation (hyphens, commas, full stops) are counted as spaces.
  * @param tweets An array of Tweet objects
  * @returns {{}} e.g. {'hello': 5, 'world': 8}
@@ -101,8 +101,8 @@ const categoriseByUser = (posts) => (
 const countWords = (tweets, stopList = []) => {
   const wordCount = {};
   for (const tweet of tweets) {
-    // Match against either a t.co URL, or an entire word.
-    const matcher = /(https\:\/\/t\.co\/.+?)\b|(\w+)/gmi;
+    // Match against either a t.co URL, a mention, hashtag or an entire word.
+    const matcher = /(https\:\/\/t\.co\/.+?)\b|([@#]?\w+)/gmi;
 
     for (const word of tweet.content.match(matcher)) {
       const wordIsInStopList = stopList.indexOf(word) > -1;
