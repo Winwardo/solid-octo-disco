@@ -1,24 +1,40 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 
-const Feed = ({ feed, hiddenWords, hiddenUsers }) => {
-  const filteredFeed = filterPostsForFeed(feed, hiddenWords, hiddenUsers);
+class Feed extends Component {
+  componentDidUpdate() {
+    $('.popup').popup();
+  }
 
-  return (
-    <div>
-      <div className="ui two column grid">
-        <div className="column">
-          <h3>Search results</h3>
+  render() {
+    const feed = this.props.feed;
+    const hiddenWords = this.props.hiddenWords;
+    const hiddenUsers = this.props.hiddenUsers;
+
+    const filteredFeed = filterPostsForFeed(feed, hiddenWords, hiddenUsers);
+
+    return (
+      <div>
+        <div className="ui two column grid">
+          <div className="column">
+            <h3>Search results</h3>
+          </div>
+          <div className="right aligned column">
+            Showing {filteredFeed.length}/{feed.length} posts
+          </div>
         </div>
-        <div className="right aligned column">
-          Showing {filteredFeed.length}/{feed.length} posts
+        <div className="ui divided items">
+          {filteredFeed.map((feedItem) => (<FeedItem content={feedItem}/>))}
         </div>
       </div>
-      <div className="ui divided items">
-        {filteredFeed.map((feedItem) => (<FeedItem content={feedItem} />))}
-      </div>
-    </div>
-  );
+    );
+  }
+};
+
+Feed.propTypes = {
+  feed: React.PropTypes.array,
+  hiddenWords: React.PropTypes.array,
+  hiddenUsers: React.PropTypes.array,
 };
 
 const filterPostsForFeed = (feed, hiddenWords, hiddenUsers) => (
@@ -61,38 +77,29 @@ const FeedItem = ({ content }) => {
   );
 };
 
-class Tweet extends Component {
-  componentDidMount() {
-    $('.popup').popup();
-  }
+const Tweet = ({ content }) => (
+  <div className="content">
+    <div className="header">{content.author.name}</div>
+    <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
+    <br />
+    {content.data.content}
 
-  render() {
-    const content = this.props.content;
-    return (
-      <div className="content">
-        <div className="header">{content.author.name}</div>
-        <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
-        <br />
-        {content.data.content}
-
-        <div className="meta">
-          <span className="date">
-            <a href={`//twitter.com/${content.author.handle}/status/${content.data.id}`}>
-              {moment(content.data.date).calendar()}
-            </a>
-          </span>
-          |
-          <span className="likes popup" data-title="Likes">
-            <i className="like icon" />{content.data.likes}
-          </span>
-          |
-          <span className="retweets popup" data-title="Retweets">
-            <i className="retweet icon" />{content.data.retweets}
-          </span>
-        </div>
-      </div>
-    );
-  }
-}
+    <div className="meta">
+      <span className="date">
+        <a href={`//twitter.com/${content.author.handle}/status/${content.data.id}`}>
+          {moment(content.data.date).calendar()}
+        </a>
+      </span>
+      |
+      <span className="likes popup" data-title="Likes">
+        <i className="like icon" />{content.data.likes}
+      </span>
+      |
+      <span className="retweets popup" data-title="Retweets">
+        <i className="retweet icon" />{content.data.retweets}
+      </span>
+    </div>
+  </div>
+);
 
 export default Feed;
