@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import Entities from 'html-entities';
 
 const entities = new Entities.XmlEntities();
 
@@ -72,17 +71,19 @@ class Tweet extends Component {
 
   render() {
     const content = this.props.content;
-    // Convert things like &amp; into an actual rendered &
-    const decodedTweetContent = entities.decode(content.data.content);
-    // Insert HTML <a> tags around any Twitter approved t.co link
-    const tweetWithLinks = decodedTweetContent.replace(/(https\:\/\/t\.co\/.+?)\b/g, '<a href="$1">$1</a>');
-
-    const decodedAuthorName = entities.decode(content.author.name);
+    // Inject HTML <a> tags around any Twitter approved t.co link
+    const tweetWithLinks = content.data.content.replace(/(https\:\/\/t\.co\/.+?)\b/g, '<a href="$1">$1</a>');
+    const decodedAuthorName = content.author.name;
 
     let goldStar;
     if (content.data.likes + content.data.retweets > 10) {
       goldStar = (<i className="yellow star icon popup" data-title="Popular tweet"/>);
     }
+
+    // Just below we use dangerousSetInnerHTML.
+    // The content it is display has come from Twitter and is safe to render as actual HTML,
+    // as all HTML entities have already been encoded - e.g., instead of <script> a tweet
+    // would contain &lt;script&gt;, which is totally safe to render.
 
     return (
       <div className="content">
@@ -91,7 +92,7 @@ class Tweet extends Component {
         &nbsp;
         <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
         <br />
-        <div dangerouslySetInnerHTML={{__html: tweetWithLinks}}></div>
+        <div dangerouslySetInnerHTML={{__html: tweetWithLinks}} />
 
         <div className="meta">
           <span className="date">

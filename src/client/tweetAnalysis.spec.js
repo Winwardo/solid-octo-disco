@@ -39,7 +39,7 @@ describe('#TweetAnalysis', () => {
         [
           {
             word: 'football',
-            count: 11,
+            count: 10,
             makeup: [
               { word: 'football', count: 10 },
             ],
