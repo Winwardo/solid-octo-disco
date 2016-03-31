@@ -30,6 +30,19 @@ describe('#TweetAnalysis', () => {
       mostFrequentWords(tweets).should.deep.equal(exampleFrequentWords);
     });
 
+    it('correctly identifies t.co URLS', () => {
+      const tweets = [{ content: 'one, two three https://t.co/url1 https://t.co/url2 four https://t.co/url3' }];
+      mostFrequentWords(tweets).should.deep.equal([
+        { word: 'one', count: 1 },
+        { word: 'two', count: 1 },
+        { word: 'three', count: 1 },
+        { word: 'https://t.co/url1', count: 1 },
+        { word: 'https://t.co/url2', count: 1 },
+        { word: 'four', count: 1 },
+        { word: 'https://t.co/url3', count: 1 },
+      ]);
+    });
+
     it('can conflate words of different cases together with one word', () => {
       const exampleCountedAndSortedWords = [
         { word: 'football', count: 10 },
