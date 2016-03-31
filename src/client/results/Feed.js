@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import Entities from 'html-entities';
+
+const entities = new Entities.XmlEntities();
 
 const Feed = ({ feed, hiddenWords, hiddenUsers }) => {
   const filteredFeed = filterPostsForFeed(feed, hiddenWords, hiddenUsers);
@@ -69,6 +72,12 @@ class Tweet extends Component {
 
   render() {
     const content = this.props.content;
+    // Convert things like &amp; into an actual rendered &
+    const decodedTweetContent = entities.decode(content.data.content);
+    // Insert HTML <a> tags around any Twitter approved t.co link
+    const tweetWithLinks = decodedTweetContent.replace(/(https\:\/\/t\.co\/.+?)\b/g, '<a href="$1">$1</a>');
+
+    const decodedAuthorName = entities.decode(content.author.name);
 
     let goldStar;
     if (content.data.likes + content.data.retweets > 10) {
@@ -78,11 +87,11 @@ class Tweet extends Component {
     return (
       <div className="content">
         {goldStar}
-        <div className="header">{content.author.name}</div>
+        <div className="header">{decodedAuthorName}</div>
         &nbsp;
         <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
         <br />
-        {content.data.content}
+        <div dangerouslySetInnerHTML={{__html: tweetWithLinks}}></div>
 
         <div className="meta">
           <span className="date">
