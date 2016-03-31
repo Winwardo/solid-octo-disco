@@ -19,7 +19,7 @@ export const groupedCountWords = (countedWords) => {
   const wordCount = [];
 
   for (const wordInfo of countedWords) {
-    const normalisedWord = wordInfo.word.toLowerCase();
+    const normalisedWord = wordInfo.word.toLowerCase().replace('#', '');
 
     let found = false;
     for (const innerWordInfo of wordCount) {

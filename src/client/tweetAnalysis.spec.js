@@ -117,6 +117,26 @@ describe('#TweetAnalysis', () => {
       );
     });
 
+    it('can conflate hashtags with normal words', () => {
+      const exampleCountedAndSortedWords = [
+        { word: 'Football', count: 10 },
+        { word: '#footBALL', count: 5 },
+      ];
+
+      groupedCountWords(exampleCountedAndSortedWords).should.deep.equal(
+        [
+          {
+            word: 'football',
+            count: 15,
+            makeup: [
+              { word: 'Football', count: 10 },
+              { word: '#footBALL', count: 5 },
+            ],
+          },
+        ]
+      );
+    });
+
     it('can conflate words of different cases together in a complex example', () => {
       const exampleCountedAndSortedWords = [
         { word: 'MANCHESTER', count: 16 },
