@@ -52,6 +52,7 @@ export const searchApiForFeed = (searchTerms) =>
         console.log("we good buddy");
       }
     })
+    .then(json => dispatch({ type: RECEIVE_FEED_RESULTS, data: json }))
     .then(() => NProgress.done())
 );
 
