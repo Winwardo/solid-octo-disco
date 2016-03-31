@@ -35,9 +35,10 @@ export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
 export const searchApiForFeed = (searchTerms) =>
 (dispatch) => (
   newPromiseChain()
-  .then(() => (fetchPost('/search', searchTerms)))
-  .then(response => (response.json()))
-  .then(json => dispatch({ type: RECEIVE_FEED_RESULTS, data: json }))
+    .then(() => NProgress.start())
+    .then(() => (fetchPost('/search', searchTerms)))
+    .then(response => (response.json()))
+    .then(json => dispatch({ type: RECEIVE_FEED_RESULTS, data: json }))
 );
 
 export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';

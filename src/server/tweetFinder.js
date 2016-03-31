@@ -12,7 +12,7 @@ import { searchAndSaveFromTwitter } from './twitterSearch';
  */
 export const searchQuery = (req, res) => (
   newPromiseChain()
-    .then(() => Promise.all(req.body.map((queryItem) => searchDatabase(queryItem.query))))
+    .then(() => Promise.all(req.body.map((queryItem) => searchDatabase(queryItem))))
     .then((tweetResultsForAllQueries) => splatTogether(tweetResultsForAllQueries, 'OR'))
     .then((splattedTweets) => getTweetsAsResults(splattedTweets))
     .then((tweetsAsResults) => resultsToPresentableOutput(tweetsAsResults))
@@ -73,30 +73,86 @@ const resultsToPresentableOutput = (results) => (
   }
 );
 
-const searchDatabase = (query, alreadyAttemptedRefresh = false) => {
-  const tweetSelection = 'SELECT *, in(\'TWEETED\').id AS authorId, in(\'TWEETED\').name AS authorName, in(\'TWEETED\').handle AS authorHandle FROM tweet WHERE content LUCENE :query ORDER BY date DESC UNWIND authorId, authorName, authorHandle LIMIT :limit';
-
-  return newPromiseChain()
-    .then(() => db.query(tweetSelection, { params: { query: `${query}~`, limit: 300 } }))
-    .then((tweetRecords) => refreshFromTwitterOrMakeTweets(alreadyAttemptedRefresh, query, tweetRecords))
+const searchDatabase = (searchObject, alreadyAttemptedRefresh = false) => (
+  newPromiseChain()
+    .then(() => Promise.all(
+      searchObject.paramTypes
+        .filter((paramType) => paramType.selected)
+        .map((paramType) => searchByParamType(searchObject, paramType.name))
+      )
+    )
+    .then((searchResults) => searchResults.reduce((previous, current) => previous.concat(current)))
+    .then((tweetRecords) => refreshFromTwitterOrMakeTweets(alreadyAttemptedRefresh, searchObject, tweetRecords))
     .then(
       (resolved) => resolved,
       (rejection) => console.warn('Major error querying the database.', rejection)
-    );
+    )
+);
+
+const searchByParamType = (searchObject, paramType) => {
+  switch (paramType) {
+    case 'keyword': return searchByKeyword(searchObject.query);
+    case 'author': return searchByAuthor(searchObject.query);
+    case 'mention': return searchByMention(searchObject.query);
+    case 'hashtag': return searchByHashtag(searchObject.query);
+  }
+
+  throw(`Invalid paramType for database Tweet searching: '${paramType}'. Should be [author, hashtag, keyword, mention].`);
 };
 
-const refreshFromTwitterOrMakeTweets = (alreadyAttemptedRefresh, query, tweetRecords) => {
+const searchByKeyword = (keyword) => {
+  const tweetSelection = makeTweetQuerySelectingFrom(
+    'SELECT FROM tweet WHERE content LUCENE :query'
+  );
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+};
+
+const searchByAuthor = (keyword) => {
+  const tweetSelection = makeTweetQuerySelectingFrom(
+    'TRAVERSE out(\'TWEETED\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
+  );
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+};
+
+const searchByMention = (keyword) => {
+  const tweetSelection = makeTweetQuerySelectingFrom(
+    'TRAVERSE in(\'MENTIONS\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
+  );
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+};
+
+const searchByHashtag = (keyword) => {
+  const tweetSelection = makeTweetQuerySelectingFrom(
+    'TRAVERSE in(\'HAS_HASHTAG\') FROM (SELECT FROM hashtag WHERE content LUCENE :query)'
+  );
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+};
+
+const makeTweetQuerySelectingFrom = (from) => (
+  `SELECT `
+    + `  *` // All the tweet data
+    + `, in('TWEETED').id AS authorId ` // Now the tweet info
+    + `, in('TWEETED').name AS authorName `
+    + `, in('TWEETED').handle AS authorHandle `
+    + ` FROM (${from}) ` // Selected from a subset of tweets
+    + ` WHERE @class = 'Tweet' ` // Don't accidentally select authors or hastags etc
+    + ` ORDER BY date DESC ` // Might be irrelevant
+    + ` UNWIND authorId, authorName, authorHandle ` // Converts from ['Steve'] to 'Steve'
+    + ` LIMIT :limit ` // Don't select too many results
+);
+
+const refreshFromTwitterOrMakeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => {
   const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 20;
   if (shouldRequeryTwitter) {
-    return refreshFromTwitter(query);
+    return refreshFromTwitter(searchObject);
   } else {
     return tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord));
   }
 };
 
-const refreshFromTwitter = (query) => (
-  searchAndSaveFromTwitter(query)
-    .then(() => searchDatabase(query, true))
+const refreshFromTwitter = (searchObject) => (
+  searchAndSaveFromTwitter(searchObject.query)
+    .then(() => searchDatabase(searchObject, true))
 );
 
 const makeTweetAndAuthorFromDatabaseTweetRecord = (tweetRecord) => (

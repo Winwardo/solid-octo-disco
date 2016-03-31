@@ -46,13 +46,13 @@ const filterPostsForFeed = (feed, hiddenWords, hiddenUsers) => (
 const FeedItem = ({ content }) => {
   let post;
   switch (content.source) {
-  case 'twitter': post = <Tweet content={content} />;
+    case 'twitter': post = <Tweet content={content} />;
   }
 
   return (
     <div className="item">
       <div className="meta"
-        style={{ minWidth: '40px', textAlign: 'center', verticalAlign: 'middle' }}
+           style={{ minWidth: '40px', textAlign: 'center', verticalAlign: 'middle' }}
       >
         <i className={`${content.source} icon`} />
       </div>
