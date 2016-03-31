@@ -31,6 +31,12 @@ class Feed extends Component {
   }
 };
 
+Feed.propTypes = {
+  feed: React.PropTypes.array,
+  hiddenWords: React.PropTypes.array,
+  hiddenUsers: React.PropTypes.array,
+};
+
 const filterPostsForFeed = (feed, hiddenWords, hiddenUsers) => (
   feed.filter((feedItem) => {
     const content = feedItem.data.content;
@@ -71,7 +77,7 @@ const FeedItem = ({ content }) => {
   );
 };
 
-const Tweet = ({content}) => (
+const Tweet = ({ content }) => (
   <div className="content">
     <div className="header">{content.author.name}</div>
     <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
