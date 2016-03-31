@@ -30,6 +30,37 @@ describe('#TweetAnalysis', () => {
       mostFrequentWords(tweets).should.deep.equal(exampleFrequentWords);
     });
 
+    it('correctly identifies t.co URLS', () => {
+      const tweets = [{ content: 'one, two three https://t.co/url1 https://t.co/url2 four https://t.co/url3' }];
+      mostFrequentWords(tweets).should.deep.equal([
+        { word: 'one', count: 1 },
+        { word: 'two', count: 1 },
+        { word: 'three', count: 1 },
+        { word: 'https://t.co/url1', count: 1 },
+        { word: 'https://t.co/url2', count: 1 },
+        { word: 'four', count: 1 },
+        { word: 'https://t.co/url3', count: 1 },
+      ]);
+    });
+
+    it('correctly identifies @mentions', () => {
+      const tweets = [{ content: 'one, @Winwardo two' }];
+      mostFrequentWords(tweets).should.deep.equal([
+        { word: 'one', count: 1 },
+        { word: '@Winwardo', count: 1 },
+        { word: 'two', count: 1 },
+      ]);
+    });
+
+    it('correctly identifies #hashtags', () => {
+      const tweets = [{ content: 'one, #FOOTBALL two' }];
+      mostFrequentWords(tweets).should.deep.equal([
+        { word: 'one', count: 1 },
+        { word: '#FOOTBALL', count: 1 },
+        { word: 'two', count: 1 },
+      ]);
+    });
+
     it('can conflate words of different cases together with one word', () => {
       const exampleCountedAndSortedWords = [
         { word: 'football', count: 10 },
@@ -80,6 +111,26 @@ describe('#TweetAnalysis', () => {
             makeup: [
               { word: 'FOOTBALL', count: 10 },
               { word: 'football', count: 5 },
+            ],
+          },
+        ]
+      );
+    });
+
+    it('can conflate hashtags with normal words', () => {
+      const exampleCountedAndSortedWords = [
+        { word: 'Football', count: 10 },
+        { word: '#footBALL', count: 5 },
+      ];
+
+      groupedCountWords(exampleCountedAndSortedWords).should.deep.equal(
+        [
+          {
+            word: 'football',
+            count: 15,
+            makeup: [
+              { word: 'Football', count: 10 },
+              { word: '#footBALL', count: 5 },
             ],
           },
         ]
