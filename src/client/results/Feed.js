@@ -71,35 +71,54 @@ const FeedItem = ({ content }) => {
            style={{ minWidth: '40px', textAlign: 'center', verticalAlign: 'middle' }}
       >
         <i className={`${content.source} icon`} />
+        <br />
       </div>
       {post}
     </div>
   );
 };
 
-const Tweet = ({ content }) => (
-  <div className="content">
-    <div className="header">{content.author.name}</div>
-    <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
-    <br />
-    {content.data.content}
+const Tweet = ({ content }) => {
+  // Inject HTML <a> tags around any Twitter approved t.co link
+  const tweetWithLinks = content.data.content.replace(/(https\:\/\/t\.co\/.+?)\b/g, '<a href="$1">$1</a>');
+  const decodedAuthorName = content.author.name;
 
-    <div className="meta">
-      <span className="date">
-        <a href={`//twitter.com/${content.author.handle}/status/${content.data.id}`}>
-          {moment(content.data.date).calendar()}
-        </a>
-      </span>
-      |
-      <span className="likes popup" data-title="Likes">
-        <i className="like icon" />{content.data.likes}
-      </span>
-      |
-      <span className="retweets popup" data-title="Retweets">
-        <i className="retweet icon" />{content.data.retweets}
-      </span>
+  let goldStar;
+  if (content.data.likes + content.data.retweets > 10) {
+    goldStar = (<i className="yellow star icon popup" data-title="Popular tweet"/>);
+  }
+
+  // Just below we use dangerousSetInnerHTML.
+  // The content it is display has come from Twitter and is safe to render as actual HTML,
+  // as all HTML entities have already been encoded - e.g., instead of <script> a tweet
+  // would contain &lt;script&gt;, which is totally safe to render.
+
+  return (
+    <div className="content">
+      {goldStar}
+      <div className="header">{decodedAuthorName}</div>
+      &nbsp;
+      <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
+      <br />
+      <div dangerouslySetInnerHTML={{__html: tweetWithLinks}} />
+
+      <div className="meta">
+        <span className="date">
+          <a href={`//twitter.com/${content.author.handle}/status/${content.data.id}`}>
+            {moment(content.data.date).calendar()}
+          </a>
+        </span>
+        |
+        <span className="likes popup" data-title="Likes">
+          <i className="like icon" />{content.data.likes}
+        </span>
+        |
+        <span className="retweets popup" data-title="Retweets">
+          <i className="retweet icon" />{content.data.retweets}
+        </span>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Feed;
