@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Feed from './Feed';
-import MostUsedWords from './MostUsedWords';
-import { groupedCountWords, mostFrequentWords, mostActiveUsers } from './../tweetAnalysis';
+import MostUsedWords from './mostfrequent/words/MostUsedWords';
+import MostActiveUsers from './mostfrequent/users/MostActiveUsers';
+import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
 
-let Results = ({ feed, mostUsedWords }) => {
+let Results = ({ feed, mostFrequent }) => {
   if (feed.length === 0) {
     return (
       <div className="ui violet inverted center aligned segment">
@@ -20,15 +21,20 @@ let Results = ({ feed, mostUsedWords }) => {
   return (
     <div className="ui grid">
       <div className="four wide column">
-        <h3>Most frequent users</h3>
+        <MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
+          userInfoList={mostFrequentUsers(feed)}
+        />
       </div>
 
       <div className="eight wide column">
-        <Feed feed={feed} hiddenWords={mostUsedWords.wordsToHide} />
+        <Feed feed={feed}
+          hiddenWords={mostFrequent.words.toHide}
+          hiddenUsers={mostFrequent.users.toHide}
+        />
       </div>
 
       <div className="four wide column">
-        <MostUsedWords filterTerm={mostUsedWords.filterTerm}
+        <MostUsedWords filterTerm={mostFrequent.words.filterTerm}
           wordInfoList={groupedCountWords(mostFrequentWords(feed.map((post) => post.data)))}
         />
       </div>
@@ -38,7 +44,7 @@ let Results = ({ feed, mostUsedWords }) => {
 
 const mapStateToProps = (state) => ({
   feed: state.feed,
-  mostUsedWords: state.mostUsedWords,
+  mostFrequent: state.mostFrequent,
 });
 
 Results = connect(mapStateToProps)(Results);

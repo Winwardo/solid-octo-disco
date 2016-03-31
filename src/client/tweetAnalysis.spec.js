@@ -1,5 +1,5 @@
 import { should } from 'chai';
-import { mostFrequentWords, mostActiveUsers, groupedCountWords } from './tweetAnalysis';
+import { mostFrequentWords, mostFrequentUsers, groupedCountWords } from './tweetAnalysis';
 should();
 
 describe('#TweetAnalysis', () => {
@@ -128,7 +128,7 @@ describe('#TweetAnalysis', () => {
   describe('Most active users counter', () => {
     it('returns an empty list on an empty input', () => {
       const tweets = [];
-      mostActiveUsers(tweets).should.deep.equal([]);
+      mostFrequentUsers(tweets).should.deep.equal([]);
     });
 
     it('returns the Tweeter and their tweets', () => {
@@ -140,15 +140,18 @@ describe('#TweetAnalysis', () => {
             handle: 'exampleHandle',
           },
           data: { content: 'hello world' },
+          source: 'twitter',
         }, {
           author: {
             id: 1,
             name: 'example',
             handle: 'exampleHandle',
           },
-          data: { content: 'second tweet' }, },
+          data: { content: 'second tweet' },
+          source: 'twitter',
+        },
       ];
-      mostActiveUsers(tweets).should.deep.equal(
+      mostFrequentUsers(tweets).should.deep.equal(
         [
           {
             author: {
@@ -160,6 +163,7 @@ describe('#TweetAnalysis', () => {
               { content: 'hello world' },
               { content: 'second tweet' },
             ],
+            source: 'twitter',
           },
         ]
       );
@@ -174,6 +178,7 @@ describe('#TweetAnalysis', () => {
             handle: 'exampleHandle2',
           },
           data: { content: 'hello world' },
+          source: 'twitter',
         }, {
           author: {
             id: 1,
@@ -181,6 +186,7 @@ describe('#TweetAnalysis', () => {
             handle: 'exampleHandle',
           },
           data: { content: 'hey there' },
+          source: 'twitter',
         }, {
           author: {
             id: 1,
@@ -188,6 +194,7 @@ describe('#TweetAnalysis', () => {
             handle: 'exampleHandle',
           },
           data: { content: 'I am second' },
+          source: 'twitter',
         }, {
           author: {
             id: 2,
@@ -195,6 +202,7 @@ describe('#TweetAnalysis', () => {
             handle: 'exampleHandle2',
           },
           data: { content: 'second tweet' },
+          source: 'twitter',
         }, {
           author: {
             id: 3,
@@ -202,6 +210,7 @@ describe('#TweetAnalysis', () => {
             handle: 'exampleHandle3',
           },
           data: { content: 'I am third' },
+          source: 'twitter',
         }, {
           author: {
             id: 2,
@@ -209,9 +218,10 @@ describe('#TweetAnalysis', () => {
             handle: 'exampleHandle2',
           },
           data: { content: 'I am first' },
+          source: 'twitter',
         },
       ];
-      mostActiveUsers(tweets).should.deep.equal(
+      mostFrequentUsers(tweets).should.deep.equal(
         [
           {
             author: {
@@ -224,6 +234,7 @@ describe('#TweetAnalysis', () => {
               { content: 'second tweet' },
               { content: 'I am first' },
             ],
+            source: 'twitter',
           },
           {
             author: {
@@ -235,6 +246,7 @@ describe('#TweetAnalysis', () => {
               { content: 'hey there' },
               { content: 'I am second' },
             ],
+            source: 'twitter',
           },
           {
             author: {
@@ -245,6 +257,7 @@ describe('#TweetAnalysis', () => {
             posts: [
               { content: 'I am third' },
             ],
+            source: 'twitter',
           },
         ]
       );
