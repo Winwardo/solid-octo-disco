@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 
-const entities = new Entities.XmlEntities();
-
 const Feed = ({ feed, hiddenWords, hiddenUsers }) => {
   const filteredFeed = filterPostsForFeed(feed, hiddenWords, hiddenUsers);
 
