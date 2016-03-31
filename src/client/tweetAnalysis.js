@@ -106,7 +106,7 @@ const countWords = (tweets, stopList = []) => {
 
     for (const word of tweet.content.match(matcher)) {
       const wordIsInStopList = stopList.indexOf(word) > -1;
-      if (!wordIsInStopList) {
+      if (!wordIsInStopList && word.length >= 3) {
         // ~~ will convert floats to integer,
         // but importantly quickly convert undefined to 0
         wordCount[word] = ~~wordCount[word] + 1;
