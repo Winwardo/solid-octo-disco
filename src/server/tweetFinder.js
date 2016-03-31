@@ -3,6 +3,8 @@ import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
 import { newPromiseChain, flattenImmutableObject } from '../shared/utilities';
 import { searchAndSaveFromTwitter } from './twitterSearch';
 
+export const MAX_TWEET_RESULTS = 300;
+
 /**
  * Searches our database for Tweets and returns them.
  * If our search is not good enough, access Twitter directly to retrieve more tweets.
@@ -104,28 +106,28 @@ const searchByKeyword = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'SELECT FROM tweet WHERE content LUCENE :query'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
 };
 
 const searchByAuthor = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE out(\'TWEETED\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
 };
 
 const searchByMention = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE in(\'MENTIONS\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
 };
 
 const searchByHashtag = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE in(\'HAS_HASHTAG\') FROM (SELECT FROM hashtag WHERE content LUCENE :query)'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
 };
 
 const makeTweetQuerySelectingFrom = (from) => (
@@ -142,12 +144,7 @@ const makeTweetQuerySelectingFrom = (from) => (
 );
 
 const refreshFromTwitterOrMakeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => {
-  const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 20;
-  if (shouldRequeryTwitter) {
-    return refreshFromTwitter(searchObject);
-  } else {
     return tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord));
-  }
 };
 
 const refreshFromTwitter = (searchObject) => (

@@ -1,4 +1,5 @@
 import { fetchPost, newPromiseChain } from '../../shared/utilities';
+import { doesFeedHaveUsefulResults } from '../tweetAnalysis';
 
 export const ADD_SEARCH_TERM = 'ADD_SEARCH_TERM';
 export const addSearchTerm = (id, query) => {
@@ -38,7 +39,20 @@ export const searchApiForFeed = (searchTerms) =>
     .then(() => NProgress.start())
     .then(() => (fetchPost('/search', searchTerms)))
     .then(response => (response.json()))
-    .then(json => dispatch({ type: RECEIVE_FEED_RESULTS, data: json }))
+    .then(feedResults => {
+      dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults });
+      return feedResults;
+    })
+    .then(feedResults => {
+      console.log("whaaat");
+      if (!doesFeedHaveUsefulResults(feedResults)) {
+        console.log("These results are UNNAAACCCEPPTAAABLLLEEEE");
+        // ask twitter for better results and send out a new search
+      } else {
+        console.log("we good buddy");
+      }
+    })
+    .then(() => NProgress.done())
 );
 
 export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';
