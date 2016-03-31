@@ -42,6 +42,24 @@ export const flattenImmutableObject = (givenObject) => {
 };
 
 /**
+ * Checks if the element is in the array, if it is, then return a new array
+ * with it removed else add it to the new array
+ * @param any primitive type that can be .indexOf(ed) from an array
+ * @return new [Array]
+ */
+export const toggleArrayElement = (array, element) => {
+  const termIndex = array.indexOf(element);
+  if (termIndex > -1) {
+    return [
+      ...array.slice(0, termIndex),
+      ...array.slice(termIndex + 1),
+    ];
+  }
+
+  return [...array, element];
+};
+
+/**
  * Starts a new Promise chain, resolving immediately.
  * @param callback Must return a Promise.
  * @returns {Promise}

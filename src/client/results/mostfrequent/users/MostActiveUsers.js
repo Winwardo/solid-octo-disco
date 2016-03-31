@@ -6,8 +6,12 @@ import UserItemsList from './UserItemsList';
 
 const MostActiveUsers = ({ dispatch, userInfoList, filterTerm }) => {
   const filteredItems = userInfoList.filter(
-    (userInfo) => userInfo.author.name.toLowerCase().includes(filterTerm.toLowerCase())
-    || userInfo.author.handle.toLowerCase().includes(filterTerm.toLowerCase())
+    (userInfo) => {
+      const matchUserName = userInfo.author.name.toLowerCase().includes(filterTerm.toLowerCase());
+      const matchUserHandle = userInfo.author.handle.toLowerCase().includes(filterTerm.toLowerCase());
+
+      return matchUserName || matchUserHandle;
+    }
   ).slice(0, 100);
 
   return (

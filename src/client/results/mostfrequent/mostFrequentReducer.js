@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { toggleArrayElement } from './../../../shared/utilities';
 import {
   UPDATE_MOST_USED_WORDS_SEARCH_FILTER, TOGGLE_MOST_USED_WORD,
   UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER, TOGGLE_MOST_ACTIVE_USER
@@ -36,18 +37,6 @@ const users = (state = { filterTerm: '', toHide: [] }, action) => {
   default:
     return state;
   }
-};
-
-const toggleArrayElement = (array, element) => {
-  const termIndex = array.indexOf(element);
-  if (termIndex > -1) {
-    return [
-      ...array.slice(0, termIndex),
-      ...array.slice(termIndex + 1),
-    ];
-  }
-
-  return [...array, element];
 };
 
 export default combineReducers({
