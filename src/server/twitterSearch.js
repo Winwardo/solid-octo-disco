@@ -44,25 +44,29 @@ const buildTweetFromRaw = (rawTweet) => {
   * @returns [latitude, longitude]
   */
 const findLatitudeLongitude = (rawTweet) => {
+  let test;
   try {
     if (rawTweet.geo) {
+      test = "geo";
       return {
         latitude: rawTweet.geo.coordinate[0],
         longitude: rawTweet.geo.coordinate[1],
       };
     } else if (rawTweet.coordinates) {
+      test = "coord";
       return {
         latitude: rawTweet.coordinates.coordinate[1],
         longitude: rawTweet.coordinates.coordinate[0],
       };
     } else if (rawTweet.place) {
+      test = "place";
       return {
         latitude: rawTweet.place.bounding_box.coordinates[0][0][1],
         longitude: rawTweet.place.bounding_box.coordinates[0][0][0],
       };
     }
   } catch (err) {
-    console.warn(`Error parsing geo-location data in tweet #${rawTweet.id_str}.`);
+    console.warn(`Error parsing ${test} data in tweet #${rawTweet.id_str}.`);
   }
 
   return {
@@ -74,15 +78,26 @@ const findLatitudeLongitude = (rawTweet) => {
 /**
  * Convert some raw user from the Twitter API into a proper immutable Tweeter object.
  * @param rawTweeter From the Twitter API.
+ * @param Boolean to signify if the passed in rawTweeter is a mention object
+ * or a full user object that has a profile_image_url_https
  * @returns {ImmutableTweet}
  */
-const buildTweeterFromRaw = (rawTweeter) => (
-  Builders.TweeterBuilder()
+const buildTweeterFromRaw = (rawTweeter, isMentionUser) => {
+  const tweeter = Builders.TweeterBuilder()
     .id(rawTweeter.id_str)
     .name(rawTweeter.name)
-    .handle(rawTweeter.screen_name)
-    .build()
-);
+    .handle(rawTweeter.screen_name);
+
+  if (isMentionUser) {
+    tweeter.profile_image_url('none')
+      .is_user_mention(true);
+  } else {
+    tweeter.profile_image_url(rawTweeter.profile_image_url_https)
+      .is_user_mention(false);
+  }
+
+  return tweeter.build();
+};
 
 const buildPlaceFromRaw = (rawPlace) => (
   Builders.PlaceBuilder()
@@ -101,8 +116,8 @@ const buildPlaceFromRaw = (rawPlace) => (
  * @returns {Promise}
  */
 const processRawRetweet = (db, rawRetweet, retweeter) => {
-  const originalTweeter = buildTweeterFromRaw(rawRetweet.user);
-  const originalTweet = buildTweeterFromRaw(rawRetweet);
+  const originalTweeter = buildTweeterFromRaw(rawRetweet.user, false);
+  const originalTweet = buildTweetFromRaw(rawRetweet);
 
   return newPromiseChain()
     .then(() => upsertTweeter(db, retweeter))
@@ -132,7 +147,7 @@ const linkTweetToHashtags = (db, rawHashtags, tweet) => (
 const linkTweetToMentions = (db, rawMentions, tweet) => (
   Promise.all(
     rawMentions.map((rawMention) => {
-      const mentionedTweeter = buildTweeterFromRaw(rawMention);
+      const mentionedTweeter = buildTweeterFromRaw(rawMention, true);
 
       return newPromiseChain()
         .then(() => upsertTweeter(db, mentionedTweeter))
@@ -196,7 +211,8 @@ const linkTweetToLocation = (db, tweet, rawPlace) => {
  * @returns {Promise.<TwitAccess>}
  */
 const processTweet = (db, rawTweet, id) => {
-  const tweeter = buildTweeterFromRaw(rawTweet.user);
+  const tweeter = buildTweeterFromRaw(rawTweet.user, false);
+  console.log('test', tweeter.is_user_mention());
   const rawRetweetedStatus = rawTweet.retweeted_status;
 
   if (rawRetweetedStatus !== undefined) {

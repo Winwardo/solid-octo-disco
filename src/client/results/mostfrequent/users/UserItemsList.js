@@ -37,7 +37,10 @@ class UserItemsList extends Component {
 let UserItem = ({ dispatch, userInfo }) => (
   <tr>
     <td className="right aligned">
-      <img className="ui avatar image" src="" alt={`${userInfo.author.name}'s Twitter profile picture`} />
+      <img className="ui avatar mini image"
+        src={userInfo.author.profile_image_url}
+        alt={`${userInfo.author.name}'s Twitter profile picture`}
+      />
     </td>
 
     <td>
