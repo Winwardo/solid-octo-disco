@@ -1,9 +1,10 @@
 import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
-import { searchTermsReducer } from './searchReducer';
+import { searchTermsReducer, feedReducer } from './searchReducer';
 import {
   ADD_SEARCH_TERM, DELETE_SEARCH_TERM,
-  TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION
+  TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION,
+  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT
 } from './searchActions';
 import { createTwitterParamTypes } from '../../shared/utilities';
 
@@ -148,5 +149,60 @@ describe('#SearchTermsReducer', () => {
     deepFreeze(action);
 
     searchTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+});
+
+describe('#FeedReducer', () => {
+  it('can receive new feed results', () => {
+    const stateBefore = {};
+
+    const records = ['some record', 'another'];
+    const action = {
+      type: RECEIVE_FEED_RESULTS,
+      data: {
+        data: {
+          records: records
+        }
+      }
+    };
+
+    const stateAfter = {posts: records};
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    feedReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('can set the pagination page', () => {
+    const stateBefore = {paginationInfo: {number: 1, limit: 10}};
+
+    const action = {
+      type: SET_FEED_PAGE_NUMBER,
+      number: 5
+    };
+
+    const stateAfter = {paginationInfo: {number: 5, limit: 10}};
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    feedReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('can set the pagination limit', () => {
+    const stateBefore = {paginationInfo: {number: 1, limit: 10}};
+
+    const action = {
+      type: SET_FEED_PAGE_LIMIT,
+      limit: 5
+    };
+
+    const stateAfter = {paginationInfo: {number: 1, limit: 5}};
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    feedReducer(stateBefore, action).should.deep.equal(stateAfter);
   });
 });
