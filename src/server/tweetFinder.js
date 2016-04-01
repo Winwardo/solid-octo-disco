@@ -3,16 +3,21 @@ import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
 import { newPromiseChain, flattenImmutableObject } from '../shared/utilities';
 import { searchAndSaveFromTwitter } from './twitterSearch';
 
+export const MAX_TWEET_RESULTS = 300;
+
 /**
  * Searches our database for Tweets and returns them.
- * If our search is not good enough, access Twitter directly to retrieve more tweets.
+ * If the returned results are not satisfactory (such
+ * as not enough relevant results, or they are too old,)
+ * then the Twitter API will be called directly.
  * @param req A HTTP Request object
  * @param res A HTTP Response object
  * @returns {Promise.<T>|*}
  */
 export const searchQuery = (req, res) => (
   newPromiseChain()
-    .then(() => Promise.all(req.body.map((queryItem) => searchDatabase(queryItem))))
+    .then(() => potentiallySearchTwitter(req.body.searchTwitter, req.body.searchTerms))
+    .then(() => Promise.all(req.body.searchTerms.map((queryItem) => searchDatabase(queryItem))))
     .then((tweetResultsForAllQueries) => splatTogether(tweetResultsForAllQueries, 'OR'))
     .then((splattedTweets) => getTweetsAsResults(splattedTweets))
     .then((tweetsAsResults) => resultsToPresentableOutput(tweetsAsResults))
@@ -28,6 +33,21 @@ export const searchQuery = (req, res) => (
       }
     )
 );
+
+/**
+ * May asynchronously search Twitter for new tweet results based on queries.
+ * @param {Object} body { searchTwitter: true, searchTerms: ... }
+ * @returns {Promise.<T>} Either resolves immediately or a promise for searching Twitter
+ */
+const potentiallySearchTwitter = (searchTwitter, searchTerms) => {
+  if (searchTwitter) {
+    return Promise.all(
+      searchTerms.map((queryItem) => refreshFromTwitter(queryItem))
+    );
+  } else {
+    return Promise.resolve();
+  }
+};
 
 const splatTogether = (allTweetResults, type) => {
   if (type === 'OR') {
@@ -82,7 +102,7 @@ const searchDatabase = (searchObject, alreadyAttemptedRefresh = false) => (
       )
     )
     .then((searchResults) => searchResults.reduce((previous, current) => previous.concat(current)))
-    .then((tweetRecords) => refreshFromTwitterOrMakeTweets(alreadyAttemptedRefresh, searchObject, tweetRecords))
+    .then((tweetRecords) => makeTweets(alreadyAttemptedRefresh, searchObject, tweetRecords))
     .then(
       (resolved) => resolved,
       (rejection) => console.warn('Major error querying the database.', rejection)
@@ -104,28 +124,28 @@ const searchByKeyword = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'SELECT FROM tweet WHERE content LUCENE :query'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
 };
 
 const searchByAuthor = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE out(\'TWEETED\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
 };
 
 const searchByMention = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE in(\'MENTIONS\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
 };
 
 const searchByHashtag = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE in(\'HAS_HASHTAG\') FROM (SELECT FROM hashtag WHERE content LUCENE :query)'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: 300 } });
+  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
 };
 
 const makeTweetQuerySelectingFrom = (from) => (
@@ -143,18 +163,12 @@ const makeTweetQuerySelectingFrom = (from) => (
     + ` LIMIT :limit ` // Don't select too many results
 );
 
-const refreshFromTwitterOrMakeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => {
-  const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 20;
-  if (shouldRequeryTwitter) {
-    return refreshFromTwitter(searchObject);
-  } else {
-    return tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord));
-  }
-};
+const makeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => (
+  tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord))
+);
 
 const refreshFromTwitter = (searchObject) => (
   searchAndSaveFromTwitter(searchObject.query)
-    .then(() => searchDatabase(searchObject, true))
 );
 
 const makeTweetAndAuthorFromDatabaseTweetRecord = (tweetRecord) => (
