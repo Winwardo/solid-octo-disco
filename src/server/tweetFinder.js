@@ -7,14 +7,16 @@ export const MAX_TWEET_RESULTS = 300;
 
 /**
  * Searches our database for Tweets and returns them.
- * May search the Twitter API directly for new results.
+ * If the returned results are not satisfactory (such
+ * as not enough relevant results, or they are too old,)
+ * then the Twitter API will be called directly.
  * @param req A HTTP Request object
  * @param res A HTTP Response object
  * @returns {Promise.<T>|*}
  */
 export const searchQuery = (req, res) => (
   newPromiseChain()
-    .then(() => potentiallySearchTwitter(req.body))
+    .then(() => potentiallySearchTwitter(req.body.searchTwitter, req.body.searchTerms))
     .then(() => Promise.all(req.body.searchTerms.map((queryItem) => searchDatabase(queryItem))))
     .then((tweetResultsForAllQueries) => splatTogether(tweetResultsForAllQueries, 'OR'))
     .then((splattedTweets) => getTweetsAsResults(splattedTweets))
@@ -37,10 +39,10 @@ export const searchQuery = (req, res) => (
  * @param {Object} body { searchTwitter: true, searchTerms: ... }
  * @returns {Promise.<T>} Either resolves immediately or a promise for searching Twitter
  */
-const potentiallySearchTwitter = (body) => {
-  if (body.searchTwitter) {
+const potentiallySearchTwitter = (searchTwitter, searchTerms) => {
+  if (searchTwitter) {
     return Promise.all(
-      body.searchTerms.map((queryItem) => refreshFromTwitter(queryItem))
+      searchTerms.map((queryItem) => refreshFromTwitter(queryItem))
     );
   } else {
     return Promise.resolve();
