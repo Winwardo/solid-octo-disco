@@ -14,6 +14,8 @@ class Feed extends Component {
     const hiddenUsers = this.props.hiddenUsers;
     const paginationInfo = this.props.paginationInfo;
 
+    //{feed} = this.props
+
     const filteredFeed = filterPostsForFeed(feed, hiddenWords, hiddenUsers);
     const paginatedFeed = paginatePosts(feed, paginationInfo);
 
@@ -29,7 +31,7 @@ class Feed extends Component {
           </div>
         </div>
         <div>
-          <PaginationButtons />
+          <PaginationButtons amount={Math.ceil(filteredFeed.length / paginationInfo.limit)} />
         </div>
         <div className="ui divided items">
           {paginatedFeed.map((feedItem) => (<FeedItem content={feedItem}/>))}
@@ -45,23 +47,28 @@ Feed.propTypes = {
   hiddenUsers: React.PropTypes.array,
 };
 
-let PaginationButtons = ({dispatch}) => {
-
-  const thing = (r) => {
-    console.log(r);
-    const a = setFeedPageNumber(r);
-    dispatch(a);
+const PaginationButtons = ({dispatch, amount}) => {
+  const buttons = [];
+  for (let i = 1; i <= amount; i++) {
+    buttons.push(<PaginationButton pageNumber={i} key={i}/>);
   }
 
   return (
     <div className="ui buttons">
-      <button className="ui button" onClick={() => {return thing(1)}}>1</button>
-      <button className="ui button" onClick={() => {return thing(2)}}>2</button>
-      <button className="ui button" onClick={() => {return thing(3)}}>3</button>
+      {buttons}
     </div>
   )
 }
-PaginationButtons = connect()(PaginationButtons);
+
+let PaginationButton = ({dispatch, pageNumber}) => (
+  <button className="ui button"
+    onClick={() => {
+    dispatch(setFeedPageNumber(pageNumber))
+    }}>
+    {pageNumber}
+  </button>
+)
+PaginationButton = connect()(PaginationButton);
 
 const filterPostsForFeed = (feed, hiddenWords, hiddenUsers) => (
   feed.filter((feedItem) => {
