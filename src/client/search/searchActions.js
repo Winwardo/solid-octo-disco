@@ -34,26 +34,34 @@ export const invalidateFeedResults = () =>
 
 export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
 export const searchApiForFeed = (searchTerms) =>
-(dispatch) => (
-  newPromiseChain()
-    .then(() => NProgress.start())
-    .then(() => (fetchPost('/search', searchTerms)))
-    .then(response => (response.json()))
-    .then(feedResults => {
-      dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults });
-      return feedResults;
-    })
-    .then(feedResults => {
-      console.log("whaaat");
-      if (!doesFeedHaveUsefulResults(feedResults)) {
-        console.log("These results are UNNAAACCCEPPTAAABLLLEEEE");
-        // ask twitter for better results and send out a new search
-      } else {
-        console.log("we good buddy");
-      }
-    })
-    .then(json => dispatch({ type: RECEIVE_FEED_RESULTS, data: json }))
-    .then(() => NProgress.done())
+    (dispatch) => (
+    newPromiseChain()
+      .then(() => NProgress.start())
+      .then(() => fetchPost('/search', {searchTerms: searchTerms, searchTwitter: false}))
+      .then(response => (response.json()))
+      .then(feedResults => {
+        dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults });
+        return feedResults;
+      })
+      .then(feedResults => {
+        console.log("whaaat");
+        if (!doesFeedHaveUsefulResults(feedResults)) {
+          console.log("These results are UNNAAACCCEPPTAAABLLLEEEE");
+          // ask twitter for better results and send out a new search
+          //return askTwitterAndTryAgain(searchTerms);
+          return newPromiseChain()
+            .then(() => fetchPost('/search', {searchTerms: searchTerms, searchTwitter: true}))
+            .then(response => (response.json()))
+            .then(feedResults => {
+              dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults });
+              return feedResults;
+            })
+        } else {
+          console.log("we good buddy");
+        }
+      })
+      //.then(json => dispatch({ type: RECEIVE_FEED_RESULTS, data: json }))
+      .then(() => NProgress.done())
 );
 
 export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';

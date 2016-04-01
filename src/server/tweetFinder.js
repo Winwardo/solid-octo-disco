@@ -14,7 +14,17 @@ export const MAX_TWEET_RESULTS = 300;
  */
 export const searchQuery = (req, res) => (
   newPromiseChain()
-    .then(() => Promise.all(req.body.map((queryItem) => searchDatabase(queryItem))))
+    .then(() => {
+      if (req.body.searchTwitter) {
+        console.log("Searching Twitter")
+        return Promise.all(
+          req.body.searchTerms.map((queryItem) => refreshFromTwitter(queryItem))
+        );
+      } else {
+        return Promise.resolve();
+      }
+    })
+    .then(() => Promise.all(req.body.searchTerms.map((queryItem) => searchDatabase(queryItem))))
     .then((tweetResultsForAllQueries) => splatTogether(tweetResultsForAllQueries, 'OR'))
     .then((splattedTweets) => getTweetsAsResults(splattedTweets))
     .then((tweetsAsResults) => resultsToPresentableOutput(tweetsAsResults))
