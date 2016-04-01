@@ -9,16 +9,10 @@ class Feed extends Component {
   }
 
   render() {
-    const feed = this.props.feed;
-    const hiddenWords = this.props.hiddenWords;
-    const hiddenUsers = this.props.hiddenUsers;
-    const paginationInfo = this.props.paginationInfo;
-
-    //{feed} = this.props
+    const {feed, hiddenWords, hiddenUsers, paginationInfo} = this.props;
 
     const filteredFeed = filterPostsForFeed(feed, hiddenWords, hiddenUsers);
     const paginatedFeed = paginatePosts(feed, paginationInfo);
-
 
     return (
       <div>
