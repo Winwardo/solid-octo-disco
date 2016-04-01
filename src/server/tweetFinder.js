@@ -7,23 +7,14 @@ export const MAX_TWEET_RESULTS = 300;
 
 /**
  * Searches our database for Tweets and returns them.
- * If our search is not good enough, access Twitter directly to retrieve more tweets.
+ * May search the Twitter API directly for new results.
  * @param req A HTTP Request object
  * @param res A HTTP Response object
  * @returns {Promise.<T>|*}
  */
 export const searchQuery = (req, res) => (
   newPromiseChain()
-    .then(() => {
-      if (req.body.searchTwitter) {
-        console.log("Searching Twitter")
-        return Promise.all(
-          req.body.searchTerms.map((queryItem) => refreshFromTwitter(queryItem))
-        );
-      } else {
-        return Promise.resolve();
-      }
-    })
+    .then(() => potentiallySearchTwitter(req.body))
     .then(() => Promise.all(req.body.searchTerms.map((queryItem) => searchDatabase(queryItem))))
     .then((tweetResultsForAllQueries) => splatTogether(tweetResultsForAllQueries, 'OR'))
     .then((splattedTweets) => getTweetsAsResults(splattedTweets))
@@ -40,6 +31,21 @@ export const searchQuery = (req, res) => (
       }
     )
 );
+
+/**
+ * May asynchronously search Twitter for new tweet results based on queries.
+ * @param {Object} body { searchTwitter: true, searchTerms: ... }
+ * @returns {Promise.<T>} Either resolves immediately or a promise for searching Twitter
+ */
+const potentiallySearchTwitter = (body) => {
+  if (body.searchTwitter) {
+    return Promise.all(
+      body.searchTerms.map((queryItem) => refreshFromTwitter(queryItem))
+    );
+  } else {
+    return Promise.resolve();
+  }
+}
 
 const splatTogether = (allTweetResults, type) => {
   if (type === 'OR') {
