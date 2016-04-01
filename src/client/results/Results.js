@@ -35,7 +35,7 @@ let Results = ({ feed, mostFrequent }) => {
 
       <div className="four wide column">
         <MostUsedWords filterTerm={mostFrequent.words.filterTerm}
-          wordInfoList={groupedCountWords(mostFrequentWords(feed.map((post) => post.data)))}
+          wordInfoList={groupedCountWords(mostFrequentWords(feed.map((post) => post.data.content)))}
         />
       </div>
     </div>

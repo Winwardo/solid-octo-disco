@@ -1,5 +1,6 @@
 import { should } from 'chai';
 import { mostFrequentWords, mostFrequentUsers, groupedCountWords } from './tweetAnalysis';
+
 should();
 
 describe('#TweetAnalysis', () => {
@@ -16,35 +17,32 @@ describe('#TweetAnalysis', () => {
     });
 
     it('counts words in a single tweet, most frequent first', () => {
-      const tweets = [{ content: 'one three two three two three' }];
-      mostFrequentWords(tweets).should.deep.equal(exampleFrequentWords);
+      const tweet = ['one three two three two three'];
+      mostFrequentWords(tweet).should.deep.equal(exampleFrequentWords);
     });
 
     it('counts words across several tweets, most frequent first', () => {
-      const tweets = [{ content: 'one two three three' }, { content: 'two three' }];
+      const tweets = ['one two three three', 'two three'];
       mostFrequentWords(tweets).should.deep.equal(exampleFrequentWords);
     });
 
     it('ignores punctuation when splitting words', () => {
-      const tweets = [{ content: 'one, two,two three.three !three' }];
+      const tweets = ['one, two,two three.three !three'];
       mostFrequentWords(tweets).should.deep.equal(exampleFrequentWords);
     });
 
-    it('correctly identifies t.co URLS', () => {
-      const tweets = [{ content: 'one, two three https://t.co/url1 https://t.co/url2 four https://t.co/url3' }];
+    it('correctly identifies and removes t.co URLS', () => {
+      const tweets = ['one, two three https://t.co/url1 https://t.co/url2 four https://t.co/url3'];
       mostFrequentWords(tweets).should.deep.equal([
         { word: 'one', count: 1 },
         { word: 'two', count: 1 },
         { word: 'three', count: 1 },
-        { word: 'https://t.co/url1', count: 1 },
-        { word: 'https://t.co/url2', count: 1 },
         { word: 'four', count: 1 },
-        { word: 'https://t.co/url3', count: 1 },
       ]);
     });
 
     it('correctly identifies @mentions', () => {
-      const tweets = [{ content: 'one, @Winwardo two' }];
+      const tweets = ['one, @Winwardo two'];
       mostFrequentWords(tweets).should.deep.equal([
         { word: 'one', count: 1 },
         { word: '@Winwardo', count: 1 },
@@ -53,7 +51,7 @@ describe('#TweetAnalysis', () => {
     });
 
     it('correctly identifies #hashtags', () => {
-      const tweets = [{ content: 'one, #FOOTBALL two' }];
+      const tweets = ['one, #FOOTBALL two'];
       mostFrequentWords(tweets).should.deep.equal([
         { word: 'one', count: 1 },
         { word: '#FOOTBALL', count: 1 },

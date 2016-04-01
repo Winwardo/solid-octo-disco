@@ -17,7 +17,6 @@ export const mostFrequentWords = (tweets) => (
  */
 export const groupedCountWords = (countedWords) => {
   const wordCount = [];
-
   for (const wordInfo of countedWords) {
     const normalisedWord = wordInfo.word.toLowerCase().replace('#', '');
 
@@ -50,16 +49,29 @@ export const groupedCountWords = (countedWords) => {
 };
 
 /**
- * Given a list of Tweet objects, return a sorted list of the most active users,
- * along with their tweets.
+ * Given a list of Tweet objects, return a sorted list of the 10 most active users.
+ * If there are more than 10 most active users that have more than 1 tweet then
+ * include them as well along with their tweets.
  * @param tweets
  * @returns {Array}\
  */
-export const mostFrequentUsers = (tweets) => (
-  categoriseByUser(tweets).sort((tweetList1, tweetList2) => (
-    tweetList2.posts.length - tweetList1.posts.length
-  ))
-);
+export const mostFrequentUsers = (tweets, minimumTopUserCount = 10) => {
+  const topUsers = categoriseByUser(tweets);
+  let topRestUsers = [];
+  if (topUsers.length > minimumTopUserCount) {
+    topRestUsers = topUsers
+      .slice(minimumTopUserCount + 1)
+      .filter(user => user.posts.length > 1);
+  }
+
+  const allTopUsers = [...topUsers.slice(0, minimumTopUserCount), ...topRestUsers];
+  return (
+    allTopUsers
+      .sort((tweetList1, tweetList2) => (
+        tweetList2.posts.length - tweetList1.posts.length
+      ))
+  );
+};
 
 /**
  * Group a list of posts by their author.
@@ -93,19 +105,23 @@ const categoriseByUser = (posts) => (
 
 /**
  * Given some list of tweets, create a dictionary of how often each word appears.
- * Correctly matches https://t.co/~ URLs, @mentions and #hashtags
+ * Removes matched https://t.co/~ URLs
+ * Correctly matches @mentions and #hashtags
  * Punctuation (hyphens, commas, full stops) are counted as spaces.
  * @param tweets An array of Tweet objects
  * @returns {{}} e.g. {'hello': 5, 'world': 8}
  */
 const countWords = (tweets, stopList = []) => {
   const wordCount = {};
-  for (const tweet of tweets) {
+  for (const content of tweets) {
     // Match against either a t.co URL, a mention, hashtag or an entire word.
     const matcher = /(https\:\/\/t\.co\/.+?)\b|([@#]?\w+)/gmi;
 
-    for (const word of tweet.content.match(matcher)) {
-      const wordIsInStopList = stopList.indexOf(word) > -1;
+    for (const word of content.match(matcher)) {
+      if (word.indexOf('https://t.co') > -1) {
+        continue;
+      }
+      const wordIsInStopList = stopList.indexOf(word.toLowerCase()) > -1;
       if (!wordIsInStopList && word.length >= 3) {
         // ~~ will convert floats to integer,
         // but importantly quickly convert undefined to 0
