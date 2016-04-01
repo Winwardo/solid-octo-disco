@@ -13,13 +13,7 @@ class Feed extends Component {
     const paginationInfo = this.props.paginationInfo;
 
     const filteredFeed = filterPostsForFeed(feed, hiddenWords, hiddenUsers);
-
-    const pageNumber = paginationInfo.number;
-    const pageLimit = paginationInfo.limit;
-
-    const first = (pageNumber-1) * pageLimit;
-    const last = first + pageLimit;
-    const paginatedFeed = filteredFeed.slice(first, last);
+    const paginatedFeed = paginatePosts(feed, paginationInfo);
 
     return (
       <div>
@@ -66,6 +60,16 @@ const filterPostsForFeed = (feed, hiddenWords, hiddenUsers) => (
     return true;
   }
 ));
+
+const paginatePosts = (feed, paginationInfo) => {
+  const pageNumber = paginationInfo.number;
+  const pageLimit = paginationInfo.limit;
+
+  const first = (pageNumber-1) * pageLimit;
+  const last = first + pageLimit;
+
+  return feed.slice(first, last);
+}
 
 const FeedItem = ({ content }) => {
   let post;
