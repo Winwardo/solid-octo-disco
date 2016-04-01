@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import moment from 'moment';
+import { setFeedPageNumber } from '../search/searchActions';
 
 class Feed extends Component {
   componentDidUpdate() {
@@ -15,6 +17,7 @@ class Feed extends Component {
     const filteredFeed = filterPostsForFeed(feed, hiddenWords, hiddenUsers);
     const paginatedFeed = paginatePosts(feed, paginationInfo);
 
+
     return (
       <div>
         <div className="ui two column grid">
@@ -24,6 +27,9 @@ class Feed extends Component {
           <div className="right aligned column">
             Showing {filteredFeed.length}/{feed.length} posts
           </div>
+        </div>
+        <div>
+          <PaginationButtons />
         </div>
         <div className="ui divided items">
           {paginatedFeed.map((feedItem) => (<FeedItem content={feedItem}/>))}
@@ -38,6 +44,24 @@ Feed.propTypes = {
   hiddenWords: React.PropTypes.array,
   hiddenUsers: React.PropTypes.array,
 };
+
+let PaginationButtons = ({dispatch}) => {
+
+  const thing = (r) => {
+    console.log(r);
+    const a = setFeedPageNumber(r);
+    dispatch(a);
+  }
+
+  return (
+    <div className="ui buttons">
+      <button className="ui button" onClick={() => {return thing(1)}}>1</button>
+      <button className="ui button" onClick={() => {return thing(2)}}>2</button>
+      <button className="ui button" onClick={() => {return thing(3)}}>3</button>
+    </div>
+  )
+}
+PaginationButtons = connect()(PaginationButtons);
 
 const filterPostsForFeed = (feed, hiddenWords, hiddenUsers) => (
   feed.filter((feedItem) => {
