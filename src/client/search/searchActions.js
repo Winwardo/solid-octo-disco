@@ -60,3 +60,10 @@ export const setFeedPageNumber = (number) => ({
   type: SET_FEED_PAGE_NUMBER,
   number
 });
+
+
+export const SET_FEED_PAGE_LIMIT = 'SET_FEED_PAGE_LIMIT';
+export const setFeedPageLimit = (limit) => ({
+  type: SET_FEED_PAGE_LIMIT,
+  limit
+});

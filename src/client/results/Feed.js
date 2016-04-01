@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { setFeedPageNumber } from '../search/searchActions';
+import { setFeedPageNumber, setFeedPageLimit } from '../search/searchActions';
 
 class Feed extends Component {
   componentDidMount() {
@@ -29,7 +29,7 @@ class Feed extends Component {
           </div>
         </div>
         <div>
-          <PaginationButtons amount={Math.ceil(filteredFeed.length / paginationInfo.limit)} />
+          <PaginationButtons amount={Math.ceil(filteredFeed.length / paginationInfo.limit)} paginationInfo={paginationInfo}/>
         </div>
         <div className="ui divided items">
           {paginatedFeed.map((feedItem) => (<FeedItem content={feedItem}/>))}
@@ -46,28 +46,60 @@ Feed.propTypes = {
   hiddenUsers: React.PropTypes.array,
 };
 
-const PaginationButtons = ({dispatch, amount}) => {
-  const buttons = [];
-  for (let i = 1; i <= amount; i++) {
-    buttons.push(<PaginationButton pageNumber={i} key={i}/>);
-  }
-
+let PaginationButtons = ({dispatch, amount, paginationInfo}) => {
   return (
-    <div className="ui buttons">
-      {buttons}
+    <div>
+      <LimitButtons paginationInfo={paginationInfo}/> results per page.
+      <br />
+      <PagePicker amount={amount} paginationInfo={paginationInfo} />
     </div>
   )
-}
+};
+PaginationButtons = connect()(PaginationButtons);
 
-let PaginationButton = ({dispatch, pageNumber}) => (
-  <button className="ui button"
-    onClick={() => {
-    dispatch(setFeedPageNumber(pageNumber))
-    }}>
-    {pageNumber}
-  </button>
+const LimitButtons = ({paginationInfo}) => (
+  <div className="ui buttons">
+    <LimitButton limit={10} paginationInfo={paginationInfo} />
+    <LimitButton limit={25} paginationInfo={paginationInfo} />
+    <LimitButton limit={50} paginationInfo={paginationInfo} />
+  </div>
 )
-PaginationButton = connect()(PaginationButton);
+
+let PagePicker = ({dispatch, amount, paginationInfo}) => (
+  <div className="ui right labeled input">
+    <div className="ui label">Page</div>
+    <input type="number"
+      placeholder="Page number..."
+      onChange={(e) => {
+        const value = e.target.value;
+        if (!isNaN(parseFloat(value)) && isFinite(value)) {
+          dispatch(setFeedPageNumber(e.target.value));
+        }
+      }}
+      min={1}
+      max={amount}
+      value={paginationInfo.number}
+    />
+    <div className="ui label">
+      / {amount}
+    </div>
+  </div>
+)
+PagePicker = connect()(PagePicker);
+
+let LimitButton = ({dispatch, limit, paginationInfo}) => {
+  const active = limit === paginationInfo.limit;
+  return (
+    <button
+      className={`ui ${active ? 'blue' : ''} button`}
+      onClick={() => {
+      dispatch(setFeedPageLimit(limit))
+      }}>
+      {limit}
+    </button>
+  );
+};
+LimitButton = connect()(LimitButton);
 
 const filterPostsForFeed = (feed, hiddenWords, hiddenUsers) => (
   feed.filter((feedItem) => {
