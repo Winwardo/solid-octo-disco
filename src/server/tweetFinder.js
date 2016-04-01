@@ -145,7 +145,6 @@ const makeTweetQuerySelectingFrom = (from) => (
 
 const refreshFromTwitterOrMakeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => {
   const shouldRequeryTwitter = !alreadyAttemptedRefresh && tweetRecords.length <= 20;
-  console.log(tweetRecords)
   if (shouldRequeryTwitter) {
     return refreshFromTwitter(searchObject);
   } else {

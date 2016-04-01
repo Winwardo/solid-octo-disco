@@ -47,19 +47,19 @@ const findLatitudeLongitude = (rawTweet) => {
   let test;
   try {
     if (rawTweet.geo) {
-      test = "geo";
+      test = 'geo';
       return {
         latitude: rawTweet.geo.coordinate[0],
         longitude: rawTweet.geo.coordinate[1],
       };
     } else if (rawTweet.coordinates) {
-      test = "coord";
+      test = 'coord';
       return {
         latitude: rawTweet.coordinates.coordinate[1],
         longitude: rawTweet.coordinates.coordinate[0],
       };
     } else if (rawTweet.place) {
-      test = "place";
+      test = 'place';
       return {
         latitude: rawTweet.place.bounding_box.coordinates[0][0][1],
         longitude: rawTweet.place.bounding_box.coordinates[0][0][0],
