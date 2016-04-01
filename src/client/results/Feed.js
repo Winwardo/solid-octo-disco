@@ -32,7 +32,7 @@ class Feed extends Component {
           {paginatedFeed.map((feedItem) => (<FeedItem content={feedItem}/>))}
         </div>
         <div>
-          <PaginationButtons amount={Math.ceil(filteredFeed.length / paginationInfo.limit)} paginationInfo={paginationInfo}/>
+          <PaginationButtons numberOfPages={Math.ceil(filteredFeed.length / paginationInfo.limit)} paginationInfo={paginationInfo}/>
         </div>
       </div>
     );
@@ -46,7 +46,7 @@ Feed.propTypes = {
   hiddenUsers: React.PropTypes.array,
 };
 
-let PaginationButtons = ({ dispatch, amount, paginationInfo }) => {
+let PaginationButtons = ({ dispatch, numberOfPages, paginationInfo }) => {
   return (
     <div className="ui grid">
       <div className="two column row">
@@ -55,7 +55,7 @@ let PaginationButtons = ({ dispatch, amount, paginationInfo }) => {
         </div>
         <br />
         <div className="right aligned column">
-          <PagePicker amount={amount} paginationInfo={paginationInfo} />
+          <PagePicker numberOfPages={numberOfPages} paginationInfo={paginationInfo} />
         </div>
       </div>
     </div>
@@ -71,13 +71,13 @@ const LimitButtons = ({ paginationInfo }) => (
   </div>
 );
 
-let PagePicker = ({ dispatch, amount, paginationInfo }) => (
+let PagePicker = ({ dispatch, numberOfPages, paginationInfo }) => (
   <div className="ui right labeled input">
     <div className="ui label">Page</div>
     <input type="number"
       placeholder="Page number..."
       onChange={(e) => {
-        const value = Math.min(e.target.value, amount);
+        const value = Math.min(e.target.value, numberOfPages);
         if (value !== '' && !isNaN(parseFloat(value)) && isFinite(value)) {
           e.target.value = value;
           dispatch(setFeedPageNumber(value));
@@ -86,7 +86,7 @@ let PagePicker = ({ dispatch, amount, paginationInfo }) => (
       defaultValue={paginationInfo.number}
     />
     <div className="ui label">
-      / {amount}
+      / {numberOfPages}
     </div>
   </div>
 );
