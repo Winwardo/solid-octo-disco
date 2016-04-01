@@ -165,7 +165,6 @@ const refreshFromTwitterOrMakeTweets = (alreadyAttemptedRefresh, searchObject, t
 
 const refreshFromTwitter = (searchObject) => (
   searchAndSaveFromTwitter(searchObject.query)
-    .then(() => searchDatabase(searchObject, true))
 );
 
 const makeTweetAndAuthorFromDatabaseTweetRecord = (tweetRecord) => (

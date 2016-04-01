@@ -38,13 +38,13 @@ export const searchApiForFeed = (searchTerms) =>
     newPromiseChain()
       .then(() => NProgress.start())
       .then(() => searchDatabaseAsCache(dispatch, searchTerms))
-      .then(feedResults => searchTwitterIfResultsArentGoodEnough(dispatch, feedResults))
+      .then(feedResults => searchTwitterIfResultsArentGoodEnough(dispatch, searchTerms, feedResults))
       .then(() => NProgress.done())
 );
 
-const searchTwitterIfResultsArentGoodEnough = (searchTerms, feedResults) => {
+const searchTwitterIfResultsArentGoodEnough = (dispatch, searchTerms, feedResults) => {
   if (!doesFeedHaveUsefulResults(feedResults)) {
-    return searchDatabaseAndTwitter(searchTerms);
+    return searchDatabaseAndTwitter(dispatch, searchTerms);
   } else {
     return Promise.resolve();
   }
