@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { toggleMostActiveUser } from './../mostFrequentActions';
+import { mostFrequentWords } from './../../../tweetAnalysis';
 
 class UserItemsList extends Component {
   componentDidMount() {
     $('.ui.checkbox').checkbox();
+    $('.ui.dropdown').dropdown();
   }
 
   componentDidUpdate() {
@@ -13,14 +15,17 @@ class UserItemsList extends Component {
 
   render() {
     return (
-      <div style={{ height: '300px', overflowY: 'scroll' }}>
+      <div>
         <table className="ui very basic table">
           <thead>
             <tr>
               <th className="eight wide"></th>
-              <th className="two wide"></th>
-              <th className="four wide"></th>
-              <th className="two wide"></th>
+              <th className="one wide"></th>
+              <th className="six wide">
+                <i className="trophy yellow icon"></i>
+                Top Words
+              </th>
+              <th className="one wide">Show</th>
             </tr>
           </thead>
           <tbody>
@@ -55,19 +60,36 @@ let UserItem = ({ dispatch, userInfo }) => (
     </td>
 
     <td>
-      Most Used Words
+      <UserItemMostUsedWords
+        usersMostUsedWords={mostFrequentWords(userInfo.posts.map(post => post.content))}
+      />
     </td>
 
     <td className="left aligned">
       <div className="ui checkbox" onClick={() => {
         dispatch(toggleMostActiveUser(userInfo.author.id));
       }}>
-        <label>Show</label>
         <input type="checkbox" name="example" defaultChecked="true" />
       </div>
     </td>
   </tr>
 );
 UserItem = connect()(UserItem);
+
+const UserItemMostUsedWords = ({ usersMostUsedWords }) => (
+  <div className="ui pointing fluid dropdown">
+    <div className="text"><b>{usersMostUsedWords[0].word}</b> x{usersMostUsedWords[0].count}</div>
+    <i className="dropdown icon"></i>
+    <div className="menu">
+      {usersMostUsedWords.slice(1).map(
+        frequentWord => (
+          <div className="item">
+            <b>{frequentWord.word}</b> x{frequentWord.count}
+          </div>
+        )
+      )}
+    </div>
+  </div>
+);
 
 export default UserItemsList;
