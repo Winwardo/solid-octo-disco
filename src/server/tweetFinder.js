@@ -45,7 +45,7 @@ const potentiallySearchTwitter = (body) => {
   } else {
     return Promise.resolve();
   }
-}
+};
 
 const splatTogether = (allTweetResults, type) => {
   if (type === 'OR') {
@@ -100,7 +100,7 @@ const searchDatabase = (searchObject, alreadyAttemptedRefresh = false) => (
       )
     )
     .then((searchResults) => searchResults.reduce((previous, current) => previous.concat(current)))
-    .then((tweetRecords) => refreshFromTwitterOrMakeTweets(alreadyAttemptedRefresh, searchObject, tweetRecords))
+    .then((tweetRecords) => makeTweets(alreadyAttemptedRefresh, searchObject, tweetRecords))
     .then(
       (resolved) => resolved,
       (rejection) => console.warn('Major error querying the database.', rejection)
@@ -161,9 +161,9 @@ const makeTweetQuerySelectingFrom = (from) => (
     + ` LIMIT :limit ` // Don't select too many results
 );
 
-const refreshFromTwitterOrMakeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => {
-    return tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord));
-};
+const makeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => (
+  tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord))
+);
 
 const refreshFromTwitter = (searchObject) => (
   searchAndSaveFromTwitter(searchObject.query)

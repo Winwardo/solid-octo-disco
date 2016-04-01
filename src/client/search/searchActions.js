@@ -55,7 +55,7 @@ const searchDatabaseAsCache = (dispatch, searchTerms) =>searchDatabase(dispatch,
 
 const searchDatabase = (dispatch, searchTerms, searchTwitter) =>
   newPromiseChain()
-  .then(() => fetchPost('/search', {searchTerms: searchTerms, searchTwitter: searchTwitter}))
+  .then(() => fetchPost('/search', { searchTerms: searchTerms, searchTwitter: searchTwitter }))
   .then(response => response.json())
   .then(feedResults => {
     dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults });
