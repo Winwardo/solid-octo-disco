@@ -13,7 +13,7 @@ class Feed extends Component {
   }
 
   render() {
-    const {feed, hiddenWords, hiddenUsers, paginationInfo} = this.props;
+    const { feed, hiddenWords, hiddenUsers, paginationInfo } = this.props;
 
     const filteredFeed = filterPostsForFeed(feed, hiddenWords, hiddenUsers);
     const paginatedFeed = paginatePosts(feed, paginationInfo);
@@ -46,7 +46,7 @@ Feed.propTypes = {
   hiddenUsers: React.PropTypes.array,
 };
 
-let PaginationButtons = ({dispatch, amount, paginationInfo}) => {
+let PaginationButtons = ({ dispatch, amount, paginationInfo }) => {
   return (
     <div className="ui grid">
       <div className="two column row">
@@ -59,25 +59,24 @@ let PaginationButtons = ({dispatch, amount, paginationInfo}) => {
         </div>
       </div>
     </div>
-  )
+  );
 };
 PaginationButtons = connect()(PaginationButtons);
 
-const LimitButtons = ({paginationInfo}) => (
+const LimitButtons = ({ paginationInfo }) => (
   <div className="ui buttons">
     <LimitButton limit={10} paginationInfo={paginationInfo} />
     <LimitButton limit={25} paginationInfo={paginationInfo} />
     <LimitButton limit={50} paginationInfo={paginationInfo} />
   </div>
-)
+);
 
-let PagePicker = ({dispatch, amount, paginationInfo}) => (
+let PagePicker = ({ dispatch, amount, paginationInfo }) => (
   <div className="ui right labeled input">
     <div className="ui label">Page</div>
     <input type="number"
       placeholder="Page number..."
       onChange={(e) => {
-        console.log(e);
         const value = Math.min(e.target.value, amount);
         if (value !== '' && !isNaN(parseFloat(value)) && isFinite(value)) {
           e.target.value = value;
@@ -90,10 +89,10 @@ let PagePicker = ({dispatch, amount, paginationInfo}) => (
       / {amount}
     </div>
   </div>
-)
+);
 PagePicker = connect()(PagePicker);
 
-let LimitButton = ({dispatch, limit, paginationInfo}) => {
+let LimitButton = ({ dispatch, limit, paginationInfo }) => {
   const active = limit === paginationInfo.limit;
   return (
     <button
@@ -133,11 +132,11 @@ const paginatePosts = (feed, paginationInfo) => {
   const pageNumber = paginationInfo.number;
   const pageLimit = paginationInfo.limit;
 
-  const first = (pageNumber-1) * pageLimit;
+  const first = (pageNumber - 1) * pageLimit;
   const last = first + pageLimit;
 
   return feed.slice(first, last);
-}
+};
 
 const FeedItem = ({ content }) => {
   let post;
@@ -178,11 +177,11 @@ const Tweet = ({ content }) => {
       {goldStar}
       <a href={`//twitter.com/${content.author.handle}`} target="_blank">
         <strong className="tweet fullname header">{decodedAuthorName}</strong>
-        &nbsp;
-        <span className="tweet handle">@{content.author.handle}</span>
+         
+                                                                                                                                <span className="tweet handle">@{content.author.handle}</span>
       </a>
       <br />
-      <div dangerouslySetInnerHTML={{__html: tweetWithLinks}} />
+      <div dangerouslySetInnerHTML={{ __html: tweetWithLinks }} />
 
       <div className="meta">
         <span className="date">

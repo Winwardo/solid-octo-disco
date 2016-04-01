@@ -53,14 +53,14 @@ const searchTermReducer = (state, action) => {
   }
 };
 
-export const feedReducer = (state = {posts: [], paginationInfo:{number: 1, limit: 10}}, action) => {
+export const feedReducer = (state = { posts: [], paginationInfo:{ number: 1, limit: 10 } }, action) => {
   switch (action.type) {
   case RECEIVE_FEED_RESULTS:
-    return {...state, posts: action.data.data.records};
-    case SET_FEED_PAGE_NUMBER:
-      return {...state, paginationInfo: {...state.paginationInfo, number: action.number}};
-    case SET_FEED_PAGE_LIMIT:
-      return {...state, paginationInfo: {...state.paginationInfo, limit: action.limit}};
+    return { ...state, posts: action.data.data.records };
+  case SET_FEED_PAGE_NUMBER:
+    return { ...state, paginationInfo: { ...state.paginationInfo, number: action.number } };
+  case SET_FEED_PAGE_LIMIT:
+    return { ...state, paginationInfo: { ...state.paginationInfo, limit: action.limit } };
   default:
     return state;
   }
