@@ -107,7 +107,7 @@ const categoriseByUser = (posts) => (
  * Given some list of tweets, create a dictionary of how often each word appears.
  * Removes matched https://t.co/~ URLs
  * Correctly matches @mentions and #hashtags
- * unctuation (hyphens, commas, full stops) are counted as spaces.
+ * Punctuation (hyphens, commas, full stops) are counted as spaces.
  * @param tweets An array of Tweet objects
  * @returns {{}} e.g. {'hello': 5, 'world': 8}
  */
