@@ -39,6 +39,27 @@ i {
   right:0;
 }
 
+.tweet.fullname {
+  color: black;
+}
+
+.tweet.fullname.header {
+  font-size: 1.28571429em;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.tweet.handle {
+  color: #8899a6;
+}
+
+a:hover .tweet.fullname {
+  color: #1b95e0;
+  text-decoration: underline;
+}
+
 #addSearchTerm::-webkit-input-placeholder {
     color:    #999;
 }
