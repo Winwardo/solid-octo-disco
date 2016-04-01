@@ -80,8 +80,8 @@ let PagePicker = ({dispatch, amount, paginationInfo}) => (
         console.log(e);
         const value = Math.min(e.target.value, amount);
         if (value !== '' && !isNaN(parseFloat(value)) && isFinite(value)) {
-          dispatch(setFeedPageNumber(e.target.value));
           e.target.value = value;
+          dispatch(setFeedPageNumber(value));
         }
       }}
       defaultValue={paginationInfo.number}
