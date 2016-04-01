@@ -10,8 +10,16 @@ class Feed extends Component {
     const feed = this.props.feed;
     const hiddenWords = this.props.hiddenWords;
     const hiddenUsers = this.props.hiddenUsers;
+    const paginationInfo = this.props.paginationInfo;
 
     const filteredFeed = filterPostsForFeed(feed, hiddenWords, hiddenUsers);
+
+    const pageNumber = paginationInfo.number;
+    const pageLimit = paginationInfo.limit;
+
+    const first = (pageNumber-1) * pageLimit;
+    const last = first + pageLimit;
+    const paginatedFeed = filteredFeed.slice(first, last);
 
     return (
       <div>
@@ -24,7 +32,7 @@ class Feed extends Component {
           </div>
         </div>
         <div className="ui divided items">
-          {filteredFeed.map((feedItem) => (<FeedItem content={feedItem}/>))}
+          {paginatedFeed.map((feedItem) => (<FeedItem content={feedItem}/>))}
         </div>
       </div>
     );

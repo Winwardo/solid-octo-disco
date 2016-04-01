@@ -53,10 +53,10 @@ const searchTermReducer = (state, action) => {
   }
 };
 
-export const feedReducer = (state = [], action) => {
+export const feedReducer = (state = {posts: [], paginationInfo:{number: 1, limit: 5}}, action) => {
   switch (action.type) {
   case RECEIVE_FEED_RESULTS:
-    return action.data.data.records;
+    return {...state, posts: action.data.data.records};
   default:
     return state;
   }
