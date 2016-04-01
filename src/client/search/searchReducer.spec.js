@@ -161,12 +161,12 @@ describe('#FeedReducer', () => {
       type: RECEIVE_FEED_RESULTS,
       data: {
         data: {
-          records: records
-        }
-      }
+          records: records,
+        },
+      },
     };
 
-    const stateAfter = {posts: records};
+    const stateAfter = { posts: records };
 
     deepFreeze(stateBefore);
     deepFreeze(action);
@@ -175,14 +175,14 @@ describe('#FeedReducer', () => {
   });
 
   it('can set the pagination page', () => {
-    const stateBefore = {paginationInfo: {number: 1, limit: 10}};
+    const stateBefore = { paginationInfo: { number: 1, limit: 10 } };
 
     const action = {
       type: SET_FEED_PAGE_NUMBER,
-      number: 5
+      number: 5,
     };
 
-    const stateAfter = {paginationInfo: {number: 5, limit: 10}};
+    const stateAfter = { paginationInfo: { number: 5, limit: 10 } };
 
     deepFreeze(stateBefore);
     deepFreeze(action);
@@ -191,14 +191,14 @@ describe('#FeedReducer', () => {
   });
 
   it('can set the pagination limit', () => {
-    const stateBefore = {paginationInfo: {number: 1, limit: 10}};
+    const stateBefore = { paginationInfo: { number: 1, limit: 10 } };
 
     const action = {
       type: SET_FEED_PAGE_LIMIT,
-      limit: 5
+      limit: 5,
     };
 
-    const stateAfter = {paginationInfo: {number: 1, limit: 5}};
+    const stateAfter = { paginationInfo: { number: 1, limit: 5 } };
 
     deepFreeze(stateBefore);
     deepFreeze(action);
