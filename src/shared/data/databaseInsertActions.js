@@ -6,7 +6,7 @@ const runQueryOnImmutableObject = (db, query, objectToFlatten) =>
 export const upsertTweeter = (db, tweeter) => (
   runQueryOnImmutableObject(
     db,
-    'UPDATE tweeter SET id=:id, name=:name, handle=:handle UPSERT WHERE id=:id',
+    'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention UPSERT WHERE id=:id',
     tweeter
   ).then(() => {}, (rej) => { console.error('Upsert tweeter', rej); })
 );

@@ -17,10 +17,9 @@ class UserItemsList extends Component {
         <table className="ui very basic table">
           <thead>
             <tr>
+              <th className="eight wide"></th>
               <th className="two wide"></th>
-              <th className="three wide"></th>
-              <th className="two wide"></th>
-              <th className="seven wide"></th>
+              <th className="four wide"></th>
               <th className="two wide"></th>
             </tr>
           </thead>
@@ -36,14 +35,19 @@ class UserItemsList extends Component {
 
 let UserItem = ({ dispatch, userInfo }) => (
   <tr>
-    <td className="right aligned">
-      <img className="ui avatar image" src="" alt={`${userInfo.author.name}'s Twitter profile picture`} />
-    </td>
-
-    <td>
-      <div className="header">
-        {userInfo.author.name} <a>@{userInfo.author.handle}</a>
-      </div>
+    <td className="left aligned">
+      <h4 className="ui image header">
+        <img className="ui mini rounded image"
+          src={userInfo.author.profile_image_url}
+          alt={`${userInfo.author.name}'s Twitter profile picture`}
+        />
+        <div className="content">
+          <a href={`//twitter.com/${userInfo.author.handle}`} target="_blank">
+            <strong className="tweet fullname">{userInfo.author.name}</strong>
+            <div className="sub header tweet handle">@{userInfo.author.handle}</div>
+          </a>
+        </div>
+      </h4>
     </td>
 
     <td>

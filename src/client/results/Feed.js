@@ -96,9 +96,11 @@ const Tweet = ({ content }) => {
   return (
     <div className="content">
       {goldStar}
-      <div className="header">{decodedAuthorName}</div>
-      &nbsp;
-      <a href={`//twitter.com/${content.author.handle}`}>@{content.author.handle}</a>
+      <a href={`//twitter.com/${content.author.handle}`} target="_blank">
+        <strong className="tweet fullname header">{decodedAuthorName}</strong>
+        &nbsp;
+        <span className="tweet handle">@{content.author.handle}</span>
+      </a>
       <br />
       <div dangerouslySetInnerHTML={{__html: tweetWithLinks}} />
 
