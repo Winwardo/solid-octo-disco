@@ -6,7 +6,9 @@ import { mostFrequentWords } from './../../../tweetAnalysis';
 class UserItemsList extends Component {
   componentDidMount() {
     $('.ui.checkbox').checkbox();
-    $('.ui.dropdown').dropdown();
+    $('.ui.dropdown').dropdown({
+      action: 'nothing'
+    });
   }
 
   componentDidUpdate() {
@@ -78,13 +80,13 @@ UserItem = connect()(UserItem);
 
 const UserItemMostUsedWords = ({ usersMostUsedWords }) => (
   <div className="ui pointing fluid dropdown">
-    <div className="text"><b>{usersMostUsedWords[0].word}</b> x{usersMostUsedWords[0].count}</div>
+    <div className="text"><strong>{usersMostUsedWords[0].word}</strong> x{usersMostUsedWords[0].count}</div>
     <i className="dropdown icon"></i>
     <div className="menu">
       {usersMostUsedWords.slice(1).map(
         frequentWord => (
           <div className="item">
-            <b>{frequentWord.word}</b> x{frequentWord.count}
+            <strong>{frequentWord.word}</strong> x{frequentWord.count}
           </div>
         )
       )}

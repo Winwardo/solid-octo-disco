@@ -55,16 +55,16 @@ export const groupedCountWords = (countedWords) => {
  * @param tweets
  * @returns {Array}\
  */
-export const mostFrequentUsers = (tweets) => {
+export const mostFrequentUsers = (tweets, minimumTopUserCount = 10) => {
   const topUsers = categoriseByUser(tweets);
   let topRestUsers = [];
-  if (topUsers.length > 10) {
+  if (topUsers.length > minimumTopUserCount) {
     topRestUsers = topUsers
-      .slice(11)
+      .slice(minimumTopUserCount + 1)
       .filter(user => user.posts.length > 1);
   }
 
-  const allTopUsers = [...topUsers.slice(0, 10), ...topRestUsers];
+  const allTopUsers = [...topUsers.slice(0, minimumTopUserCount), ...topRestUsers];
   return (
     allTopUsers
       .sort((tweetList1, tweetList2) => (
@@ -105,9 +105,9 @@ const categoriseByUser = (posts) => (
 
 /**
  * Given some list of tweets, create a dictionary of how often each word appears.
- * Correctly matches https://t.co/~ URLs, @mentions and #hashtags
- * Punctuation (hyphens, commas, full stops) are counted as spaces.
- * Removes https://t.co/~ links
+ * Removes matched https://t.co/~ URLs
+ * Correctly matches @mentions and #hashtags
+ * unctuation (hyphens, commas, full stops) are counted as spaces.
  * @param tweets An array of Tweet objects
  * @returns {{}} e.g. {'hello': 5, 'world': 8}
  */
