@@ -1,4 +1,5 @@
 import { fetchPost, newPromiseChain } from '../../shared/utilities';
+import { doesFeedHaveUsefulResults } from '../tweetAnalysis';
 
 export const ADD_SEARCH_TERM = 'ADD_SEARCH_TERM';
 export const addSearchTerm = (id, query) => {
@@ -33,14 +34,33 @@ export const invalidateFeedResults = () =>
 
 export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
 export const searchApiForFeed = (searchTerms) =>
-(dispatch) => (
-  newPromiseChain()
-    .then(() => NProgress.start())
-    .then(() => (fetchPost('/search', searchTerms)))
-    .then(response => (response.json()))
-    .then(json => dispatch({ type: RECEIVE_FEED_RESULTS, data: json }))
-    .then(() => NProgress.done())
+    (dispatch) => (
+    newPromiseChain()
+      .then(() => NProgress.start())
+      .then(() => searchDatabaseAsCache(dispatch, searchTerms))
+      .then(feedResults => searchTwitterIfResultsArentGoodEnough(dispatch, searchTerms, feedResults))
+      .then(() => NProgress.done())
 );
+
+const searchTwitterIfResultsArentGoodEnough = (dispatch, searchTerms, feedResults) => {
+  if (!doesFeedHaveUsefulResults(feedResults)) {
+    return searchDatabaseAndTwitter(dispatch, searchTerms);
+  } else {
+    return Promise.resolve();
+  }
+};
+
+const searchDatabaseAndTwitter = (dispatch, searchTerms) => searchDatabase(dispatch, searchTerms, true);
+const searchDatabaseAsCache = (dispatch, searchTerms) =>searchDatabase(dispatch, searchTerms, false);
+
+const searchDatabase = (dispatch, searchTerms, searchTwitter) =>
+  newPromiseChain()
+  .then(() => fetchPost('/search', { searchTerms: searchTerms, searchTwitter: searchTwitter }))
+  .then(response => response.json())
+  .then(feedResults => {
+    dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults });
+    return feedResults;
+  });
 
 export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';
 export const deleteSearchTerm = (id) => ({
