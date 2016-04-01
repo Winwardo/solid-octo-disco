@@ -4,6 +4,10 @@ import moment from 'moment';
 import { setFeedPageNumber } from '../search/searchActions';
 
 class Feed extends Component {
+  componentDidMount() {
+    $('.popup').popup();
+  }
+
   componentDidUpdate() {
     $('.popup').popup();
   }
@@ -37,6 +41,7 @@ class Feed extends Component {
 
 Feed.propTypes = {
   feed: React.PropTypes.array,
+  paginationInfo: React.PropTypes.object,
   hiddenWords: React.PropTypes.array,
   hiddenUsers: React.PropTypes.array,
 };
