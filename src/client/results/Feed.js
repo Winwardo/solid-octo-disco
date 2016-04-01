@@ -28,11 +28,11 @@ class Feed extends Component {
             Showing {filteredFeed.length}/{feed.length} posts
           </div>
         </div>
-        <div>
-          <PaginationButtons amount={Math.ceil(filteredFeed.length / paginationInfo.limit)} paginationInfo={paginationInfo}/>
-        </div>
         <div className="ui divided items">
           {paginatedFeed.map((feedItem) => (<FeedItem content={feedItem}/>))}
+        </div>
+        <div>
+          <PaginationButtons amount={Math.ceil(filteredFeed.length / paginationInfo.limit)} paginationInfo={paginationInfo}/>
         </div>
       </div>
     );
@@ -48,10 +48,16 @@ Feed.propTypes = {
 
 let PaginationButtons = ({dispatch, amount, paginationInfo}) => {
   return (
-    <div>
-      <LimitButtons paginationInfo={paginationInfo}/> results per page.
-      <br />
-      <PagePicker amount={amount} paginationInfo={paginationInfo} />
+    <div className="ui grid">
+      <div className="two column row">
+        <div className="left column">
+          <LimitButtons paginationInfo={paginationInfo}/> results per page.
+        </div>
+        <br />
+        <div className="right aligned column">
+          <PagePicker amount={amount} paginationInfo={paginationInfo} />
+        </div>
+      </div>
     </div>
   )
 };
@@ -71,14 +77,14 @@ let PagePicker = ({dispatch, amount, paginationInfo}) => (
     <input type="number"
       placeholder="Page number..."
       onChange={(e) => {
-        const value = e.target.value;
-        if (!isNaN(parseFloat(value)) && isFinite(value)) {
+        console.log(e);
+        const value = Math.min(e.target.value, amount);
+        if (value !== '' && !isNaN(parseFloat(value)) && isFinite(value)) {
           dispatch(setFeedPageNumber(e.target.value));
+          e.target.value = value;
         }
       }}
-      min={1}
-      max={amount}
-      value={paginationInfo.number}
+      defaultValue={paginationInfo.number}
     />
     <div className="ui label">
       / {amount}
@@ -93,7 +99,7 @@ let LimitButton = ({dispatch, limit, paginationInfo}) => {
     <button
       className={`ui ${active ? 'blue' : ''} button`}
       onClick={() => {
-      dispatch(setFeedPageLimit(limit))
+        dispatch(setFeedPageLimit(limit));
       }}>
       {limit}
     </button>
