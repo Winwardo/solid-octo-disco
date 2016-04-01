@@ -212,7 +212,6 @@ const linkTweetToLocation = (db, tweet, rawPlace) => {
  */
 const processTweet = (db, rawTweet, id) => {
   const tweeter = buildTweeterFromRaw(rawTweet.user, false);
-  console.log('test', tweeter.is_user_mention());
   const rawRetweetedStatus = rawTweet.retweeted_status;
 
   if (rawRetweetedStatus !== undefined) {
