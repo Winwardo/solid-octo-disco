@@ -1,7 +1,8 @@
-const Integer = 'Integer';
-const String = 'String';
+const Boolean = 'Boolean';
 const Datetime = 'Datetime';
 const Double = 'Double';
+const Integer = 'Integer';
+const String = 'String';
 
 const Edge = 'E';
 const Vertex = 'V';
@@ -44,6 +45,8 @@ export const schema = {
       { name: 'id', type: String },
       { name: 'name', type: String },
       { name: 'handle', type: String },
+      { name: 'profile_image_url', type: String },
+      { name: 'is_user_mention', type: Boolean },
     ],
     indexes: [
       { properties: ['name'], type: LUCENE, },

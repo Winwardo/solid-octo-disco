@@ -134,10 +134,12 @@ const makeTweetQuerySelectingFrom = (from) => (
     + `, in('TWEETED').id AS authorId ` // Now the tweet info
     + `, in('TWEETED').name AS authorName `
     + `, in('TWEETED').handle AS authorHandle `
+    + `, in('TWEETED').profile_image_url as authorProfileImage `
+    + `, in('TWEETED').is_user_mention as isUserMention `
     + ` FROM (${from}) ` // Selected from a subset of tweets
     + ` WHERE @class = 'Tweet' ` // Don't accidentally select authors or hastags etc
     + ` ORDER BY date DESC ` // Might be irrelevant
-    + ` UNWIND authorId, authorName, authorHandle ` // Converts from ['Steve'] to 'Steve'
+    + ` UNWIND authorId, authorName, authorHandle, authorProfileImage, isUserMention ` // Converts from ['Steve'] to 'Steve'
     + ` LIMIT :limit ` // Don't select too many results
 );
 
@@ -167,6 +169,8 @@ const buildTweeterFromDatabaseTweetRecord = (record) => (
     .id(record.authorId)
     .name(record.authorName)
     .handle(record.authorHandle)
+    .profile_image_url(record.authorProfileImage)
+    .is_user_mention(record.isUserMention)
     .build()
 );
 
