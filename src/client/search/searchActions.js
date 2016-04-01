@@ -37,32 +37,30 @@ export const searchApiForFeed = (searchTerms) =>
     (dispatch) => (
     newPromiseChain()
       .then(() => NProgress.start())
-      .then(() => fetchPost('/search', {searchTerms: searchTerms, searchTwitter: false}))
-      .then(response => (response.json()))
-      .then(feedResults => {
-        dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults });
-        return feedResults;
-      })
-      .then(feedResults => {
-        console.log("whaaat");
-        if (!doesFeedHaveUsefulResults(feedResults)) {
-          console.log("These results are UNNAAACCCEPPTAAABLLLEEEE");
-          // ask twitter for better results and send out a new search
-          //return askTwitterAndTryAgain(searchTerms);
-          return newPromiseChain()
-            .then(() => fetchPost('/search', {searchTerms: searchTerms, searchTwitter: true}))
-            .then(response => (response.json()))
-            .then(feedResults => {
-              dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults });
-              return feedResults;
-            })
-        } else {
-          console.log("we good buddy");
-        }
-      })
-      //.then(json => dispatch({ type: RECEIVE_FEED_RESULTS, data: json }))
+      .then(() => searchDatabaseAsCache(dispatch, searchTerms))
+      .then(feedResults => searchTwitterIfResultsArentGoodEnough(dispatch, feedResults))
       .then(() => NProgress.done())
 );
+
+const searchTwitterIfResultsArentGoodEnough = (searchTerms, feedResults) => {
+  if (!doesFeedHaveUsefulResults(feedResults)) {
+    return searchDatabaseAndTwitter(searchTerms);
+  } else {
+    return Promise.resolve();
+  }
+};
+
+const searchDatabaseAndTwitter = (dispatch, searchTerms) => searchDatabase(dispatch, searchTerms, true);
+const searchDatabaseAsCache = (dispatch, searchTerms) =>searchDatabase(dispatch, searchTerms, false);
+
+const searchDatabase = (dispatch, searchTerms, searchTwitter) =>
+  newPromiseChain()
+  .then(() => fetchPost('/search', {searchTerms: searchTerms, searchTwitter: searchTwitter}))
+  .then(response => response.json())
+  .then(feedResults => {
+    dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults });
+    return feedResults;
+  });
 
 export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';
 export const deleteSearchTerm = (id) => ({
