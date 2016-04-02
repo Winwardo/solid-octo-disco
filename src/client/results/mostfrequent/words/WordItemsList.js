@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 class WordItemsList extends Component {
   componentDidMount() {
-    if(this.props.wordsToggledAction) {
+    if (this.props.wordsToggledAction) {
       $('.ui.checkbox.words').checkbox('check');
     } else {
       $('.ui.checkbox.words').checkbox('uncheck');

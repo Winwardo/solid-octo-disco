@@ -24,10 +24,10 @@ export const toggleMostActiveUser = (userId) => ({
 
 export const TOGGLE_ALL_MOST_USED_WORDS = 'TOGGLE_ALL_MOST_USED_WORDS';
 export const toggleAllMostUsedWordsSearch = () => ({
-  type: TOGGLE_ALL_MOST_USED_WORDS
+  type: TOGGLE_ALL_MOST_USED_WORDS,
 });
 
 export const TOGGLE_ALL_MOST_ACTIVE_USERS = 'TOGGLE_ALL_MOST_ACTIVE_USERS';
 export const toggleAllMostActiveUsersSearch = () => ({
-  type: TOGGLE_ALL_MOST_ACTIVE_USERS
+  type: TOGGLE_ALL_MOST_ACTIVE_USERS,
 });
