@@ -16,7 +16,7 @@ const SlidingSearchBar = ({ onTypingInSearchBar, currentValue }) => {
       />
       <i className="search icon"></i>
     </div>
-  )
+  );
 };
 
 export default SlidingSearchBar;
