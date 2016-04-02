@@ -12,7 +12,7 @@ const MostFrequent = ({ title, filterTerm, onTypingInSearchBar, onToggleAll, cur
           />
         </div>
         <div className="right aligned column">
-          <button className="ui button" onClick={onToggleAll}>
+          <button className="ui purple basic button" onClick={onToggleAll}>
             {currentToggledAction ? 'Hide all' : 'Show all'}
           </button>
         </div>
