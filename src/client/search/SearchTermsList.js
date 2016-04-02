@@ -28,6 +28,13 @@ class TermsList extends Component {
     );
   }
 }
+TermsList.propTypes = {
+  searchTerms: React.PropTypes.array,
+  showSearchTerm: React.PropTypes.func,
+  onSearchTermParamTypeToggleClick: React.PropTypes.func,
+  onSearchTermDeleteClick: React.PropTypes.func,
+  onSearchTermsChange: React.PropTypes.func,
+};
 
 const mapStateToProps = (state) => ({ searchTerms: state.searchTerms });
 
