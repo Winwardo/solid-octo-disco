@@ -7,7 +7,7 @@ class UserItemsList extends Component {
   componentDidMount() {
     $('.ui.checkbox').checkbox();
     $('.ui.dropdown.words').dropdown({
-      action: 'nothing'
+      action: 'nothing',
     });
   }
 

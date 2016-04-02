@@ -40,7 +40,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onSearchTermsChange: () => {
     dispatch(invalidateFeedResults());
-  }
+  },
 });
 
 export default connect(
