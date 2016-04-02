@@ -36,10 +36,15 @@ class Feed extends Component {
           </div>
         </div>
         <div className="ui divided items">
-          {paginatedFeed.map((feedItem) => (<FeedItem content={feedItem} />))}
+          {paginatedFeed.map((feedItem) => (
+            <FeedItem content={feedItem} key={feedItem.data.id} />
+          ))}
         </div>
         <div>
-          <PaginationButtons numberOfPages={Math.ceil(filteredFeed.length / paginationInfo.limit)} paginationInfo={paginationInfo}/>
+          <PaginationButtons
+            numberOfPages={Math.ceil(filteredFeed.length / paginationInfo.limit)}
+            paginationInfo={paginationInfo}
+          />
         </div>
       </div>
     );
@@ -64,13 +69,13 @@ const filterPostsForFeed = (
     // If we can find the chosen hidden word in this tweet, block the post
     for (const toggledWord of toggledWords) {
       if (content.indexOf(toggledWord) > -1) {
-        return !wordsToggledAction;
+        return !wordsToggledAction && usersToggledAction;
       }
     }
 
     for (const toggledUser of toggledUsers) {
       if (authorId === toggledUser) {
-        return !usersToggledAction;
+        return !usersToggledAction && wordsToggledAction;
       }
     }
 
@@ -88,32 +93,36 @@ const paginatePosts = (feed, paginationInfo) => {
   return feed.slice(first, last);
 };
 
-let PaginationButtons = ({ dispatch, numberOfPages, paginationInfo }) => {
-  return (
-    <div className="ui grid">
-      <div className="two column row">
-        <div className="left column">
-          <LimitButtons paginationInfo={paginationInfo}/> results per page.
-        </div>
-        <br />
-        <div className="right aligned column">
-          <PagePicker numberOfPages={numberOfPages} paginationInfo={paginationInfo} />
-        </div>
+let PaginationButtons = ({ dispatch, numberOfPages, paginationInfo }) => (
+  <div className="ui grid">
+    <div className="two column row">
+      <div className="left column">
+        <LimitButtons
+          paginationInfo={paginationInfo}
+          updateLimit={(limit) => { dispatch(setFeedPageLimit(limit)); }} /> results per page.
+      </div>
+      <br />
+      <div className="right aligned column">
+        <PagePicker
+          numberOfPages={numberOfPages}
+          paginationInfo={paginationInfo}
+          updatePageNumber={(limit) => { dispatch(setFeedPageNumber(limit)); }}
+        />
       </div>
     </div>
-  );
-};
+  </div>
+);
 PaginationButtons = connect()(PaginationButtons);
 
-const LimitButtons = ({ paginationInfo }) => (
+const LimitButtons = ({ updateLimit, paginationInfo }) => (
   <div className="ui buttons">
-    <LimitButton limit={10} paginationInfo={paginationInfo} />
-    <LimitButton limit={25} paginationInfo={paginationInfo} />
-    <LimitButton limit={50} paginationInfo={paginationInfo} />
+    <LimitButton limit={10} paginationInfo={paginationInfo} updateLimit={updateLimit} />
+    <LimitButton limit={25} paginationInfo={paginationInfo} updateLimit={updateLimit} />
+    <LimitButton limit={50} paginationInfo={paginationInfo} updateLimit={updateLimit} />
   </div>
 );
 
-let PagePicker = ({ dispatch, numberOfPages, paginationInfo }) => (
+const PagePicker = ({ updatePageNumber, numberOfPages, paginationInfo }) => (
   <div className="ui right labeled input">
     <div className="ui label">Page</div>
     <input type="number"
@@ -122,7 +131,7 @@ let PagePicker = ({ dispatch, numberOfPages, paginationInfo }) => (
         const value = Math.min(e.target.value, numberOfPages);
         if (value !== '' && !isNaN(parseFloat(value)) && isFinite(value)) {
           e.target.value = value;
-          dispatch(setFeedPageNumber(value));
+          updatePageNumber(value);
         }
       }}
       defaultValue={paginationInfo.number}
@@ -132,21 +141,19 @@ let PagePicker = ({ dispatch, numberOfPages, paginationInfo }) => (
     </div>
   </div>
 );
-PagePicker = connect()(PagePicker);
 
-let LimitButton = ({ dispatch, limit, paginationInfo }) => {
+const LimitButton = ({ updateLimit, limit, paginationInfo }) => {
   const active = limit === paginationInfo.limit;
   return (
     <button
       className={`ui ${active ? 'blue' : ''} button`}
       onClick={() => {
-        dispatch(setFeedPageLimit(limit));
+        updateLimit(limit);
       }}>
       {limit}
     </button>
   );
 };
-LimitButton = connect()(LimitButton);
 
 const FeedItem = ({ content }) => {
   let post;
@@ -187,6 +194,8 @@ const Tweet = ({ content }) => {
       {goldStar}
       <a href={`//twitter.com/${content.author.handle}`} target="_blank">
         <strong className="tweet fullname header">{decodedAuthorName}</strong>
+        &nbsp;
+        <span className="tweet handle">@{content.author.handle}</span>
       </a>
       <br />
       <div dangerouslySetInnerHTML={{ __html: tweetWithLinks }} />

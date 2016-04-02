@@ -91,20 +91,27 @@ let UserItem = ({ dispatch, userInfo }) => (
 );
 UserItem = connect()(UserItem);
 
-const UserItemMostUsedWords = ({ usersMostUsedWords }) => (
-  <div className="ui pointing fluid dropdown userwords">
-    <div className="text"><strong>{usersMostUsedWords[0].word}</strong> x{usersMostUsedWords[0].count}</div>
-    <i className="dropdown icon"></i>
-    <div className="menu">
-      {usersMostUsedWords.slice(1).map(
-        frequentWord => (
-          <div className="item">
-            <strong>{frequentWord.word}</strong> x{frequentWord.count}
-          </div>
-        )
-      )}
+const UserItemMostUsedWords = ({ usersMostUsedWords }) => {
+  let topWord = { word: 'N/A', count: 0 };
+  if (usersMostUsedWords[0] !== undefined) {
+    topWord = usersMostUsedWords[0];
+  }
+
+  return (
+    <div className="ui pointing fluid dropdown words">
+      <div className="text"><strong>{topWord.word}</strong> x{topWord.count}</div>
+      <i className="dropdown icon"></i>
+      <div className="menu">
+        {usersMostUsedWords.slice(1).map(
+          frequentWord => (
+            <div className="item" key={frequentWord.word}>
+              <strong>{frequentWord.word}</strong> x{frequentWord.count}
+            </div>
+          )
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default UserItemsList;

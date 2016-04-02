@@ -7,6 +7,7 @@ import {
   RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT
 } from './searchActions';
 import { createTwitterParamTypes } from '../../shared/utilities';
+import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
 
 describe('#SearchTermsReducer', () => {
   it('should add a hashtag search term', () => {
@@ -153,10 +154,14 @@ describe('#SearchTermsReducer', () => {
 });
 
 describe('#FeedReducer', () => {
-  it('can receive new feed results', () => {
+  it('can receive new feed results, and will group them', () => {
     const stateBefore = {};
 
-    const records = ['some record', 'another'];
+    const records = [
+      { data:{ content:'some record' }, author:{ id: '1' } },
+      { data:{ content:'another' }, author:{ id: '2' } },
+    ];
+
     const action = {
       type: RECEIVE_FEED_RESULTS,
       data: {
@@ -166,7 +171,11 @@ describe('#FeedReducer', () => {
       },
     };
 
-    const stateAfter = { posts: records };
+    const stateAfter = {
+      posts: records,
+      groupedMostFrequentWords: groupedCountWords(mostFrequentWords(records.map((post) => post.data.content))),
+      mostFrequentUsers: mostFrequentUsers(records),
+    };
 
     deepFreeze(stateBefore);
     deepFreeze(action);

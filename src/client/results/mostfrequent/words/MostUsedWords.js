@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import MostFrequent from './../MostFrequent';
-import { updateMostUsedWordsSearch, toggleAllMostUsedWordsSearch } from './../mostFrequentActions';
+import {
+  updateMostUsedWordsSearch,
+  toggleMostUsedWord, toggleAllMostUsedWordsSearch
+} from './../mostFrequentActions';
 import WordItemsList from './WordItemsList';
 
 const MostUsedWords = ({ dispatch, wordInfoList, wordsToggledAction, filterTerm }) => {
@@ -20,13 +23,13 @@ const MostUsedWords = ({ dispatch, wordInfoList, wordsToggledAction, filterTerm 
       }}
       currentToggledAction={wordsToggledAction}
     >
-      <WordItemsList words={filteredItems} wordsToggledAction={wordsToggledAction} />
+      <WordItemsList words={filteredItems} wordsToggledAction={wordsToggledAction}
+        toggleMostUsedWord={(word) => {
+          dispatch(toggleMostUsedWord(word));
+        }}
+      />
     </MostFrequent>
   );
 };
-
-// const mapStateToProps = (state) => ({
-//   wordInfoList: state.mostFrequent,
-// });
 
 export default connect()(MostUsedWords);
