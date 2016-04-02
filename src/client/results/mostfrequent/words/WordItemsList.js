@@ -18,14 +18,14 @@ class WordItemsList extends Component {
       <div style={{ height: '300px', overflowY: 'scroll' }}>
         <div className="ui fluid accordion" style={{ overflow: 'hidden' }}>
           { this.props.words.map((wordInfo, id) =>
-            <ConflatedWordItem key={id} conflatedWordInfo={wordInfo} />) }
+            <ConflatedWordItem key={id} conflatedWordInfo={wordInfo} dispatch={this.props.dispatch} />) }
         </div>
       </div>
     );
   }
 }
 
-const ConflatedWordItem = ({ conflatedWordInfo }) => (
+const ConflatedWordItem = ({ dispatch, conflatedWordInfo }) => (
   <div>
     <div className="title">
       <div className="ui grid">
@@ -44,7 +44,7 @@ const ConflatedWordItem = ({ conflatedWordInfo }) => (
         <tbody>
           {
             conflatedWordInfo.makeup.map((makeupInfo, id) => (
-              <WordItem key={id} makeupInfo={makeupInfo} conflatedWordCount={conflatedWordInfo.count} />
+              <WordItem key={id} makeupInfo={makeupInfo} conflatedWordCount={conflatedWordInfo.count} dispatch={dispatch} />
             ))
           }
         </tbody>
@@ -53,7 +53,7 @@ const ConflatedWordItem = ({ conflatedWordInfo }) => (
   </div>
 );
 
-let WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => (
+const WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => (
   <tr>
     <td className="right aligned" style={{ width: '60px' }}>
       {Math.round(makeupInfo.count / conflatedWordCount * 100)}%
@@ -70,6 +70,5 @@ let WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => (
     </td>
   </tr>
 );
-WordItem = connect()(WordItem);
 
 export default WordItemsList;

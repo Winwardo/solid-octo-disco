@@ -16,7 +16,7 @@ const MostUsedWords = ({ dispatch, wordInfoList, filterTerm }) => {
       }}
       filterTerm={filterTerm}
     >
-      <WordItemsList words={filteredItems} />
+      <WordItemsList words={filteredItems} dispatch={dispatch} />
     </MostFrequent>
   );
 };
