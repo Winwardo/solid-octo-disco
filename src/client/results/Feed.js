@@ -16,7 +16,7 @@ class Feed extends Component {
     const { feed, hiddenWords, hiddenUsers, paginationInfo } = this.props;
 
     const filteredFeed = filterPostsForFeed(feed, hiddenWords, hiddenUsers);
-    const paginatedFeed = paginatePosts(feed, paginationInfo);
+    const paginatedFeed = paginatePosts(filteredFeed, paginationInfo);
 
     return (
       <div>
