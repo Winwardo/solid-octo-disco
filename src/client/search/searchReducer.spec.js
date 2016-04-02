@@ -158,8 +158,8 @@ describe('#FeedReducer', () => {
     const stateBefore = {};
 
     const records = [
-      {data:{content:'some record'} , author:{id: '1'}},
-      {data:{content:'another'}, author:{id: '2'}}
+      { data:{ content:'some record' }, author:{ id: '1' } },
+      { data:{ content:'another' }, author:{ id: '2' } },
     ];
 
     const action = {
@@ -174,7 +174,7 @@ describe('#FeedReducer', () => {
     const stateAfter = {
       posts: records,
       groupedMostFrequentWords: groupedCountWords(mostFrequentWords(records.map((post) => post.data.content))),
-      mostFrequentUsers: mostFrequentUsers(records)
+      mostFrequentUsers: mostFrequentUsers(records),
     };
 
     deepFreeze(stateBefore);

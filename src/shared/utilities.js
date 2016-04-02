@@ -175,4 +175,4 @@ export const throttleFunction = (callback, milliseconds) => {
 
     timeout = setTimeout(() => callback.apply(undefined, args), milliseconds);
   };
-}
+};

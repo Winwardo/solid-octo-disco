@@ -46,21 +46,19 @@ Feed.propTypes = {
   hiddenUsers: React.PropTypes.array,
 };
 
-let PaginationButtons = ({ dispatch, numberOfPages, paginationInfo }) => {
-  return (
-    <div className="ui grid">
-      <div className="two column row">
-        <div className="left column">
-          <LimitButtons paginationInfo={paginationInfo} dispatch={dispatch} /> results per page.
-        </div>
-        <br />
-        <div className="right aligned column">
-          <PagePicker numberOfPages={numberOfPages} paginationInfo={paginationInfo} dispatch={dispatch} />
-        </div>
+let PaginationButtons = ({ dispatch, numberOfPages, paginationInfo }) => (
+  <div className="ui grid">
+    <div className="two column row">
+      <div className="left column">
+        <LimitButtons paginationInfo={paginationInfo} dispatch={dispatch} /> results per page.
+      </div>
+      <br />
+      <div className="right aligned column">
+        <PagePicker numberOfPages={numberOfPages} paginationInfo={paginationInfo} dispatch={dispatch} />
       </div>
     </div>
-  );
-};
+  </div>
+);
 PaginationButtons = connect()(PaginationButtons);
 
 const LimitButtons = ({ dispatch, paginationInfo }) => (
