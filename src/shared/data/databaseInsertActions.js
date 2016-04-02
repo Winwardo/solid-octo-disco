@@ -3,13 +3,20 @@ import { flattenImmutableObject } from '../utilities';
 const runQueryOnImmutableObject = (db, query, objectToFlatten) =>
   db.query(query, { params: flattenImmutableObject(objectToFlatten) });
 
-export const upsertTweeter = (db, tweeter) => (
-  runQueryOnImmutableObject(
-    db,
-    'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention UPSERT WHERE id=:id',
-    tweeter
-  ).then(() => {}, (rej) => { console.error('Upsert tweeter', rej); })
-);
+export const upsertTweeter = (db, tweeter) => {
+  // If the existing user is a mention only, but this new
+  // tweeter object is the full deal (e.g. has a proper
+  // profile picture), then update them.
+  let isUserMentionCheck = '';
+  if (!tweeter.is_user_mention()) {
+    isUserMentionCheck = 'AND is_user_mention=true';
+  };
+
+  const query = 'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention UPSERT WHERE id=:id ' + isUserMentionCheck;
+
+  return runQueryOnImmutableObject(db, query, tweeter)
+    .then(() => {}, (rej) => { console.error('Upsert tweeter', rej); });
+};
 
 export const upsertTweet = (db, tweet) => (
   runQueryOnImmutableObject(
