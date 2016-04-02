@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import Feed from './Feed';
 import MostUsedWords from './mostfrequent/words/MostUsedWords';
 import MostActiveUsers from './mostfrequent/users/MostActiveUsers';
-import { mostFrequentUsers } from './../tweetAnalysis';
 
 let Results = ({ feed, mostFrequent }) => {
   const posts = feed.posts;

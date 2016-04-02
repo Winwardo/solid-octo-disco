@@ -50,26 +50,26 @@ let PaginationButtons = ({ dispatch, numberOfPages, paginationInfo }) => (
   <div className="ui grid">
     <div className="two column row">
       <div className="left column">
-        <LimitButtons paginationInfo={paginationInfo} dispatch={dispatch} /> results per page.
+        <LimitButtons paginationInfo={paginationInfo} updateLimit={(limit) => { dispatch(setFeedPageLimit(limit)); }} /> results per page.
       </div>
       <br />
       <div className="right aligned column">
-        <PagePicker numberOfPages={numberOfPages} paginationInfo={paginationInfo} dispatch={dispatch} />
+        <PagePicker numberOfPages={numberOfPages} paginationInfo={paginationInfo} updatePageNumber={(limit) => { dispatch(setFeedPageNumber(limit)); }} />
       </div>
     </div>
   </div>
 );
 PaginationButtons = connect()(PaginationButtons);
 
-const LimitButtons = ({ dispatch, paginationInfo }) => (
+const LimitButtons = ({ updateLimit, paginationInfo }) => (
   <div className="ui buttons">
-    <LimitButton limit={10} paginationInfo={paginationInfo} dispatch={dispatch} />
-    <LimitButton limit={25} paginationInfo={paginationInfo} dispatch={dispatch} />
-    <LimitButton limit={50} paginationInfo={paginationInfo} dispatch={dispatch} />
+    <LimitButton limit={10} paginationInfo={paginationInfo} updateLimit={updateLimit} />
+    <LimitButton limit={25} paginationInfo={paginationInfo} updateLimit={updateLimit} />
+    <LimitButton limit={50} paginationInfo={paginationInfo} updateLimit={updateLimit} />
   </div>
 );
 
-const PagePicker = ({ dispatch, numberOfPages, paginationInfo }) => (
+const PagePicker = ({ updatePageNumber, numberOfPages, paginationInfo }) => (
   <div className="ui right labeled input">
     <div className="ui label">Page</div>
     <input type="number"
@@ -78,7 +78,7 @@ const PagePicker = ({ dispatch, numberOfPages, paginationInfo }) => (
         const value = Math.min(e.target.value, numberOfPages);
         if (value !== '' && !isNaN(parseFloat(value)) && isFinite(value)) {
           e.target.value = value;
-          dispatch(setFeedPageNumber(value));
+          updatePageNumber(value);
         }
       }}
       defaultValue={paginationInfo.number}
@@ -89,13 +89,13 @@ const PagePicker = ({ dispatch, numberOfPages, paginationInfo }) => (
   </div>
 );
 
-const LimitButton = ({ dispatch, limit, paginationInfo }) => {
+const LimitButton = ({ updateLimit, limit, paginationInfo }) => {
   const active = limit === paginationInfo.limit;
   return (
     <button
       className={`ui ${active ? 'blue' : ''} button`}
       onClick={() => {
-        dispatch(setFeedPageLimit(limit));
+        updateLimit(limit);
       }}>
       {limit}
     </button>
