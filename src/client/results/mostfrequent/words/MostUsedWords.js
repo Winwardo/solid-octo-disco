@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import MostFrequent from './../MostFrequent';
-import { updateMostUsedwordsSearch } from './../mostFrequentActions';
+import { updateMostUsedwordsSearch, toggleMostUsedWord } from './../mostFrequentActions';
 import WordItemsList from './WordItemsList';
 
 const MostUsedWords = ({ dispatch, wordInfoList, filterTerm }) => {
@@ -16,7 +16,9 @@ const MostUsedWords = ({ dispatch, wordInfoList, filterTerm }) => {
       }}
       filterTerm={filterTerm}
     >
-      <WordItemsList words={filteredItems} dispatch={dispatch} />
+      <WordItemsList words={filteredItems} toggleMostUsedWord={(word) => {
+        dispatch(toggleMostUsedWord(word))
+      }} />
     </MostFrequent>
   );
 };
