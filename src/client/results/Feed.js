@@ -176,7 +176,7 @@ const Tweet = ({ content }) => {
       <a href={`//twitter.com/${content.author.handle}`} target="_blank">
         <strong className="tweet fullname header">{decodedAuthorName}</strong>
         &nbsp;
-        @{content.author.handle}
+        <span className="tweet handle">@{content.author.handle}</span>
       </a>
       <br />
       <div dangerouslySetInnerHTML={{ __html: tweetWithLinks }} />

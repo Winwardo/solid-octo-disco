@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Feed from './Feed';
 import MostUsedWords from './mostfrequent/words/MostUsedWords';
 import MostActiveUsers from './mostfrequent/users/MostActiveUsers';
-import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
+import { mostFrequentUsers } from './../tweetAnalysis';
 
 let Results = ({ feed, mostFrequent }) => {
   const posts = feed.posts;
@@ -37,7 +37,7 @@ let Results = ({ feed, mostFrequent }) => {
 
       <div className="four wide column">
         <MostUsedWords filterTerm={mostFrequent.words.filterTerm}
-          wordInfoList={groupedCountWords(mostFrequentWords(posts.map((post) => post.data.content)))}
+          wordInfoList={feed.groupedMostFrequentWords}
         />
       </div>
     </div>
