@@ -12,11 +12,13 @@ class WordItemsList extends Component {
     $('.ui.accordion').accordion();
   }
 
-  componentDidUpdate() {
-    if(this.props.wordsToggledAction) {
-      $('.ui.checkbox.words').checkbox('check');
-    } else {
-      $('.ui.checkbox.words').checkbox('uncheck');
+  componentDidUpdate(nextProps) {
+    if (nextProps.wordsToggledAction !== this.props.wordsToggledAction) {
+      if (this.props.wordsToggledAction) {
+        $('.ui.checkbox.words').checkbox('check');
+      } else {
+        $('.ui.checkbox.words').checkbox('uncheck');
+      }
     }
     $('.ui.accordion').accordion();
   }

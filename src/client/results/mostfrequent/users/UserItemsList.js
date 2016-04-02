@@ -15,11 +15,13 @@ class UserItemsList extends Component {
     });
   }
 
-  componentDidUpdate() {
-    if (this.props.usersToggledAction) {
-      $('.ui.checkbox.users').checkbox('check');
-    } else {
-      $('.ui.checkbox.users').checkbox('uncheck');
+  componentDidUpdate(nextProps) {
+    if (nextProps.usersToggledAction !== this.props.usersToggledAction) {
+      if (this.props.usersToggledAction) {
+        $('.ui.checkbox.users').checkbox('check');
+      } else {
+        $('.ui.checkbox.users').checkbox('uncheck');
+      }
     }
     $('.ui.dropdown.userwords').dropdown({
       action: 'nothing',
