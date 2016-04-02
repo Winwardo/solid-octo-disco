@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import MostFrequent from './../MostFrequent';
-import { updateActiveUsersSearch } from './../mostFrequentActions';
+import { updateActiveUsersSearch, toggleAllMostActiveUsersSearch } from './../mostFrequentActions';
 import UserItemsList from './UserItemsList';
 
-const MostActiveUsers = ({ dispatch, userInfoList, filterTerm }) => {
+const MostActiveUsers = ({ dispatch, userInfoList, usersToggledAction, filterTerm }) => {
   const filteredItems = userInfoList.filter(
     (userInfo) => {
       const matchUserName = userInfo.author.name.toLowerCase().includes(filterTerm.toLowerCase());
@@ -16,12 +16,16 @@ const MostActiveUsers = ({ dispatch, userInfoList, filterTerm }) => {
 
   return (
     <MostFrequent title="Most Active Users"
+      filterTerm={filterTerm}
       onTypingInSearchBar={(newFilterTerm) => {
         dispatch(updateActiveUsersSearch(newFilterTerm));
       }}
-      filterTerm={filterTerm}
+      onToggleAll={() => {
+        dispatch(toggleAllMostActiveUsersSearch());
+      }}
+      currentToggledAction={usersToggledAction}
     >
-      <UserItemsList users={filteredItems} />
+      <UserItemsList users={filteredItems} usersToggledAction={usersToggledAction} />
     </MostFrequent>
   );
 };

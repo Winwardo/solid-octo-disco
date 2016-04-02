@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SlidingSearchBar from './SearchBar';
 
-const MostFrequent = ({ title, onTypingInSearchBar, filterTerm, children }) => (
+const MostFrequent = ({ title, filterTerm, onTypingInSearchBar, onToggleAll, currentToggledAction, children }) => (
   <div>
     <h3>{title}</h3>
     <div>
@@ -12,17 +12,15 @@ const MostFrequent = ({ title, onTypingInSearchBar, filterTerm, children }) => (
           />
         </div>
         <div className="right aligned column">
-          <ToggleAll />
+          <button className="ui button" onClick={onToggleAll}>
+            {currentToggledAction ? "Hide all" : "Show all"}
+          </button>
         </div>
       </div>
       <br />
       {children}
     </div>
   </div>
-);
-
-const ToggleAll = () => (
-  <button className="ui button">Hide all</button>
 );
 
 export default MostFrequent;

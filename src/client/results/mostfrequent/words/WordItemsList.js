@@ -4,12 +4,20 @@ import { toggleMostUsedWord } from './../mostFrequentActions';
 
 class WordItemsList extends Component {
   componentDidMount() {
-    $('.ui.checkbox').checkbox();
+    if(this.props.wordsToggledAction) {
+      $('.ui.checkbox.words').checkbox('check');
+    } else {
+      $('.ui.checkbox.words').checkbox('uncheck');
+    }
     $('.ui.accordion').accordion();
   }
 
   componentDidUpdate() {
-    $('.ui.checkbox').checkbox();
+    if(this.props.wordsToggledAction) {
+      $('.ui.checkbox.words').checkbox('check');
+    } else {
+      $('.ui.checkbox.words').checkbox('uncheck');
+    }
     $('.ui.accordion').accordion();
   }
 
@@ -61,11 +69,11 @@ let WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => (
     <td className="right aligned" style={{ width: '60px' }}>{makeupInfo.count}</td>
     <td>{makeupInfo.word}</td>
     <td>
-      <div className="ui checkbox" onClick={() => {
+      <div className="ui checkbox words" onClick={() => {
         dispatch(toggleMostUsedWord(makeupInfo.word));
       }}>
         <label>Show</label>
-        <input type="checkbox" name="example" defaultChecked="true" />
+        <input type="checkbox" name="example" />
       </div>
     </td>
   </tr>
