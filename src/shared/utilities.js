@@ -154,3 +154,25 @@ export const toggleParamType = (paramTypes, paramTypeToggleName) => (
     };
   })
 );
+
+/**
+ * Returns a decorated callback function, which will be called some time later.
+ * However, if the returned function is called again before the callback
+ * is activated, the timer will be reset.
+ * This might be useful say when delaying running a search until 200ms after
+ * the user has stopped typing.
+ * @param callback
+ * @param milliseconds
+ * @returns {Function}
+ */
+export const throttleFunction = (callback, milliseconds) => {
+  let timeout;
+
+  return (...args) => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    timeout = setTimeout(() => callback.apply(undefined, args), milliseconds);
+  };
+}
