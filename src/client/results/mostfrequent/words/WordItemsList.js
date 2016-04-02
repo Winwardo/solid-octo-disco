@@ -2,21 +2,21 @@ import React, { Component } from 'react';
 
 class WordItemsList extends Component {
   componentDidMount() {
-    if (this.props.wordsToggledAction) {
+    if (this.props.isWordsToggledActionHide) {
       $('.ui.checkbox.words').checkbox('check');
     } else {
       $('.ui.checkbox.words').checkbox('uncheck');
     }
     $('.ui.accordion.words').accordion({
       selector: {
-        trigger: '.title .conflated-word-selector'
-      }
+        trigger: '.title .conflated-word-selector',
+      },
     });
   }
 
   componentDidUpdate(nextProps) {
-    if (nextProps.wordsToggledAction !== this.props.wordsToggledAction) {
-      if (this.props.wordsToggledAction) {
+    if (nextProps.isWordsToggledActionHide !== this.props.isWordsToggledActionHide) {
+      if (this.props.isWordsToggledActionHide) {
         $('.ui.checkbox.words').checkbox('check');
       } else {
         $('.ui.checkbox.words').checkbox('uncheck');
@@ -39,6 +39,10 @@ class WordItemsList extends Component {
     );
   }
 }
+WordItemsList.propTypes = {
+  words: React.PropTypes.array,
+  isWordsToggledActionHide: React.PropTypes.bool,
+};
 
 const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWord, conflatedWordInfo }) => (
   <div>
@@ -69,9 +73,9 @@ const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWord, conflatedWordIn
 
             let toggleWords = [];
             $(`.ui.checkbox.words[data-id^="${conflatedWordInfo.word}child"]`).each((index) => {
-              const childCheckbox = $(`.ui.checkbox.words[data-id="${conflatedWordInfo.word}child${index}"]`);
-              if (childCheckbox.checkbox('is checked') !== masterChecked) {
-                childCheckbox.checkbox(action);
+              const $childCheckbox = $(`.ui.checkbox.words[data-id="${conflatedWordInfo.word}child${index}"]`);
+              if ($childCheckbox.checkbox('is checked') !== masterChecked) {
+                $childCheckbox.checkbox(action);
                 toggleWords.push(conflatedWordInfo.makeup[index].word);
               }
             });
@@ -113,9 +117,9 @@ const WordItem = ({ toggleMostUsedWord, makeupInfo, conflatedWord, checkboxId, c
     <td>
       <div data-id={`${conflatedWord}child${checkboxId}`} className="ui checkbox words" onClick={() => {
         toggleMostUsedWord([makeupInfo.word]);
-        const thisCheckbox = $(`.ui.checkbox.words[data-id^="${conflatedWord}child${checkboxId}"]`).checkbox('is checked');
+        const $thisCheckbox = $(`.ui.checkbox.words[data-id^="${conflatedWord}child${checkboxId}"]`).checkbox('is checked');
         let action;
-        if (thisCheckbox) {
+        if ($thisCheckbox) {
           action = 'check';
         } else {
           action = 'uncheck';
@@ -123,7 +127,7 @@ const WordItem = ({ toggleMostUsedWord, makeupInfo, conflatedWord, checkboxId, c
 
         let allCheckboxesSame = true;
         $(`.ui.checkbox.words[data-id^="${conflatedWord}child"]`).each((index) => {
-          if (thisCheckbox !== $(`.ui.checkbox.words[data-id^="${conflatedWord}child${index}"]`).checkbox('is checked')) {
+          if ($thisCheckbox !== $(`.ui.checkbox.words[data-id^="${conflatedWord}child${index}"]`).checkbox('is checked')) {
             allCheckboxesSame = false;
           }
         });

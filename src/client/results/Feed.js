@@ -15,13 +15,13 @@ class Feed extends Component {
   render() {
     const {
       feed, paginationInfo,
-      toggledWords, wordsToggledAction,
-      toggledUsers, usersToggledAction,
+      toggledWords, isWordsToggledActionHide,
+      toggledUsers, isUsersToggledActionHide,
     } = this.props;
 
     const filteredFeed = filterPostsForFeed(
-      feed, toggledWords, wordsToggledAction,
-      toggledUsers, usersToggledAction
+      feed, toggledWords, isWordsToggledActionHide,
+      toggledUsers, isUsersToggledActionHide
     );
     const paginatedFeed = paginatePosts(filteredFeed, paginationInfo);
 
@@ -54,13 +54,13 @@ Feed.propTypes = {
   feed: React.PropTypes.array,
   paginationInfo: React.PropTypes.object,
   toggledWords: React.PropTypes.array,
-  wordsToggledAction: React.PropTypes.bool,
+  isWordsToggledActionHide: React.PropTypes.bool,
   toggledUsers: React.PropTypes.array,
-  usersToggledAction: React.PropTypes.bool,
+  isUsersToggledActionHide: React.PropTypes.bool,
 };
 
 const filterPostsForFeed = (
-  feed, toggledWords, wordsToggledAction, toggledUsers, usersToggledAction
+  feed, toggledWords, isWordsToggledActionHide, toggledUsers, isUsersToggledActionHide
 ) => (
   feed.filter((feedItem) => {
     const content = feedItem.data.content;
@@ -69,17 +69,17 @@ const filterPostsForFeed = (
     // If we can find the chosen hidden word in this tweet, block the post
     for (const toggledWord of toggledWords) {
       if (content.indexOf(`${toggledWord}`) > -1) {
-        return !wordsToggledAction && usersToggledAction;
+        return !isWordsToggledActionHide && isUsersToggledActionHide;
       }
     }
 
     for (const toggledUser of toggledUsers) {
       if (authorId === toggledUser) {
-        return !usersToggledAction && wordsToggledAction;
+        return !isUsersToggledActionHide && isWordsToggledActionHide;
       }
     }
 
-    return wordsToggledAction && usersToggledAction;
+    return isWordsToggledActionHide && isUsersToggledActionHide;
   }
 ));
 

@@ -5,7 +5,7 @@ import { mostFrequentWords } from './../../../tweetAnalysis';
 
 class UserItemsList extends Component {
   componentDidMount() {
-    if (this.props.usersToggledAction) {
+    if (this.props.isUsersToggledActionHide) {
       $('.ui.checkbox.users').checkbox('check');
     } else {
       $('.ui.checkbox.users').checkbox('uncheck');
@@ -16,8 +16,8 @@ class UserItemsList extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    if (nextProps.usersToggledAction !== this.props.usersToggledAction) {
-      if (this.props.usersToggledAction) {
+    if (nextProps.isUsersToggledActionHide !== this.props.isUsersToggledActionHide) {
+      if (this.props.isUsersToggledActionHide) {
         $('.ui.checkbox.users').checkbox('check');
       } else {
         $('.ui.checkbox.users').checkbox('uncheck');
@@ -52,6 +52,10 @@ class UserItemsList extends Component {
     );
   }
 }
+UserItemsList.propTypes = {
+  users: React.PropTypes.array,
+  isUsersToggledActionHide: React.PropTypes.bool,
+};
 
 let UserItem = ({ dispatch, userInfo }) => (
   <tr>
