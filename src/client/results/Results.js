@@ -23,7 +23,7 @@ let Results = ({ feed, mostFrequent }) => {
     <div className="ui grid">
       <div className="four wide column">
         <MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
-          userInfoList={mostFrequentUsers(posts)}
+          userInfoList={feed.mostFrequentUsers}
         />
       </div>
 
