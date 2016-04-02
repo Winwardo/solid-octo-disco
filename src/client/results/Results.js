@@ -6,7 +6,8 @@ import MostActiveUsers from './mostfrequent/users/MostActiveUsers';
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
 
 let Results = ({ feed, mostFrequent }) => {
-  if (feed.length === 0) {
+  const posts = feed.posts;
+  if (posts.length === 0) {
     return (
       <div className="ui violet inverted center aligned segment">
         <h2 className="ui inverted header">
@@ -22,20 +23,21 @@ let Results = ({ feed, mostFrequent }) => {
     <div className="ui grid">
       <div className="four wide column">
         <MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
-          userInfoList={mostFrequentUsers(feed)}
+          userInfoList={mostFrequentUsers(posts)}
         />
       </div>
 
       <div className="eight wide column">
-        <Feed feed={feed}
+        <Feed feed={posts}
           hiddenWords={mostFrequent.words.toHide}
           hiddenUsers={mostFrequent.users.toHide}
+          paginationInfo={feed.paginationInfo}
         />
       </div>
 
       <div className="four wide column">
         <MostUsedWords filterTerm={mostFrequent.words.filterTerm}
-          wordInfoList={groupedCountWords(mostFrequentWords(feed.map((post) => post.data.content)))}
+          wordInfoList={groupedCountWords(mostFrequentWords(posts.map((post) => post.data.content)))}
         />
       </div>
     </div>

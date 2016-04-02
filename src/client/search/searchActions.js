@@ -74,3 +74,15 @@ export const toggleSearchTermParamTypeSelection = (id, paramTypeName) => ({
   id,
   paramTypeName,
 });
+
+export const SET_FEED_PAGE_NUMBER = 'SET_FEED_PAGE_NUMBER';
+export const setFeedPageNumber = (number) => ({
+  type: SET_FEED_PAGE_NUMBER,
+  number,
+});
+
+export const SET_FEED_PAGE_LIMIT = 'SET_FEED_PAGE_LIMIT';
+export const setFeedPageLimit = (limit) => ({
+  type: SET_FEED_PAGE_LIMIT,
+  limit,
+});

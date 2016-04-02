@@ -1,6 +1,6 @@
 import {
   ADD_SEARCH_TERM, TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION, DELETE_SEARCH_TERM,
-  RECEIVE_FEED_RESULTS
+  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT
 } from './searchActions';
 import { createTwitterParamTypes, toggleParamType } from '../../shared/utilities';
 
@@ -53,10 +53,14 @@ const searchTermReducer = (state, action) => {
   }
 };
 
-export const feedReducer = (state = [], action) => {
+export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, limit: 10 } }, action) => {
   switch (action.type) {
   case RECEIVE_FEED_RESULTS:
-    return action.data.data.records;
+    return { ...state, posts: action.data.data.records };
+  case SET_FEED_PAGE_NUMBER:
+    return { ...state, paginationInfo: { ...state.paginationInfo, number: action.number } };
+  case SET_FEED_PAGE_LIMIT:
+    return { ...state, paginationInfo: { ...state.paginationInfo, limit: action.limit } };
   default:
     return state;
   }
