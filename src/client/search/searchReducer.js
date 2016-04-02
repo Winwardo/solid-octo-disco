@@ -3,6 +3,7 @@ import {
   RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT
 } from './searchActions';
 import { createTwitterParamTypes, toggleParamType } from '../../shared/utilities';
+import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
 
 export const searchTermsReducer = (state = [], action) => {
   switch (action.type) {
@@ -53,10 +54,15 @@ const searchTermReducer = (state, action) => {
   }
 };
 
-export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, limit: 10 } }, action) => {
+export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, limit: 10 }, groupedMostFrequentWords: [], mostFrequentUsers: [] }, action) => {
   switch (action.type) {
   case RECEIVE_FEED_RESULTS:
-    return { ...state, posts: action.data.data.records };
+    return {
+      ...state,
+      posts: action.data.data.records,
+      groupedMostFrequentWords: groupedCountWords(mostFrequentWords(action.data.data.records.map((post) => post.data.content))),
+      mostFrequentUsers: mostFrequentUsers(action.data.data.records),
+    };
   case SET_FEED_PAGE_NUMBER:
     return { ...state, paginationInfo: { ...state.paginationInfo, number: action.number } };
   case SET_FEED_PAGE_LIMIT:
@@ -65,3 +71,4 @@ export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, li
     return state;
   }
 };
+

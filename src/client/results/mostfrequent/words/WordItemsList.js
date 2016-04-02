@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { toggleMostUsedWord } from './../mostFrequentActions';
 
 class WordItemsList extends Component {
   componentDidMount() {
@@ -18,14 +17,14 @@ class WordItemsList extends Component {
       <div style={{ height: '300px', overflowY: 'scroll' }}>
         <div className="ui fluid accordion" style={{ overflow: 'hidden' }}>
           { this.props.words.map((wordInfo, id) =>
-            <ConflatedWordItem key={id} conflatedWordInfo={wordInfo} />) }
+            <ConflatedWordItem key={wordInfo.word} conflatedWordInfo={wordInfo} toggleMostUsedWord={this.props.toggleMostUsedWord} />) }
         </div>
       </div>
     );
   }
 }
 
-const ConflatedWordItem = ({ conflatedWordInfo }) => (
+const ConflatedWordItem = ({ toggleMostUsedWord, conflatedWordInfo }) => (
   <div>
     <div className="title">
       <div className="ui grid">
@@ -44,7 +43,7 @@ const ConflatedWordItem = ({ conflatedWordInfo }) => (
         <tbody>
           {
             conflatedWordInfo.makeup.map((makeupInfo, id) => (
-              <WordItem key={id} makeupInfo={makeupInfo} conflatedWordCount={conflatedWordInfo.count} />
+              <WordItem key={makeupInfo.word} makeupInfo={makeupInfo} conflatedWordCount={conflatedWordInfo.count} toggleMostUsedWord={toggleMostUsedWord} />
             ))
           }
         </tbody>
@@ -53,7 +52,7 @@ const ConflatedWordItem = ({ conflatedWordInfo }) => (
   </div>
 );
 
-let WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => (
+const WordItem = ({ toggleMostUsedWord, makeupInfo, conflatedWordCount }) => (
   <tr>
     <td className="right aligned" style={{ width: '60px' }}>
       {Math.round(makeupInfo.count / conflatedWordCount * 100)}%
@@ -62,7 +61,7 @@ let WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => (
     <td>{makeupInfo.word}</td>
     <td>
       <div className="ui checkbox" onClick={() => {
-        dispatch(toggleMostUsedWord(makeupInfo.word));
+        toggleMostUsedWord(makeupInfo.word);
       }}>
         <label>Show</label>
         <input type="checkbox" name="example" defaultChecked="true" />
@@ -70,6 +69,5 @@ let WordItem = ({ dispatch, makeupInfo, conflatedWordCount }) => (
     </td>
   </tr>
 );
-WordItem = connect()(WordItem);
 
 export default WordItemsList;
