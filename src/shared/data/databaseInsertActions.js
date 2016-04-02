@@ -1,20 +1,33 @@
-import { flattenImmutableObject } from '../utilities';
+import { flattenImmutableObject, newPromiseChain } from '../utilities';
 
 const runQueryOnImmutableObject = (db, query, objectToFlatten) =>
   db.query(query, { params: flattenImmutableObject(objectToFlatten) });
 
 export const upsertTweeter = (db, tweeter) => {
-  // If the existing user is a mention only, but this new
-  // tweeter object is the full deal (e.g. has a proper
-  // profile picture), then update them.
-  let isUserMentionCheck = '';
-  if (!tweeter.is_user_mention()) {
-    isUserMentionCheck = 'AND is_user_mention=true';
-  };
+  // This is more complex than the other upsert queries
+  // First check if our Tweeter already exists in the database
+  // If they do, ONLY overwrite their current information, if the
+  // new information is complete, e.g. isn't from a mention
+  // and therefore has profile image information
+  const checkQuery = 'SELECT FROM tweeter WHERE id=:id';
 
-  const query = 'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention UPSERT WHERE id=:id ' + isUserMentionCheck;
+  const update = 'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention WHERE id=:id';
+  const upsert = 'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention UPSERT WHERE id=:id';
 
-  return runQueryOnImmutableObject(db, query, tweeter)
+  return newPromiseChain()
+    .then(() => runQueryOnImmutableObject(db, checkQuery, tweeter))
+    .then(
+      (response) => {
+        if (response.length === 1) { // Do we have this author already?
+          if (!tweeter.is_user_mention()) { // Is it worth updating?
+            return runQueryOnImmutableObject(db, update, tweeter);
+          }
+        } else {
+          // We can't find the user, so upsert them
+          return runQueryOnImmutableObject(db, upsert, tweeter);
+        }
+      }
+    )
     .then(() => {}, (rej) => { console.error('Upsert tweeter', rej); });
 };
 
