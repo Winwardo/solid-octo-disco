@@ -48,10 +48,17 @@ const findLatitudeLongitude = (rawTweet) => {
   try {
     if (rawTweet.geo) {
       test = 'geo';
-      return {
-        latitude: rawTweet.geo.coordinate[0],
-        longitude: rawTweet.geo.coordinate[1],
-      };
+      if (rawTweet.geo.coordinate) {
+        return {
+          latitude: rawTweet.geo.coordinate[0],
+          longitude: rawTweet.geo.coordinate[1],
+        };
+      } else {
+        return {
+          latitude: rawTweet.geo.coordinates[0],
+          longitude: rawTweet.geo.coordinates[1],
+        };
+      }
     } else if (rawTweet.coordinates) {
       test = 'coord';
       return {

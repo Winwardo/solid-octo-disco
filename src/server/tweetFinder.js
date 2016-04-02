@@ -101,7 +101,7 @@ const searchDatabase = (searchObject, alreadyAttemptedRefresh = false) => (
         .map((paramType) => searchByParamType(searchObject, paramType.name))
       )
     )
-    .then((searchResults) => searchResults.reduce((previous, current) => previous.concat(current)))
+    .then((searchResults) => searchResults.reduce((previous, current) => previous.concat(current), []))
     .then((tweetRecords) => makeTweets(alreadyAttemptedRefresh, searchObject, tweetRecords))
     .then(
       (resolved) => resolved,
