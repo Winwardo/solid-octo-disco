@@ -98,7 +98,7 @@ const UserItemMostUsedWords = ({ usersMostUsedWords }) => {
   }
 
   return (
-    <div className="ui pointing fluid dropdown words">
+    <div className="ui pointing fluid dropdown userwords">
       <div className="text"><strong>{topWord.word}</strong> x{topWord.count}</div>
       <i className="dropdown icon"></i>
       <div className="menu">

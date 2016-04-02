@@ -24,9 +24,9 @@ describe('#MostFrequentActions', () => {
   });
 
   it('should create an action for toggling hiding most used word', () => {
-    toggleMostUsedWord('exampleWord').should.deep.equal({
+    toggleMostUsedWord(['exampleWord']).should.deep.equal({
       type: TOGGLE_MOST_USED_WORD,
-      word: 'exampleWord',
+      words: ['exampleWord'],
     });
   });
 
