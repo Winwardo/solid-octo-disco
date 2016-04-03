@@ -31,7 +31,7 @@ class WordItemsList extends Component {
           {this.props.words.map((wordInfo, id) =>
             <ConflatedWordItem key={wordInfo.word} accordianIndex={id}
               conflatedWordInfo={wordInfo}
-              toggleMostUsedWord={this.props.toggleMostUsedWord}
+              toggleMostUsedWords={this.props.toggleMostUsedWords}
             />
           )}
         </div>
@@ -44,7 +44,7 @@ WordItemsList.propTypes = {
   isWordsToggledActionHide: React.PropTypes.bool,
 };
 
-const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWord, conflatedWordInfo }) => (
+const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWords, conflatedWordInfo }) => (
   <div>
     <div className="title">
       <div className="ui grid">
@@ -80,7 +80,7 @@ const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWord, conflatedWordIn
               }
             });
 
-            toggleMostUsedWord(toggleWords);
+            toggleMostUsedWords(toggleWords);
           }}>
             <label>Show</label>
             <input type="checkbox" name="example" />
@@ -97,7 +97,7 @@ const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWord, conflatedWordIn
                 checkboxId={id}
                 makeupInfo={makeupInfo}
                 conflatedWordCount={conflatedWordInfo.count}
-                toggleMostUsedWord={toggleMostUsedWord}
+                toggleMostUsedWords={toggleMostUsedWords}
               />
             ))
           }
@@ -107,7 +107,7 @@ const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWord, conflatedWordIn
   </div>
 );
 
-const WordItem = ({ toggleMostUsedWord, makeupInfo, conflatedWord, checkboxId, conflatedWordCount }) => (
+const WordItem = ({ toggleMostUsedWords, makeupInfo, conflatedWord, checkboxId, conflatedWordCount }) => (
   <tr>
     <td className="right aligned" style={{ width: '60px' }}>
       {Math.round(makeupInfo.count / conflatedWordCount * 100)}%
@@ -116,7 +116,7 @@ const WordItem = ({ toggleMostUsedWord, makeupInfo, conflatedWord, checkboxId, c
     <td>{makeupInfo.word}</td>
     <td>
       <div data-id={`${conflatedWord}child${checkboxId}`} className="ui checkbox words" onClick={() => {
-        toggleMostUsedWord([makeupInfo.word]);
+        toggleMostUsedWords([makeupInfo.word]);
         const $thisCheckbox = $(`.ui.checkbox.words[data-id^="${conflatedWord}child${checkboxId}"]`).checkbox('is checked');
         let action;
         if ($thisCheckbox) {

@@ -2,7 +2,7 @@ import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
 import mostFrequentReducer from './mostFrequentReducer';
 import {
-  updateMostUsedWordsSearch, toggleMostUsedWord, toggleAllMostUsedWordsSearch,
+  updateMostUsedWordsSearch, toggleMostUsedWords, toggleAllMostUsedWordsSearch,
   updateActiveUsersSearch, toggleMostActiveUser, toggleAllMostActiveUsersSearch
 } from './mostFrequentActions';
 
@@ -81,7 +81,7 @@ describe('#MostFrequentReducer', () => {
     describe('Toggling of hidden words', () => {
       it('should add a hidden word', () => {
         const stateBefore = initialState;
-        const action = toggleMostUsedWord('LeMoN');
+        const action = toggleMostUsedWords(['LeMoN']);
 
         const stateAfter = {
           words: {
@@ -115,7 +115,7 @@ describe('#MostFrequentReducer', () => {
             isToggledActionHide: true,
           },
         };
-        const action = toggleMostUsedWord('LeMoN');
+        const action = toggleMostUsedWords(['LeMoN']);
 
         const stateAfter = {
           words: {
@@ -149,7 +149,7 @@ describe('#MostFrequentReducer', () => {
             isToggledActionHide: true,
           },
         };
-        const action = toggleMostUsedWord('LEMON');
+        const action = toggleMostUsedWords(['LEMON']);
 
         const stateAfter = initialState;
 
