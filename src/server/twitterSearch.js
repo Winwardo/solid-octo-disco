@@ -249,7 +249,7 @@ export const searchAndSaveFromTwitter = (query, count = 300) => {
         return sweepTwitterAndConcat(query, count);
       })
       .then(
-        ({statuses}) => {
+        (statuses) => {
           console.info(`Twitter search for '${query}' successful! Found ${statuses.length} relevant Tweets.`);
 
           return Promise.all(
@@ -277,20 +277,16 @@ const sweepTwitterAndConcat = (query, count, existingStatuses = [], lowestId = n
     .then((twitStatuses) => {
       const countLeft = count - 100;
       const added = twitStatuses.length;
-      const newLowestId = Math.min(...twitStatuses.map((status) => status.id));
 
       if (countLeft > 0 && added > 0) {
-        return sweepTwitterAndConcat(query, countLeft, twitStatuses, newLowestId)
-          .then((results) => {
-            return {
-              statuses: existingStatuses.concat(results.statuses),
-            }
-          });
-      }
+        const newLowestId = Math.min(...twitStatuses.map((status) => status.id));
 
-      return {
-        statuses: existingStatuses.concat(twitStatuses),
-      };
+        return newPromiseChain
+          .then(() => sweepTwitterAndConcat(query, countLeft, twitStatuses, newLowestId))
+          .then((results) => existingStatuses.concat(results));
+      } else {
+        return existingStatuses.concat(twitStatuses);
+      }
     });
 }
 
