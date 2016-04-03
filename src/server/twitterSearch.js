@@ -6,7 +6,7 @@ import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweet
   upsertHashtag, upsertTweet, upsertTweeter, upsertPlace, upsertCountry
 } from '../shared/data/databaseInsertActions';
 import * as Builders from '../shared/data/databaseObjects';
-import { newPromiseChain } from '../shared/utilities';
+import { newPromiseChain, range } from '../shared/utilities';
 
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
@@ -217,9 +217,10 @@ const linkTweetToLocation = (db, tweet, rawPlace) => {
  * @param rawTweet The original status object from the Twitter API
  * @returns {Promise.<TwitAccess>}
  */
-const processTweet = (db, rawTweet, id) => {
+const processTweet = (db, rawTweet) => {
   const tweeter = buildTweeterFromRaw(rawTweet.user, false);
   const rawRetweetedStatus = rawTweet.retweeted_status;
+  const id = rawTweet.id;
 
   if (rawRetweetedStatus !== undefined) {
     return processRawRetweet(db, rawRetweetedStatus, tweeter)
@@ -243,12 +244,39 @@ const processTweet = (db, rawTweet, id) => {
 export const searchAndSaveFromTwitter = (query, count = 300) => {
   if (TWITTER_ENABLED) {
     console.info(`Searching Twitter for query '${query}'.`);
-    return TwitAccess.get('search/tweets', { q: query, count: count })
+    return newPromiseChain()
+      //.then(() => TwitAccess.get('search/tweets', { q: query, count: count }))
+      //.then((result) => result.data.statuses)
+      //.then(statuses => {
+      //  console.info("first sweep: " + statuses.length + " tweets.");
+      //  const lowestId = Math.min(...statuses.map((status) => status.id));
+      //  return {statuses: statuses, lowestId: null};
+      //})
+      //.then(({statuses, lowestId}) => {
+      //  return newPromiseChain()
+      //    .then(() => TwitAccess.get('search/tweets', { q: `${query} max_id:${lowestId}`, count: count }))
+      //    .then((twitResults) => {
+      //      const twitStatuses = twitResults.data.statuses;
+      //      console.info("second sweep: " + twitStatuses.length + " tweets.");
+      //      return {statuses: statuses.concat(twitStatuses), lowestId: lowestId, twitResults: twitResults}
+      //    });
+      //})
+      .then(() => {
+        return sweepTwitterAndConcat(query, 300);
+      })
+      //.then((statusListList) => {
+        //return Array.prototype.reduce((prev, current) => prev.concat(current), [])
+      //})
       .then(
-        (result) => {
-          console.info(`Twitter search for '${query}' successful.`);
+        ({statuses, lowestId}) => {
+          console.info(`Twitter search for '${query}' successful!`);
+
+          console.info("conjoined sweep: " + statuses.length + " tweets.");
+          //console.info(result.data.search_metadata)
+          //console.info(`lowestId: ${lowestId}`);
+
           return Promise.all(
-            result.data.statuses.map((rawTweet) => processTweet(db, rawTweet))
+            statuses.map((rawTweet) => processTweet(db, rawTweet))
           );
         },
         (rej) => {
@@ -260,6 +288,67 @@ export const searchAndSaveFromTwitter = (query, count = 300) => {
     return Promise.resolve();
   }
 };
+
+const sweepTwitterAndConcat = (query, count, existingStatuses = [], lowestId = null) => {
+  let extendedQuery = query;
+  if (lowestId !== null) {
+    extendedQuery += ` max_id:${lowestId}`;
+  };
+
+  console.info("es", existingStatuses.length);
+  console.info("eq", extendedQuery);
+  console.info("count:", count);
+
+  return newPromiseChain()
+    .then(() => potentiallySearchTwitter(extendedQuery, count))
+    .then((twitStatuses) => {
+      const countLeft = count - 100;
+      const added = twitStatuses.length;
+
+      const r = twitStatuses.map((status) => status.id)
+      //console.info("r", r);
+      const newLowestId = Math.min(...r);
+
+      console.info(`countLeft: ${countLeft}, added: ${added}, newLowestId: ${newLowestId}`);
+
+      //let p;
+      if (countLeft > 0 && added > 0) {
+        //console.info("there is more to do")
+        return sweepTwitterAndConcat(query, countLeft, twitStatuses, newLowestId)
+          .then((results) => {
+            return {
+              statuses: existingStatuses.concat(results.statuses),
+              lowestId: lowestId,
+              count: countLeft,
+              added: added
+            }
+          });
+      }
+
+      return {
+        statuses: existingStatuses.concat(twitStatuses),
+        lowestId: lowestId,
+        count: countLeft,
+        added: added
+      };
+    });
+}
+
+const potentiallySearchTwitter = (exactQuery, count) => {
+  console.info("potentiallySearchTwitter")
+  const actualCount = Math.min(count, 100);
+  return newPromiseChain()
+    .then(() => {
+      if (count > 0) {
+        console.info("actually search twitter")
+        return newPromiseChain()
+          .then(() => TwitAccess.get('search/tweets', { q: `${exactQuery}`, count: actualCount }))
+          .then((twitResults) => twitResults.data.statuses)
+      } else {
+        return [];
+      }
+    });
+}
 
 export const searchAndSaveResponse = (res, query) => (
   searchAndSaveFromTwitter(query).then((result) => {
