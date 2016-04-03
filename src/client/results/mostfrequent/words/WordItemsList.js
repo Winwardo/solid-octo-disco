@@ -62,7 +62,12 @@ const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWords, conflatedWordI
         </div>
         <div className="four wide column">
           <div data-id={`${conflatedWordInfo.word}master`} className="ui checkbox words" onClick={() => {
+            // makes sure the accordian is open
+            // so that the user can see which words are being toggled
             $('.ui.accordion.words').accordion('open', accordianIndex);
+
+            // sets the semantic-ui checkbox action method dependant on whether
+            // the master checkbox(conflated word) is checked/unchecked after being clicked
             let action;
             const masterChecked = $(`.ui.checkbox.words[data-id="${conflatedWordInfo.word}master"]`).checkbox('is checked');
             if (masterChecked) {
@@ -71,15 +76,22 @@ const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWords, conflatedWordI
               action = 'uncheck';
             }
 
+            // created an array of toggle words to send a single redux action instead of several
             let toggleWords = [];
+            // loops through each child checkboxes'(conflated word's variants)
+
             $(`.ui.checkbox.words[data-id^="${conflatedWordInfo.word}child"]`).each((index) => {
               const $childCheckbox = $(`.ui.checkbox.words[data-id="${conflatedWordInfo.word}child${index}"]`);
+              // To see if it's the same checked/unchecked state as the master(conflated word).
+              // This is to make sure that it doesn't toggle words that aren't meant to be
+              // toggled in the state tree.
               if ($childCheckbox.checkbox('is checked') !== masterChecked) {
                 $childCheckbox.checkbox(action);
                 toggleWords.push(conflatedWordInfo.makeup[index].word);
               }
             });
 
+            //sends off the action with the children's conflated word's variants that need to be toggled.
             toggleMostUsedWords(toggleWords);
           }}>
             <label>Show</label>
@@ -118,6 +130,8 @@ const WordItem = ({ toggleMostUsedWords, makeupInfo, conflatedWord, checkboxId, 
       <div data-id={`${conflatedWord}child${checkboxId}`} className="ui checkbox words" onClick={() => {
         toggleMostUsedWords([makeupInfo.word]);
         const $thisCheckbox = $(`.ui.checkbox.words[data-id^="${conflatedWord}child${checkboxId}"]`).checkbox('is checked');
+        // sets the semantic-ui checkbox action method dependant on whether
+        // this checkbox is checked/unchecked after being clicked
         let action;
         if ($thisCheckbox) {
           action = 'check';
@@ -125,6 +139,7 @@ const WordItem = ({ toggleMostUsedWords, makeupInfo, conflatedWord, checkboxId, 
           action = 'uncheck';
         }
 
+        // checks if all the other conflated word's variants are the same state (checked/unchecked)
         let allCheckboxesSame = true;
         $(`.ui.checkbox.words[data-id^="${conflatedWord}child"]`).each((index) => {
           if ($thisCheckbox !== $(`.ui.checkbox.words[data-id^="${conflatedWord}child${index}"]`).checkbox('is checked')) {
@@ -132,6 +147,7 @@ const WordItem = ({ toggleMostUsedWords, makeupInfo, conflatedWord, checkboxId, 
           }
         });
 
+        // If they are then check/uncheck the master checkbox
         if (allCheckboxesSame) {
           $(`.ui.checkbox.words[data-id="${conflatedWord}master"]`).checkbox(action);
         }
