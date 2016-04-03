@@ -68,7 +68,7 @@ const filterPostsForFeed = (
 
     // If we can find the chosen hidden word in this tweet, block the post
     for (const toggledWord of toggledWords) {
-      if (content.indexOf(`${toggledWord}`) > -1) {
+      if (content.indexOf(toggledWord) > -1) {
         return !isWordsToggledActionHide && isUsersToggledActionHide;
       }
     }

@@ -38,13 +38,13 @@ describe('#MostFrequentActions', () => {
   });
 
   it('should create an action for toggling all most used words', () => {
-    toggleAllMostUsedWordsSearch('12345').should.deep.equal({
+    toggleAllMostUsedWordsSearch().should.deep.equal({
       type: TOGGLE_ALL_MOST_USED_WORDS,
     });
   });
 
   it('should create an action for toggling all most active users', () => {
-    toggleAllMostActiveUsersSearch('12345').should.deep.equal({
+    toggleAllMostActiveUsersSearch().should.deep.equal({
       type: TOGGLE_ALL_MOST_ACTIVE_USERS,
     });
   });
