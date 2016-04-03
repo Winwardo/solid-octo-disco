@@ -2,18 +2,20 @@ import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
 import mostFrequentReducer from './mostFrequentReducer';
 import {
-  updateMostUsedwordsSearch, toggleMostUsedWord,
-  updateActiveUsersSearch, toggleMostActiveUser
+  updateMostUsedWordsSearch, toggleMostUsedWords, toggleAllMostUsedWordsSearch,
+  updateActiveUsersSearch, toggleMostActiveUser, toggleAllMostActiveUsersSearch
 } from './mostFrequentActions';
 
 const initialState = {
   words: {
     filterTerm: '',
-    toHide: [],
+    toToggle: [],
+    isToggledActionHide: true,
   },
   users: {
     filterTerm: '',
-    toHide: [],
+    toToggle: [],
+    isToggledActionHide: true,
   },
 };
 
@@ -21,16 +23,52 @@ describe('#MostFrequentReducer', () => {
   describe('Most used words', () => {
     it('should add the given search term to words search filter', () => {
       const stateBefore = initialState;
-      const action = updateMostUsedwordsSearch('Football');
+      const action = updateMostUsedWordsSearch('Football');
 
       const stateAfter = {
         words: {
           filterTerm: 'Football',
-          toHide: [],
+          toToggle: [],
+          isToggledActionHide: true,
         },
         users: {
           filterTerm: '',
-          toHide: [],
+          toToggle: [],
+          isToggledActionHide: true,
+        },
+      };
+
+      deepFreeze(stateBefore);
+      deepFreeze(action);
+
+      mostFrequentReducer(stateBefore, action).should.deep.equal(stateAfter);
+    });
+
+    it('should change toggle isToggledActionHide and empty the toToggle words', () => {
+      const stateBefore = {
+        words: {
+          filterTerm: '',
+          toToggle: ['lEmOn'],
+          isToggledActionHide: true,
+        },
+        users: {
+          filterTerm: '',
+          toToggle: ['12345'],
+          isToggledActionHide: true,
+        },
+      };
+      const action = toggleAllMostUsedWordsSearch();
+
+      const stateAfter = {
+        words: {
+          filterTerm: '',
+          toToggle: [],
+          isToggledActionHide: false,
+        },
+        users: {
+          filterTerm: '',
+          toToggle: ['12345'],
+          isToggledActionHide: true,
         },
       };
 
@@ -43,16 +81,18 @@ describe('#MostFrequentReducer', () => {
     describe('Toggling of hidden words', () => {
       it('should add a hidden word', () => {
         const stateBefore = initialState;
-        const action = toggleMostUsedWord('LeMoN');
+        const action = toggleMostUsedWords(['LeMoN']);
 
         const stateAfter = {
           words: {
             filterTerm: '',
-            toHide: ['LeMoN'],
+            toToggle: ['LeMoN'],
+            isToggledActionHide: true,
           },
           users: {
             filterTerm: '',
-            toHide: [],
+            toToggle: [],
+            isToggledActionHide: true,
           },
         };
 
@@ -66,23 +106,27 @@ describe('#MostFrequentReducer', () => {
         const stateBefore = {
           words: {
             filterTerm: '',
-            toHide: ['lEmOn'],
+            toToggle: ['lEmOn'],
+            isToggledActionHide: true,
           },
           users: {
             filterTerm: '',
-            toHide: [],
+            toToggle: [],
+            isToggledActionHide: true,
           },
         };
-        const action = toggleMostUsedWord('LeMoN');
+        const action = toggleMostUsedWords(['LeMoN']);
 
         const stateAfter = {
           words: {
             filterTerm: '',
-            toHide: ['lEmOn', 'LeMoN'],
+            toToggle: ['lEmOn', 'LeMoN'],
+            isToggledActionHide: true,
           },
           users: {
             filterTerm: '',
-            toHide: [],
+            toToggle: [],
+            isToggledActionHide: true,
           },
         };
 
@@ -96,14 +140,16 @@ describe('#MostFrequentReducer', () => {
         const stateBefore = {
           words: {
             filterTerm: '',
-            toHide: ['LEMON'],
+            toToggle: ['LEMON'],
+            isToggledActionHide: true,
           },
           users: {
             filterTerm: '',
-            toHide: [],
+            toToggle: [],
+            isToggledActionHide: true,
           },
         };
-        const action = toggleMostUsedWord('LEMON');
+        const action = toggleMostUsedWords(['LEMON']);
 
         const stateAfter = initialState;
 
@@ -123,11 +169,47 @@ describe('#MostFrequentReducer', () => {
       const stateAfter = {
         words: {
           filterTerm: '',
-          toHide: [],
+          toToggle: [],
+          isToggledActionHide: true,
         },
         users: {
           filterTerm: 'Football',
-          toHide: [],
+          toToggle: [],
+          isToggledActionHide: true,
+        },
+      };
+
+      deepFreeze(stateBefore);
+      deepFreeze(action);
+
+      mostFrequentReducer(stateBefore, action).should.deep.equal(stateAfter);
+    });
+
+    it('should change isToggledActionHide and empty the toToggle users', () => {
+      const stateBefore = {
+        words: {
+          filterTerm: '',
+          toToggle: [],
+          isToggledActionHide: true,
+        },
+        users: {
+          filterTerm: '',
+          toToggle: ['12345'],
+          isToggledActionHide: true,
+        },
+      };
+      const action = toggleAllMostActiveUsersSearch();
+
+      const stateAfter = {
+        words: {
+          filterTerm: '',
+          toToggle: [],
+          isToggledActionHide: true,
+        },
+        users: {
+          filterTerm: '',
+          toToggle: [],
+          isToggledActionHide: false,
         },
       };
 
@@ -145,11 +227,13 @@ describe('#MostFrequentReducer', () => {
         const stateAfter = {
           words: {
             filterTerm: '',
-            toHide: [],
+            toToggle: [],
+            isToggledActionHide: true,
           },
           users: {
             filterTerm: '',
-            toHide: ['12345'],
+            toToggle: ['12345'],
+            isToggledActionHide: true,
           },
         };
 
@@ -163,11 +247,13 @@ describe('#MostFrequentReducer', () => {
         const stateBefore = {
           words: {
             filterTerm: '',
-            toHide: [],
+            toToggle: [],
+            isToggledActionHide: true,
           },
           users: {
             filterTerm: '',
-            toHide: ['12345'],
+            toToggle: ['12345'],
+            isToggledActionHide: true,
           },
         };
         const action = toggleMostActiveUser('12345');

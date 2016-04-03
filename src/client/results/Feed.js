@@ -13,9 +13,16 @@ class Feed extends Component {
   }
 
   render() {
-    const { feed, hiddenWords, hiddenUsers, paginationInfo } = this.props;
+    const {
+      feed, paginationInfo,
+      toggledWords, isWordsToggledActionHide,
+      toggledUsers, isUsersToggledActionHide,
+    } = this.props;
 
-    const filteredFeed = filterPostsForFeed(feed, hiddenWords, hiddenUsers);
+    const filteredFeed = filterPostsForFeed(
+      feed, toggledWords, isWordsToggledActionHide,
+      toggledUsers, isUsersToggledActionHide
+    );
     const paginatedFeed = paginatePosts(filteredFeed, paginationInfo);
 
     return (
@@ -29,32 +36,78 @@ class Feed extends Component {
           </div>
         </div>
         <div className="ui divided items">
-          {paginatedFeed.map((feedItem) => (<FeedItem content={feedItem} key={feedItem.data.id}/>))}
+          {paginatedFeed.map((feedItem) => (
+            <FeedItem content={feedItem} key={feedItem.data.id} />
+          ))}
         </div>
         <div>
-          <PaginationButtons numberOfPages={Math.ceil(filteredFeed.length / paginationInfo.limit)} paginationInfo={paginationInfo}/>
+          <PaginationButtons
+            numberOfPages={Math.ceil(filteredFeed.length / paginationInfo.limit)}
+            paginationInfo={paginationInfo}
+          />
         </div>
       </div>
     );
   }
-};
-
+}
 Feed.propTypes = {
   feed: React.PropTypes.array,
   paginationInfo: React.PropTypes.object,
-  hiddenWords: React.PropTypes.array,
-  hiddenUsers: React.PropTypes.array,
+  toggledWords: React.PropTypes.array,
+  isWordsToggledActionHide: React.PropTypes.bool,
+  toggledUsers: React.PropTypes.array,
+  isUsersToggledActionHide: React.PropTypes.bool,
+};
+
+const filterPostsForFeed = (
+  feed, toggledWords, isWordsToggledActionHide, toggledUsers, isUsersToggledActionHide
+) => (
+  feed.filter((feedItem) => {
+    const content = feedItem.data.content;
+    const authorId = feedItem.author.id;
+
+    // If we can find the chosen hidden word in this tweet, block the post
+    for (const toggledWord of toggledWords) {
+      if (content.indexOf(toggledWord) > -1) {
+        return !isWordsToggledActionHide && isUsersToggledActionHide;
+      }
+    }
+
+    for (const toggledUser of toggledUsers) {
+      if (authorId === toggledUser) {
+        return !isUsersToggledActionHide && isWordsToggledActionHide;
+      }
+    }
+
+    return isWordsToggledActionHide && isUsersToggledActionHide;
+  }
+));
+
+const paginatePosts = (feed, paginationInfo) => {
+  const pageNumber = paginationInfo.number;
+  const pageLimit = paginationInfo.limit;
+
+  const first = (pageNumber - 1) * pageLimit;
+  const last = first + pageLimit;
+
+  return feed.slice(first, last);
 };
 
 let PaginationButtons = ({ dispatch, numberOfPages, paginationInfo }) => (
   <div className="ui grid">
     <div className="two column row">
       <div className="left column">
-        <LimitButtons paginationInfo={paginationInfo} updateLimit={(limit) => { dispatch(setFeedPageLimit(limit)); }} /> results per page.
+        <LimitButtons
+          paginationInfo={paginationInfo}
+          updateLimit={(limit) => { dispatch(setFeedPageLimit(limit)); }} /> results per page.
       </div>
       <br />
       <div className="right aligned column">
-        <PagePicker numberOfPages={numberOfPages} paginationInfo={paginationInfo} updatePageNumber={(limit) => { dispatch(setFeedPageNumber(limit)); }} />
+        <PagePicker
+          numberOfPages={numberOfPages}
+          paginationInfo={paginationInfo}
+          updatePageNumber={(limit) => { dispatch(setFeedPageNumber(limit)); }}
+        />
       </div>
     </div>
   </div>
@@ -100,38 +153,6 @@ const LimitButton = ({ updateLimit, limit, paginationInfo }) => {
       {limit}
     </button>
   );
-};
-
-const filterPostsForFeed = (feed, hiddenWords, hiddenUsers) => (
-  feed.filter((feedItem) => {
-    const content = feedItem.data.content;
-    const authorId = feedItem.author.id;
-
-    // If we can find the chosen hidden word in this tweet, block the post
-    for (const hiddenWord of hiddenWords) {
-      if (content.indexOf(hiddenWord) > -1) {
-        return false;
-      }
-    }
-
-    for (const hiddenUser of hiddenUsers) {
-      if (authorId === hiddenUser) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-));
-
-const paginatePosts = (feed, paginationInfo) => {
-  const pageNumber = paginationInfo.number;
-  const pageLimit = paginationInfo.limit;
-
-  const first = (pageNumber - 1) * pageLimit;
-  const last = first + pageLimit;
-
-  return feed.slice(first, last);
 };
 
 const FeedItem = ({ content }) => {

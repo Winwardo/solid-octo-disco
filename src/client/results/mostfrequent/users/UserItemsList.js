@@ -5,14 +5,27 @@ import { mostFrequentWords } from './../../../tweetAnalysis';
 
 class UserItemsList extends Component {
   componentDidMount() {
-    $('.ui.checkbox').checkbox();
-    $('.ui.dropdown.words').dropdown({
+    if (this.props.isUsersToggledActionHide) {
+      $('.ui.checkbox.users').checkbox('check');
+    } else {
+      $('.ui.checkbox.users').checkbox('uncheck');
+    }
+    $('.ui.dropdown.userwords').dropdown({
       action: 'nothing',
     });
   }
 
-  componentDidUpdate() {
-    $('.ui.checkbox').checkbox();
+  componentDidUpdate(nextProps) {
+    if (nextProps.isUsersToggledActionHide !== this.props.isUsersToggledActionHide) {
+      if (this.props.isUsersToggledActionHide) {
+        $('.ui.checkbox.users').checkbox('check');
+      } else {
+        $('.ui.checkbox.users').checkbox('uncheck');
+      }
+    }
+    $('.ui.dropdown.userwords').dropdown({
+      action: 'nothing',
+    });
   }
 
   render() {
@@ -39,6 +52,10 @@ class UserItemsList extends Component {
     );
   }
 }
+UserItemsList.propTypes = {
+  users: React.PropTypes.array,
+  isUsersToggledActionHide: React.PropTypes.bool,
+};
 
 let UserItem = ({ dispatch, userInfo }) => (
   <tr>
@@ -68,10 +85,10 @@ let UserItem = ({ dispatch, userInfo }) => (
     </td>
 
     <td className="left aligned">
-      <div className="ui checkbox" onClick={() => {
+      <div className="ui checkbox users" onClick={() => {
         dispatch(toggleMostActiveUser(userInfo.author.id));
       }}>
-        <input type="checkbox" name="example" defaultChecked="true" />
+        <input type="checkbox" name="example" />
       </div>
     </td>
   </tr>
@@ -85,7 +102,7 @@ const UserItemMostUsedWords = ({ usersMostUsedWords }) => {
   }
 
   return (
-    <div className="ui pointing fluid dropdown words">
+    <div className="ui pointing fluid dropdown userwords">
       <div className="text"><strong>{topWord.word}</strong> x{topWord.count}</div>
       <i className="dropdown icon"></i>
       <div className="menu">
