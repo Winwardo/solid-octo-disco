@@ -295,18 +295,14 @@ const sweepTwitterAndConcat = (query, count, existingStatuses = [], lowestId = n
 }
 
 const potentiallySearchTwitter = (exactQuery, count) => {
-  const actualCount = Math.min(count, 100);
-
-  return newPromiseChain()
-    .then(() => {
-      if (count > 0) {
-        return newPromiseChain()
-          .then(() => TwitAccess.get('search/tweets', { q: `${exactQuery} -filter:retweets filter:safe`, count: actualCount }))
-          .then((twitResults) => twitResults.data.statuses);
-      } else {
-        return [];
-      }
-    });
+    if (count > 0) {
+      const actualCount = Math.min(count, 100);
+      return newPromiseChain()
+        .then(() => TwitAccess.get('search/tweets', { q: `${exactQuery} -filter:retweets filter:safe`, count: actualCount }))
+        .then((twitResults) => twitResults.data.statuses);
+    } else {
+      return [];
+    }
 }
 
 export const searchAndSaveResponse = (res, query) => (
