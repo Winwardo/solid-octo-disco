@@ -116,8 +116,9 @@ const countWords = (tweets, stopList = []) => {
   for (const content of tweets) {
     // Match against either a t.co URL, a mention, hashtag or an entire word.
     const matcher = /(https\:\/\/t\.co\/.+?)\b|([@#]?\w+)/gmi;
+    const matches = content.match(matcher) || [];
 
-    for (const word of content.match(matcher)) {
+    for (const word of matches) {
       if (word.indexOf('https://t.co') > -1) {
         continue;
       }
