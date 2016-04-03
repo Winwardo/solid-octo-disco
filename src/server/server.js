@@ -67,6 +67,10 @@ app.get('/football/seasons/:id/teams', (req, res) => {
   searchFootballSeasonTeams(res, req.params.id);
 });
 
+app.get('*', (req, res) => {
+  res.status(404).sendFile('404.html', { root: 'public' });
+});
+
 // Listen on port 3000, IP defaults to 127.0.0.1 (localhost)
 app.listen(port, (err) => {
   if (err) {
