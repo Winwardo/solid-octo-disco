@@ -170,7 +170,7 @@ export const doesFeedHaveUsefulResults = (feedResults) => {
 
   let outOfDateCount = 0;
   for (const result in feedResults.data) {
-    const test = new Date(data.data.date).getTime()
+    const test = new Date(data.data.date).getTime();
     if (test < xMinutesAgo) {
       outOfDateCount++;
       if (outOfDateCount >= maxOldPosts) {

@@ -17,7 +17,7 @@ const MostUsedWords = ({ dispatch, wordInfoList, filterTerm }) => {
       filterTerm={filterTerm}
     >
       <WordItemsList words={filteredItems} toggleMostUsedWord={(word) => {
-        dispatch(toggleMostUsedWord(word))
+        dispatch(toggleMostUsedWord(word));
       }} />
     </MostFrequent>
   );

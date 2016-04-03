@@ -245,9 +245,7 @@ export const searchAndSaveFromTwitter = (query, count = 300) => {
   if (TWITTER_ENABLED) {
     console.info(`Searching Twitter for query '${query}'.`);
     return newPromiseChain()
-      .then(() => {
-        return sweepTwitterAndConcat(query, count);
-      })
+      .then(() => sweepTwitterAndConcat(query, count))
       .then(
         (statuses) => {
           console.info(`Twitter search for '${query}' successful! Found ${statuses.length} relevant Tweets.`);
@@ -288,18 +286,18 @@ const sweepTwitterAndConcat = (query, count, existingStatuses = [], lowestId = n
         return existingStatuses.concat(twitStatuses);
       }
     });
-}
+};
 
 const potentiallySearchTwitter = (exactQuery, count) => {
-    if (count > 0) {
-      const actualCount = Math.min(count, 100);
-      return newPromiseChain()
-        .then(() => TwitAccess.get('search/tweets', { q: `${exactQuery} -filter:retweets filter:safe`, count: actualCount }))
-        .then((twitResults) => twitResults.data.statuses);
-    } else {
-      return [];
-    }
-}
+  if (count > 0) {
+    const actualCount = Math.min(count, 100); // Twitter will only return a max of 100 Tweets at any time
+    return newPromiseChain()
+      .then(() => TwitAccess.get('search/tweets', { q: `${exactQuery} -filter:retweets filter:safe`, count: actualCount }))
+      .then((twitResults) => twitResults.data.statuses);
+  } else {
+    return [];
+  }
+};
 
 export const searchAndSaveResponse = (res, query) => (
   searchAndSaveFromTwitter(query).then((result) => {
