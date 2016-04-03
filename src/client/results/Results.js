@@ -23,13 +23,16 @@ let Results = ({ feed, mostFrequent }) => {
       <div className="four wide column">
         <MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
           userInfoList={feed.mostFrequentUsers}
+          isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
         />
       </div>
 
       <div className="eight wide column">
         <Feed feed={posts}
-          hiddenWords={mostFrequent.words.toHide}
-          hiddenUsers={mostFrequent.users.toHide}
+          toggledWords={mostFrequent.words.toToggle}
+          isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
+          toggledUsers={mostFrequent.users.toToggle}
+          isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
           paginationInfo={feed.paginationInfo}
         />
       </div>
@@ -37,6 +40,7 @@ let Results = ({ feed, mostFrequent }) => {
       <div className="four wide column">
         <MostUsedWords filterTerm={mostFrequent.words.filterTerm}
           wordInfoList={feed.groupedMostFrequentWords}
+          isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
         />
       </div>
     </div>

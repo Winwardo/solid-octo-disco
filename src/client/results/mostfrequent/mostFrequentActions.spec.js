@@ -1,14 +1,16 @@
 import { should } from 'chai';
 import {
-  UPDATE_MOST_USED_WORDS_SEARCH_FILTER, updateMostUsedwordsSearch,
+  UPDATE_MOST_USED_WORDS_SEARCH_FILTER, updateMostUsedWordsSearch,
   UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER, updateActiveUsersSearch,
-  TOGGLE_MOST_USED_WORD, toggleMostUsedWord,
-  TOGGLE_MOST_ACTIVE_USER, toggleMostActiveUser
+  TOGGLE_MOST_USED_WORDS, toggleMostUsedWords,
+  TOGGLE_MOST_ACTIVE_USER, toggleMostActiveUser,
+  TOGGLE_ALL_MOST_USED_WORDS, toggleAllMostUsedWordsSearch,
+  TOGGLE_ALL_MOST_ACTIVE_USERS, toggleAllMostActiveUsersSearch,
 } from './mostFrequentActions';
 
 describe('#MostFrequentActions', () => {
   it('should create a correct search for most  used words', () => {
-    updateMostUsedwordsSearch('filter').should.deep.equal({
+    updateMostUsedWordsSearch('filter').should.deep.equal({
       type: UPDATE_MOST_USED_WORDS_SEARCH_FILTER,
       filterTerm: 'filter',
     });
@@ -22,9 +24,9 @@ describe('#MostFrequentActions', () => {
   });
 
   it('should create an action for toggling hiding most used word', () => {
-    toggleMostUsedWord('exampleWord').should.deep.equal({
-      type: TOGGLE_MOST_USED_WORD,
-      word: 'exampleWord',
+    toggleMostUsedWords(['exampleWord']).should.deep.equal({
+      type: TOGGLE_MOST_USED_WORDS,
+      words: ['exampleWord'],
     });
   });
 
@@ -32,6 +34,18 @@ describe('#MostFrequentActions', () => {
     toggleMostActiveUser('12345').should.deep.equal({
       type: TOGGLE_MOST_ACTIVE_USER,
       userId: '12345',
+    });
+  });
+
+  it('should create an action for toggling all most used words', () => {
+    toggleAllMostUsedWordsSearch().should.deep.equal({
+      type: TOGGLE_ALL_MOST_USED_WORDS,
+    });
+  });
+
+  it('should create an action for toggling all most active users', () => {
+    toggleAllMostActiveUsersSearch().should.deep.equal({
+      type: TOGGLE_ALL_MOST_ACTIVE_USERS,
     });
   });
 });
