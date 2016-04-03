@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CurrentQueryTerms from './CurrentQueryTerms';
+import CategoryFilters from './categories/CategoryFilters';
 
 const Search = () => (
   <div className="ui left aligned container">
@@ -9,9 +10,7 @@ const Search = () => (
 );
 
 const Filters = () => (
-  <div className="row">
-    Filters will go here
-  </div>
+  <CategoryFilters />
 );
 
 export default Search;
