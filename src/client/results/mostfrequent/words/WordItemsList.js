@@ -134,7 +134,7 @@ const WordItem = ({ toggleMostUsedWords, makeupInfo, conflatedWord, checkboxId, 
           }
         });
 
-        // If they are then check/uncheck the master checkbox
+        // If they are, then check/uncheck the master checkbox
         if (allCheckboxesSame) {
           $(`.ui.checkbox.words[data-id="${conflatedWord}master"]`).checkbox(action);
         }
