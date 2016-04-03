@@ -245,35 +245,12 @@ export const searchAndSaveFromTwitter = (query, count = 300) => {
   if (TWITTER_ENABLED) {
     console.info(`Searching Twitter for query '${query}'.`);
     return newPromiseChain()
-      //.then(() => TwitAccess.get('search/tweets', { q: query, count: count }))
-      //.then((result) => result.data.statuses)
-      //.then(statuses => {
-      //  console.info("first sweep: " + statuses.length + " tweets.");
-      //  const lowestId = Math.min(...statuses.map((status) => status.id));
-      //  return {statuses: statuses, lowestId: null};
-      //})
-      //.then(({statuses, lowestId}) => {
-      //  return newPromiseChain()
-      //    .then(() => TwitAccess.get('search/tweets', { q: `${query} max_id:${lowestId}`, count: count }))
-      //    .then((twitResults) => {
-      //      const twitStatuses = twitResults.data.statuses;
-      //      console.info("second sweep: " + twitStatuses.length + " tweets.");
-      //      return {statuses: statuses.concat(twitStatuses), lowestId: lowestId, twitResults: twitResults}
-      //    });
-      //})
       .then(() => {
-        return sweepTwitterAndConcat(query, 300);
+        return sweepTwitterAndConcat(query, count);
       })
-      //.then((statusListList) => {
-        //return Array.prototype.reduce((prev, current) => prev.concat(current), [])
-      //})
       .then(
-        ({statuses, lowestId}) => {
-          console.info(`Twitter search for '${query}' successful!`);
-
-          console.info("conjoined sweep: " + statuses.length + " tweets.");
-          //console.info(result.data.search_metadata)
-          //console.info(`lowestId: ${lowestId}`);
+        ({statuses}) => {
+          console.info(`Twitter search for '${query}' successful! Found ${statuses.length} relevant Tweets.`);
 
           return Promise.all(
             statuses.map((rawTweet) => processTweet(db, rawTweet))
@@ -295,55 +272,37 @@ const sweepTwitterAndConcat = (query, count, existingStatuses = [], lowestId = n
     extendedQuery += ` max_id:${lowestId}`;
   };
 
-  console.info("es", existingStatuses.length);
-  console.info("eq", extendedQuery);
-  console.info("count:", count);
-
   return newPromiseChain()
     .then(() => potentiallySearchTwitter(extendedQuery, count))
     .then((twitStatuses) => {
       const countLeft = count - 100;
       const added = twitStatuses.length;
+      const newLowestId = Math.min(...twitStatuses.map((status) => status.id));
 
-      const r = twitStatuses.map((status) => status.id)
-      //console.info("r", r);
-      const newLowestId = Math.min(...r);
-
-      console.info(`countLeft: ${countLeft}, added: ${added}, newLowestId: ${newLowestId}`);
-
-      //let p;
       if (countLeft > 0 && added > 0) {
-        //console.info("there is more to do")
         return sweepTwitterAndConcat(query, countLeft, twitStatuses, newLowestId)
           .then((results) => {
             return {
               statuses: existingStatuses.concat(results.statuses),
-              lowestId: lowestId,
-              count: countLeft,
-              added: added
             }
           });
       }
 
       return {
         statuses: existingStatuses.concat(twitStatuses),
-        lowestId: lowestId,
-        count: countLeft,
-        added: added
       };
     });
 }
 
 const potentiallySearchTwitter = (exactQuery, count) => {
-  console.info("potentiallySearchTwitter")
   const actualCount = Math.min(count, 100);
+
   return newPromiseChain()
     .then(() => {
       if (count > 0) {
-        console.info("actually search twitter")
         return newPromiseChain()
-          .then(() => TwitAccess.get('search/tweets', { q: `${exactQuery}`, count: actualCount }))
-          .then((twitResults) => twitResults.data.statuses)
+          .then(() => TwitAccess.get('search/tweets', { q: `${exactQuery} -filter:retweets filter:safe`, count: actualCount }))
+          .then((twitResults) => twitResults.data.statuses);
       } else {
         return [];
       }
