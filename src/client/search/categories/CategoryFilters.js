@@ -20,7 +20,7 @@ class CategoryFilters extends Component {
         year == currentYear ? 'ui bottom attached active tab segment' : 'ui bottom attached tab segment';
       seasonYearTabsContent.push(
         <div className={tabContentClassName} data-tab={year}>
-          Year: {year}'s content
+          Year: {year}s content
         </div>
       );
     }
