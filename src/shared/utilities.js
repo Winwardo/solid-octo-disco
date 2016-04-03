@@ -71,6 +71,18 @@ export const newPromiseChain = () => (
 );
 
 /**
+ * Generates the boilerplate headers for a JSON GET request
+ * @returns {{method: string, headers: {Accept: string, Content-Type: string}}}
+ */
+export const makeGetHeader = () => ({
+  method: 'GET',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+});
+
+/**
  * Generates the boilerplate headers for a JSON POST request
  * @param body The body of the request, e.g. {'query': 'liverpool'}
  * @returns {{method: string, headers: {Accept: string, Content-Type: string}, body: *}}
