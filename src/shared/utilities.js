@@ -188,3 +188,22 @@ export const throttleFunction = (callback, milliseconds) => {
     timeout = setTimeout(() => callback.apply(undefined, args), milliseconds);
   };
 };
+
+/**
+ * Creates an array filled with numbers between the range [min, max)
+ * @param min The start number, inclusive.
+ * @param max The end number, exclusive
+ * @param step Step between each number, must be positive.
+ * @returns {Array}
+ */
+export const range = (min, max, step=1) => {
+  if (step <= 0) {
+    return [];
+  };
+
+  const result = [];
+  for (let i = min; i < max; i += step) {
+    result.push(i);
+  }
+  return result;
+}

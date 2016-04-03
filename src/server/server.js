@@ -1,5 +1,4 @@
 import express from 'express';
-import webpack from 'webpack';
 import config from '../../webpack.config.js';
 import { searchQuery } from './tweetFinder';
 import { generateDatabase } from './orientdb';
@@ -12,6 +11,7 @@ const port = process.env.PORT || 3000;
 
 // In development hotload React using webpack-hot-middleware
 if ((process.env.NODE_ENV === 'development')) {
+  const webpack = require('webpack');
   const compiler = webpack(config[1]);
   app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,

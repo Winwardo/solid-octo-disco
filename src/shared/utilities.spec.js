@@ -3,7 +3,8 @@ import deepFreeze from 'deep-freeze';
 import {
   flattenObjectToArray, flattenImmutableObject,
   makePostHeader,
-  createTwitterParamTypes, toggleParamType
+  createTwitterParamTypes, toggleParamType,
+  range
 } from './utilities';
 should();
 
@@ -111,4 +112,27 @@ describe('#Utilities', () => {
       toggleParamType(paramTypesBefore, 'keyword').should.deep.equal(paramTypesExpected);
     });
   });
+
+  describe('creating a range', () => {
+    it('can create a simple range from 0 to n', () => {
+      range(0, 5).should.deep.equal([0, 1, 2, 3, 4]);
+    });
+
+    it('can create a simple range from m to n', () => {
+      range(2, 5).should.deep.equal([2, 3, 4]);
+    });
+
+    it('returns empty if m > n', () => {
+      range(10, 5).should.deep.equal([]);
+    });
+
+    it('can step correctly', () => {
+      range(1, 10, 2).should.deep.equal([1,3,5,7,9]);
+    });
+
+    it('does not allow negative steps', () => {
+      range(1, 10, -1).should.deep.equal([]);
+    });
+  });
 });
+
