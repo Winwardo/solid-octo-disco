@@ -11,7 +11,7 @@ export const updateActiveUsersSearch = (filterTerm) => ({
 });
 
 export const TOGGLE_MOST_USED_WORDS = 'TOGGLE_MOST_USED_WORDS';
-export const toggleMostUsedWord = (words) => ({
+export const toggleMostUsedWords = (words) => ({
   type: TOGGLE_MOST_USED_WORDS,
   words,
 });

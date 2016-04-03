@@ -2,7 +2,7 @@ import { should } from 'chai';
 import {
   UPDATE_MOST_USED_WORDS_SEARCH_FILTER, updateMostUsedWordsSearch,
   UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER, updateActiveUsersSearch,
-  TOGGLE_MOST_USED_WORD, toggleMostUsedWord,
+  TOGGLE_MOST_USED_WORDS, toggleMostUsedWords,
   TOGGLE_MOST_ACTIVE_USER, toggleMostActiveUser,
   TOGGLE_ALL_MOST_USED_WORDS, toggleAllMostUsedWordsSearch,
   TOGGLE_ALL_MOST_ACTIVE_USERS, toggleAllMostActiveUsersSearch,
@@ -24,8 +24,8 @@ describe('#MostFrequentActions', () => {
   });
 
   it('should create an action for toggling hiding most used word', () => {
-    toggleMostUsedWord(['exampleWord']).should.deep.equal({
-      type: TOGGLE_MOST_USED_WORD,
+    toggleMostUsedWords(['exampleWord']).should.deep.equal({
+      type: TOGGLE_MOST_USED_WORDS,
       words: ['exampleWord'],
     });
   });

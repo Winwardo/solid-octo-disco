@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import MostFrequent from './../MostFrequent';
 import {
   updateMostUsedWordsSearch,
-  toggleMostUsedWord, toggleAllMostUsedWordsSearch
+  toggleMostUsedWords, toggleAllMostUsedWordsSearch
 } from './../mostFrequentActions';
 import WordItemsList from './WordItemsList';
 
@@ -24,8 +24,8 @@ const MostUsedWords = ({ dispatch, wordInfoList, isWordsToggledActionHide, filte
       currentToggledAction={isWordsToggledActionHide}
     >
       <WordItemsList words={filteredItems} isWordsToggledActionHide={isWordsToggledActionHide}
-        toggleMostUsedWord={(word) => {
-          dispatch(toggleMostUsedWord(word));
+        toggleMostUsedWords={(word) => {
+          dispatch(toggleMostUsedWords(word));
         }}
       />
     </MostFrequent>
