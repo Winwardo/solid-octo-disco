@@ -1,5 +1,4 @@
 import express from 'express';
-import webpack from 'webpack';
 import config from '../../webpack.config.js';
 import { searchQuery } from './tweetFinder';
 import { generateDatabase } from './orientdb';
@@ -11,6 +10,7 @@ const port = process.env.PORT || 3000;
 
 // In development hotload React using webpack-hot-middleware
 if ((process.env.NODE_ENV === 'development')) {
+  const webpack = require('webpack');
   const compiler = webpack(config[1]);
   app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
@@ -56,6 +56,11 @@ app.get('/exampleTwitterJson', (req, res) => {
 app.get('/twit/stream/:query', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
   stream(req, res);
+});
+
+app.get('*', (req, res) => {
+  //res.writeHead(404);
+  res.status(404).sendFile('404.html', {root: 'public'});
 });
 
 // Listen on port 3000, IP defaults to 127.0.0.1 (localhost)
