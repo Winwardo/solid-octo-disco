@@ -11,7 +11,7 @@ const YearSelector = ({ seasonYears, currentYear }) => {
           {year}
         </a>
       ),
-      ...seasonYearButtons
+      ...seasonYearButtons,
     ];
   }
 

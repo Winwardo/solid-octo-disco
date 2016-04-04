@@ -26,7 +26,7 @@ const footballCategoryFiltersReducer = (state = { seasonsByYear: {} }, action) =
       seasonsByYear: {
         ...state.seasonsByYear,
         [action.year]: footballSeasons(state.seasonsByYear[action.year], action),
-      }
+      },
     };
   default:
     return state;

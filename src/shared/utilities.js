@@ -196,14 +196,14 @@ export const throttleFunction = (callback, milliseconds) => {
  * @param step Step between each number, must be positive.
  * @returns {Array}
  */
-export const range = (min, max, step=1) => {
+export const range = (min, max, step = 1) => {
   if (step <= 0) {
     return [];
-  };
+  }
 
   const result = [];
   for (let i = min; i < max; i += step) {
     result.push(i);
   }
   return result;
-}
+};
