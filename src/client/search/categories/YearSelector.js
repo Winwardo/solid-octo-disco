@@ -16,7 +16,7 @@ const YearSelector = ({ seasonYears, currentYear }) => {
     seasonYearButtons = [
       ...seasonYearButtons,
       (
-        <a className={y == currentYear ? 'active item' : 'item'} data-tab={y}>
+        <a className={y === currentYear ? 'active item' : 'item'} data-tab={y}>
           {numberOfLeagues}
           {y}
         </a>
