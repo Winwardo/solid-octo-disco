@@ -17,7 +17,8 @@ export const searchFootballSeasons = (res, year) => {
   fetchData(res, footballRequestUrl, `${year}'s football seasons`);
 };
 
-export const searchFootballSeasonTeams = (res, id) => {
+export const searchFootballSeasonTeams = (res, year, leagues) => {
+  
   const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/soccerseasons/${id}/teams`;
   fetchData(res, footballRequestUrl, `football season with id=${id}' teams`);
 };

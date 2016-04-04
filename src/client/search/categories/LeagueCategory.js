@@ -2,15 +2,22 @@ import React, { Component } from 'react';
 
 class LeagueCategory extends Component {
   componentDidMount() {
-    $('.ui.dropdown.leagues').dropdown();
+    $('.ui.dropdown.leagues').dropdown({
+      action: 'nothing',
+    });
   }
 
   render() {
     return (
-      <div className="ui dropdown labeled search icon button leagues">
-        <i className="trophy icon"></i>
+      <div className="ui dropdown labeled icon button leagues">
+        <i className="trophy purple icon"></i>
+        <span className="text">Leagues...</span>
         <div className="menu">
-          {this.props.leagues(league => {
+          <div className="ui icon search input">
+            <i className="search icon"></i>
+            <input type="text" placeholder="Search tags..." />
+          </div>
+          {this.props.leagues.map(league => {
             // gets rid of the 20XX/YY year at the end of the caption
             const leagueName = league.caption.slice(0, league.caption.length - 7);
             return (

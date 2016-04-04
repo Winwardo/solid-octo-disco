@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import YearSelector from './YearSelector';
 import { connect } from 'react-redux';
 import LeagueCategory from './LeagueCategory';
+import TeamCategory from './TeamCategory';
 import moment from 'moment';
 import { addSearchTerm } from './../searchActions';
 
@@ -20,10 +21,19 @@ class CategoryFilters extends Component {
     for (let year in this.props.football.seasonsByYear) {
       const tabContentClassName =
         year === currentYear ? 'ui bottom attached active tab segment' : 'ui bottom attached tab segment';
+      let yearsLeagues = []
+      if(this.props.football.seasonsByYear[year]){
+        if(!this.props.football.seasonsByYear[year].isFetching){
+          yearsLeagues = this.props.football.seasonsByYear[year].seasons
+        }
+      }
       seasonYearTabsContent.push(
         <div className={tabContentClassName} data-tab={year}>
-          <LeagueCategory leagues={this.props.football.seasonsByYear[year].seasons}
+          <LeagueCategory leagues={yearsLeagues}
             onClickLeague={this.props.onClickCategoryFilter}
+          />
+          <TeamCategory teamsByLeague={'none'}
+            onClickTeam={this.props.onClickCategoryFilter}
           />
         </div>
       );

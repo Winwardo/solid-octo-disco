@@ -1,4 +1,4 @@
-import { newPromiseChain, makeGetHeader } from './../../../shared/utilities';
+import { newPromiseChain, makeGetHeader, fetchPost } from './../../../shared/utilities';
 
 import fetch from 'isomorphic-fetch';
 
@@ -42,3 +42,26 @@ export const fetchAllFootballSeasons = (year) =>
       })
       .catch((error) => console.warn('Major error fetching the football seasons', error))
 );
+
+// export const REQUEST_FOOTBALL_SEASONS_TEAMS = 'REQUEST_FOOTBALL_SEASONS_TEAMS';
+// const requestFootballSeasonsTeams = (season) => ({
+//   type: REQUEST_FOOTBALL_SEASONS_TEAMS,
+//   season,
+// });
+//
+// export const RECIEVE_FOOTBALL_SEASONS_TEAMS = 'RECIEVE_FOOTBALL_SEASONS_TEAMS';
+// const recieveFootballSeasonsTeams = (season, json) => ({
+//   type: RECIEVE_FOOTBALL_SEASONS_TEAMS,
+//   season,
+//   footballSeasons: json,
+// });
+
+export const fetchAllFootballSeasonTeams = (year) =>
+  (dispatch, getState) => (
+    newPromiseChain()
+      .then(() => fetchPost(`/football/seasons/${year}/teams`, {
+        leagues: getState().football.seasonsByYear[year].seasons
+          .map((season) => ({ id: season.id, name: season.caption }))
+      }))
+      .then()
+  )

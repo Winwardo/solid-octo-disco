@@ -63,8 +63,8 @@ app.get('/football/seasons/:year', (req, res) => {
   searchFootballSeasons(res, req.params.year);
 });
 
-app.get('/football/seasons/:id/teams', (req, res) => {
-  searchFootballSeasonTeams(res, req.params.id);
+app.post('/football/seasons/:year/teams', (req, res) => {
+  searchFootballSeasonTeams(res, req.params.year, req.params.query.body.leagues);
 });
 
 app.get('*', (req, res) => {
