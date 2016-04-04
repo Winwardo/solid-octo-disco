@@ -33,7 +33,7 @@ finalStore.dispatch(fetchAllFootballSeasons(moment().year()));
 const rootElement = document.getElementById('root');
 
 let render = () => {
-  const App = require('./App').default;
+  const App = require('./queryInterface').default;
   ReactDOM.render(
     <Provider store={finalStore}>
       <App />
