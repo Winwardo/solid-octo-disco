@@ -1,6 +1,8 @@
 import fetch from 'isomorphic-fetch';
 import { newPromiseChain } from './../shared/utilities';
 
+// These keys should be hidden in a private config file or environment variables
+// For simplicity of this assignment, they will be visible here
 const footballAccessOptions = {
   method: 'GET',
   headers: { 'X-Auth-Token': 'f39c0cf21f95409498f8eea5eb129b0f' },
