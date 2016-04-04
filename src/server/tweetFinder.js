@@ -3,7 +3,7 @@ import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
 import { newPromiseChain, flattenImmutableObject } from '../shared/utilities';
 import { searchAndSaveFromTwitter } from './twitterSearch';
 
-export const MAX_TWEET_RESULTS = 300;
+export const MAX_TWEET_RESULTS = 500;
 
 /**
  * Searches our database for Tweets and returns them.
