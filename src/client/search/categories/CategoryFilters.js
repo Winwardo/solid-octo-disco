@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import YearSelector from './YearSelector';
 import { connect } from 'react-redux';
+import LeagueCategory from './LeagueCategory';
 import moment from 'moment';
+import { addSearchTerm } from './../searchActions';
 
 class CategoryFilters extends Component {
   componentDidMount() {
@@ -20,7 +22,9 @@ class CategoryFilters extends Component {
         year === currentYear ? 'ui bottom attached active tab segment' : 'ui bottom attached tab segment';
       seasonYearTabsContent.push(
         <div className={tabContentClassName} data-tab={year}>
-          Year: {year}s content
+          <LeagueCategory leagues={this.props.football.seasonsByYear[year].seasons}
+            onClickLeague={this.props.onClickCategoryFilter}
+          />
         </div>
       );
     }
@@ -35,8 +39,16 @@ class CategoryFilters extends Component {
 }
 CategoryFilters.propTypes = {
   football: React.PropTypes.object,
+  onClickCategoryFilter: React.PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({ football: state.football });
 
-export default connect(mapStateToProps)(CategoryFilters);
+const mapDispatchToProps = (dispatch) => ({
+  onClickCategoryFilter: (newTerm) => dispatch(addSearchTerm(newTerm)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CategoryFilters);

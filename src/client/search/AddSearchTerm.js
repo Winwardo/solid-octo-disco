@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addSearchTerm } from './searchActions';
 
-let nextSearchTermId = 0;
-
 let AddSearchTerm = ({ dispatch }) => {
   const keywordSearchStyle = {
     display: 'none',
@@ -25,7 +23,7 @@ let AddSearchTerm = ({ dispatch }) => {
 
         onKeyDown={(e) => {
           if (e.keyCode === 13) {
-            dispatch(addSearchTerm(nextSearchTermId++, e.target.value));
+            dispatch(addSearchTerm(e.target.value));
             e.target.value = '';
           }
         }}
