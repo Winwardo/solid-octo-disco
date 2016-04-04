@@ -17,7 +17,7 @@ class CategoryFilters extends Component {
     let seasonYearTabsContent = [];
     for (let year in this.props.football.seasonsByYear) {
       const tabContentClassName =
-        year == currentYear ? 'ui bottom attached active tab segment' : 'ui bottom attached tab segment';
+        year === currentYear ? 'ui bottom attached active tab segment' : 'ui bottom attached tab segment';
       seasonYearTabsContent.push(
         <div className={tabContentClassName} data-tab={year}>
           Year: {year}s content
