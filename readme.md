@@ -10,7 +10,7 @@ Created by team `solid-octo-disco 👌` (Topher Winward & Vasily Shelkov)
 If you are reading this as a marker, you should have access to a pre-built copy of Socto.
 Two steps are required to running Socto:
 + Ensure OrientDB is running. Do this by running `START_DATABASE_WINDOWS.bat`.
-  + If you receive the error `The ORIENTDB_HOME environment variable is not defined correctly`, please manually go to `./lib/orientdb/bin/` and double click `server.bat` - do not run it from a command prompt.
+  + If you receive the error `"The ORIENTDB_HOME environment variable is not defined correctly"`, please manually go to `./lib/orientdb/bin/` and double click `server.bat` - do not run it from a command prompt.
 + Start the Node server: run `npm start` from a command prompt within the `solid-octo-disco` folder.
 + Socto should now be accessible at http://localhost:3000.
 
@@ -53,6 +53,11 @@ compiles into
 React.createElement(Hello, {name: "World"})
 ```
 It's strange to look at at first, but quickly becomes very natural and allows for some incredibly powerful expressions.
+
+## How does the database schema work?
+As we are using [OrientDB](orientdb.com), it is not possible for us to provide a `mysqldump` of our schema. However, our OrientDB schema is generated on startup, using data found in `./src/shared/data/databaseSchema.js`. This is commented and hopefully clear in itself.
+
+This file is used both to set up the appropriate classes and indexes in OrientDB, but also for creating object builders, found in `databaseObjects.js`. This ensures that when we use classes like `Tweet`, `Tweeter` and `Country` in our code, it matches exactly the object schema found in OrientDB. This way a data mismatch between our server and the database becomes impossible.
 
 ## Tools available
 + `make clean`: Removes all `build` and `node_module` files.
