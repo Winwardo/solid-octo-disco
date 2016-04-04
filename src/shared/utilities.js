@@ -194,4 +194,4 @@ export const range = (min, max, step=1) => {
     result.push(i);
   }
   return result;
-}
+};

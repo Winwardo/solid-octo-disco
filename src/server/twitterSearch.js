@@ -6,11 +6,12 @@ import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweet
   upsertHashtag, upsertTweet, upsertTweeter, upsertPlace, upsertCountry
 } from '../shared/data/databaseInsertActions';
 import * as Builders from '../shared/data/databaseObjects';
-import { newPromiseChain } from '../shared/utilities';
+import { newPromiseChain, range } from '../shared/utilities';
 
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
 export const TWITTER_ENABLED = true;
+const MAX_TWEETS_FROM_TWITTER_API = 100;
 
 export const TwitAccess = new Twit({
   access_token: '1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68',
@@ -217,9 +218,10 @@ const linkTweetToLocation = (db, tweet, rawPlace) => {
  * @param rawTweet The original status object from the Twitter API
  * @returns {Promise.<TwitAccess>}
  */
-const processTweet = (db, rawTweet, id) => {
+const processTweet = (db, rawTweet) => {
   const tweeter = buildTweeterFromRaw(rawTweet.user, false);
   const rawRetweetedStatus = rawTweet.retweeted_status;
+  const id = rawTweet.id;
 
   if (rawRetweetedStatus !== undefined) {
     return processRawRetweet(db, rawRetweetedStatus, tweeter)
@@ -243,12 +245,14 @@ const processTweet = (db, rawTweet, id) => {
 export const searchAndSaveFromTwitter = (query, count = 300) => {
   if (TWITTER_ENABLED) {
     console.info(`Searching Twitter for query '${query}'.`);
-    return TwitAccess.get('search/tweets', { q: query, count: count })
+    return newPromiseChain()
+      .then(() => sweepTwitterAndConcat(query, count))
       .then(
-        (result) => {
-          console.info(`Twitter search for '${query}' successful.`);
+        (statuses) => {
+          console.info(`Twitter search for '${query}' successful! Found ${statuses.length} relevant Tweets.`);
+
           return Promise.all(
-            result.data.statuses.map((rawTweet) => processTweet(db, rawTweet))
+            statuses.map((rawTweet) => processTweet(db, rawTweet))
           );
         },
         (rej) => {
@@ -258,6 +262,41 @@ export const searchAndSaveFromTwitter = (query, count = 300) => {
   } else {
     console.info(`Twitter disabled, not searching query '${query}'.`);
     return Promise.resolve();
+  }
+};
+
+const sweepTwitterAndConcat = (query, count, existingStatuses = [], lowestId = null) => {
+  let extendedQuery = query;
+  if (lowestId !== null) {
+    extendedQuery += ` max_id:${lowestId}`;
+  };
+
+  return newPromiseChain()
+    .then(() => potentiallySearchTwitter(extendedQuery, count))
+    .then((twitStatuses) => {
+      const countLeft = count - MAX_TWEETS_FROM_TWITTER_API;
+      const added = twitStatuses.length;
+
+      if (countLeft > 0 && added > 0) {
+        const newLowestId = Math.min(...twitStatuses.map((status) => status.id));
+
+        return newPromiseChain()
+          .then(() => sweepTwitterAndConcat(query, countLeft, twitStatuses, newLowestId))
+          .then((results) => existingStatuses.concat(results));
+      } else {
+        return existingStatuses.concat(twitStatuses);
+      }
+    });
+};
+
+const potentiallySearchTwitter = (exactQuery, count) => {
+  if (count > 0) {
+    const actualCount = Math.min(count, MAX_TWEETS_FROM_TWITTER_API); // Twitter will only return a max of 100 Tweets at any time
+    return newPromiseChain()
+      .then(() => TwitAccess.get('search/tweets', { q: `${exactQuery} -filter:retweets filter:safe`, count: actualCount }))
+      .then((twitResults) => twitResults.data.statuses);
+  } else {
+    return [];
   }
 };
 

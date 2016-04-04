@@ -127,7 +127,7 @@ describe('#Utilities', () => {
     });
 
     it('can step correctly', () => {
-      range(1, 10, 2).should.deep.equal([1,3,5,7,9]);
+      range(1, 10, 2).should.deep.equal([1, 3, 5, 7, 9]);
     });
 
     it('does not allow negative steps', () => {
