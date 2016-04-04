@@ -14,20 +14,17 @@ Two steps are required to running Socto:
   + If you receive the error `"The ORIENTDB_HOME environment variable is not defined correctly"`, please manually go to `./lib/orientdb/bin/` and double click `server.bat` - do not run it from a command prompt.
 + Start the Node server: run `npm start` from a command prompt within the `solid-octo-disco` folder.
 + Socto should now be accessible at http://localhost:3000.
++ If either the `./build` or `./node_modules` folder is missing, please follow the next instructions for building.
 
 ## I want to build from scratch, then run.
 If you have a pure clone of the git repo and want to run, please run the following commands:
-+ `npm install --production`
-+ `npm install gulp -g`
-+ `npm install webpack -g`
++ `npm install`
 + `npm run build`
 + Follow the instructions above to start OrientDB and the server.
 
 ## I want to develop.
 Whether you have a pure clone, or a marker version of Socto, use these commands:
 + `npm install`
-+ `npm install gulp -g`
-+ `npm install webpack -g`
 + Start the OrientDB server
 + `npm run dev`
 + The server will now be available at http://localhost:3000, complete with hot-reloading of server and client files. All development tools are available, including redux-devtools.
