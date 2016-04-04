@@ -59,6 +59,11 @@ As we are using [OrientDB](orientdb.com), it is not possible for us to provide a
 
 This file is used both to set up the appropriate classes and indexes in OrientDB, but also for creating object builders, found in `databaseObjects.js`. This ensures that when we use classes like `Tweet`, `Tweeter` and `Country` in our code, it matches exactly the object schema found in OrientDB. This way a data mismatch between our server and the database becomes impossible.
 
+## What are those three green rectangles at the top?
+Those are status badges - the first two are confirmation from Travis CI and Circle CI that our code can be built independently across several versions of Node.js, including `0.12.4`, the exact version used in Lewin Lab. Click them to see the build history.
+
+The third is a Codacy badge. When we commit to our GitHub repo, Codacy takes a copy of the code, and runs several different static analysers on it, to find any issues. This is a third layer of code quality checks, above ESLint and JSCS. It then clearly displays any errors. If at any time the codebase had too many errors, Codacy will deny any further pull requests from being merged until the quality increases. This is a strict but very effective way of ensuring Socto always has the highest quality code possible.
+
 ## Tools available
 + `make clean`: Removes all `build` and `node_module` files.
 + `npm install`: Install all of Socto's dependencies.
