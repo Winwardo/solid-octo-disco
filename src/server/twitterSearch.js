@@ -279,7 +279,7 @@ const sweepTwitterAndConcat = (query, count, existingStatuses = [], lowestId = n
       if (countLeft > 0 && added > 0) {
         const newLowestId = Math.min(...twitStatuses.map((status) => status.id));
 
-        return newPromiseChain
+        return newPromiseChain()
           .then(() => sweepTwitterAndConcat(query, countLeft, twitStatuses, newLowestId))
           .then((results) => existingStatuses.concat(results));
       } else {
