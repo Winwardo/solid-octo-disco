@@ -11,6 +11,7 @@ import { newPromiseChain, range } from '../shared/utilities';
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
 export const TWITTER_ENABLED = true;
+const MAX_TWEETS_FROM_TWITTER_API = 100;
 
 export const TwitAccess = new Twit({
   access_token: '1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68',
@@ -273,7 +274,7 @@ const sweepTwitterAndConcat = (query, count, existingStatuses = [], lowestId = n
   return newPromiseChain()
     .then(() => potentiallySearchTwitter(extendedQuery, count))
     .then((twitStatuses) => {
-      const countLeft = count - 100;
+      const countLeft = count - MAX_TWEETS_FROM_TWITTER_API;
       const added = twitStatuses.length;
 
       if (countLeft > 0 && added > 0) {
@@ -290,7 +291,7 @@ const sweepTwitterAndConcat = (query, count, existingStatuses = [], lowestId = n
 
 const potentiallySearchTwitter = (exactQuery, count) => {
   if (count > 0) {
-    const actualCount = Math.min(count, 100); // Twitter will only return a max of 100 Tweets at any time
+    const actualCount = Math.min(count, MAX_TWEETS_FROM_TWITTER_API); // Twitter will only return a max of 100 Tweets at any time
     return newPromiseChain()
       .then(() => TwitAccess.get('search/tweets', { q: `${exactQuery} -filter:retweets filter:safe`, count: actualCount }))
       .then((twitResults) => twitResults.data.statuses);

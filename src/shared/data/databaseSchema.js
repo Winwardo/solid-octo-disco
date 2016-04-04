@@ -36,6 +36,7 @@ export const schema = {
       { name: 'latitude', type: Double },
     ],
     indexes: [
+      { properties: ['id'], type: UNIQUE, },
       { properties: ['content'], type: LUCENE, },
     ],
   },
@@ -49,6 +50,7 @@ export const schema = {
       { name: 'is_user_mention', type: Boolean },
     ],
     indexes: [
+      { properties: ['id'], type: UNIQUE, },
       { properties: ['name'], type: LUCENE, },
       { properties: ['handle'], type: LUCENE, },
     ],
@@ -71,6 +73,7 @@ export const schema = {
       { name: 'type', type: String },
     ],
     indexes: [
+      { properties: ['id'], type: UNIQUE, },
       { properties: ['full_name'], type: LUCENE, },
     ],
   },
@@ -81,6 +84,7 @@ export const schema = {
       { name: 'name', type: String },
     ],
     indexes: [
+      { properties: ['code'], type: UNIQUE, },
       { properties: ['name'], type: LUCENE, },
     ],
   },
