@@ -6,11 +6,15 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { searchTermsReducer, feedReducer } from './search/searchReducer';
 import mostFrequentReducer from './results/mostfrequent/mostFrequentReducer';
+import footballCategoryFiltersReducer from './search/categories/categoryFiltersReducer';
+import { fetchAllFootballSeasons } from './search/categories/categoryFilterActions';
+import moment from 'moment';
 
 const feedApp = combineReducers({
   searchTerms: searchTermsReducer,
   mostFrequent: mostFrequentReducer,
   feed: feedReducer,
+  football: footballCategoryFiltersReducer,
 });
 
 const middlewares = [thunkMiddleware];
@@ -22,6 +26,9 @@ const finalStore = createStore(
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )
 );
+
+// fetch all the football seasons on startup
+finalStore.dispatch(fetchAllFootballSeasons(moment().year()));
 
 const rootElement = document.getElementById('root');
 
