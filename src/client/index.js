@@ -63,7 +63,7 @@ if (module.hot) {
     }
   };
 
-  module.hot.accept('./App', () => {
+  module.hot.accept('./queryInterface', () => {
     setTimeout(render);
   });
 }
