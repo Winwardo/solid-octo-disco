@@ -35,7 +35,7 @@ Whether you have a pure clone, or a marker version of Socto, use these commands:
 # Extra information
 
 ## Where is `queryInterface.html`?
-As we are using React, it it does not make any sense to have a `queryInterface.html` file. Instead, Express serves `./public/index.html` to the client. On this page, `bundle.js` is included, which contains the relevant React code to start displaying our interface. Look at `./src/client/index.js` to see where the React & Redux code begins and is kicked off. This displays the React component found in `./src/client/App.js`, and from here it's a lot simpler to find the children components used.
+As we are using React, it it does not make any sense to have a `queryInterface.html` file. Instead, Express serves `./public/index.html` to the client. On this page, `bundle.js` is included, which contains the relevant React code to start displaying our interface. Look at `./src/client/index.js` to see where the React & Redux code begins and is kicked off. This displays the React component found in `./src/client/queryInterface.js`, and from here it's a lot simpler to find the children components used.
 
 ## How does the database schema work?
 As we are using [OrientDB](orientdb.com), it is not possible for us to provide a `mysqldump` of our schema. However, our OrientDB schema is generated on startup, using data found in `./src/shared/data/databaseSchema.js`. This is commented and hopefully clear in itself.
