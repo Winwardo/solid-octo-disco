@@ -71,6 +71,18 @@ export const newPromiseChain = () => (
 );
 
 /**
+ * Generates the boilerplate headers for a JSON GET request
+ * @returns {{method: string, headers: {Accept: string, Content-Type: string}}}
+ */
+export const makeGetHeader = () => ({
+  method: 'GET',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+});
+
+/**
  * Generates the boilerplate headers for a JSON POST request
  * @param body The body of the request, e.g. {'query': 'liverpool'}
  * @returns {{method: string, headers: {Accept: string, Content-Type: string}, body: *}}
@@ -184,10 +196,10 @@ export const throttleFunction = (callback, milliseconds) => {
  * @param step Step between each number, must be positive.
  * @returns {Array}
  */
-export const range = (min, max, step=1) => {
+export const range = (min, max, step = 1) => {
   if (step <= 0) {
     return [];
-  };
+  }
 
   const result = [];
   for (let i = min; i < max; i += step) {

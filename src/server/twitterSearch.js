@@ -8,11 +8,11 @@ import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweet
 import * as Builders from '../shared/data/databaseObjects';
 import { newPromiseChain, range } from '../shared/utilities';
 
-// These keys should be hidden in a private config file or environment variables
-// For simplicity of this assignment, they will be visible here
 export const TWITTER_ENABLED = true;
 const MAX_TWEETS_FROM_TWITTER_API = 100;
 
+// These keys should be hidden in a private config file or environment variables
+// For simplicity of this assignment, they will be visible here
 export const TwitAccess = new Twit({
   access_token: '1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68',
   access_token_secret: 'ceYqZAulg2MT89Jw11rA44FOwHOFcEccFv9HXFIG9ckJf',

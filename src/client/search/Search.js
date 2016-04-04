@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CurrentQueryTerms from './CurrentQueryTerms';
+import CategoryFilters from './categories/CategoryFilters';
 
 /**
  * Search encompasses the entire search interface, including the "Filters"
@@ -15,9 +16,7 @@ const Search = () => (
 );
 
 const Filters = () => (
-  <div className="row">
-    Filters will go here
-  </div>
+  <CategoryFilters />
 );
 
 export default Search;

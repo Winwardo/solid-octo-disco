@@ -4,6 +4,7 @@ import { searchQuery } from './tweetFinder';
 import { generateDatabase } from './orientdb';
 import { searchAndSaveResponse, stream, TwitAccess } from './twitterSearch';
 import bodyParser from 'body-parser';
+import { searchFootballSeasons, searchFootballSeasonTeams } from './footballSearch';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -58,9 +59,16 @@ app.get('/twit/stream/:query', (req, res) => {
   stream(req, res);
 });
 
+app.get('/football/seasons/:year', (req, res) => {
+  searchFootballSeasons(res, req.params.year);
+});
+
+app.get('/football/seasons/:id/teams', (req, res) => {
+  searchFootballSeasonTeams(res, req.params.id);
+});
+
 app.get('*', (req, res) => {
-  //res.writeHead(404);
-  res.status(404).sendFile('404.html', {root: 'public'});
+  res.status(404).sendFile('404.html', { root: 'public' });
 });
 
 // Listen on port 3000, IP defaults to 127.0.0.1 (localhost)
