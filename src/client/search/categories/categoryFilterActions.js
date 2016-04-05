@@ -21,7 +21,7 @@ const removeFootballSeason = (year) => ({
   year,
 });
 
-export const fetchAllFootballSeasons = (year, firstYear) =>
+export const fetchAllFootballSeasons = (year, isFirstYear) =>
   dispatch => (
     newPromiseChain()
       .then(() => dispatch(requestFootballSeason(year)))
@@ -31,7 +31,7 @@ export const fetchAllFootballSeasons = (year, firstYear) =>
         const nextYearToCheck = year - 1;
         if (json.length > 0) {
           dispatch(recieveFootballSeason(year, json));
-          if (firstYear) {
+          if (isFirstYear) {
             dispatch(fetchAllFootballLeagueTeams(year));
           }
           return dispatch(fetchAllFootballSeasons(nextYearToCheck, false));
