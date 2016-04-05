@@ -127,27 +127,6 @@ const makeParamType = (selectedParamTypes, type) => ({
 });
 
 /**
- * Returns a semantic icon name or character to represent seachParamTypes
- * eg. hashtag = #, mention = @
- * @param string which represents a paramtype
- * @returns char or string representing paramType (could be semantic icon class)
- */
-const getParamTypeIcon = (paramType) => {
-  switch (paramType) {
-  case 'author':
-    return 'user icon';
-  case 'hashtag':
-    return '#';
-  case 'keyword':
-    return 'file text icon';
-  case 'mention':
-    return 'at icon';
-  default:
-    return '?';
-  }
-};
-
-/**
  * Returns a copy of the paramTypes with the name of the passed
  * in paramType toggled
  * @param paramTypes array
@@ -206,4 +185,46 @@ export const range = (min, max, step = 1) => {
     result.push(i);
   }
   return result;
+};
+
+/**
+ * Returns a semantic icon name or character to represent seachParamTypes
+ * eg. hashtag = #, mention = @
+ * @param string which represents a paramtype
+ * @returns char or string representing paramType (could be semantic icon class)
+ */
+const getParamTypeIcon = (paramType) => {
+  switch (paramType) {
+  case 'author':
+    return 'user icon';
+  case 'hashtag':
+    return '#';
+  case 'keyword':
+    return 'file text icon';
+  case 'mention':
+    return 'at icon';
+  default:
+    return '?';
+  }
+};
+
+/**
+* Transforms the football-data.org api's player nationalities to semantic flag icon class name
+* @param string which represents football-data.org's a player's nationality
+* @returns string representing semantic flag icon class name
+*/
+export const getSemanticCountryFlagName = (countryName) => {
+  console.log(countryName);
+  switch (countryName) {
+  case 'england':
+    return 'united kingdom';
+  case 'korea, south':
+    return 'south korea';
+  case 'korea, north':
+    return 'north korea';
+  case 'bosnia-herzegovina':
+    return 'bosnia'
+  default:
+    return countryName;
+  }
 };

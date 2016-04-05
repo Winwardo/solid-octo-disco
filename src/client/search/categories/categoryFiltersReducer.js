@@ -26,7 +26,6 @@ const footballCategoryFiltersReducer = (state = footballCategoryFiltersInitialSt
     };
   case REMOVE_FOOTBALL_SEASON: {
     const oldSeasonsByYear = state.seasonsByYear;
-    console.log(oldSeasonsByYear);
     delete oldSeasonsByYear[action.year];
     return {
       ...state,
@@ -61,7 +60,7 @@ const footballCategoryFiltersReducer = (state = footballCategoryFiltersInitialSt
       selectedTeam: {
         ...state.selectedTeam,
         isFetching: false,
-        players: action.footballTeamPlayers
+        ...action.footballTeamPlayers
       }
     };
   default:

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class TeamCategory extends Component {
   componentDidMount() {
     $('.ui.dropdown.teams').dropdown({
-      action: 'nothing',
+      action: 'hide',
     });
     $('.ui.accordion.teams').accordion();
   }
@@ -64,7 +64,13 @@ class TeamCategory extends Component {
                     {league.teams.map(team => (
                       <div data-id={league.id} className="league item"
                         style={{ cursor: 'pointer' }}
-                        onClick={() => this.props.onClickTeam(team.shortName)}
+                        onClick={() => {
+                          const teamId = team._links.players.href.match(/\/v1\/teams\/(\d*?)\/players/)[1];
+                          this.props.onClickAddTeam(team.shortName);
+                          this.props.onClickSelectTeam(
+                            teamId, team.name, team.shortName, team.crestUrl
+                          );
+                        }}
                       >
                         <img className="ui avatar image" src={team.crestUrl} />
                         {team.name}
@@ -82,7 +88,8 @@ class TeamCategory extends Component {
 }
 TeamCategory.propTypes = {
   teamsByLeague: React.PropTypes.object,
-  onClickTeam: React.PropTypes.func,
+  onClickAddTeam: React.PropTypes.func,
+  onClickSelectTeam: React.PropTypes.func
 };
 
 export default TeamCategory;
