@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Immutable from 'immutable';
 import Feed from './Feed';
 import MostUsedWords from './mostfrequent/words/MostUsedWords';
 import MostActiveUsers from './mostfrequent/users/MostActiveUsers';
@@ -20,11 +19,6 @@ let Results = ({ feed, mostFrequent }) => {
     );
   }
 
-  const _onChangeViewport = (newViewport) => {
-    var viewport = assign({}, this.state.viewport, newViewport);
-    this.setState({viewport});
-  };
-
   return (
     <div className="ui grid">
 
@@ -35,8 +29,7 @@ let Results = ({ feed, mostFrequent }) => {
         />
       </div>
 
-      <div className="eight wide column" id="scatterMapContainer">
-
+      <div className="eight wide column">
         <Feed feed={posts}
           toggledWords={mostFrequent.words.toToggle}
           isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
@@ -47,7 +40,6 @@ let Results = ({ feed, mostFrequent }) => {
 
         <div id="tweetMap" style={{height: '500px', width:'100%'}} />
         <GoogleMap posts={posts.filter((post) => post.data.longitude !== 0)} />
-
       </div>
 
       <div className="four wide column">
