@@ -16,10 +16,32 @@ const config = {
         test: /\.js$/,
         loader: 'babel',
         include: path.join(__dirname, 'src')
-      }
+      },
+      {
+        test: /\.json$/,
+        loader: 'json'
+      },
+      {
+        test: /\.js$/,
+        include: path.resolve(__dirname, 'node_modules/mapbox-gl/js/render/shaders.js'),
+        loader: 'transform/cacheable?brfs'
+      },
+      {
+        test: /\.js$/,
+        include: path.resolve(__dirname, 'node_modules/webworkify/index.js'),
+        loader: 'worker'
+      },
+      { test: /\.glsl$/, loader: 'shader' },
+      { test: /\.worker.js$/, loader: 'worker', query: { inline: true }}
     ]
   },
-  debug: development
+  debug: development,
+  resolve: {
+    alias: {
+      'mapbox-gl/js/geo/transform': path.resolve('./node_modules/mapbox-gl/js/geo/transform'),
+      'mapbox-gl': path.resolve('./node_modules/mapbox-gl')
+    }
+  }
 };
 
 // Calculate external dependencies for Webpack. Webpack searches for these
