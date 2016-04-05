@@ -124,29 +124,50 @@ const searchByKeyword = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'SELECT FROM tweet WHERE content LUCENE :query'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
+  console.log("searching:", normaliseQueryTerm(keyword));
+  return db.query(tweetSelection, { params: { query: normaliseQueryTerm(keyword), limit: MAX_TWEET_RESULTS } });
 };
 
-const searchByAuthor = (keyword) => {
+const searchByAuthor = (author) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE out(\'TWEETED\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
+  return db.query(tweetSelection, { params: { query: normaliseQueryTerm(author), limit: MAX_TWEET_RESULTS } });
 };
 
-const searchByMention = (keyword) => {
+const searchByMention = (mention) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE in(\'MENTIONS\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
+  return db.query(tweetSelection, { params: { query: normaliseQueryTerm(mention), limit: MAX_TWEET_RESULTS } });
 };
 
-const searchByHashtag = (keyword) => {
+const searchByHashtag = (hashtag) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE in(\'HAS_HASHTAG\') FROM (SELECT FROM hashtag WHERE content LUCENE :query)'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
+  return db.query(tweetSelection, { params: { query: normaliseQueryTerm(hashtag), limit: MAX_TWEET_RESULTS } });
 };
+
+/**
+ * Make a query more search-friendly in our database.
+ * Multiple term queries will receive quotes to preserve order
+ * e.g. "Manchester United" won't return results for "united manchester"
+ * Long single term queries will receive ~ for fuzzy matching
+ * @param term Some phrase, like `manchester united`
+ * @returns {*} The normalised term.
+ */
+export const normaliseQueryTerm = (query) => {
+  const terms = query.split(' ');
+
+  if (terms.length === 1) {
+    if (terms.length > 4) {
+      return query + '~'; // fuzzy search
+    }
+  } else {
+    return `"${query}"`; // add quotes to preserve order
+  };
+}
 
 const makeTweetQuerySelectingFrom = (from) => (
   `SELECT `
