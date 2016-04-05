@@ -91,18 +91,8 @@ export const linkTweeterToRetweet = (db, tweeter, tweet) => (
   )
 );
 
-export const linkQuoteTweetToOriginalTweet = (db, quoteTweet, originalTweet) => {
-  console.log("The meat of the thing");
-
-  //console.log(quoteTweet)
-  //console.log(originalTweet)
-  //console.log(quoteTweet.id());
-  //console.log(originalTweet.id());
-
-  //const params = ;
-  //console.log("PARAMS:", params);
-
-  return db.query(
+export const linkQuoteTweetToOriginalTweet = (db, quoteTweet, originalTweet) => (
+  db.query(
     'CREATE EDGE QUOTED FROM (SELECT FROM tweet WHERE id = :quoteTweetId) TO (SELECT FROM tweet WHERE id = :originalTweetId)',
     {
       params: {
@@ -111,9 +101,9 @@ export const linkQuoteTweetToOriginalTweet = (db, quoteTweet, originalTweet) => 
       },
     }).then(
     () => {},
-    (rej) => expectRejection(rej, 'QUOTED.in_out', 'quoteTweet', 'quotedTweet'),
+    (rej) => expectRejection(rej, 'QUOTED.in_out', 'quoteTweet', 'quotedTweet')
   )
-};
+);
 
 export const linkTweetToHashtag = (db, tweet, hashtag) => (
   db.query(

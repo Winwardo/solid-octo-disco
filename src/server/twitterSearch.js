@@ -124,8 +124,7 @@ const buildPlaceFromRaw = (rawPlace) => (
  * @param retweeter An immutable Tweeter object
  * @returns {Promise}
  */
-const processRawRetweet = (db, rawTweet, rawRetweet, retweeter) => {
-  //console.log("raw retweet?")
+const processRawRetweet = (db, rawTweet, retweeter, rawRetweet) => {
   const originalTweeter = buildTweeterFromRaw(rawRetweet.user, false);
   const originalTweet = buildTweetFromRaw(rawRetweet);
 
@@ -133,22 +132,16 @@ const processRawRetweet = (db, rawTweet, rawRetweet, retweeter) => {
     .then(() => upsertTweeter(db, retweeter))
     .then(() => processRawOriginalTweet(db, rawRetweet, originalTweeter))
     .then(() => linkTweeterToRetweet(db, retweeter, originalTweet))
-    //.then(() => potentiallyLinkQuoteTweetToOriginalTweet(db, rawTweet, retweeter, originalTweet))
 };
 
 const potentiallyLinkQuoteTweetToOriginalTweet = (db, rawQuoteTweet, quotingTweeter, rawOriginalTweet) => {
-  console.log("Potench", rawQuoteTweet.text);
   if (rawQuoteTweet.quoted_status) {
-
     const originalTweet = buildTweetFromRaw(rawOriginalTweet);
-
-    console.log("Fo sho WE GOT A QUOTE BABY", rawQuoteTweet.text)
     const quoteTweet = buildTweetFromRaw(rawQuoteTweet);
-    console.log("quotey:", quoteTweet.content());
+
     return newPromiseChain()
-      .then(() => processRawOriginalTweet(db, rawQuoteTweet, quotingTweeter))
+      //.then(() => processRawOriginalTweet(db, rawQuoteTweet, quotingTweeter))
       .then(() => processTweet(db, rawOriginalTweet))
-      .then(() => console.log("A quick word from our sponsors"))
       .then(() => linkQuoteTweetToOriginalTweet(db, quoteTweet, originalTweet));
   }
 
@@ -194,7 +187,6 @@ const linkTweetToMentions = (db, rawMentions, tweet) => (
  * @returns {Promise}
  */
 const processRawOriginalTweet = (db, rawTweet, originalTweeter) => {
-  console.log("Processing some raw original tweet")
   const tweet = buildTweetFromRaw(rawTweet);
   const rawHashtags = rawTweet.entities.hashtags;
   const rawMentions = rawTweet.entities.user_mentions;
@@ -248,38 +240,20 @@ const processTweet = (db, rawTweet) => {
   const id = rawTweet.id;
 
   let promises = [];
+  let types;
 
-  if (rawRetweetedStatus !== undefined) {
-    promises.push(
-      processRawRetweet(db, rawTweet, rawRetweetedStatus, tweeter)
-      .then(
-        (res) => { },
-        (rej) => { console.warn('Rejected retweet #', id, rej); }
-      )
-    )
-  } else {
-    promises.push(
-      processRawOriginalTweet(db, rawTweet, tweeter)
-      .then(
-        (res) => {  },
-        (rej) => { console.warn('Rejected tweet #', id, rej); }
-      )
-    )
-  };
-
-  //console.log("promises1:", promises);
-
-  if (rawQuotedStatus !== undefined) {
-    console.log("INSIDE SUCKER");
-    promises.push(
-      potentiallyLinkQuoteTweetToOriginalTweet(db, rawTweet, tweeter, rawQuotedStatus)
-    );
-    console.log("pushed");
-  };
-
-  //console.log("promises2:", promises);
-
-  return Promise.all(promises);
+  return newPromiseChain()
+  .then(() => processRawOriginalTweet(db, rawTweet, tweeter))
+  .then(() => {
+    if (rawRetweetedStatus !== undefined) {
+      return processRawRetweet(db, rawTweet, tweeter, rawRetweetedStatus);
+    }
+  })
+  .then(() => {
+    if (rawQuotedStatus !== undefined) {
+      return potentiallyLinkQuoteTweetToOriginalTweet(db, rawTweet, tweeter, rawQuotedStatus);
+    };
+  })
 };
 
 /**
