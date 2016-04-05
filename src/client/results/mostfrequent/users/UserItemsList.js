@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { toggleMostActiveUser } from './../mostFrequentActions';
 import { mostFrequentWords } from './../../../tweetAnalysis';
+import { TwitterProfilePicture } from '../../../Twitter';
 
 class UserItemsList extends Component {
   componentDidMount() {
@@ -61,10 +62,7 @@ let UserItem = ({ dispatch, userInfo }) => (
   <tr>
     <td className="left aligned">
       <h4 className="ui image header">
-        <img className="ui mini rounded image"
-          src={userInfo.author.profile_image_url}
-          alt={`${userInfo.author.name}'s Twitter profile picture`}
-        />
+        <TwitterProfilePicture author={userInfo.author} size="mini" />
         <div className="content">
           <a href={`//twitter.com/${userInfo.author.handle}`} target="_blank">
             <strong className="tweet fullname">{userInfo.author.name}</strong>
@@ -94,6 +92,8 @@ let UserItem = ({ dispatch, userInfo }) => (
   </tr>
 );
 UserItem = connect()(UserItem);
+
+
 
 const UserItemMostUsedWords = ({ usersMostUsedWords }) => {
   let topWord = { word: 'N/A', count: 0 };

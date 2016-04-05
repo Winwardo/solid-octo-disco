@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { setFeedPageNumber, setFeedPageLimit } from '../search/searchActions';
+import { TwitterProfilePicture } from '../Twitter';
 
 class Feed extends Component {
   componentDidMount() {
@@ -191,6 +192,8 @@ const Tweet = ({ content }) => {
 
   return (
     <div className="content">
+      <TwitterProfilePicture author={content.author} size="tiny" />
+
       {goldStar}
       <a href={`//twitter.com/${content.author.handle}`} target="_blank">
         <strong className="tweet fullname header">{decodedAuthorName}</strong>
