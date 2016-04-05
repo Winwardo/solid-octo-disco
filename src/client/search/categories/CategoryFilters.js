@@ -30,12 +30,23 @@ class CategoryFilters extends Component {
 
       seasonYearTabsContent.push(
         <div className={tabContentClassName} data-tab={year}>
-          <LeagueCategory leagues={this.props.football.seasonsByYear[year]}
-            onClickLeague={this.props.onClickCategoryFilter}
-          />
-          <TeamCategory teamsByLeague={this.props.football.leagueTeamsByYear[year]}
-            onClickTeam={this.props.onClickCategoryFilter}
-          />
+          <div className="ui five column grid">
+            <div className="column">
+              <LeagueCategory leagues={this.props.football.seasonsByYear[year]}
+                onClickLeague={this.props.onClickCategoryFilter}
+              />
+            </div>
+
+            <div className="column">
+              <TeamCategory teamsByLeague={this.props.football.leagueTeamsByYear[year]}
+                onClickTeam={this.props.onClickCategoryFilter}
+              />
+            </div>
+
+            <div className="column">
+              {/*<PlayerCategory />*/}
+            </div>
+          </div>
         </div>
       );
     }

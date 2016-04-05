@@ -15,9 +15,11 @@ class LeagueCategory extends Component {
       }
     }
 
+    const isFetchingLoader = <i className="purple icon"><div className="ui active inline loader"></div></i>;
+
     return (
       <div className="ui dropdown labeled icon button leagues">
-        <i className="trophy purple icon"></i>
+        {yearsLeagues.length === 0 ? isFetchingLoader : <i className="trophy purple icon"></i>}
         <span className="text">Leagues...</span>
         <div className="menu">
           <div className="ui icon search input">

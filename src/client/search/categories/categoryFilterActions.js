@@ -21,7 +21,7 @@ const removeFootballSeason = (year) => ({
   year,
 });
 
-export const fetchAllFootballSeasons = (year) =>
+export const fetchAllFootballSeasons = (year, firstYear) =>
   dispatch => (
     newPromiseChain()
       .then(() => dispatch(requestFootballSeason(year)))
@@ -31,13 +31,16 @@ export const fetchAllFootballSeasons = (year) =>
         const nextYearToCheck = year - 1;
         if (json.length > 0) {
           dispatch(recieveFootballSeason(year, json));
-          return dispatch(fetchAllFootballSeasons(nextYearToCheck));
+          if (firstYear) {
+            dispatch(fetchAllFootballLeagueTeams(year));
+          }
+          return dispatch(fetchAllFootballSeasons(nextYearToCheck, false));
         } else if (json.length === undefined) {
           dispatch(removeFootballSeason(year));
           return Promise.resolve();
         } else {
           dispatch(removeFootballSeason(year));
-          return dispatch(fetchAllFootballSeasons(nextYearToCheck));
+          return dispatch(fetchAllFootballSeasons(nextYearToCheck, false));
         }
       })
       .catch((error) => console.warn('Major error fetching the football seasons', error))

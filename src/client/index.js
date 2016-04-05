@@ -31,10 +31,7 @@ const finalStore = createStore(
 );
 
 // fetch all the football seasons on startup
-const firstYearToFetch = moment().year() - 1;
-newPromiseChain()
-  .then(() => finalStore.dispatch(fetchAllFootballSeasons(firstYearToFetch)))
-  .then(() => finalStore.dispatch(fetchAllFootballLeagueTeams(firstYearToFetch)))
+finalStore.dispatch(fetchAllFootballSeasons(moment().year() - 1, true));
 
 const rootElement = document.getElementById('root');
 
