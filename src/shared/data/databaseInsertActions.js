@@ -34,7 +34,7 @@ export const upsertTweeter = (db, tweeter) => {
 export const upsertTweet = (db, tweet) => (
   runQueryOnImmutableObject(
     db,
-    'UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets, longitude=:longitude, latitude=:latitude UPSERT WHERE id=:id',
+    'UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets, longitude=:longitude, latitude=:latitude, contains_a_quoted_tweet=:contains_a_quoted_tweet UPSERT WHERE id=:id',
     tweet
   ).then(() => {}, (rej) => { console.error('Upsert tweet', rej); })
 );
@@ -85,8 +85,35 @@ export const linkTweeterToRetweet = (db, tweeter, tweet) => (
         tweetId: tweet.id(),
         tweeterId: tweeter.id(),
       },
-    }).then(() => {}, (rej) => { console.error('Link tweeter -> retweet', rej); })
+    }).then(
+    () => {},
+    (rej) => expectRejection(rej, 'RETWEETED.in_out', 'tweeter', 'retweet'),
+  )
 );
+
+export const linkQuoteTweetToOriginalTweet = (db, quoteTweet, originalTweet) => {
+  console.log("The meat of the thing");
+
+  //console.log(quoteTweet)
+  //console.log(originalTweet)
+  //console.log(quoteTweet.id());
+  //console.log(originalTweet.id());
+
+  //const params = ;
+  //console.log("PARAMS:", params);
+
+  return db.query(
+    'CREATE EDGE QUOTED FROM (SELECT FROM tweet WHERE id = :quoteTweetId) TO (SELECT FROM tweet WHERE id = :originalTweetId)',
+    {
+      params: {
+        quoteTweetId: quoteTweet.id(),
+        originalTweetId: originalTweet.id(),
+      },
+    }).then(
+    () => {},
+    (rej) => expectRejection(rej, 'QUOTED.in_out', 'quoteTweet', 'quotedTweet'),
+  )
+};
 
 export const linkTweetToHashtag = (db, tweet, hashtag) => (
   db.query(
@@ -146,7 +173,7 @@ export const linkPlaceToCountry = (db, place, country) => (
 
 const expectRejection = (rejection, expect, from, to) => {
   if (rejection.message.indexOf(expect) > -1) {
-    console.info('Tweet already linked to hashtag.');
+    //console.info(`${from} already linked to ${to}.`);
   } else {
     console.error(`Unexpected error linking ${from} => ${to}.`, rejection);
   }

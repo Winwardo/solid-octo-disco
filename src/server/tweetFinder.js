@@ -197,6 +197,7 @@ const buildTweetFromDatabaseRecord = (record) => (
     .retweets(record.retweets)
     .longitude(record.longitude)
     .latitude(record.latitude)
+    .contains_a_quoted_tweet(record.contains_a_quoted_tweet)
     .build()
 );
 

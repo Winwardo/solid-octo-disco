@@ -2,7 +2,7 @@ const Twit = require('twit');
 const moment = require('moment');
 import { db } from './orientdb';
 import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweetToTweeterViaMention,
-  linkTweetToPlace, linkPlaceToCountry,
+  linkTweetToPlace, linkPlaceToCountry, linkQuoteTweetToOriginalTweet,
   upsertHashtag, upsertTweet, upsertTweeter, upsertPlace, upsertCountry
 } from '../shared/data/databaseInsertActions';
 import * as Builders from '../shared/data/databaseObjects';
@@ -36,6 +36,7 @@ const buildTweetFromRaw = (rawTweet) => {
     .retweets(rawTweet.retweet_count)
     .latitude(coordinates.latitude)
     .longitude(coordinates.longitude)
+    .contains_a_quoted_tweet(rawTweet.is_quote_status)
     .build();
 };
 
@@ -123,15 +124,36 @@ const buildPlaceFromRaw = (rawPlace) => (
  * @param retweeter An immutable Tweeter object
  * @returns {Promise}
  */
-const processRawRetweet = (db, rawRetweet, retweeter) => {
+const processRawRetweet = (db, rawTweet, rawRetweet, retweeter) => {
+  //console.log("raw retweet?")
   const originalTweeter = buildTweeterFromRaw(rawRetweet.user, false);
   const originalTweet = buildTweetFromRaw(rawRetweet);
 
   return newPromiseChain()
     .then(() => upsertTweeter(db, retweeter))
     .then(() => processRawOriginalTweet(db, rawRetweet, originalTweeter))
-    .then(() => linkTweeterToRetweet(db, retweeter, originalTweet));
+    .then(() => linkTweeterToRetweet(db, retweeter, originalTweet))
+    //.then(() => potentiallyLinkQuoteTweetToOriginalTweet(db, rawTweet, retweeter, originalTweet))
 };
+
+const potentiallyLinkQuoteTweetToOriginalTweet = (db, rawQuoteTweet, quotingTweeter, rawOriginalTweet) => {
+  console.log("Potench", rawQuoteTweet.text);
+  if (rawQuoteTweet.quoted_status) {
+
+    const originalTweet = buildTweetFromRaw(rawOriginalTweet);
+
+    console.log("Fo sho WE GOT A QUOTE BABY", rawQuoteTweet.text)
+    const quoteTweet = buildTweetFromRaw(rawQuoteTweet);
+    console.log("quotey:", quoteTweet.content());
+    return newPromiseChain()
+      .then(() => processRawOriginalTweet(db, rawQuoteTweet, quotingTweeter))
+      .then(() => processTweet(db, rawOriginalTweet))
+      .then(() => console.log("A quick word from our sponsors"))
+      .then(() => linkQuoteTweetToOriginalTweet(db, quoteTweet, originalTweet));
+  }
+
+  return Promise.resolve();
+}
 
 /**
  * Link a tweet to all of its hashtags
@@ -172,6 +194,7 @@ const linkTweetToMentions = (db, rawMentions, tweet) => (
  * @returns {Promise}
  */
 const processRawOriginalTweet = (db, rawTweet, originalTweeter) => {
+  console.log("Processing some raw original tweet")
   const tweet = buildTweetFromRaw(rawTweet);
   const rawHashtags = rawTweet.entities.hashtags;
   const rawMentions = rawTweet.entities.user_mentions;
@@ -221,21 +244,42 @@ const linkTweetToLocation = (db, tweet, rawPlace) => {
 const processTweet = (db, rawTweet) => {
   const tweeter = buildTweeterFromRaw(rawTweet.user, false);
   const rawRetweetedStatus = rawTweet.retweeted_status;
+  const rawQuotedStatus = rawTweet.quoted_status;
   const id = rawTweet.id;
 
+  let promises = [];
+
   if (rawRetweetedStatus !== undefined) {
-    return processRawRetweet(db, rawRetweetedStatus, tweeter)
+    promises.push(
+      processRawRetweet(db, rawTweet, rawRetweetedStatus, tweeter)
       .then(
         (res) => { },
         (rej) => { console.warn('Rejected retweet #', id, rej); }
-      );
+      )
+    )
   } else {
-    return processRawOriginalTweet(db, rawTweet, tweeter)
+    promises.push(
+      processRawOriginalTweet(db, rawTweet, tweeter)
       .then(
         (res) => {  },
         (rej) => { console.warn('Rejected tweet #', id, rej); }
-      );
+      )
+    )
   };
+
+  //console.log("promises1:", promises);
+
+  if (rawQuotedStatus !== undefined) {
+    console.log("INSIDE SUCKER");
+    promises.push(
+      potentiallyLinkQuoteTweetToOriginalTweet(db, rawTweet, tweeter, rawQuotedStatus)
+    );
+    console.log("pushed");
+  };
+
+  //console.log("promises2:", promises);
+
+  return Promise.all(promises);
 };
 
 /**
@@ -253,7 +297,7 @@ export const searchAndSaveFromTwitter = (query, count = 300) => {
 
           return Promise.all(
             statuses.map((rawTweet) => processTweet(db, rawTweet))
-          );
+          ).then(() => console.log('Successfully processed the Tweets.'));
         },
         (rej) => {
           console.warn('Unable to search Twitter.', rej);
@@ -293,7 +337,7 @@ const potentiallySearchTwitter = (exactQuery, count) => {
   if (count > 0) {
     const actualCount = Math.min(count, MAX_TWEETS_FROM_TWITTER_API); // Twitter will only return a max of 100 Tweets at any time
     return newPromiseChain()
-      .then(() => TwitAccess.get('search/tweets', { q: `${exactQuery} -filter:retweets filter:safe`, count: actualCount }))
+      .then(() => TwitAccess.get('search/tweets', { q: `${exactQuery} filter:safe`, count: actualCount }))
       .then((twitResults) => twitResults.data.statuses);
   } else {
     return [];
