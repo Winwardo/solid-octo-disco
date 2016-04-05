@@ -4,7 +4,9 @@ import { searchQuery } from './tweetFinder';
 import { generateDatabase } from './orientdb';
 import { searchAndSaveResponse, stream, TwitAccess } from './twitterSearch';
 import bodyParser from 'body-parser';
-import { searchFootballSeasons, searchFootballSeasonTeams } from './footballSearch';
+import {
+  searchFootballSeasons, searchFootballSeasonTeams, searchFootballTeamPlayers
+} from './footballSearch';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -60,6 +62,10 @@ app.get('/football/seasons/:year', (req, res) => {
 
 app.post('/football/seasons/:year/teams', (req, res) => {
   searchFootballSeasonTeams(res, req.params.year, req.body.leagues);
+});
+
+app.get('/football/teams/:teamid/players', (req, res) => {
+  searchFootballTeamPlayers(res, req.params.teamid);
 });
 
 app.get('*', (req, res) => {

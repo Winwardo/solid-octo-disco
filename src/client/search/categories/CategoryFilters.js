@@ -24,27 +24,27 @@ class CategoryFilters extends Component {
   render() {
     const currentYear = `${moment().year() - 1}`;
     let seasonYearTabsContent = [];
-    for (let year in this.props.football.seasonsByYear) {
+    for (let y = currentYear; y >= 2013; y--) {
       const tabContentClassName =
-        year === currentYear ? 'ui bottom attached active tab segment' : 'ui bottom attached tab segment';
+        y === currentYear ? 'ui bottom attached active tab segment' : 'ui bottom attached tab segment';
 
       seasonYearTabsContent.push(
-        <div className={tabContentClassName} data-tab={year}>
+        <div className={tabContentClassName} data-tab={y}>
           <div className="ui five column grid">
             <div className="column">
-              <LeagueCategory leagues={this.props.football.seasonsByYear[year]}
+              <LeagueCategory leagues={this.props.football.seasonsByYear[y]}
                 onClickLeague={this.props.onClickCategoryFilter}
               />
             </div>
 
             <div className="column">
-              <TeamCategory teamsByLeague={this.props.football.leagueTeamsByYear[year]}
+              <TeamCategory teamsByLeague={this.props.football.leagueTeamsByYear[y]}
                 onClickTeam={this.props.onClickCategoryFilter}
               />
             </div>
 
             <div className="column">
-              {/*<PlayerCategory />*/}
+              {/* <PlayerCategory />*/}
             </div>
           </div>
         </div>

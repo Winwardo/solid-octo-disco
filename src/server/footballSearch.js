@@ -59,6 +59,11 @@ const fetchLeagueTeamsById = (leagueId) => {
     );
 };
 
+export const searchFootballTeamPlayers = (res, teamId) => {
+  const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/teams/${teamId}/players`;
+  fetchDataAndRespond(res, footballRequestUrl, `team with id:${teamId}'s football players`);
+};
+
 const fetchDataAndRespond = (res, url, name) => {
   newPromiseChain()
     .then(() => fetch(url, footballAccessOptions))
