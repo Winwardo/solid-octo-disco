@@ -3,20 +3,20 @@ import { newPromiseChain, makeGetHeader, fetchPost } from './../../../shared/uti
 import fetch from 'isomorphic-fetch';
 
 export const REQUEST_FOOTBALL_SEASON = 'REQUEST_FOOTBALL_SEASON';
-const requestFootballSeason = (year) => ({
+export const requestFootballSeason = (year) => ({
   type: REQUEST_FOOTBALL_SEASON,
   year,
 });
 
 export const RECIEVE_FOOTBALL_SEASON = 'RECIEVE_FOOTBALL_SEASON';
-const recieveFootballSeason = (year, json) => ({
+export const recieveFootballSeason = (year, json) => ({
   type: RECIEVE_FOOTBALL_SEASON,
   year,
   footballSeasons: json,
 });
 
 export const REMOVE_FOOTBALL_SEASON = 'REMOVE_FOOTBALL_SEASON';
-const removeFootballSeason = (year) => ({
+export const removeFootballSeason = (year) => ({
   type: REMOVE_FOOTBALL_SEASON,
   year,
 });
@@ -47,13 +47,13 @@ export const fetchAllFootballSeasons = (year, isFirstYear) =>
 );
 
 export const REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS = 'REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS';
-const requestYearsFootballLeaguesTeams = (year) => ({
+export const requestYearsFootballLeaguesTeams = (year) => ({
   type: REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS,
   year,
 });
 
 export const RECIEVE_YEARS_FOOTBALL_LEAGUES_TEAMS = 'RECIEVE_YEARS_FOOTBALL_LEAGUES_TEAMS';
-const recieveYearsFootballLeaguesTeams = (year, json) => ({
+export const recieveYearsFootballLeaguesTeams = (year, json) => ({
   type: RECIEVE_YEARS_FOOTBALL_LEAGUES_TEAMS,
   year,
   footballLeagues: json,
@@ -74,4 +74,31 @@ export const fetchAllFootballLeagueTeams = (year) =>
       .then(allSeasonsTeams =>
         dispatch(recieveYearsFootballLeaguesTeams(year, allSeasonsTeams.data.teamsByLeague))
       )
+      .catch((error) => console.warn(`Major error fetching the ${year}'s' football leagues`, error))
+  );
+
+export const SELECT_AND_REQUEST_FOOTBALL_TEAM = 'SELECT_AND_REQUEST_FOOTBALL_TEAM';
+export const selectAndRequestFootballTeam = (id, name, shortName, crestUrl) => ({
+  type: SELECT_AND_REQUEST_FOOTBALL_TEAM,
+  id,
+  crestUrl,
+  name,
+  shortName
+});
+
+
+export const RECIEVE_SELECTED_FOOTBALL_TEAM_PLAYERS = 'RECIEVE_SELECTED_FOOTBALL_TEAM_PLAYERS';
+export const recieveSelectedFootballTeamPlayers = (json) => ({
+  type: RECIEVE_SELECTED_FOOTBALL_TEAM_PLAYERS,
+  footballTeamPlayers: json,
+});
+
+export const fetchFootballTeamPlayers = (id, name, shortName, crestUrl) =>
+  (dispatch) => (
+    newPromiseChain()
+      .then(() => dispatch(selectAndRequestFootballTeam(id, name, shortName, crestUrl)))
+      .then(() => fetch(`/football/teams/${id}/players`, makeGetHeader()))
+      .then(response => response.json())
+      .then(json => dispatch(recieveSelectedFootballTeamPlayers(json)))
+      .catch((error) => console.warn(`Major error fetching ${name}'s players`, error))
   );
