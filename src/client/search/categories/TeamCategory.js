@@ -50,6 +50,7 @@ class TeamCategory extends Component {
                   <div className="items">
                     {league.teams.map(team => (
                       <div data-id={league.id} className="league item"
+                        style={{ cursor: 'pointer' }}
                         onClick={() => this.props.onClickTeam(team.shortName)}
                       >
                         <img className="ui avatar image" src={team.crestUrl} />
