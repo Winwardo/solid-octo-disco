@@ -8,7 +8,8 @@ export default React.createClass({
 
   componentDidUpdate: function() {
     this.markerBounds = new google.maps.LatLngBounds();
-    this.markerBounds.extend(new google.maps.LatLng(51.5, 0.12)) // London
+    this.markerBounds.extend(new google.maps.LatLng(49.9, -9.8)) // South West of UK
+    this.markerBounds.extend(new google.maps.LatLng(58.9, -1.93)) // North East of UK
 
     this.markers.forEach((marker) => marker.setMap(null));
     this.props.posts.forEach(this.addMarker);
