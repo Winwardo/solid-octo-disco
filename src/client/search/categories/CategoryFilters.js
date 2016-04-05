@@ -10,13 +10,13 @@ import { addSearchTerm } from './../searchActions';
 class CategoryFilters extends Component {
   componentDidMount() {
     $('.menu .item').tab({
-      onVisible: (tabPath) => this.props.onClickYearTab(tabPath)
-    });
-  }
-
-  componentDidUpdate() {
-    $('.menu .item').tab({
-      onVisible: (tabPath) => this.props.onClickYearTab(tabPath)
+      onVisible: (tabPath) => {
+        let leagueLength = 0;
+        if (this.props.football.leagueTeamsByYear[tabPath]) {
+          leagueLength = this.props.football.leagueTeamsByYear[tabPath].leagues.length;
+        }
+        return this.props.onClickYearTab(tabPath, leagueLength);
+      }
     });
   }
 
@@ -68,10 +68,10 @@ CategoryFilters.propTypes = {
 
 const mapStateToProps = (state) => ({ football: state.football });
 
-const mapDispatchToProps = (dispatch, getState) => ({
+const mapDispatchToProps = (dispatch) => ({
   onClickCategoryFilter: (newTerm) => dispatch(addSearchTerm(newTerm)),
-  onClickYearTab: (year) => {
-    if (getState().football.leagueTeamsByYear[year].leagues.length === 0) {
+  onClickYearTab: (year, leagueLength) => {
+    if (leagueLength === 0) {
       return dispatch(fetchAllFootballLeagueTeams(year));
     }
 
