@@ -47,7 +47,7 @@ let Results = ({ feed, mostFrequent }) => {
           paginationInfo={feed.paginationInfo}
         />
 
-        <div id="map44" style={{height: '300px', width:'100%'}} coords={{ lat: -34.397, lng: 150.644}} />
+        <div id="tweetMap" style={{height: '500px', width:'100%'}} />
         <GMap posts={posts.filter((post) => post.data.longitude !== 0)} />
 
       </div>
@@ -65,30 +65,26 @@ let Results = ({ feed, mostFrequent }) => {
 
 
 const GMap = React.createClass({
+  // http://revelry.co/google-maps-react/
   map: null,
   markers: [],
   infoWindow: null,
 
-  render: () => {
-    console.log("render")
-    return (
-      <div className="GMap">
-        <div ref="map_canvas" id="themap">
-        </div>
-      </div>
-    )
-  },
+  render: () => (
+    <div />
+  ),
 
   componentDidUpdate: function() {
     console.log("update");
-    this.map = this.createMap()
+    this.markerBounds = new google.maps.LatLngBounds();
     this.markers.forEach((marker) => marker.setMap(null));
     this.props.posts.forEach(this.addMarker);
+    this.map.fitBounds(this.markerBounds);
   },
 
   componentDidMount: function() {
+    this.map = this.createMap()
     this.componentDidUpdate();
-    console.log("mount");
   },
 
   createMap: function() {
@@ -101,13 +97,14 @@ const GMap = React.createClass({
 
     console.log("map", mapOptions);
     //return new google.maps.Map(this.refs.map_canvas.getDOMNode(), mapOptions)
-    return new google.maps.Map($("#map44")[0], mapOptions)
+    return new google.maps.Map($("#tweetMap")[0], mapOptions)
   },
 
   addMarker: function(post) {
     console.log("marker", post);
+    const pos = new google.maps.LatLng(post.data.latitude, post.data.longitude);
     const marker = new google.maps.Marker({
-      position: new google.maps.LatLng(post.data.latitude, post.data.longitude),
+      position: pos,
       map: this.map,
       title: post.data.content
     })
@@ -121,6 +118,7 @@ const GMap = React.createClass({
     })
 
     this.markers.push(marker);
+    this.markerBounds.extend(pos)
 
     return marker;
   },
