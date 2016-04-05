@@ -18,7 +18,7 @@ const YearSelector = ({ seasonYears, currentYear }) => {
       (
         <a className={y === currentYear ? 'active item' : 'item'} data-tab={y}>
           {numberOfLeagues}
-          {y}
+          {y}/{parseInt(y, 10) + 1}
         </a>
       ),
     ];

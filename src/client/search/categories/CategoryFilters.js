@@ -68,9 +68,15 @@ CategoryFilters.propTypes = {
 
 const mapStateToProps = (state) => ({ football: state.football });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch, getState) => ({
   onClickCategoryFilter: (newTerm) => dispatch(addSearchTerm(newTerm)),
-  onClickYearTab: (year) => dispatch(fetchAllFootballLeagueTeams(year)),
+  onClickYearTab: (year) => {
+    if (getState().football.leagueTeamsByYear[year].leagues.length === 0) {
+      return dispatch(fetchAllFootballLeagueTeams(year));
+    }
+
+    return false;
+  },
 });
 
 export default connect(
