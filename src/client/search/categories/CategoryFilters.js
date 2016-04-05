@@ -21,7 +21,7 @@ class CategoryFilters extends Component {
   }
 
   render() {
-    const currentYear = `${moment().year()}`;
+    const currentYear = `${moment().year() - 1}`;
     let seasonYearTabsContent = [];
     for (let year in this.props.football.seasonsByYear) {
       const tabContentClassName =
