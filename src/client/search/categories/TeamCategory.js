@@ -5,6 +5,7 @@ class TeamCategory extends Component {
     $('.ui.dropdown.teams').dropdown({
       action: 'nothing',
     });
+    $('.ui.vertical.accordion.menu.teams').accordion();
   }
 
   render() {
@@ -17,7 +18,24 @@ class TeamCategory extends Component {
             <i className="search icon"></i>
             <input type="text" placeholder="Search tags..." />
           </div>
-          {}
+          <div className="ui vertical accordion menu teams">
+            {this.props.teamsByLeague.map(league => (
+              <div className="item">
+                <div className="title">
+                  <i className="dropdown icon"></i>
+                  {league.name.slice(0, league.name.length - 7)}
+                </div>
+                <div className="content">
+                  {league.teams.map(team => (
+                    <div className="item" onClick={() => this.props.onClickTeam(team.shortName)}>
+                      <img className="ui avatar image" src={team.crestUrl} />
+                      {team.name}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );

@@ -67,9 +67,8 @@ export const fetchAllFootballLeagueTeams = (year) =>
             .map((season) => ({ id: season.id, name: season.caption }))
         }
       ))
-      .then(allSeasonsTeams => {
-        console.log('finished?',allSeasonsTeams);
-        dispatch(
-        recieveYearsFootballLeaguesTeams(year, allSeasonsTeams.data.teamsByLeague)
-      )})
+      .then(results => results.json())
+      .then(allSeasonsTeams =>
+        dispatch(recieveYearsFootballLeaguesTeams(year, allSeasonsTeams.data.teamsByLeague))
+      )
   );

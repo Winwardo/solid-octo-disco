@@ -22,21 +22,18 @@ export const searchFootballSeasonTeams = (res, year, leagues) =>
     .then(() =>
       Promise.all(
         leagues.map(
-          league => {
-            let leagueTeams = fetchLeagueTeamsById(league.id);
-            console.log('fetched', leagueTeams);
-            return ({
-              league: league.name,
+          league => newPromiseChain()
+            .then(() => fetchLeagueTeamsById(league.id))
+            .then(leagueTeams => ({
+              name: league.name,
               id: league.id,
               ...leagueTeams,
-            });
-          }
+            }))
         )
       )
     )
     .then(
       (allYearsLeagueTeams) => {
-        console.log('resolved', allYearsLeagueTeams);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           data: {
