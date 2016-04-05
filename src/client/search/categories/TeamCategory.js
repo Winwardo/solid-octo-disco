@@ -9,18 +9,20 @@ class TeamCategory extends Component {
   }
 
   render() {
-    console.log('teamByLeague', this.props.teamsByLeague);
     let leagueTeams = [];
+    let isFetchingLoader;
     // checks if teamsByLeague exist and have been fetched
     if (this.props.teamsByLeague) {
       if (!this.props.teamsByLeague.isFetching) {
         leagueTeams = this.props.teamsByLeague.leagues;
+      } else {
+        isFetchingLoader = <i className="purple icon"><div className="ui active inline loader"></div></i>;
       }
     }
 
     return (
       <div className="ui dropdown labeled icon button teams">
-        <i className="users purple icon"></i>
+        {isFetchingLoader ? isFetchingLoader : <i className="users purple icon"></i>}
         <span className="text">Teams...</span>
         <div className="menu">
           <div className="ui icon search input">
