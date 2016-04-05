@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { throttleFunction } from './../../shared/utilities';
 import TermItem from './TermItem';
 import {
   deleteSearchTerm, invalidateFeedResults, toggleSearchTermParamTypeSelection
@@ -45,9 +46,7 @@ const mapDispatchToProps = (dispatch) => ({
   onSearchTermDeleteClick: (id) => {
     dispatch(deleteSearchTerm(id));
   },
-  onSearchTermsChange: () => {
-    dispatch(invalidateFeedResults());
-  },
+  onSearchTermsChange: throttleFunction(() => dispatch(invalidateFeedResults()), 1000)
 });
 
 export default connect(
