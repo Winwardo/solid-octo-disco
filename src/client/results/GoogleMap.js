@@ -45,7 +45,7 @@ export default React.createClass({
     });
 
     const infowindow = new google.maps.InfoWindow({
-      content: `@${post.author.handle}: ${post.data.content}`
+      content: `<a href="//twitter.com/${post.author.handle}">@${post.author.handle}</a>: ${post.data.content}`
     });
 
     marker.addListener('click', function() {
