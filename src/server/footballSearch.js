@@ -14,16 +14,55 @@ const footballAPIVersion = '/v1';
 
 export const searchFootballSeasons = (res, year) => {
   const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/soccerseasons/?season=${year}`;
-  fetchData(res, footballRequestUrl, `${year}'s football seasons`);
+  fetchDataAndRespond(res, footballRequestUrl, `${year}'s football seasons`);
 };
 
-export const searchFootballSeasonTeams = (res, year, leagues) => {
-  
-  const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/soccerseasons/${id}/teams`;
-  fetchData(res, footballRequestUrl, `football season with id=${id}' teams`);
+export const searchFootballSeasonTeams = (res, year, leagues) =>
+  newPromiseChain()
+    .then(() =>
+      Promise.all(
+        leagues.map(
+          league => {
+            let leagueTeams = fetchLeagueTeamsById(league.id);
+            console.log('fetched', leagueTeams);
+            return ({
+              league: league.name,
+              id: league.id,
+              ...leagueTeams,
+            });
+          }
+        )
+      )
+    )
+    .then(
+      (allYearsLeagueTeams) => {
+        console.log('resolved', allYearsLeagueTeams);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          data: {
+            teamsByLeague: allYearsLeagueTeams
+          }
+        }));
+      },
+      (rejection) => {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end('An unexpected internal error occurred.');
+        console.warn(`Unable to search for query year:${year}'s league's teams`, rejection);
+      }
+  );
+
+const fetchLeagueTeamsById = (leagueId) => {
+  const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/soccerseasons/${leagueId}/teams`;
+  return newPromiseChain()
+    .then(() => fetch(footballRequestUrl, footballAccessOptions))
+    .then(response => response.json())
+    .then(
+      leagueTeamsResolved => leagueTeamsResolved,
+      rejection => console.warn(`Major error reqesting the league with id:${leagueId}.`, rejection)
+    );
 };
 
-const fetchData = (res, url, name) => {
+const fetchDataAndRespond = (res, url, name) => {
   newPromiseChain()
     .then(() => fetch(url, footballAccessOptions))
     .then(response => response.json())

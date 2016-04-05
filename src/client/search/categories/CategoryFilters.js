@@ -3,16 +3,21 @@ import YearSelector from './YearSelector';
 import { connect } from 'react-redux';
 import LeagueCategory from './LeagueCategory';
 import TeamCategory from './TeamCategory';
+import { fetchAllFootballLeagueTeams } from './categoryFilterActions';
 import moment from 'moment';
 import { addSearchTerm } from './../searchActions';
 
 class CategoryFilters extends Component {
   componentDidMount() {
-    $('.menu .item').tab();
+    $('.menu .item').tab({
+      onVisible: (tabPath) => this.props.onClickYearTab(tabPath)
+    });
   }
 
   componentDidUpdate() {
-    $('.menu .item').tab();
+    $('.menu .item').tab({
+      onVisible: (tabPath) => this.props.onClickYearTab(tabPath)
+    });
   }
 
   render() {
@@ -56,6 +61,7 @@ const mapStateToProps = (state) => ({ football: state.football });
 
 const mapDispatchToProps = (dispatch) => ({
   onClickCategoryFilter: (newTerm) => dispatch(addSearchTerm(newTerm)),
+  onClickYearTab: (year) => dispatch(fetchAllFootballLeagueTeams(year)),
 });
 
 export default connect(

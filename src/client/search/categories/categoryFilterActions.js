@@ -43,25 +43,33 @@ export const fetchAllFootballSeasons = (year) =>
       .catch((error) => console.warn('Major error fetching the football seasons', error))
 );
 
-// export const REQUEST_FOOTBALL_SEASONS_TEAMS = 'REQUEST_FOOTBALL_SEASONS_TEAMS';
-// const requestFootballSeasonsTeams = (season) => ({
-//   type: REQUEST_FOOTBALL_SEASONS_TEAMS,
-//   season,
-// });
-//
-// export const RECIEVE_FOOTBALL_SEASONS_TEAMS = 'RECIEVE_FOOTBALL_SEASONS_TEAMS';
-// const recieveFootballSeasonsTeams = (season, json) => ({
-//   type: RECIEVE_FOOTBALL_SEASONS_TEAMS,
-//   season,
-//   footballSeasons: json,
-// });
+export const REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS = 'REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS';
+const requestYearsFootballLeaguesTeams = (year) => ({
+  type: REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS,
+  year,
+});
 
-export const fetchAllFootballSeasonTeams = (year) =>
+export const RECIEVE_YEARS_FOOTBALL_LEAGUES_TEAMS = 'RECIEVE_YEARS_FOOTBALL_LEAGUES_TEAMS';
+const recieveYearsFootballLeaguesTeams = (year, json) => ({
+  type: RECIEVE_YEARS_FOOTBALL_LEAGUES_TEAMS,
+  year,
+  footballLeagues: json,
+});
+
+export const fetchAllFootballLeagueTeams = (year) =>
   (dispatch, getState) => (
     newPromiseChain()
-      .then(() => fetchPost(`/football/seasons/${year}/teams`, {
-        leagues: getState().football.seasonsByYear[year].seasons
-          .map((season) => ({ id: season.id, name: season.caption }))
-      }))
-      .then()
-  )
+      .then(() => dispatch(requestYearsFootballLeaguesTeams(year)))
+      .then(() => fetchPost(
+        `/football/seasons/${year}/teams`,
+        {
+          leagues: getState().football.seasonsByYear[year].seasons
+            .map((season) => ({ id: season.id, name: season.caption }))
+        }
+      ))
+      .then(allSeasonsTeams => {
+        console.log('finished?',allSeasonsTeams);
+        dispatch(
+        recieveYearsFootballLeaguesTeams(year, allSeasonsTeams.data.teamsByLeague)
+      )})
+  );

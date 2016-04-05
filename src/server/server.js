@@ -43,11 +43,6 @@ app.post('/search', (req, res) => {
   searchQuery(req, res);
 });
 
-app.get('/twit/:query', (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'application/json' });
-  searchAndSaveResponse(res, req.params.query);
-});
-
 app.get('/exampleTwitterJson', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
   TwitAccess.get('search/tweets', { q: 'Brussels', count: 300 })
@@ -64,7 +59,7 @@ app.get('/football/seasons/:year', (req, res) => {
 });
 
 app.post('/football/seasons/:year/teams', (req, res) => {
-  searchFootballSeasonTeams(res, req.params.year, req.params.query.body.leagues);
+  searchFootballSeasonTeams(res, req.params.year, req.body.leagues);
 });
 
 app.get('*', (req, res) => {
