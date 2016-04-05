@@ -8,6 +8,13 @@ class LeagueCategory extends Component {
   }
 
   render() {
+    let yearsLeagues = [];
+    if (this.props.leagues) {
+      if (!this.props.leagues.isFetching) {
+        yearsLeagues = this.props.leagues.seasons;
+      }
+    }
+
     return (
       <div className="ui dropdown labeled icon button leagues">
         <i className="trophy purple icon"></i>
@@ -17,7 +24,7 @@ class LeagueCategory extends Component {
             <i className="search icon"></i>
             <input type="text" placeholder="Search tags..." />
           </div>
-          {this.props.leagues.map(league => {
+          {yearsLeagues.map(league => {
             // gets rid of the 20XX/YY year at the end of the caption
             const leagueName = league.caption.slice(0, league.caption.length - 7);
             return (

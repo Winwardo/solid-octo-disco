@@ -9,6 +9,15 @@ class TeamCategory extends Component {
   }
 
   render() {
+    console.log('teamByLeague', this.props.teamsByLeague);
+    let leagueTeams = [];
+    // checks if teamsByLeague exist and have been fetched
+    if (this.props.teamsByLeague) {
+      if (!this.props.teamsByLeague.isFetching) {
+        leagueTeams = this.props.teamsByLeague.leagues;
+      }
+    }
+
     return (
       <div className="ui dropdown labeled icon button teams">
         <i className="users purple icon"></i>
@@ -17,7 +26,7 @@ class TeamCategory extends Component {
           <div className="ui icon search input">
             <i className="search icon"></i>
             <input type="text" placeholder="Search Teams..." onChange={() => {
-              this.props.teamsByLeague.forEach((league) => {
+              leagueTeams.forEach((league) => {
                 // Assume all leagues don't have teams showing
                 let hasUnfilteredTeams = false;
                 // For every team in the league with id
@@ -40,7 +49,7 @@ class TeamCategory extends Component {
             }} />
           </div>
           <div className="ui styled accordion teams">
-            {this.props.teamsByLeague.map(league => (
+            {leagueTeams.map(league => (
               <div data-id={league.id} className="league section">
                 <div className="title">
                   <i className="dropdown icon"></i>

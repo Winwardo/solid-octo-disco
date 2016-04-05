@@ -15,6 +15,7 @@ class CategoryFilters extends Component {
         if (this.props.football.leagueTeamsByYear[tabPath]) {
           leagueLength = this.props.football.leagueTeamsByYear[tabPath].leagues.length;
         }
+        // only fetches the data for the football year if it hasn't already been fetched
         return this.props.onClickYearTab(tabPath, leagueLength);
       }
     });
@@ -27,26 +28,12 @@ class CategoryFilters extends Component {
       const tabContentClassName =
         year === currentYear ? 'ui bottom attached active tab segment' : 'ui bottom attached tab segment';
 
-      let yearsLeagues = [];
-      if (this.props.football.seasonsByYear[year]) {
-        if (!this.props.football.seasonsByYear[year].isFetching) {
-          yearsLeagues = this.props.football.seasonsByYear[year].seasons;
-        }
-      }
-
-      let leagueTeams = [];
-      if (this.props.football.leagueTeamsByYear[year]) {
-        if (!this.props.football.leagueTeamsByYear[year].isFetching) {
-          leagueTeams = this.props.football.leagueTeamsByYear[year].leagues;
-        }
-      }
-
       seasonYearTabsContent.push(
         <div className={tabContentClassName} data-tab={year}>
-          <LeagueCategory leagues={yearsLeagues}
+          <LeagueCategory leagues={this.props.football.seasonsByYear[year]}
             onClickLeague={this.props.onClickCategoryFilter}
           />
-          <TeamCategory teamsByLeague={leagueTeams}
+          <TeamCategory teamsByLeague={this.props.football.leagueTeamsByYear[year]}
             onClickTeam={this.props.onClickCategoryFilter}
           />
         </div>
