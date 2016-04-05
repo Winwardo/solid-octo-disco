@@ -29,6 +29,7 @@ let Results = ({ feed, mostFrequent }) => {
 
   return (
     <div className="ui grid">
+
       <div className="four wide column">
         <MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
           userInfoList={feed.mostFrequentUsers}
@@ -36,8 +37,7 @@ let Results = ({ feed, mostFrequent }) => {
         />
       </div>
 
-      <div className="eight wide column">
-        <InteractiveMap posts={posts}/>
+      <div className="eight wide column" id="scatterMapContainer">
 
         <Feed feed={posts}
           toggledWords={mostFrequent.words.toToggle}
@@ -46,6 +46,10 @@ let Results = ({ feed, mostFrequent }) => {
           isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
           paginationInfo={feed.paginationInfo}
         />
+
+        <div id="map44" style={{height: '300px', width:'100%'}} coords={{ lat: -34.397, lng: 150.644}} />
+        <GMap posts={posts.filter((post) => post.data.longitude !== 0)} />
+
       </div>
 
       <div className="four wide column">
@@ -55,57 +59,90 @@ let Results = ({ feed, mostFrequent }) => {
         />
       </div>
     </div>
+
   );
 };
 
 
-var InteractiveMap = React.createClass({
-  getInitialState() {
-    return {
-      viewport: {
-        longitude: 0.01,
-        latitude: 0.01,
-        zoom: 0,
-        width: 620,
-        height: 370,
-        startDragLngLat: null,
-        isDragging: null,
-        mapStyle:'mapbox://styles/mapbox/basic-v8',
-        mapboxApiAccessToken:'pk.eyJ1Ijoid2lud2FyZG8iLCJhIjoiY2ltbm4zbWdlMDAzZnd4a3FoM29uZGcxciJ9.qRmwZHvFhbo9k-IqxKEwFA'
-      },
-    };
+const GMap = React.createClass({
+  map: null,
+  markers: [],
+  infoWindow: null,
+
+  render: () => {
+    console.log("render")
+    return (
+      <div className="GMap">
+        <div ref="map_canvas" id="themap">
+        </div>
+      </div>
+    )
   },
 
-  _onChangeViewport(newViewport) {
-    const viewport = {...this.state.viewport, ...newViewport};
-    this.setState({viewport});
+  componentDidUpdate: function() {
+    console.log("update");
+    this.map = this.createMap()
+    this.markers.forEach((marker) => marker.setMap(null));
+    this.props.posts.forEach(this.addMarker);
   },
 
-  render() {
-    var {viewport} = this.state;
+  componentDidMount: function() {
+    this.componentDidUpdate();
+    console.log("mount");
+  },
 
-    const locations = Immutable.fromJS(
-      this.props.posts
-        .filter((post) => post.data.longitude !== 0)
-        .map((post) => [post.data.longitude, post.data.latitude])
-    );
+  createMap: function() {
+    const mapOptions = {
+      minZoom: 1,
+      zoom: 1,
+      center: new google.maps.LatLng(30, 0),
+      mapTypeId: google.maps.MapTypeId.TERRAIN
+    }
 
-    return <MapGL
-      onChangeViewport={this._onChangeViewport}
-      {...viewport}
-    >
-      <ScatterPlotOverlay
-        {...viewport}
-        locations={locations}
-        dotRadius={5}
-        globalOpacity={1}
-        compositeOperation="overlay"
-        dotFill="#1FBAD6"
-        renderWhileDragging={true}
-      />
-    </MapGL>;
-  }
-});
+    console.log("map", mapOptions);
+    //return new google.maps.Map(this.refs.map_canvas.getDOMNode(), mapOptions)
+    return new google.maps.Map($("#map44")[0], mapOptions)
+  },
+
+  addMarker: function(post) {
+    console.log("marker", post);
+    const marker = new google.maps.Marker({
+      position: new google.maps.LatLng(post.data.latitude, post.data.longitude),
+      map: this.map,
+      title: post.data.content
+    })
+
+    var infowindow = new google.maps.InfoWindow({
+      content: post.data.content
+    });
+
+    marker.addListener('click', function() {
+      infowindow.open(this.map, marker);
+    })
+
+    this.markers.push(marker);
+
+    return marker;
+  },
+
+  createInfoWindow: function(marker) {
+    console.log("info");
+    const contentString = "<div class='InfoWindow'>I'm a Window that contains Info Yay</div>";
+    const infoWindow = new google.maps.InfoWindow({
+      map: this.map,
+      anchor: marker,
+      content: contentString
+    })
+    return infoWindow
+  },
+
+  handleZoomChange: () => {
+  },
+
+  handleDragEnd: () => {
+  },
+})
+
 
 const mapStateToProps = (state) => ({
   feed: state.feed,
