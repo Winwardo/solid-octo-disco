@@ -1,3 +1,5 @@
+# Certain folders are NOT excluded here, such as documentation: this is the RELEASE branch.
+
 # Logs
 logs
 *.log
@@ -20,9 +22,6 @@ coverage
 # node-waf configuration
 .lock-wscript
 
-# Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
-
 # Dependency directories
 node_modules
 jspm_packages
@@ -33,7 +32,6 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-public/bundle.js
 .idea/*
 coverage.html
 
@@ -43,6 +41,3 @@ build
 # Database data
 lib/orientdb/databases
 lib/orientdb/log
-
-# Documentation
-documentation/*
