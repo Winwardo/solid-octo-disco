@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 const YearSelector = ({ seasonYears, currentYear }) => {
   let seasonYearButtons = [];
   for (let y = currentYear; y >= 2013; y--) {
-    let numberOfLeagues = (<div className="ui active small inline loader"></div>);
+    let numberOfLeagues = (
+        <div className="ui active small inline loader"></div>
+    );
 
     // When season year's leagues have been retrieved remove loader and show the number of them
     if (seasonYears[y]) {
