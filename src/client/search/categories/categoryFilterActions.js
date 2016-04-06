@@ -93,6 +93,11 @@ export const recieveSelectedFootballTeamPlayers = (json) => ({
   footballTeamPlayers: json,
 });
 
+export const REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS = 'REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS';
+export const removeSelectedFootballTeamPlayers = () => ({
+  type: REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS
+});
+
 export const fetchFootballTeamPlayers = (id, name, shortName, crestUrl) =>
   (dispatch) => (
     newPromiseChain()

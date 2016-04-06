@@ -1,7 +1,8 @@
 import {
   REQUEST_FOOTBALL_SEASON, RECIEVE_FOOTBALL_SEASON, REMOVE_FOOTBALL_SEASON,
   REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS, RECIEVE_YEARS_FOOTBALL_LEAGUES_TEAMS,
-  SELECT_AND_REQUEST_FOOTBALL_TEAM, RECIEVE_SELECTED_FOOTBALL_TEAM_PLAYERS
+  SELECT_AND_REQUEST_FOOTBALL_TEAM, RECIEVE_SELECTED_FOOTBALL_TEAM_PLAYERS,
+  REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS
 } from './categoryFilterActions';
 
 const footballCategoryFiltersInitialState = {
@@ -62,6 +63,14 @@ const footballCategoryFiltersReducer = (state = footballCategoryFiltersInitialSt
         isFetching: false,
         ...action.footballTeamPlayers
       }
+    };
+  case REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS:
+    return {
+      ...state,
+      selectedTeam: {
+        isSelected: false,
+        isFetching: false
+      },
     };
   default:
     return state;

@@ -93,5 +93,13 @@ describe('#categoryFilterActions', () => {
 
       actions.recieveSelectedFootballTeamPlayers(exampleJson).should.deep.equal(expectedAction);
     });
+
+    it('should create an action to remove selection of a football team players', () => {
+      const expectedAction = {
+        type: actions.REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS
+      };
+
+      actions.removeSelectedFootballTeamPlayers().should.deep.equal(expectedAction);
+    });
   });
 });

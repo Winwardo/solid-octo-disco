@@ -170,9 +170,25 @@ describe('#footballCategoryFiltersReducer', () => {
           name,
           shortName,
           crestUrl,
-          players: exampleJson,
+          ...exampleJson,
         }
       };
+
+      deepFreeze(stateBefore);
+      deepFreeze(action);
+
+      footballCategoryFiltersReducer(stateBefore, action).should.deep.equal(stateAfter);
+    });
+
+    it('should remove the selected football team players', () => {
+      const exampleJson = { players: ['player1', 'player2'] };
+      const stateBefore = footballCategoryFiltersReducer(
+        footballCategoryFiltersInitialState,
+        actions.recieveSelectedFootballTeamPlayers(exampleJson),
+      );
+      const action = actions.removeSelectedFootballTeamPlayers();
+
+      const stateAfter = footballCategoryFiltersInitialState;
 
       deepFreeze(stateBefore);
       deepFreeze(action);

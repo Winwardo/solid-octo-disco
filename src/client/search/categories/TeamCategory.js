@@ -29,26 +29,39 @@ class TeamCategory extends Component {
         <div className="menu">
           <div className="ui icon search input">
             <i className="search icon"></i>
-            <input type="text" placeholder="Search Teams..." onChange={() => {
+            <input type="text" placeholder="Search Teams..." onChange={(e) => {
+              const inputLength = e.target.value.length;
+              // setting very little timeout so that the below happens after
+              // the class names have have changed properly
               leagueTeams.forEach((league) => {
-                // Assume all leagues don't have teams showing
-                let hasUnfilteredTeams = false;
-                // For every team in the league with id
-                $(`.league.item[data-id="${league.id}"]`).each((i, team) => {
-                  // check if it doesn't have the filtered class
-                  if (!$(team).hasClass('filtered')) {
-                    // which means that all the teams aren't filtered
-                    hasUnfilteredTeams = true;
-                  }
-                });
+                setTimeout(() => {
+                  // Assume all leagues don't have teams showing
+                  let hasUnfilteredTeams = false;
+                  let leaguesShowing = 0;
+                  // For every team in the league with id
+                  $(`.league.item[data-id="${league.id}"]`).each((i, team) => {
+                    // check if it doesn't have the filtered class
+                    if (!$(team).hasClass('filtered')) {
+                      // which means that all the teams aren't filtered
+                      leaguesShowing++;
+                      hasUnfilteredTeams = true;
+                    }
+                  });
 
-                // if the league has showing teams remove the filtered class to hide them
-                // otherwise add a class to hide that league.
-                if (hasUnfilteredTeams) {
-                  $(`.league.section[data-id="${league.id}"]`).removeClass('item filtered');
-                } else {
-                  $(`.league.section[data-id="${league.id}"]`).addClass('item filtered');
-                }
+                  // if the league has showing teams remove the filtered class to hide them
+                  // otherwise add a class to hide that league.
+                  if (hasUnfilteredTeams) {
+                    $(`.league.section[data-id="${league.id}"]`).removeClass('item filtered');
+                    const totalLeagues = $(`.league.item[data-id="${league.id}"]`).length;
+                    if (inputLength === 0) {
+                      $(`.league.count[data-id="${league.id}"]`).text(totalLeagues);
+                    } else {
+                      $(`.league.count[data-id="${league.id}"]`).text(`${leaguesShowing} / ${totalLeagues}`);
+                    }
+                  } else {
+                    $(`.league.section[data-id="${league.id}"]`).addClass('item filtered');
+                  }
+                }, 20);
               });
             }} />
           </div>
@@ -58,6 +71,9 @@ class TeamCategory extends Component {
                 <div className="title">
                   <i className="dropdown icon"></i>
                   {league.name.slice(0, league.name.length - 7)}
+                  <div className="ui purple horizontal basic label" style={{ float: 'right' }}>
+                    <span data-id={league.id} className="league count">{league.teams.length}</span>
+                  </div>
                 </div>
                 <div className="content">
                   <div className="items">
@@ -77,7 +93,7 @@ class TeamCategory extends Component {
                           </div>
 
                           <div className="column">
-                            <div className="mini ui right floated basic purple button"
+                            <div className="mini ui right floated purple button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 const teamId = team._links.players.href.match(/\/v1\/teams\/(\d*?)\/players/)[1];

@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import LeagueCategory from './LeagueCategory';
 import TeamCategory from './TeamCategory';
 import PlayerCategory from './PlayerCategory';
-import { fetchAllFootballLeagueTeams, fetchFootballTeamPlayers } from './categoryFilterActions';
+import {
+  fetchAllFootballLeagueTeams, fetchFootballTeamPlayers, removeSelectedFootballTeamPlayers
+} from './categoryFilterActions';
 import { addSearchTerm } from './../searchActions';
 import moment from 'moment';
 
@@ -49,6 +51,8 @@ class CategoryFilters extends Component {
                 <div className="column">
                   {
                     !this.props.football.selectedTeam.isSelected &&
+                    this.props.football.leagueTeamsByYear[y] &&
+                    this.props.football.leagueTeamsByYear[y].isFetching &&
                       <span className="ui purple horizontal tag label">
                         Select a team to add players...
                       </span>
@@ -92,6 +96,7 @@ const mapDispatchToProps = (dispatch) => ({
   onClickSelectTeam: (id, name, shortName, crestUrl) =>
     dispatch(fetchFootballTeamPlayers(id, name, shortName, crestUrl)),
   onClickYearTab: (year, leagueLength) => {
+    dispatch(removeSelectedFootballTeamPlayers());
     if (leagueLength === 0) {
       return dispatch(fetchAllFootballLeagueTeams(year));
     }
