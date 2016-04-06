@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {
   ADD_SEARCH_TERM, TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION, DELETE_SEARCH_TERM,
   RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT
@@ -59,7 +60,7 @@ export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, li
   case RECEIVE_FEED_RESULTS:
     return {
       ...state,
-      posts: action.data.data.records,
+      posts: sortPostsForFeed(action.data.data.records),
       groupedMostFrequentWords: groupedCountWords(mostFrequentWords(action.data.data.records.map((post) => post.data.content))),
       mostFrequentUsers: mostFrequentUsers(action.data.data.records),
     };
@@ -72,3 +73,10 @@ export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, li
   }
 };
 
+const sortPostsForFeed = (feed) => (
+  [...feed].sort(
+    (post1, post2) => (
+      moment(post2.data.date).diff(moment(post1.data.date))
+    )
+  )
+);
