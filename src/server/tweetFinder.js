@@ -229,7 +229,7 @@ const getTweetsAsResults = (data) => (
   )
 );
 
-export const getQuotedTweetFromParent = (req, res, id) => (
+export const getQuotedTweetFromParent = (req, res) => (
   newPromiseChain()
     .then(() => (
        db.query(
