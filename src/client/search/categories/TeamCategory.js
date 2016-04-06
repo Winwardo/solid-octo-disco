@@ -24,7 +24,7 @@ class TeamCategory extends Component {
     }
 
     return (
-      <div className="large ui fluid dropdown labeled icon button teams">
+      <div className="large ui fluid dropdown labeled icon button teams category">
         {isFetching || leagueTeams.length === 0 ? loaderIcon : <i className="users purple icon"></i>}
         <span className="text">Teams...</span>
         <div className="menu">
