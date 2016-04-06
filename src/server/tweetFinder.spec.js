@@ -155,6 +155,8 @@ describe('#QueryBuilder', () => {
         '@arsenal OR @spurs',
       ]
     );
+  });
+});
 
 describe('#QueryNormaliser', () => {
   it('leaves short single terms alone', () => {
