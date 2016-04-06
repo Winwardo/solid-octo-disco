@@ -7,14 +7,11 @@ import { Provider } from 'react-redux';
 import { searchTermsReducer, feedReducer } from './search/searchReducer';
 import mostFrequentReducer from './results/mostfrequent/mostFrequentReducer';
 import footballCategoryFiltersReducer from './search/categories/categoryFiltersReducer';
-import { newPromiseChain } from './../shared/utilities';
-import {
-  fetchAllFootballSeasons, fetchAllFootballLeagueTeams
-} from './search/categories/categoryFilterActions';
+import { fetchAllFootballSeasons } from './search/categories/categoryFilterActions';
 import moment from 'moment';
 
 const feedApp = combineReducers({
-  searchTerms: searchTermsReducer,
+  search: searchTermsReducer,
   mostFrequent: mostFrequentReducer,
   feed: feedReducer,
   football: footballCategoryFiltersReducer,

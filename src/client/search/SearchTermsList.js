@@ -38,7 +38,7 @@ TermsList.propTypes = {
   onSearchTermsChange: React.PropTypes.func,
 };
 
-const mapStateToProps = (state) => ({ searchTerms: state.searchTerms });
+const mapStateToProps = (state) => ({ searchTerms: state.search.terms });
 
 const mapDispatchToProps = (dispatch) => ({
   onSearchTermParamTypeToggleClick: (id, paramTypeName) => {

@@ -1,30 +1,56 @@
 import moment from 'moment';
 import {
   ADD_SEARCH_TERM, TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION, DELETE_SEARCH_TERM,
-  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT
+  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT,
+  SET_AND_SHOW_SEARCH_QUERY_TERM_VALIDATION_ERROR, HIDE_SEARCH_QUERY_TERM_VALIDATION_ERROR
 } from './searchActions';
 import { createTwitterParamTypes, toggleParamType } from '../../shared/utilities';
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
 
-export const searchTermsReducer = (state = [], action) => {
+export const searchTermsInitialState = {
+  terms: [],
+  showValidationError: false,
+  errorMessage: '',
+};
+
+export const searchTermsReducer = (state = searchTermsInitialState, action) => {
   switch (action.type) {
   case ADD_SEARCH_TERM:
-    return [
+    return {
       ...state,
-      searchTermReducer(undefined, action),
-    ];
+      terms: [
+        ...state.terms,
+        searchTermReducer(undefined, action),
+      ],
+    };
   case TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION:
-    return state.map(searchTerm => searchTermReducer(searchTerm, action));
+    return {
+      ...state,
+      terms: state.terms.map(searchTerm => searchTermReducer(searchTerm, action)),
+    };
   case DELETE_SEARCH_TERM: {
     if (state.length === 1) return [];
 
-    const termIndex = state.map(term => (term.id)).indexOf(action.id);
-    return [
-      ...state.slice(0, termIndex),
-      ...state.slice(termIndex + 1),
-    ];
+    const termIndex = state.terms.map(term => (term.id)).indexOf(action.id);
+    return {
+      ...state,
+      terms: [
+        ...state.terms.slice(0, termIndex),
+        ...state.terms.slice(termIndex + 1),
+      ],
+    };
   }
-
+  case SET_AND_SHOW_SEARCH_QUERY_TERM_VALIDATION_ERROR:
+    return {
+      ...state,
+      showValidationError: true,
+      errorMessage: action.message,
+    };
+  case HIDE_SEARCH_QUERY_TERM_VALIDATION_ERROR:
+    return {
+      ...state,
+      showValidationError: false,
+    };
   default:
     return state;
   }

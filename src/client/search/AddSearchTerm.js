@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addSearchTerm } from './searchActions';
+import { addSearchTerm, setAndShowSearchQueryTermValidationError } from './searchActions';
 
 let AddSearchTerm = ({ dispatch }) => {
   const keywordSearchStyle = {
@@ -23,8 +23,12 @@ let AddSearchTerm = ({ dispatch }) => {
 
         onKeyDown={(e) => {
           if (e.keyCode === 13) {
-            dispatch(addSearchTerm(e.target.value));
-            e.target.value = '';
+            if (e.target.value.length > 2) {
+              dispatch(addSearchTerm(e.target.value));
+              e.target.value = '';
+            } else {
+              dispatch(setAndShowSearchQueryTermValidationError('The search must be at least 2 characters'));
+            }
           }
         }}
 
