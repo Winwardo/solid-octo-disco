@@ -97,7 +97,7 @@ class TeamCategory extends Component {
                           </div>
 
                           <div className="column">
-                            <div className="mini ui right floated purple button"
+                            <div className="mini ui fluid right floated purple button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 this.props.onClickSelectTeam(
