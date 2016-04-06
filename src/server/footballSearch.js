@@ -24,7 +24,11 @@ export const searchFootballSeasons = (res, year) => {
     .then(() => db.query('SELECT FROM league WHERE year=:year', { params: { year: year } }))
     .then((results) => {
       if (results.length === 0) { // If our cache is empty, call the Football API
-        return fetchAndCache(db, footballRequestUrl);
+        return newPromiseChain()
+          .then(() => console.log("Hitting Football API."))
+          .then(() => fetch(footballRequestUrl, footballAccessOptions))
+          .then(response => response.json())
+          .then((footballSeasons) => cacheAPIJsonArray(db, 'League', footballSeasons));
       } else {
         return results; // Return our cached data
       }
@@ -85,20 +89,45 @@ const fetchLeagueTeamsById = (leagueId) => {
 
 export const searchFootballTeamPlayers = (res, teamId) => {
   const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/teams/${teamId}/players`;
-  fetchDataAndRespond(res, footballRequestUrl, `team with id:${teamId}'s football players`);
+
+  return newPromiseChain()
+    .then(() => db.query('SELECT FROM player WHERE teamid=:teamid', { params: { teamid: teamId } }))
+    .then((results) => {
+      if (results.length === 0) { // If our cache is empty, call the Football API
+        console.log("Nothing in cache")
+        return newPromiseChain()
+          .then(() => console.log("Hitting Football API."))
+          .then(() => fetch(footballRequestUrl, footballAccessOptions))
+          .then(response => response.json())
+          .then((league) => {
+            return cacheAPIJsonArray(db, 'Player', league.players.map((player) => ({...player, teamid: teamId})))
+          });
+      } else {
+        return results; // Return our cached data
+      }
+    })
+    .then((players) => ({players: players}))
+    .then(
+      (footballPlayers) => {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(footballPlayers));
+      },
+      (rejection) => {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end('An unexpected internal error occurred.');
+        console.warn(`Unable to get ${teamId}`, rejection);
+      });
+
+
+  //fetchDataAndRespond(res, footballRequestUrl, `team with id:${teamId}'s football players`);
 };
 
-const fetchAndCache = (db, footballRequestUrl) => {
-  return newPromiseChain()
-    .then(() => fetch(footballRequestUrl, footballAccessOptions))
-    .then(response => response.json())
-    .then((footballSeasons) => cacheAPIJsonArray(db, 'League', footballSeasons))
-}
 
 const cacheAPIJsonArray = (db, datatype, dataArray) => (
   newPromiseChain()
+    .then(() => console.log("Caching:", datatype, dataArray.length, dataArray[0]))
     .then(() => Promise.all( // Insert all the seasons to our cache
       dataArray.map((data) => db.insert().into(datatype).set(data).one())
     ))
-    .then((responses) => dataArray) // Return the actual API data as we already have it
+    .then(() => dataArray) // Return the actual API data as we already have it
 );
