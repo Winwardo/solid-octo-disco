@@ -24,11 +24,11 @@ const TermItem = ({ onDeleteClick, onToggleParamTypeClick, query, source, paramT
                 );
               } else {
                 return (
-                <i key={id} className={'tiny inverted blue circular icon param types popup'}
-                  data-title={`Search by ${paramType.name}`}
-                >
-                  {paramType.icon}
-                </i>
+                  <i key={id} className={'tiny inverted blue circular icon param types popup'}
+                    data-title={`Search by ${paramType.name}`}
+                  >
+                    {paramType.icon}
+                  </i>
                 );
               }
             })
