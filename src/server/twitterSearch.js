@@ -131,7 +131,7 @@ const processRawRetweet = (db, rawTweet, retweeter, rawRetweet) => {
   return newPromiseChain()
     .then(() => upsertTweeter(db, retweeter))
     .then(() => processRawOriginalTweet(db, rawRetweet, originalTweeter))
-    .then(() => linkTweeterToRetweet(db, retweeter, originalTweet))
+    .then(() => linkTweeterToRetweet(db, retweeter, originalTweet));
 };
 
 const potentiallyLinkQuoteTweetToOriginalTweet = (db, rawQuoteTweet, quotingTweeter, rawOriginalTweet) => {
@@ -145,7 +145,7 @@ const potentiallyLinkQuoteTweetToOriginalTweet = (db, rawQuoteTweet, quotingTwee
   }
 
   return Promise.resolve();
-}
+};
 
 /**
  * Link a tweet to all of its hashtags

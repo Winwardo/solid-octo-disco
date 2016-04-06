@@ -48,4 +48,4 @@ describe('#QueryNormaliser', () => {
   it('surrounds multiple term queries in quotes', () => {
     tweetFinder.normaliseQueryTerm('manchester united').should.equal('"manchester united"');
   });
-})
+});

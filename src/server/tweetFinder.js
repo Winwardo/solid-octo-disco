@@ -168,7 +168,7 @@ export const normaliseQueryTerm = (query) => {
   } else {
     return `"${query}"`; // add quotes to preserve order
   };
-}
+};;
 
 const makeTweetQuerySelectingFrom = (from) => (
   `SELECT `
@@ -229,23 +229,27 @@ const getTweetsAsResults = (data) => (
   )
 );
 
-export const getQuotedTweetFromParent = (req, res, id) => {
-  return newPromiseChain()
-    .then(() => {
-      return db.query(makeTweetQuerySelectingFrom('TRAVERSE OUT FROM (SELECT OUT(\'QUOTED\') FROM (SELECT FROM Tweet WHERE id = :id))'),
-        {
-          params: {
-            id: req.params.id,
-            limit: 1
-          }
-        });
-    })
-    .then((results) => {
-      return makeTweetAndAuthorFromDatabaseTweetRecord(results[0]);
-    })
-    .then((final) => res.status(200).end(JSON.stringify(final)))
-    .catch((rej) => res.status(500).end(JSON.stringify({
-      message: 'Unable to get quoted tweet from parent.',
-      reason: rej
-    })));
-}
+export const getQuotedTweetFromParent = (req, res, id) => (
+  newPromiseChain()
+    .then(() => (
+       db.query(
+         makeTweetQuerySelectingFrom('TRAVERSE OUT FROM (SELECT OUT(\'QUOTED\') FROM (SELECT FROM Tweet WHERE id = :id))'),
+         {
+           params: {
+             id: req.params.id,
+             limit: 1,
+           },
+         }
+       )
+    ))
+    .then((results) =>   makeTweetAndAuthorFromDatabaseTweetRecord(results[0]))
+    .then(
+      (response) => res.status(200).end(JSON.stringify(response)),
+      (rej) => res.status(500).end(
+        JSON.stringify({
+          message: 'Unable to get quoted tweet from parent.',
+          reason: rej,
+        })
+      )
+    )
+);

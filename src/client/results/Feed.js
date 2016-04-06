@@ -203,8 +203,6 @@ const Tweet = ({ content }) => {
       {goldStar}
       <a href={`//twitter.com/${content.author.handle}`} target="_blank">
         <strong className="tweet fullname header">{decodedAuthorName}</strong>
-        &nbsp;
-        <span className="tweet handle">@{content.author.handle}</span>
       </a>
       <br />
       <div dangerouslySetInnerHTML={{ __html: tweetWithLinks }} />
@@ -232,7 +230,7 @@ const Tweet = ({ content }) => {
 
 const QuotedTweet = React.createClass({
   getInitialState: () => ({
-    tweetContent: null
+    tweetContent: null,
   }),
 
   componentDidMount: function () {
@@ -244,11 +242,11 @@ const QuotedTweet = React.createClass({
             tweetContent: {
               data: result.tweet,
               author: result.author,
-            }
+            },
           });
         },
         (rej) => {
-          console.warn("Unable to fetch quoted tweet.", rej);
+          console.warn('Unable to fetch quoted tweet.', rej);
         }
       );
   },
@@ -262,7 +260,7 @@ const QuotedTweet = React.createClass({
         <div>
           <Tweet content={this.state.tweetContent} />
         </div>
-      )
+      );
       loadingClass = '';
     };
 
@@ -279,7 +277,7 @@ const QuotedTweet = React.createClass({
       </div>
     </div>
     );
-  }
-})
+  },
+});
 
 export default Feed;

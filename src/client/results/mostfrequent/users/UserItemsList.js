@@ -93,8 +93,6 @@ let UserItem = ({ dispatch, userInfo }) => (
 );
 UserItem = connect()(UserItem);
 
-
-
 const UserItemMostUsedWords = ({ usersMostUsedWords }) => {
   let topWord = { word: 'N/A', count: 0 };
   if (usersMostUsedWords[0] !== undefined) {
