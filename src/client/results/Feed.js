@@ -236,38 +236,21 @@ const QuotedTweet = React.createClass({
   }),
 
   componentDidMount: function () {
-    //this.setState({
-    //  tweetContent: {
-    //    data: {
-    //      content: "Hey there",
-    //      likes: 7,
-    //      retweets: 2,
-    //      date: 0,
-    //    },
-    //    author: {
-    //      name: "Name",
-    //      handle: "John",
-    //      profile_image_url: "",
-    //    }
-    //  }
-    //})
     fetch('/tweet/quotedby/' + this.props.parentId, {})
       .then((result) => result.json())
-    .then((result) => {
-      console.log("Donennenene", result);
-
-      const trans = {
-        data: result.tweet,
-        author: result.author,
-      };
-
-      console.log(trans);
-
-
-      this.setState({tweetContent: trans});
-    }, (rej) => {
-      console.log("Aww fetch poops", rej);
-    });
+      .then(
+        (result) => {
+          this.setState({
+            tweetContent: {
+              data: result.tweet,
+              author: result.author,
+            }
+          });
+        },
+        (rej) => {
+          console.warn("Unable to fetch quoted tweet.", rej);
+        }
+      );
   },
 
   render: function () {

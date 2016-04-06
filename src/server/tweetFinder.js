@@ -124,7 +124,6 @@ const searchByKeyword = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'SELECT FROM tweet WHERE content LUCENE :query'
   );
-  console.log("searching:", normaliseQueryTerm(keyword));
   return db.query(tweetSelection, { params: { query: normaliseQueryTerm(keyword), limit: MAX_TWEET_RESULTS } });
 };
 
@@ -233,7 +232,6 @@ const getTweetsAsResults = (data) => (
 export const getQuotedTweetFromParent = (req, res, id) => {
   return newPromiseChain()
     .then(() => {
-      console.log(req.params.id);
       return db.query(makeTweetQuerySelectingFrom('TRAVERSE OUT FROM (SELECT OUT(\'QUOTED\') FROM (SELECT FROM Tweet WHERE id = :id))'),
         {
           params: {
@@ -243,10 +241,11 @@ export const getQuotedTweetFromParent = (req, res, id) => {
         });
     })
     .then((results) => {
-      //console.log("res", results[0])
       return makeTweetAndAuthorFromDatabaseTweetRecord(results[0]);
     })
-    .then((final) => res.end(JSON.stringify(final)))
-    .catch((rej) => console.log("poo", rej));
-  //.then((results) => getTweetsAsResults(splattedTweets))
+    .then((final) => res.status(200).end(JSON.stringify(final)))
+    .catch((rej) => res.status(500).end(JSON.stringify({
+      message: 'Unable to get quoted tweet from parent.',
+      reason: rej
+    })));
 }
