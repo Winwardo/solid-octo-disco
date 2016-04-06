@@ -214,7 +214,6 @@ const getParamTypeIcon = (paramType) => {
 * @returns string representing semantic flag icon class name
 */
 export const getSemanticCountryFlagName = (countryName) => {
-  console.log(countryName);
   switch (countryName) {
   case 'england':
     return 'united kingdom';
@@ -224,6 +223,8 @@ export const getSemanticCountryFlagName = (countryName) => {
     return 'north korea';
   case 'bosnia-herzegovina':
     return 'bosnia'
+  case `cote d'ivoire`:
+    return 'cote divoire'
   default:
     return countryName;
   }

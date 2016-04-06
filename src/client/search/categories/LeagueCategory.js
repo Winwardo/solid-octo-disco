@@ -32,6 +32,9 @@ class LeagueCategory extends Component {
             return (
               <div className="item league" onClick={() => this.props.onClickLeague(leagueName)}>
                 {leagueName}
+                <div className="ui right floated">
+                  <i className="add green circle icon float right"></i>
+                </div>
               </div>
             );
           })}

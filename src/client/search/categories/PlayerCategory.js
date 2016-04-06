@@ -30,12 +30,15 @@ class PlayerCategory extends Component {
         <div className="menu">
           <div className="ui icon search input">
             <i className="search icon"></i>
-            <input type="text" placeholder="Search tags..." />
+            <input type="text" placeholder="Search players..." />
           </div>
           {this.props.teamPlayers.map(player => (
             <div className="item player" onClick={() => this.props.onClickPlayer(player.name)}>
               <i className={`${getSemanticCountryFlagName(player.nationality.toLowerCase())} flag`} />
               {player.name}
+              <div className="ui right floated">
+                <i className="add green circle icon float right"></i>
+              </div>
             </div>
           ))}
         </div>

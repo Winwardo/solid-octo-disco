@@ -64,16 +64,33 @@ class TeamCategory extends Component {
                     {league.teams.map(team => (
                       <div data-id={league.id} className="league item"
                         style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                          const teamId = team._links.players.href.match(/\/v1\/teams\/(\d*?)\/players/)[1];
-                          this.props.onClickAddTeam(team.shortName);
-                          this.props.onClickSelectTeam(
-                            teamId, team.name, team.shortName, team.crestUrl
-                          );
-                        }}
+                        onClick={() => this.props.onClickAddTeam(team.shortName)}
                       >
-                        <img className="ui avatar image" src={team.crestUrl} />
-                        {team.name}
+                        <div className="ui three column grid">
+                          <div className="column">
+                            <img className="ui avatar image" src={team.crestUrl} />
+                            {team.name}
+                          </div>
+
+                          <div className="center aligned column">
+                            <i className="add green circle icon float right"></i>
+                          </div>
+
+                          <div className="column">
+                            <div className="mini ui right floated basic purple button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const teamId = team._links.players.href.match(/\/v1\/teams\/(\d*?)\/players/)[1];
+                                this.props.onClickSelectTeam(
+                                teamId, team.name, team.shortName, team.crestUrl
+                                );
+                              }}
+                            >
+                              {team.name} Players
+                              <i className="right chevron icon"></i>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>
