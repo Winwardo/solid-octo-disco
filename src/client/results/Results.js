@@ -38,7 +38,7 @@ let Results = ({ feed, mostFrequent }) => {
           paginationInfo={feed.paginationInfo}
         />
 
-        <div id="tweetMap" style={{height: '500px', width:'100%'}} />
+        <div id="tweetMap" style={{ height: '500px', width:'100%' }} />
         <GoogleMap posts={posts.filter((post) => post.data.longitude !== 0)} />
       </div>
 
