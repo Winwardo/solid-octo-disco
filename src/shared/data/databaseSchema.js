@@ -89,6 +89,40 @@ export const schema = {
       { properties: ['name'], type: LUCENE, },
     ],
   },
+  League: {
+    superclass: Vertex,
+    properties: [
+      { name: 'id', type: Integer },
+      { name: 'year', type: String },
+      { name: 'caption', type: String },
+    ],
+    indexes: [
+      { properties: ['id'], type: UNIQUE, },
+    ]
+  },
+  Team: {
+    superclass: Vertex,
+    properties: [
+      { name: 'id', type: Integer },
+      { name: 'name', type: String },
+      { name: 'shortName', type: String },
+      { name: 'crestUrl', type: String },
+    ],
+    indexes: [
+      { properties: ['id'], type: UNIQUE, },
+    ]
+  },
+  Player: {
+    superclass: Vertex,
+    properties: [
+      { name: 'id', type: Integer },
+      { name: 'name', type: String },
+      { name: 'nationality', type: String },
+    ],
+    indexes: [
+      { properties: ['id'], type: UNIQUE, },
+    ]
+  },
   TWEETED: EmptyEdge,
   RETWEETED: EmptyEdge,
   QUOTED: EmptyEdge,

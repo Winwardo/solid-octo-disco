@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import  { db } from './orientdb';
 import { newPromiseChain } from './../shared/utilities';
 
 // These keys should be hidden in a private config file or environment variables
@@ -18,7 +19,26 @@ const footballAPIVersion = '/v1';
 
 export const searchFootballSeasons = (res, year) => {
   const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/soccerseasons/?season=${year}`;
-  fetchDataAndRespond(res, footballRequestUrl, `${year}'s football seasons`);
+
+  return newPromiseChain()
+    .then(() => db.query('SELECT FROM league WHERE year=:year', { params: { year: year } }))
+    .then((results) => {
+      if (results.length === 0) { // If our cache is empty, call the Football API
+        return fetchAndCache(db, footballRequestUrl);
+      } else {
+        return results; // Return our cached data
+      }
+    })
+    .then(
+      (footballSeasons) => {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(footballSeasons));
+      },
+      (rejection) => {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end('An unexpected internal error occurred.');
+        console.warn(`Unable to get ${year}`, rejection);
+      });
 };
 
 export const searchFootballSeasonTeams = (res, year, leagues) =>
@@ -68,18 +88,17 @@ export const searchFootballTeamPlayers = (res, teamId) => {
   fetchDataAndRespond(res, footballRequestUrl, `team with id:${teamId}'s football players`);
 };
 
-const fetchDataAndRespond = (res, url, name) => {
-  newPromiseChain()
-    .then(() => fetch(url, footballAccessOptions))
+const fetchAndCache = (db, footballRequestUrl) => {
+  return newPromiseChain()
+    .then(() => fetch(footballRequestUrl, footballAccessOptions))
     .then(response => response.json())
-    .then(
-      footballSeasons => {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(footballSeasons));
-      },
-      (rejection) => {
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end('An unexpected internal error occurred.');
-        console.warn(`Unable to get ${name}`, rejection);
-      });
-};
+    .then((footballSeasons) => cacheAPIJsonArray(db, 'League', footballSeasons))
+}
+
+const cacheAPIJsonArray = (db, datatype, dataArray) => (
+  newPromiseChain()
+    .then(() => Promise.all( // Insert all the seasons to our cache
+      dataArray.map((data) => db.insert().into(datatype).set(data).one())
+    ))
+    .then((responses) => dataArray) // Return the actual API data as we already have it
+);
