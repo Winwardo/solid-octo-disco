@@ -16,14 +16,26 @@ class LeagueCategory extends Component {
     }
 
     const isFetchingLoader = <i className="purple icon"><div className="ui active inline loader"></div></i>;
+    const isFetchingSmallLoader = <i className="purple icon"><div className="ui active small inline loader"></div></i>;
+
+    const leagueCountTransitionClassName =
+      this.props.tabYear === this.props.currentYear ?
+      "ui purple horizontal label year league count content transition visible"
+      :
+      "ui purple horizontal label year league count content transition hidden"
 
     return (
       <div className="ui dropdown labeled icon button leagues">
         {yearsLeagues.length === 0 ? isFetchingLoader : <i className="trophy purple icon"></i>}
         <span className="text">
-          <div data-id={this.props.year} className="ui purple horizontal label year league count content transition hidden">
-            {yearsLeagues.length}
-          </div>
+          {
+            yearsLeagues.length === 0 ?
+              isFetchingSmallLoader
+            :
+              <div data-id={this.props.tabYear} className={leagueCountTransitionClassName}>
+                {yearsLeagues.length}
+              </div>
+          }
           Leagues...
         </span>
         <div className="menu">
@@ -49,8 +61,9 @@ class LeagueCategory extends Component {
   }
 }
 LeagueCategory.propTypes = {
-  leagues: React.PropTypes.array,
-  year: React.PropTypes.number,
+  leagues: React.PropTypes.object,
+  tabYear: React.PropTypes.number,
+  currentYear: React.PropTypes.number,
   onClickLeague: React.PropTypes.func
 };
 

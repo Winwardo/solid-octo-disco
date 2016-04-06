@@ -64,7 +64,7 @@ class CategoryFilters extends Component {
           <div className="ui four column grid">
             <div className="center aligned column">
               <LeagueCategory leagues={this.props.football.seasonsByYear[y]}
-                year={y}
+                currentYear={currentYear} tabYear={y}
                 onClickLeague={this.props.onClickCategoryFilter}
               />
             </div>

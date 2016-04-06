@@ -8,8 +8,9 @@ const YearSelector = ({ seasonYears, currentYear }) => {
     if (seasonYears[y]) {
       if (!seasonYears[y].isFetching) {
         const numberOfLeaguesClassName = "ui purple horizontal label year league count title"
+        const transitionHidden = y === currentYear ? `${numberOfLeaguesClassName} transition hidden` : numberOfLeaguesClassName
         numberOfLeagues = (
-          <div data-id={y} className={numberOfLeaguesClassName}>
+          <div data-id={y} className={transitionHidden}>
             {seasonYears[y].seasons.length}
           </div>);
       }
