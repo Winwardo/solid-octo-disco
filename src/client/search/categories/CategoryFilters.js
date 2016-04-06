@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import YearSelector from './YearSelector';
 import { connect } from 'react-redux';
+import { newPromiseChain } from './../../../shared/utilities';
 import LeagueCategory from './LeagueCategory';
 import TeamCategory from './TeamCategory';
 import PlayerCategory from './PlayerCategory';
@@ -14,6 +15,27 @@ class CategoryFilters extends Component {
   componentDidMount() {
     $('.menu .item').tab({
       onVisible: (tabPath) => {
+        const currentYear = moment().year() - 1;
+        for (let y = currentYear; y >= 2013; y--) {
+          if (parseInt(tabPath) === y) {
+            newPromiseChain()
+              .then(() =>
+                $(`.label.year.league.count.title[data-id="${y}"]`).transition('slide up'))
+              .then(() =>
+                $(`.label.year.league.count.content[data-id="${y}"]`).transition('slide down'))
+              .then(() =>
+                $(`.label.year.league.count.content[data-id="${y}"]`).transition('jiggle'))
+          } else {
+            if ($(`.label.year.league.count.title[data-id="${y}"]`).hasClass('hidden')) {
+              newPromiseChain()
+                .then(() =>
+                  $(`.label.year.league.count.title[data-id="${y}"]`).transition('slide up'))
+                .then(() =>
+                  $(`.label.year.league.count.content[data-id="${y}"]`).transition('slide down'));
+            }
+          }
+        }
+
         let leagueLength = 0;
         if (this.props.football.leagueTeamsByYear[tabPath]) {
           leagueLength = this.props.football.leagueTeamsByYear[tabPath].leagues.length;
@@ -25,7 +47,7 @@ class CategoryFilters extends Component {
   }
 
   render() {
-    const currentYear = `${moment().year() - 1}`;
+    const currentYear = moment().year() - 1;
     let seasonYearTabsContent = [];
     for (let y = currentYear; y >= 2013; y--) {
       const tabContentClassName =
@@ -36,6 +58,7 @@ class CategoryFilters extends Component {
           <div className="ui four column grid">
             <div className="center aligned column">
               <LeagueCategory leagues={this.props.football.seasonsByYear[y]}
+                year={y}
                 onClickLeague={this.props.onClickCategoryFilter}
               />
             </div>
@@ -52,7 +75,7 @@ class CategoryFilters extends Component {
                   {
                     !this.props.football.selectedTeam.isSelected &&
                     this.props.football.leagueTeamsByYear[y] &&
-                    this.props.football.leagueTeamsByYear[y].isFetching &&
+                    !this.props.football.leagueTeamsByYear[y].isFetching &&
                       <span className="ui purple horizontal tag label">
                         Select a team to add players...
                       </span>

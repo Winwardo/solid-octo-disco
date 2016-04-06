@@ -20,7 +20,12 @@ class LeagueCategory extends Component {
     return (
       <div className="ui dropdown labeled icon button leagues">
         {yearsLeagues.length === 0 ? isFetchingLoader : <i className="trophy purple icon"></i>}
-        <span className="text">Leagues...</span>
+        <span className="text">
+          <div data-id={this.props.year} className="ui purple horizontal label year league count content transition hidden">
+            {yearsLeagues.length}
+          </div>
+          Leagues...
+        </span>
         <div className="menu">
           <div className="ui icon search input">
             <i className="search icon"></i>
@@ -45,6 +50,7 @@ class LeagueCategory extends Component {
 }
 LeagueCategory.propTypes = {
   leagues: React.PropTypes.array,
+  year: React.PropTypes.number,
   onClickLeague: React.PropTypes.func
 };
 
