@@ -161,8 +161,10 @@ export const normaliseQueryTerm = (query) => {
   const terms = query.split(' ');
 
   if (terms.length === 1) {
-    if (terms.length > 4) {
-      return query + '~'; // fuzzy search
+    if (query.length > 4) {
+      return `${query}~`; // fuzzy search
+    } else {
+      return query;
     }
   } else {
     return `"${query}"`; // add quotes to preserve order

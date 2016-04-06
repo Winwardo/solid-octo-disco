@@ -244,15 +244,14 @@ const processTweet = (db, rawTweet) => {
   return newPromiseChain()
   .then(() => processRawOriginalTweet(db, rawTweet, tweeter))
   .then(() => {
+    // Quotes that are also retweets confuse our system, so only take EITHER retweets or quotes.
     if (rawRetweetedStatus !== undefined) {
       return processRawRetweet(db, rawTweet, tweeter, rawRetweetedStatus);
     }
-  })
-  .then(() => {
     if (rawQuotedStatus !== undefined) {
       return potentiallyLinkQuoteTweetToOriginalTweet(db, rawTweet, tweeter, rawQuotedStatus);
-    };
-  })
+    }
+  });
 };
 
 /**
