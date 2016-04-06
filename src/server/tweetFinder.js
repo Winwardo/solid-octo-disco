@@ -63,13 +63,13 @@ export const buildTwitterQuery = (searchTerms) => {
   const result = [];
 
   let lastQuery = [];
-  for (const searchTerm of searchTerms) {
+  searchTerms.forEach((searchTerm) => {
     const actualTerm = searchTerm.query;
     const termWithNoSpaces = actualTerm.replace(' ', '');
     const currentQueryAddition = [];
     let alreadyHadAuthorOrMention = false;
 
-    for (const paramType of searchTerm.paramTypes) {
+    searchTerm.paramTypes.forEach((paramType) => {
       switch (paramType.name) {
         case 'keyword':
           currentQueryAddition.push(`"${actualTerm}"`);
@@ -87,7 +87,7 @@ export const buildTwitterQuery = (searchTerms) => {
         default:
           break;
       }
-    }
+    });
 
     if (lastQuery.length + currentQueryAddition.length <= maxTwitterQueryTerms) {
       lastQuery = lastQuery.concat(currentQueryAddition);
@@ -95,7 +95,7 @@ export const buildTwitterQuery = (searchTerms) => {
       result.push(lastQuery.join(joinKeyword));
       lastQuery = currentQueryAddition;
     }
-  }
+  });
 
   if (lastQuery.length > 0) {
     result.push(lastQuery.join(joinKeyword));
