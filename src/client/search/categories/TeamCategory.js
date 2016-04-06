@@ -103,7 +103,7 @@ const LeagueTeamsList = ({ id, name, teams, onClickAddTeam, onClickSelectTeam })
           <LeagueTeam key={`league${id}team${team.id}`}
             leagueId={id} name={team.name} crestUrl={team.crestUrl}
             onClickAddTeam={() => {
-              onClickAddTeam(team.name);
+              onClickAddTeam(`^#${team.name}`);
               onClickAddTeam(`#${team.shortName}`);
             }}
             onClickSelectTeam={() =>
