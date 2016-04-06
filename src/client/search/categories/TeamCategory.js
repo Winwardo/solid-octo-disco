@@ -12,6 +12,7 @@ class TeamCategory extends Component {
     let leagueTeams = [];
     let isFetching = false;
     const loaderIcon = <i className="purple icon"><div className="ui active inline loader"></div></i>;
+
     // checks if teamsByLeague exist and have been fetched
     if (this.props.teamsByLeague) {
       if (!this.props.teamsByLeague.isFetching) {
@@ -31,6 +32,7 @@ class TeamCategory extends Component {
             <i className="search icon"></i>
             <input type="text" placeholder="Search Teams..." onChange={(e) => {
               const inputLength = e.target.value.length;
+
               // setting very little timeout so that the below happens after
               // the class names have have changed properly
               leagueTeams.forEach((league) => {
@@ -38,6 +40,7 @@ class TeamCategory extends Component {
                   // Assume all leagues don't have teams showing
                   let hasUnfilteredTeams = false;
                   let leaguesShowing = 0;
+
                   // For every team in the league with id
                   $(`.league.item[data-id="${league.id}"]`).each((i, team) => {
                     // check if it doesn't have the filtered class
@@ -122,7 +125,7 @@ class TeamCategory extends Component {
 TeamCategory.propTypes = {
   teamsByLeague: React.PropTypes.object,
   onClickAddTeam: React.PropTypes.func,
-  onClickSelectTeam: React.PropTypes.func
+  onClickSelectTeam: React.PropTypes.func,
 };
 
 export default TeamCategory;

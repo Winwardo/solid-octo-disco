@@ -20,9 +20,9 @@ class LeagueCategory extends Component {
 
     const leagueCountTransitionClassName =
       this.props.tabYear === this.props.currentYear ?
-      "ui purple horizontal label year league count content transition visible"
+      'ui purple horizontal label year league count content transition visible'
       :
-      "ui purple horizontal label year league count content transition hidden"
+      'ui purple horizontal label year league count content transition hidden';
 
     return (
       <div className="large ui dropdown labeled icon button leagues">
@@ -64,7 +64,7 @@ LeagueCategory.propTypes = {
   leagues: React.PropTypes.object,
   tabYear: React.PropTypes.number,
   currentYear: React.PropTypes.number,
-  onClickLeague: React.PropTypes.func
+  onClickLeague: React.PropTypes.func,
 };
 
 export default LeagueCategory;

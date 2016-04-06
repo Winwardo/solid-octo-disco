@@ -10,8 +10,8 @@ const footballCategoryFiltersInitialState = {
   leagueTeamsByYear: {},
   selectedTeam: {
     isSelected: false,
-    isFetching: false
-  }
+    isFetching: false,
+  },
 };
 
 const footballCategoryFiltersReducer = (state = footballCategoryFiltersInitialState, action) => {
@@ -39,7 +39,7 @@ const footballCategoryFiltersReducer = (state = footballCategoryFiltersInitialSt
       ...state,
       leagueTeamsByYear: {
         ...state.leagueTeamsByYear,
-        [action.year]: footballLeagueTeamsReducer(state.leagueTeamsByYear[action.year], action)
+        [action.year]: footballLeagueTeamsReducer(state.leagueTeamsByYear[action.year], action),
       },
     };
   case SELECT_AND_REQUEST_FOOTBALL_TEAM:
@@ -52,8 +52,8 @@ const footballCategoryFiltersReducer = (state = footballCategoryFiltersInitialSt
         name: action.name,
         shortName: action.shortName,
         crestUrl: action.crestUrl,
-        players: []
-      }
+        players: [],
+      },
     };
   case RECIEVE_SELECTED_FOOTBALL_TEAM_PLAYERS:
     return {
@@ -61,15 +61,15 @@ const footballCategoryFiltersReducer = (state = footballCategoryFiltersInitialSt
       selectedTeam: {
         ...state.selectedTeam,
         isFetching: false,
-        ...action.footballTeamPlayers
-      }
+        ...action.footballTeamPlayers,
+      },
     };
   case REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS:
     return {
       ...state,
       selectedTeam: {
         isSelected: false,
-        isFetching: false
+        isFetching: false,
       },
     };
   default:
@@ -110,6 +110,5 @@ const footballLeagueTeamsReducer = (state = { isFetching: false, leagues: [] }, 
     return state;
   }
 };
-
 
 export default footballCategoryFiltersReducer;

@@ -21,7 +21,7 @@ describe('#categoryFilterActions', () => {
       const expectedAction = {
         type: actions.RECIEVE_FOOTBALL_SEASON,
         year,
-        footballSeasons: exampleJson
+        footballSeasons: exampleJson,
       };
 
       actions.recieveFootballSeason(year, exampleJson).should.deep.equal(expectedAction);
@@ -58,7 +58,7 @@ describe('#categoryFilterActions', () => {
       const expectedAction = {
         type: actions.RECIEVE_YEARS_FOOTBALL_LEAGUES_TEAMS,
         year,
-        footballLeagues: exampleJson
+        footballLeagues: exampleJson,
       };
 
       actions.recieveYearsFootballLeaguesTeams(year, exampleJson).should.deep.equal(expectedAction);
@@ -88,7 +88,7 @@ describe('#categoryFilterActions', () => {
 
       const expectedAction = {
         type: actions.RECIEVE_SELECTED_FOOTBALL_TEAM_PLAYERS,
-        footballTeamPlayers: exampleJson
+        footballTeamPlayers: exampleJson,
       };
 
       actions.recieveSelectedFootballTeamPlayers(exampleJson).should.deep.equal(expectedAction);
@@ -96,7 +96,7 @@ describe('#categoryFilterActions', () => {
 
     it('should create an action to remove selection of a football team players', () => {
       const expectedAction = {
-        type: actions.REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS
+        type: actions.REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS,
       };
 
       actions.removeSelectedFootballTeamPlayers().should.deep.equal(expectedAction);

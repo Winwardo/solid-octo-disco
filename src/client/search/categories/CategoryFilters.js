@@ -17,6 +17,7 @@ class CategoryFilters extends Component {
       onVisible: (tabPath) => {
         // animation for the league counts on the tabs
         const currentYear = moment().year() - 1;
+
         // for each year tab
         for (let y = currentYear; y >= 2013; y--) {
           // if the year is the visible tab
@@ -28,7 +29,7 @@ class CategoryFilters extends Component {
               .then(() =>
                 $(`.label.year.league.count.content[data-id="${y}"]`).transition('slide down'))
               .then(() =>
-                $(`.label.year.league.count.content[data-id="${y}"]`).transition('jiggle'))
+                $(`.label.year.league.count.content[data-id="${y}"]`).transition('jiggle'));
           } else {
             // otherwise if the tab's title league count was hidden show it and hide the
             // hidden dropdown's count
@@ -46,9 +47,10 @@ class CategoryFilters extends Component {
         if (this.props.football.leagueTeamsByYear[tabPath]) {
           leagueLength = this.props.football.leagueTeamsByYear[tabPath].leagues.length;
         }
+
         // only fetches the data for the football year if it hasn't already been fetched
         return this.props.onClickYearTab(tabPath, leagueLength);
-      }
+      },
     });
   }
 

@@ -67,7 +67,7 @@ export const fetchAllFootballLeagueTeams = (year) =>
         `/football/seasons/${year}/teams`,
         {
           leagues: getState().football.seasonsByYear[year].seasons
-            .map((season) => ({ id: season.id, name: season.caption }))
+            .map((season) => ({ id: season.id, name: season.caption })),
         }
       ))
       .then(results => results.json())
@@ -83,9 +83,8 @@ export const selectAndRequestFootballTeam = (id, name, shortName, crestUrl) => (
   id,
   crestUrl,
   name,
-  shortName
+  shortName,
 });
-
 
 export const RECIEVE_SELECTED_FOOTBALL_TEAM_PLAYERS = 'RECIEVE_SELECTED_FOOTBALL_TEAM_PLAYERS';
 export const recieveSelectedFootballTeamPlayers = (json) => ({
@@ -95,7 +94,7 @@ export const recieveSelectedFootballTeamPlayers = (json) => ({
 
 export const REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS = 'REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS';
 export const removeSelectedFootballTeamPlayers = () => ({
-  type: REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS
+  type: REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS,
 });
 
 export const fetchFootballTeamPlayers = (id, name, shortName, crestUrl) =>

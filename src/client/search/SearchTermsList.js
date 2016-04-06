@@ -46,7 +46,7 @@ const mapDispatchToProps = (dispatch) => ({
   onSearchTermDeleteClick: (id) => {
     dispatch(deleteSearchTerm(id));
   },
-  onSearchTermsChange: throttleFunction(() => dispatch(invalidateFeedResults()), 1000)
+  onSearchTermsChange: throttleFunction(() => dispatch(invalidateFeedResults()), 1000),
 });
 
 export default connect(

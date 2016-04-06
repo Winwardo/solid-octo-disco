@@ -1,6 +1,6 @@
 import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
-import footballCategoryFiltersReducer from './categoryFiltersReducer'
+import footballCategoryFiltersReducer from './categoryFiltersReducer';
 import * as actions from './categoryFilterActions';
 
 // copied from ./footballCategoryFiltersReducer
@@ -9,8 +9,8 @@ const footballCategoryFiltersInitialState = {
   leagueTeamsByYear: {},
   selectedTeam: {
     isSelected: false,
-    isFetching: false
-  }
+    isFetching: false,
+  },
 };
 
 describe('#footballCategoryFiltersReducer', () => {
@@ -24,14 +24,14 @@ describe('#footballCategoryFiltersReducer', () => {
         seasonsByYear: {
           [year]: {
             isFetching: true,
-            seasons: []
-          }
+            seasons: [],
+          },
         },
         leagueTeamsByYear: {},
         selectedTeam: {
           isSelected: false,
-          isFetching: false
-        }
+          isFetching: false,
+        },
       };
 
       deepFreeze(stateBefore);
@@ -52,14 +52,14 @@ describe('#footballCategoryFiltersReducer', () => {
         seasonsByYear: {
           [year]: {
             isFetching: false,
-            seasons: exampleJson
-          }
+            seasons: exampleJson,
+          },
         },
         leagueTeamsByYear: {},
         selectedTeam: {
           isSelected: false,
-          isFetching: false
-        }
+          isFetching: false,
+        },
       };
 
       deepFreeze(stateBefore);
@@ -79,13 +79,13 @@ describe('#footballCategoryFiltersReducer', () => {
         leagueTeamsByYear: {
           [year]: {
             isFetching: true,
-            leagues: []
-          }
+            leagues: [],
+          },
         },
         selectedTeam: {
           isSelected: false,
-          isFetching: false
-        }
+          isFetching: false,
+        },
       };
 
       deepFreeze(stateBefore);
@@ -107,13 +107,13 @@ describe('#footballCategoryFiltersReducer', () => {
         leagueTeamsByYear: {
           [year]: {
             isFetching: false,
-            leagues: exampleJson
-          }
+            leagues: exampleJson,
+          },
         },
         selectedTeam: {
           isSelected: false,
-          isFetching: false
-        }
+          isFetching: false,
+        },
       };
 
       deepFreeze(stateBefore);
@@ -142,8 +142,8 @@ describe('#footballCategoryFiltersReducer', () => {
           name,
           shortName,
           crestUrl,
-          players: []
-        }
+          players: [],
+        },
       };
 
       deepFreeze(stateBefore);
@@ -171,7 +171,7 @@ describe('#footballCategoryFiltersReducer', () => {
           shortName,
           crestUrl,
           ...exampleJson,
-        }
+        },
       };
 
       deepFreeze(stateBefore);

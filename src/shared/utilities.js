@@ -222,9 +222,9 @@ export const getSemanticCountryFlagName = (countryName) => {
   case 'korea, north':
     return 'north korea';
   case 'bosnia-herzegovina':
-    return 'bosnia'
+    return 'bosnia';
   case `cote d'ivoire`:
-    return 'cote divoire'
+    return 'cote divoire';
   default:
     return countryName;
   }

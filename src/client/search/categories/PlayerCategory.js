@@ -50,7 +50,7 @@ PlayerCategory.propTypes = {
   teamName: React.PropTypes.string,
   teamCrestUrl: React.PropTypes.string,
   teamPlayers: React.PropTypes.array,
-  onClickPlayer: React.PropTypes.func
+  onClickPlayer: React.PropTypes.func,
 };
 
 export default PlayerCategory;
