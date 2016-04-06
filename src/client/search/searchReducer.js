@@ -73,9 +73,10 @@ export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, li
   }
 };
 
-const sortPostsForFeed = (feed) => {
-  feed.sort(
-    (post1, post2) => moment(post2.data.date).diff(moment(post1.data.date))
-  );
-  return feed;
-}
+const sortPostsForFeed = (feed) => (
+  [...feed].sort(
+    (post1, post2) => (
+      moment(post2.data.date).diff(moment(post1.data.date))
+    )
+  )
+);

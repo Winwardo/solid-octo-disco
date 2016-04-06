@@ -154,12 +154,10 @@ describe('#SearchTermsReducer', () => {
 });
 
 describe('#FeedReducer', () => {
-  it('can receive new feed results, and will group them', () => {
+  it('can receive new feed results, and will group and sort them', () => {
     const stateBefore = {};
 
     const records = [
-      { data:{ content:'some record' }, author:{ id: '1' } },
-      { data:{ content:'another' }, author:{ id: '2' } },
     ];
 
     const action = {
