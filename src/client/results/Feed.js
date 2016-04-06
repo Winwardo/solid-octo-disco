@@ -25,6 +25,7 @@ class Feed extends Component {
       feed, toggledWords, isWordsToggledActionHide,
       toggledUsers, isUsersToggledActionHide
     );
+
     const paginatedFeed = paginatePosts(filteredFeed, paginationInfo);
 
     return (
@@ -229,8 +230,9 @@ const Tweet = ({ content }) => {
 };
 
 class QuotedTweet extends Component {
-  getInitialState() {
-    return {
+  constructor(props) {
+    super(props)
+    this.state = {
       tweetContent: null,
     };
   }
