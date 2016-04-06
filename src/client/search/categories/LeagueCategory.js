@@ -30,7 +30,7 @@ class LeagueCategory extends Component {
         <span className="text">
           {
             yearsLeagues.length === 0 ?
-              isFetchingSmallLoader
+            isFetchingSmallLoader
             :
               <div data-id={this.props.tabYear} className={leagueCountTransitionClassName}>
                 {yearsLeagues.length}
@@ -47,7 +47,8 @@ class LeagueCategory extends Component {
             // gets rid of the 20XX/YY year at the end of the caption
             const leagueName = league.caption.slice(0, league.caption.length - 7);
             return (
-              <div className="item league" onClick={() => this.props.onClickLeague(leagueName)}>
+              <div key={`league${league.id}`} className="item league"
+                onClick={() => this.props.onClickLeague(leagueName)}>
                 {leagueName}
                 <div className="ui right floated">
                   <i className="add green circle icon float right"></i>

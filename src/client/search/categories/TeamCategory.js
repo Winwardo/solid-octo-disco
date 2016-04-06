@@ -70,7 +70,7 @@ class TeamCategory extends Component {
           </div>
           <div className="ui styled accordion teams">
             {leagueTeams.map(league => (
-              <div data-id={league.id} className="league section">
+              <div key={`leagueteams${league.id}`} data-id={league.id} className="league section">
                 <div className="title">
                   <i className="dropdown icon"></i>
                   {league.name.slice(0, league.name.length - 7)}
@@ -81,7 +81,8 @@ class TeamCategory extends Component {
                 <div className="content">
                   <div className="items">
                     {league.teams.map(team => (
-                      <div data-id={league.id} className="league item"
+                      <div key={`league${league.id}team${team.id}`}
+                        data-id={league.id} className="league item"
                         style={{ cursor: 'pointer' }}
                         onClick={() => this.props.onClickAddTeam(team.shortName)}
                       >
@@ -99,9 +100,8 @@ class TeamCategory extends Component {
                             <div className="mini ui right floated purple button"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                const teamId = team._links.players.href.match(/\/v1\/teams\/(\d*?)\/players/)[1];
                                 this.props.onClickSelectTeam(
-                                teamId, team.name, team.shortName, team.crestUrl
+                                team.id, team.name, team.shortName, team.crestUrl
                                 );
                               }}
                             >

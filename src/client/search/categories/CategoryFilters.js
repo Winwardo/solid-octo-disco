@@ -62,7 +62,7 @@ class CategoryFilters extends Component {
         y === currentYear ? 'ui bottom attached active tab segment' : 'ui bottom attached tab segment';
 
       seasonYearTabsContent.push(
-        <div className={tabContentClassName} data-tab={y}>
+        <div key={`yearcontent${y}`} className={tabContentClassName} data-tab={y}>
           <div className="ui grid">
             <div className="center aligned four wide column">
               <LeagueCategory leagues={this.props.football.seasonsByYear[y]}

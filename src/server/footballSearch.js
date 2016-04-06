@@ -5,8 +5,12 @@ import { newPromiseChain } from './../shared/utilities';
 // For simplicity of this assignment, they will be visible here
 const footballAccessOptions = {
   method: 'GET',
-  headers: { 'X-Auth-Token': 'f39c0cf21f95409498f8eea5eb129b0f' },
+  headers: {
+    'X-Auth-Token': 'f39c0cf21f95409498f8eea5eb129b0f',
+    'X-Response-Control': 'minified',
+  },
   dataType: 'json',
+
 };
 
 const footballAPIHost = 'http://api.football-data.org';
