@@ -25,8 +25,8 @@ class Feed extends Component {
       feed, toggledWords, isWordsToggledActionHide,
       toggledUsers, isUsersToggledActionHide
     );
-    const sortedFeed = sortPostsForFeed(feed);
-    const paginatedFeed = paginatePosts(sortedFeed, paginationInfo);
+
+    const paginatedFeed = paginatePosts(filteredFeed, paginationInfo);
 
     return (
       <div>
@@ -85,13 +85,6 @@ const filterPostsForFeed = (
     return isWordsToggledActionHide && isUsersToggledActionHide;
   }
 ));
-
-const sortPostsForFeed = (feed) => {
-  feed.sort(
-    (post1, post2) => moment(post2.data.date).diff(moment(post1.data.date))
-  );
-  return feed;
-}
 
 const paginatePosts = (feed, paginationInfo) => {
   const pageNumber = paginationInfo.number;
@@ -237,8 +230,9 @@ const Tweet = ({ content }) => {
 };
 
 class QuotedTweet extends Component {
-  getInitialState() {
-    return {
+  constructor(props) {
+    super(props)
+    this.state = {
       tweetContent: null,
     };
   }
