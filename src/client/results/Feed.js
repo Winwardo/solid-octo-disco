@@ -25,7 +25,8 @@ class Feed extends Component {
       feed, toggledWords, isWordsToggledActionHide,
       toggledUsers, isUsersToggledActionHide
     );
-    const paginatedFeed = paginatePosts(filteredFeed, paginationInfo);
+    const sortedFeed = sortPostsForFeed(feed);
+    const paginatedFeed = paginatePosts(sortedFeed, paginationInfo);
 
     return (
       <div>
@@ -84,6 +85,13 @@ const filterPostsForFeed = (
     return isWordsToggledActionHide && isUsersToggledActionHide;
   }
 ));
+
+const sortPostsForFeed = (feed) => {
+  feed.sort(
+    (post1, post2) => moment(post2.data.date).diff(moment(post1.data.date))
+  );
+  return feed;
+}
 
 const paginatePosts = (feed, paginationInfo) => {
   const pageNumber = paginationInfo.number;
