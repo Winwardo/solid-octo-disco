@@ -124,29 +124,51 @@ const searchByKeyword = (keyword) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'SELECT FROM tweet WHERE content LUCENE :query'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
+  return db.query(tweetSelection, { params: { query: normaliseQueryTerm(keyword), limit: MAX_TWEET_RESULTS } });
 };
 
-const searchByAuthor = (keyword) => {
+const searchByAuthor = (author) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE out(\'TWEETED\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
+  return db.query(tweetSelection, { params: { query: normaliseQueryTerm(author), limit: MAX_TWEET_RESULTS } });
 };
 
-const searchByMention = (keyword) => {
+const searchByMention = (mention) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE in(\'MENTIONS\') FROM (SELECT FROM Tweeter WHERE name LUCENE :query OR handle LUCENE :query)'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
+  return db.query(tweetSelection, { params: { query: normaliseQueryTerm(mention), limit: MAX_TWEET_RESULTS } });
 };
 
-const searchByHashtag = (keyword) => {
+const searchByHashtag = (hashtag) => {
   const tweetSelection = makeTweetQuerySelectingFrom(
     'TRAVERSE in(\'HAS_HASHTAG\') FROM (SELECT FROM hashtag WHERE content LUCENE :query)'
   );
-  return db.query(tweetSelection, { params: { query: `${keyword}~`, limit: MAX_TWEET_RESULTS } });
+  return db.query(tweetSelection, { params: { query: normaliseQueryTerm(hashtag), limit: MAX_TWEET_RESULTS } });
 };
+
+/**
+ * Make a query more search-friendly in our database.
+ * Multiple term queries will receive quotes to preserve order
+ * e.g. "Manchester United" won't return results for "united manchester"
+ * Long single term queries will receive ~ for fuzzy matching
+ * @param term Some phrase, like `manchester united`
+ * @returns {*} The normalised term.
+ */
+export const normaliseQueryTerm = (query) => {
+  const terms = query.split(' ');
+
+  if (terms.length === 1) {
+    if (query.length > 4) {
+      return `${query}~`; // fuzzy search
+    } else {
+      return query;
+    }
+  } else {
+    return `"${query}"`; // add quotes to preserve order
+  };
+};;
 
 const makeTweetQuerySelectingFrom = (from) => (
   `SELECT `
@@ -197,6 +219,7 @@ const buildTweetFromDatabaseRecord = (record) => (
     .retweets(record.retweets)
     .longitude(record.longitude)
     .latitude(record.latitude)
+    .contains_a_quoted_tweet(record.contains_a_quoted_tweet)
     .build()
 );
 
@@ -204,4 +227,29 @@ const getTweetsAsResults = (data) => (
   data.map(
     (tweet) => ({ data: tweet.tweet, author: tweet.author, source: 'twitter' })
   )
+);
+
+export const getQuotedTweetFromParent = (res, id) => (
+  newPromiseChain()
+    .then(() => (
+       db.query(
+         makeTweetQuerySelectingFrom('TRAVERSE OUT FROM (SELECT OUT(\'QUOTED\') FROM (SELECT FROM Tweet WHERE id = :id))'),
+         {
+           params: {
+             id: id,
+             limit: 1,
+           },
+         }
+       )
+    ))
+    .then((results) =>   makeTweetAndAuthorFromDatabaseTweetRecord(results[0]))
+    .then(
+      (response) => res.status(200).end(JSON.stringify(response)),
+      (rej) => res.status(500).end(
+        JSON.stringify({
+          message: 'Unable to get quoted tweet from parent.',
+          reason: rej,
+        })
+      )
+    )
 );

@@ -35,3 +35,17 @@ describe('#TweetFinder', () => {
 
   });
 });
+
+describe('#QueryNormaliser', () => {
+  it('leaves short single terms alone', () => {
+    tweetFinder.normaliseQueryTerm('hi').should.equal('hi');
+  });
+
+  it('fuzzes longer single terms', () => {
+    tweetFinder.normaliseQueryTerm('manchester').should.equal('manchester~');
+  });
+
+  it('surrounds multiple term queries in quotes', () => {
+    tweetFinder.normaliseQueryTerm('manchester united').should.equal('"manchester united"');
+  });
+});

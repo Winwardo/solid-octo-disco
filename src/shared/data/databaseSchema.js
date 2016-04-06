@@ -34,6 +34,7 @@ export const schema = {
       { name: 'retweets', type: Integer },
       { name: 'longitude', type: Double },
       { name: 'latitude', type: Double },
+      { name: 'contains_a_quoted_tweet', type: Boolean },
     ],
     indexes: [
       { properties: ['id'], type: UNIQUE, },
@@ -90,6 +91,7 @@ export const schema = {
   },
   TWEETED: EmptyEdge,
   RETWEETED: EmptyEdge,
+  QUOTED: EmptyEdge,
   FOLLOWS: EmptyEdge,
   MENTIONS: EmptyEdge,
   HAS_HASHTAG: EmptyEdge,
