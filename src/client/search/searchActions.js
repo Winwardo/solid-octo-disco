@@ -14,6 +14,8 @@ export const addSearchTerm = (query) => {
   switch (query.charAt(0)) {
   case '#':
     return addQueryParamTypes(searchQuery, query.substring(1), ['hashtag']);
+  case '*':
+    return addQueryParamTypes(searchQuery, query.substring(1), ['keyword']);
   case '@':
     return addQueryParamTypes(searchQuery, query.substring(1), ['author', 'mention']);
   default:

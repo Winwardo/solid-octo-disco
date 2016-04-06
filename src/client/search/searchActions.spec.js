@@ -3,6 +3,7 @@ import * as actions from './searchActions';
 
 describe('#SearchActions', () => {
   let searchTermId = 0;
+
   it('should create an action to add a hashtag', () => {
     const query = '#Footy';
 
@@ -12,6 +13,21 @@ describe('#SearchActions', () => {
       id: searchTermId++,
       query: expectedQuery,
       paramTypes: ['hashtag'],
+      source: 'twitter',
+    };
+
+    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+  });
+
+  it('should create an action to add just a keyword', () => {
+    const query = '*Footy';
+
+    const expectedQuery = 'Footy';
+    const expectedAction = {
+      type: 'ADD_SEARCH_TERM',
+      id: searchTermId++,
+      query: expectedQuery,
+      paramTypes: ['keyword'],
       source: 'twitter',
     };
 
