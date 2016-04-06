@@ -15,33 +15,38 @@ class PlayerCategory extends Component {
   }
 
   render() {
-    const isFetchingLoader = (
-      <i className="purple icon">
-        <div className="ui active inline loader"></div>
-      </i>
-    );
     return (
-      <div className="ui dropdown labeled icon button players category">
-        <span className="text">
-          <img className="ui small image" src={this.props.teamCrestUrl} />
-          {this.props.teamName} Players
-        </span>
-        {this.props.teamPlayers.length === 0 ? isFetchingLoader : <i className="soccer purple icon"></i>}
-        <div className="menu">
-          <div className="ui icon search input">
-            <i className="search icon"></i>
-            <input type="text" placeholder="Search players..." />
-          </div>
-          {this.props.teamPlayers.map(player => (
-            <div className="item player" onClick={() => this.props.onClickPlayer(player.name)}>
-              <i className={`${getSemanticCountryFlagName(player.nationality.toLowerCase())} flag`} />
-              {player.name}
-              <div className="ui right floated">
-                <i className="add green circle icon float right"></i>
-              </div>
+      <div className="ui labeled button">
+        <div className="ui dropdown labeled icon button players category">
+          <span className="text">
+            <img className="ui small image" src={this.props.teamCrestUrl} />
+            {this.props.teamName} Players
+          </span>
+          {
+            this.props.isTeamPlayersFetching ?
+              <i className="icon">
+                <div className="ui active inline loader"></div>
+              </i>
+            :
+              <i className="soccer purple icon"></i>
+          }
+          <div className="menu">
+            <div className="ui icon search input">
+              <i className="search icon"></i>
+              <input type="text" placeholder="Search players..." />
             </div>
-          ))}
+            {this.props.teamPlayers.map(player =>
+              <TeamPlayer key={`player${player.id}`} name={player.name}
+                nationality={player.nationality.toLowerCase()} onClick={this.props.onClickPlayer}
+              />
+            )}
+          </div>
         </div>
+        { !this.props.isTeamPlayersFetching &&
+          <div className="ui purple left pointing label">
+            {this.props.teamPlayers.length}
+          </div>
+        }
       </div>
     );
   }
@@ -49,8 +54,19 @@ class PlayerCategory extends Component {
 PlayerCategory.propTypes = {
   teamName: React.PropTypes.string,
   teamCrestUrl: React.PropTypes.string,
+  isTeamPlayersFetching: React.PropTypes.boolean,
   teamPlayers: React.PropTypes.array,
   onClickPlayer: React.PropTypes.func,
 };
+
+const TeamPlayer = ({ name, nationality, onClick }) => (
+  <div className="item player" onClick={() => onClick(name)}>
+    <i className={`${getSemanticCountryFlagName(nationality)} flag`} />
+    {name}
+    <div className="ui right floated">
+      <i className="add green circle icon float right"></i>
+    </div>
+  </div>
+);
 
 export default PlayerCategory;

@@ -1,17 +1,7 @@
 import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
-import footballCategoryFiltersReducer from './categoryFiltersReducer';
+import footballCategoryFiltersReducer, { footballCategoryFiltersInitialState } from './categoryFiltersReducer';
 import * as actions from './categoryFilterActions';
-
-// copied from ./footballCategoryFiltersReducer
-const footballCategoryFiltersInitialState = {
-  seasonsByYear: {},
-  leagueTeamsByYear: {},
-  selectedTeam: {
-    isSelected: false,
-    isFetching: false,
-  },
-};
 
 describe('#footballCategoryFiltersReducer', () => {
   const year = 2016;
@@ -46,7 +36,7 @@ describe('#footballCategoryFiltersReducer', () => {
         footballCategoryFiltersInitialState,
         actions.requestFootballSeason(year)
       );
-      const action = actions.recieveFootballSeason(year, exampleJson);
+      const action = actions.receiveFootballSeason(year, exampleJson);
 
       const stateAfter = {
         seasonsByYear: {
@@ -100,7 +90,7 @@ describe('#footballCategoryFiltersReducer', () => {
         footballCategoryFiltersInitialState,
         actions.requestYearsFootballLeaguesTeams(year)
       );
-      const action = actions.recieveYearsFootballLeaguesTeams(year, exampleJson);
+      const action = actions.receiveYearsFootballLeaguesTeams(year, exampleJson);
 
       const stateAfter = {
         seasonsByYear: {},
@@ -128,6 +118,7 @@ describe('#footballCategoryFiltersReducer', () => {
     const name = 'example football team';
     const shortName = 'ExFootTeam';
     const crestUrl = 'http://exFootTeamCrest.com';
+
     it('should select and start fetching the requested football team players', () => {
       const stateBefore = footballCategoryFiltersInitialState;
       const action = actions.selectAndRequestFootballTeam(id, name, shortName, crestUrl);
@@ -143,6 +134,7 @@ describe('#footballCategoryFiltersReducer', () => {
           shortName,
           crestUrl,
           players: [],
+          count: 0,
         },
       };
 
@@ -153,12 +145,12 @@ describe('#footballCategoryFiltersReducer', () => {
     });
 
     it('should finish fetching the requested football team players', () => {
-      const exampleJson = { players: ['player1', 'player2'] };
+      const exampleJson = { players: ['player1', 'player2'], count: 10 };
       const stateBefore = footballCategoryFiltersReducer(
         footballCategoryFiltersInitialState,
         actions.selectAndRequestFootballTeam(id, name, shortName, crestUrl)
       );
-      const action = actions.recieveSelectedFootballTeamPlayers(exampleJson);
+      const action = actions.receiveSelectedFootballTeamPlayers(exampleJson);
 
       const stateAfter = {
         seasonsByYear: {},
@@ -184,7 +176,7 @@ describe('#footballCategoryFiltersReducer', () => {
       const exampleJson = { players: ['player1', 'player2'] };
       const stateBefore = footballCategoryFiltersReducer(
         footballCategoryFiltersInitialState,
-        actions.recieveSelectedFootballTeamPlayers(exampleJson),
+        actions.receiveSelectedFootballTeamPlayers(exampleJson),
       );
       const action = actions.removeSelectedFootballTeamPlayers();
 

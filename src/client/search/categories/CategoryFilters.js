@@ -11,6 +11,8 @@ import {
 import { addSearchTerm } from './../searchActions';
 import moment from 'moment';
 
+export const EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API = 2013;
+
 class CategoryFilters extends Component {
   componentDidMount() {
     $('.menu .item').tab({
@@ -19,7 +21,7 @@ class CategoryFilters extends Component {
         const currentYear = moment().year() - 1;
 
         // for each year tab
-        for (let y = currentYear; y >= 2013; y--) {
+        for (let y = currentYear; y >= EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API; y--) {
           // if the year is the visible tab
           if (parseInt(tabPath) === y) {
             // then hide the tab's title league count and show the league dropdown's count
@@ -57,7 +59,8 @@ class CategoryFilters extends Component {
   render() {
     const currentYear = moment().year() - 1;
     let seasonYearTabsContent = [];
-    for (let y = currentYear; y >= 2013; y--) {
+    for (let y = currentYear; y >= EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API; y--) {
+      // adding active to the current year to show the initial year's tab
       const tabContentClassName =
         y === currentYear ? 'ui bottom attached active tab segment' : 'ui bottom attached tab segment';
 
@@ -90,6 +93,7 @@ class CategoryFilters extends Component {
                   {
                     this.props.football.selectedTeam.isSelected &&
                       <PlayerCategory teamName={this.props.football.selectedTeam.name}
+                        isTeamPlayersFetching={this.props.football.selectedTeam.isFetching}
                         teamCrestUrl={this.props.football.selectedTeam.crestUrl}
                         teamPlayers={this.props.football.selectedTeam.players}
                         onClickPlayer={this.props.onClickCategoryFilter}

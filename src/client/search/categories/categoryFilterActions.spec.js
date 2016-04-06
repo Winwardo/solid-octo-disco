@@ -14,17 +14,17 @@ describe('#categoryFilterActions', () => {
       actions.requestFootballSeason(year).should.deep.equal(expectedAction);
     });
 
-    it('should create an action to recieve football season', () => {
+    it('should create an action to receive football season', () => {
       const year = 2016;
       const exampleJson = { seasons: ['season1', 'season2'] };
 
       const expectedAction = {
-        type: actions.RECIEVE_FOOTBALL_SEASON,
+        type: actions.RECEIVE_FOOTBALL_SEASON,
         year,
         footballSeasons: exampleJson,
       };
 
-      actions.recieveFootballSeason(year, exampleJson).should.deep.equal(expectedAction);
+      actions.receiveFootballSeason(year, exampleJson).should.deep.equal(expectedAction);
     });
 
     it('should create an action to remove a football season', () => {
@@ -51,17 +51,17 @@ describe('#categoryFilterActions', () => {
       actions.requestYearsFootballLeaguesTeams(year).should.deep.equal(expectedAction);
     });
 
-    it('should create an action to recieve football league teams', () => {
+    it('should create an action to receive football league teams', () => {
       const year = 2016;
       const exampleJson = { leagues: ['league1', 'league2'] };
 
       const expectedAction = {
-        type: actions.RECIEVE_YEARS_FOOTBALL_LEAGUES_TEAMS,
+        type: actions.RECEIVE_YEARS_FOOTBALL_LEAGUES_TEAMS,
         year,
         footballLeagues: exampleJson,
       };
 
-      actions.recieveYearsFootballLeaguesTeams(year, exampleJson).should.deep.equal(expectedAction);
+      actions.receiveYearsFootballLeaguesTeams(year, exampleJson).should.deep.equal(expectedAction);
     });
   });
 
@@ -87,11 +87,11 @@ describe('#categoryFilterActions', () => {
       const exampleJson = { players: ['player1', 'player2'] };
 
       const expectedAction = {
-        type: actions.RECIEVE_SELECTED_FOOTBALL_TEAM_PLAYERS,
+        type: actions.RECEIVE_SELECTED_FOOTBALL_TEAM_PLAYERS,
         footballTeamPlayers: exampleJson,
       };
 
-      actions.recieveSelectedFootballTeamPlayers(exampleJson).should.deep.equal(expectedAction);
+      actions.receiveSelectedFootballTeamPlayers(exampleJson).should.deep.equal(expectedAction);
     });
 
     it('should create an action to remove selection of a football team players', () => {

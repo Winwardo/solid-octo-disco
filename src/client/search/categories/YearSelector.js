@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API } from './CategoryFilters';
 
 const YearSelector = ({ seasonYears, currentYear }) => {
   let seasonYearButtons = [];
-  for (let y = currentYear; y >= 2013; y--) {
+  for (let y = currentYear; y >= EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API; y--) {
     let numberOfLeagues = (
         <div className="ui active small inline loader"></div>
     );
@@ -31,7 +32,6 @@ const YearSelector = ({ seasonYears, currentYear }) => {
   }
 
   return (
-
     <div className="ui top attached tabular menu">
       {seasonYearButtons}
     </div>

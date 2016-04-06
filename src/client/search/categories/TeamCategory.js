@@ -70,51 +70,11 @@ class TeamCategory extends Component {
           </div>
           <div className="ui styled accordion teams">
             {leagueTeams.map(league => (
-              <div key={`leagueteams${league.id}`} data-id={league.id} className="league section">
-                <div className="title">
-                  <i className="dropdown icon"></i>
-                  {league.name.slice(0, league.name.length - 7)}
-                  <div className="ui purple horizontal basic label" style={{ float: 'right' }}>
-                    <span data-id={league.id} className="league count">{league.teams.length}</span>
-                  </div>
-                </div>
-                <div className="content">
-                  <div className="items">
-                    {league.teams.map(team => (
-                      <div key={`league${league.id}team${team.id}`}
-                        data-id={league.id} className="league item"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => this.props.onClickAddTeam(team.shortName)}
-                      >
-                        <div className="ui three column grid">
-                          <div className="column">
-                            <img className="ui avatar image" src={team.crestUrl} />
-                            {team.name}
-                          </div>
-
-                          <div className="center aligned column">
-                            <i className="add green circle icon float right"></i>
-                          </div>
-
-                          <div className="column">
-                            <div className="mini ui fluid right floated purple button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                this.props.onClickSelectTeam(
-                                team.id, team.name, team.shortName, team.crestUrl
-                                );
-                              }}
-                            >
-                              {team.name} Players
-                              <i className="right chevron icon"></i>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <LeagueTeamsList key={`leagueteams${league.id}`} id={league.id}
+                name={league.name.slice(0, league.name.length - 7)}
+                teams={league.teams} onClickAddTeam={this.props.onClickAddTeam}
+                onClickSelectTeam={this.props.onClickSelectTeam}
+              />
             ))}
           </div>
         </div>
@@ -127,5 +87,66 @@ TeamCategory.propTypes = {
   onClickAddTeam: React.PropTypes.func,
   onClickSelectTeam: React.PropTypes.func,
 };
+
+const LeagueTeamsList = ({ id, name, teams, onClickAddTeam, onClickSelectTeam }) => (
+  <div data-id={id} className="league section">
+    <div className="title">
+      <i className="dropdown icon"></i>
+      {name}
+      <div className="ui purple horizontal basic label" style={{ float: 'right' }}>
+        <span data-id={id} className="league count">{teams.length}</span>
+      </div>
+    </div>
+    <div className="content">
+      <div className="items">
+        {teams.map(team =>
+          <LeagueTeam key={`league${id}team${team.id}`}
+            leagueId={id} name={team.name} crestUrl={team.crestUrl}
+            onClickAddTeam={() => {
+              onClickAddTeam(team.name);
+              onClickAddTeam(`#${team.shortName}`);
+            }}
+            onClickSelectTeam={() =>
+              onClickSelectTeam(team.id, team.name, team.shortName, team.crestUrl)
+            }
+          />
+        )}
+      </div>
+    </div>
+  </div>
+);
+
+const LeagueTeam = ({
+  leagueId, name, crestUrl, onClickAddTeam, onClickSelectTeam
+}) => (
+  <div
+    data-id={leagueId} className="league item"
+    style={{ cursor: 'pointer' }}
+    onClick={() => onClickAddTeam()}
+  >
+    <div className="ui three column grid">
+      <div className="column">
+        <img className="ui avatar image" src={crestUrl} />
+        {name}
+      </div>
+
+      <div className="center aligned column">
+        <i className="add green circle icon float right"></i>
+      </div>
+
+      <div className="column">
+        <div className="mini ui fluid right floated purple button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClickSelectTeam();
+          }}
+        >
+          {name} Players
+          <i className="right chevron icon"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 export default TeamCategory;
