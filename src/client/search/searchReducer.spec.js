@@ -158,6 +158,8 @@ describe('#FeedReducer', () => {
     const stateBefore = {};
 
     const records = [
+      { data:{ content:'some record', date: '2016-04-06' }, author:{ id: '1' } },
+      { data:{ content:'another', date: '2014-04-06' }, author:{ id: '2' } },
     ];
 
     const action = {
