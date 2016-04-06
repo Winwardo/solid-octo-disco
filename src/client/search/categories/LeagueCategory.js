@@ -47,11 +47,11 @@ class LeagueCategory extends Component {
             // gets rid of the 20XX/YY year at the end of the caption
             const leagueName = league.caption.slice(0, league.caption.length - 7);
             return (
-              <LeagueItem id={league.id} onClickLeague={() => {
-                this.props.onClickLeague(`*${leagueName}`);
-                this.props.onClickLeague(`#${league.league}`);
-              }}
-                name={leagueName}
+              <LeagueItem key={`league${league.id}`} name={leagueName}
+                onClickLeague={() => {
+                  this.props.onClickLeague(`*${leagueName}`);
+                  this.props.onClickLeague(`#${league.league}`);
+                }}
               />
             );
           })}
@@ -66,9 +66,8 @@ LeagueCategory.propTypes = {
   currentYear: React.PropTypes.number,
   onClickLeague: React.PropTypes.func,
 };
-const LeagueItem = ({ id, name, onClickLeague }) => (
-  <div key={`league${id}`} className="item league"
-    onClick={() => onClickLeague()}>
+const LeagueItem = ({ name, onClickLeague }) => (
+  <div className="item league" onClick={() => onClickLeague()}>
     {name}
     <div className="ui right floated">
       <i className="add green circle icon float right"></i>

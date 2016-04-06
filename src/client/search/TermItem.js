@@ -15,16 +15,17 @@ const TermItem = ({ onDeleteClick, onToggleParamTypeClick, query, source, paramT
         <div>
           {paramTypes
             .filter((paramType) => paramType.selected)
-            .map((paramType, id) => {
+            .map((paramType, paramId) => {
               if (paramType.icon.length > 1) {
                 return (
-                  <i key={id} className={`tiny inverted blue circular ${paramType.icon} param types popup`}
+                  <i key={paramId}
+                    className={`tiny inverted blue circular ${paramType.icon} param types popup`}
                     data-title={`Search by ${paramType.name}`}
-                  ></i>
+                  />
                 );
               } else {
                 return (
-                  <i key={id} className={'tiny inverted blue circular icon param types popup'}
+                  <i key={paramId} className={'tiny inverted blue circular icon param types popup'}
                     data-title={`Search by ${paramType.name}`}
                   >
                     {paramType.icon}
