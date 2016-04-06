@@ -58,7 +58,7 @@ const potentiallySearchTwitter = (searchTwitter, searchTerms) => {
  */
 export const buildTwitterQuery = (searchTerms) => {
   const maxTwitterQueryTerms = 10;
-  const joinKeyword = " OR ";
+  const joinKeyword = ' OR ';
 
   const result = [];
 
@@ -102,7 +102,7 @@ export const buildTwitterQuery = (searchTerms) => {
   }
 
   return result;
-}
+};
 
 const splatTogether = (allTweetResults, type) => {
   if (type === 'OR') {

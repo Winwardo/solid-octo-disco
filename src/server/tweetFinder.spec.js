@@ -40,7 +40,7 @@ describe('#QueryBuilder', () => {
   const makeQuery = (term, paramTypes) => {
     const result = {
       query: term,
-      paramTypes: []
+      paramTypes: [],
     };
     for (const paramTypeName of paramTypes) {
       result.paramTypes.push({
@@ -49,7 +49,7 @@ describe('#QueryBuilder', () => {
       });
     }
     return result;
-  }
+  };
 
   it('should return the empty array for an empty array', () => {
     tweetFinder.buildTwitterQuery([]).should.deep.equal([]);
@@ -58,11 +58,11 @@ describe('#QueryBuilder', () => {
   it('should build a single Twitter query for a single search query', () => {
     tweetFinder.buildTwitterQuery(
       [
-        makeQuery('arsenal', ['keyword', 'author', 'hashtag', 'mention'])
+        makeQuery('arsenal', ['keyword', 'author', 'hashtag', 'mention']),
       ]
     ).should.deep.equal(
       [
-        '"arsenal" OR @arsenal OR #arsenal'
+        '"arsenal" OR @arsenal OR #arsenal',
       ]
     );
   });
@@ -70,11 +70,11 @@ describe('#QueryBuilder', () => {
   it('should build a single Twitter query for a single search query with differently ordered paraas', () => {
     tweetFinder.buildTwitterQuery(
       [
-        makeQuery('arsenal', ['hashtag', 'keyword', 'author', 'mention'])
+        makeQuery('arsenal', ['hashtag', 'keyword', 'author', 'mention']),
       ]
     ).should.deep.equal(
       [
-        '#arsenal OR "arsenal" OR @arsenal'
+        '#arsenal OR "arsenal" OR @arsenal',
       ]
     );
   });
@@ -82,11 +82,11 @@ describe('#QueryBuilder', () => {
   it('should remove spaces in authors/mentions and hashtags', () => {
     tweetFinder.buildTwitterQuery(
       [
-        makeQuery('manchester united', ['keyword', 'author', 'hashtag', 'mention'])
+        makeQuery('manchester united', ['keyword', 'author', 'hashtag', 'mention']),
       ]
     ).should.deep.equal(
       [
-        '"manchester united" OR @manchesterunited OR #manchesterunited'
+        '"manchester united" OR @manchesterunited OR #manchesterunited',
       ]
     );
   });
@@ -95,11 +95,11 @@ describe('#QueryBuilder', () => {
     tweetFinder.buildTwitterQuery(
       [
         makeQuery('arsenal', ['keyword', 'author', 'hashtag', 'mention']),
-        makeQuery('spurs', ['keyword', 'author', 'hashtag', 'mention'])
+        makeQuery('spurs', ['keyword', 'author', 'hashtag', 'mention']),
       ]
     ).should.deep.equal(
       [
-        '"arsenal" OR @arsenal OR #arsenal OR "spurs" OR @spurs OR #spurs'
+        '"arsenal" OR @arsenal OR #arsenal OR "spurs" OR @spurs OR #spurs',
       ]
     );
   });
@@ -115,7 +115,7 @@ describe('#QueryBuilder', () => {
     ).should.deep.equal(
       [
         '"arsenal" OR @arsenal OR #arsenal OR "spurs" OR @spurs OR #spurs OR "manchester" OR @manchester OR #manchester',
-        '"liverpool" OR @liverpool OR #liverpool'
+        '"liverpool" OR @liverpool OR #liverpool',
       ]
     );
   });
@@ -127,7 +127,7 @@ describe('#QueryBuilder', () => {
       ]
     ).should.deep.equal(
       [
-        '"arsenal"'
+        '"arsenal"',
       ]
     );
   });
@@ -139,7 +139,7 @@ describe('#QueryBuilder', () => {
       ]
     ).should.deep.equal(
       [
-        '#arsenal'
+        '#arsenal',
       ]
     );
   });
@@ -148,11 +148,11 @@ describe('#QueryBuilder', () => {
     tweetFinder.buildTwitterQuery(
       [
         makeQuery('arsenal', ['mention']),
-        makeQuery('spurs', ['author'])
+        makeQuery('spurs', ['author']),
       ]
     ).should.deep.equal(
       [
-        '@arsenal OR @spurs'
+        '@arsenal OR @spurs',
       ]
     );
   });
