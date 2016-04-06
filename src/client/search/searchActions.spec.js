@@ -3,6 +3,7 @@ import * as actions from './searchActions';
 
 describe('#SearchActions', () => {
   let searchTermId = 0;
+
   it('should create an action to add a hashtag', () => {
     const query = '#Footy';
 
@@ -18,6 +19,21 @@ describe('#SearchActions', () => {
     actions.addSearchTerm(query).should.deep.equal(expectedAction);
   });
 
+  it('should create an action to add just a keyword', () => {
+    const query = '*Footy';
+
+    const expectedQuery = 'Footy';
+    const expectedAction = {
+      type: 'ADD_SEARCH_TERM',
+      id: searchTermId++,
+      query: expectedQuery,
+      paramTypes: ['keyword'],
+      source: 'twitter',
+    };
+
+    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+  });
+
   it('should create an action to add an author and mention', () => {
     const query = '@Manchester';
 
@@ -27,6 +43,66 @@ describe('#SearchActions', () => {
       id: searchTermId++,
       query: expectedQuery,
       paramTypes: ['author', 'mention'],
+      source: 'twitter',
+    };
+
+    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+  });
+
+  it('should create an action to add everything apart from a hashtag', () => {
+    const query = '^#Footy';
+
+    const expectedQuery = 'Footy';
+    const expectedAction = {
+      type: 'ADD_SEARCH_TERM',
+      id: searchTermId++,
+      query: expectedQuery,
+      paramTypes: ['author', 'keyword', 'mention'],
+      source: 'twitter',
+    };
+
+    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+  });
+
+  it('should create an action to add everything apart from a keyword', () => {
+    const query = '^*Footy';
+
+    const expectedQuery = 'Footy';
+    const expectedAction = {
+      type: 'ADD_SEARCH_TERM',
+      id: searchTermId++,
+      query: expectedQuery,
+      paramTypes: ['author', 'hashtag', 'mention'],
+      source: 'twitter',
+    };
+
+    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+  });
+
+  it('should create an action to add everything apart from author and mention', () => {
+    const query = '^@Footy';
+
+    const expectedQuery = 'Footy';
+    const expectedAction = {
+      type: 'ADD_SEARCH_TERM',
+      id: searchTermId++,
+      query: expectedQuery,
+      paramTypes: ['hashtag', 'keyword'],
+      source: 'twitter',
+    };
+
+    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+  });
+
+  it('should create an action to add a default search term if ^ without a symbol afterwards', () => {
+    const query = '^Footy';
+
+    const expectedQuery = 'Footy';
+    const expectedAction = {
+      type: 'ADD_SEARCH_TERM',
+      id: searchTermId++,
+      query: expectedQuery,
+      paramTypes: ['author', 'hashtag', 'keyword', 'mention'],
       source: 'twitter',
     };
 

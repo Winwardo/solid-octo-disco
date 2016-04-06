@@ -41,12 +41,67 @@ export const searchQuery = (req, res) => (
  */
 const potentiallySearchTwitter = (searchTwitter, searchTerms) => {
   if (searchTwitter) {
+    const twitterQueries = buildTwitterQuery(searchTerms);
     return Promise.all(
-      searchTerms.map((queryItem) => refreshFromTwitter(queryItem))
+      twitterQueries.map((twitterQuery) => searchAndSaveFromTwitter(twitterQuery))
     );
   } else {
     return Promise.resolve();
   }
+};
+
+/**
+ * Given some search terms with param types, convert it to Twitter API
+ * friendly queries.
+ * @param searchTerms
+ * @returns {Array} Some Twitter API queries, like ["#arsenal OR @manchester"]
+ */
+export const buildTwitterQuery = (searchTerms) => {
+  const maxTwitterQueryTerms = 10;
+  const joinKeyword = ' OR ';
+
+  const result = [];
+
+  let lastQuery = [];
+  searchTerms.forEach((searchTerm) => {
+    const actualTerm = searchTerm.query;
+    const termWithNoSpaces = actualTerm.replace(' ', '');
+    const currentQueryAddition = [];
+    let alreadyHadAuthorOrMention = false;
+
+    searchTerm.paramTypes.forEach((paramType) => {
+      switch (paramType.name) {
+        case 'keyword':
+          currentQueryAddition.push(`"${actualTerm}"`);
+          break;
+        case 'hashtag':
+          currentQueryAddition.push(`#${termWithNoSpaces}`);
+          break;
+        case 'author':
+        case 'mention':
+          if (!alreadyHadAuthorOrMention) {
+            alreadyHadAuthorOrMention = true;
+            currentQueryAddition.push(`@${termWithNoSpaces}`);
+          }
+          break;
+        default:
+          break;
+      }
+    });
+
+    if (lastQuery.length + currentQueryAddition.length <= maxTwitterQueryTerms) {
+      lastQuery = lastQuery.concat(currentQueryAddition);
+    } else {
+      result.push(lastQuery.join(joinKeyword));
+      lastQuery = currentQueryAddition;
+    }
+  });
+
+  if (lastQuery.length > 0) {
+    result.push(lastQuery.join(joinKeyword));
+  }
+
+  return result;
 };
 
 const splatTogether = (allTweetResults, type) => {
@@ -187,10 +242,6 @@ const makeTweetQuerySelectingFrom = (from) => (
 
 const makeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => (
   tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord))
-);
-
-const refreshFromTwitter = (searchObject) => (
-  searchAndSaveFromTwitter(searchObject.query)
 );
 
 const makeTweetAndAuthorFromDatabaseTweetRecord = (tweetRecord) => (
