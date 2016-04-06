@@ -21,7 +21,7 @@ class PlayerCategory extends Component {
       </i>
     );
     return (
-      <div className="ui dropdown labeled icon button players">
+      <div className="ui dropdown labeled icon button players category">
         <span className="text">
           <img className="ui small image" src={this.props.teamCrestUrl} />
           {this.props.teamName} Players
