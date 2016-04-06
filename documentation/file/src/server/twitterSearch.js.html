@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/server/twitterSearch.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="https://github.com/Winwardo/solid-octo-disco" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Header">Header</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TwitterProfilePicture">TwitterProfilePicture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-App">App</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-doesFeedHaveUsefulResults">doesFeedHaveUsefulResults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-exampleTweets">exampleTweets</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-groupedCountWords">groupedCountWords</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentUsers">mostFrequentUsers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentWords">mostFrequentWords</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Feed.js~Feed.html">Feed</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/GoogleMap.js~GoogleMap.html">GoogleMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_ACTIVE_USERS">TOGGLE_ALL_MOST_ACTIVE_USERS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_USED_WORDS">TOGGLE_ALL_MOST_USED_WORDS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_ACTIVE_USER">TOGGLE_MOST_ACTIVE_USER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_USED_WORDS">TOGGLE_MOST_USED_WORDS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER">UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_USED_WORDS_SEARCH_FILTER">UPDATE_MOST_USED_WORDS_SEARCH_FILTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostActiveUsersSearch">toggleAllMostActiveUsersSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostUsedWordsSearch">toggleAllMostUsedWordsSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostActiveUser">toggleMostActiveUser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostUsedWords">toggleMostUsedWords</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateActiveUsersSearch">updateActiveUsersSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateMostUsedWordsSearch">updateMostUsedWordsSearch</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent/users</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/mostfrequent/users/UserItemsList.js~UserItemsList.html">UserItemsList</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent/words</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/mostfrequent/words/WordItemsList.js~WordItemsList.html">WordItemsList</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AddSearchTerm">AddSearchTerm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CurrentQueryTerms">CurrentQueryTerms</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Search">Search</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TermItem">TermItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ADD_SEARCH_TERM">ADD_SEARCH_TERM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DELETE_SEARCH_TERM">DELETE_SEARCH_TERM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INVALIDATE_FEED_RESULTS">INVALIDATE_FEED_RESULTS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FEED_RESULTS">RECEIVE_FEED_RESULTS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_LIMIT">SET_FEED_PAGE_LIMIT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_NUMBER">SET_FEED_PAGE_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION">TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addSearchTerm">addSearchTerm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-deleteSearchTerm">deleteSearchTerm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateFeedResults">invalidateFeedResults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchApiForFeed">searchApiForFeed</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageLimit">setFeedPageLimit</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageNumber">setFeedPageNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchTermParamTypeSelection">toggleSearchTermParamTypeSelection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-feedReducer">feedReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchTermsReducer">searchTermsReducer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search/categories</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/LeagueCategory.js~LeagueCategory.html">LeagueCategory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/PlayerCategory.js~PlayerCategory.html">PlayerCategory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/TeamCategory.js~TeamCategory.html">TeamCategory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API">EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-YearSelector">YearSelector</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FOOTBALL_SEASON">RECEIVE_FOOTBALL_SEASON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_SELECTED_FOOTBALL_TEAM_PLAYERS">RECEIVE_SELECTED_FOOTBALL_TEAM_PLAYERS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_YEARS_FOOTBALL_LEAGUES_TEAMS">RECEIVE_YEARS_FOOTBALL_LEAGUES_TEAMS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REMOVE_FOOTBALL_SEASON">REMOVE_FOOTBALL_SEASON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS">REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REQUEST_FOOTBALL_SEASON">REQUEST_FOOTBALL_SEASON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS">REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT_AND_REQUEST_FOOTBALL_TEAM">SELECT_AND_REQUEST_FOOTBALL_TEAM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchAllFootballLeagueTeams">fetchAllFootballLeagueTeams</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchAllFootballSeasons">fetchAllFootballSeasons</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchFootballTeamPlayers">fetchFootballTeamPlayers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-receiveFootballSeason">receiveFootballSeason</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-receiveSelectedFootballTeamPlayers">receiveSelectedFootballTeamPlayers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-receiveYearsFootballLeaguesTeams">receiveYearsFootballLeaguesTeams</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeFootballSeason">removeFootballSeason</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeSelectedFootballTeamPlayers">removeSelectedFootballTeamPlayers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-requestFootballSeason">requestFootballSeason</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-requestYearsFootballLeaguesTeams">requestYearsFootballLeaguesTeams</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-selectAndRequestFootballTeam">selectAndRequestFootballTeam</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-footballCategoryFiltersInitialState">footballCategoryFiltersInitialState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-footballCategoryFiltersReducer">footballCategoryFiltersReducer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">server</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-exampleSearch">exampleSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchFootballSeasonTeams">searchFootballSeasonTeams</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchFootballSeasons">searchFootballSeasons</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchFootballTeamPlayers">searchFootballTeamPlayers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-db">db</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-generateDatabase">generateDatabase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MAX_TWEET_RESULTS">MAX_TWEET_RESULTS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-buildTwitterQuery">buildTwitterQuery</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getQuotedTweetFromParent">getQuotedTweetFromParent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-normaliseQueryTerm">normaliseQueryTerm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchQuery">searchQuery</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-unionTweets">unionTweets</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TWITTER_ENABLED">TWITTER_ENABLED</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TwitAccess">TwitAccess</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchAndSaveFromTwitter">searchAndSaveFromTwitter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchAndSaveResponse">searchAndSaveResponse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stream">stream</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">shared</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createTwitterParamTypes">createTwitterParamTypes</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchPost">fetchPost</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-flattenImmutableObject">flattenImmutableObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-flattenObjectToArray">flattenObjectToArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getSemanticCountryFlagName">getSemanticCountryFlagName</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-makeGetHeader">makeGetHeader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-makePostHeader">makePostHeader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-newPromiseChain">newPromiseChain</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-range">range</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-throttleFunction">throttleFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleArrayElement">toggleArrayElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleParamType">toggleParamType</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">shared/data</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkPlaceToCountry">linkPlaceToCountry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkQuoteTweetToOriginalTweet">linkQuoteTweetToOriginalTweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweetToHashtag">linkTweetToHashtag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweetToPlace">linkTweetToPlace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweetToTweeterViaMention">linkTweetToTweeterViaMention</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweeterToRetweet">linkTweeterToRetweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweeterToTweet">linkTweeterToTweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertCountry">upsertCountry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertHashtag">upsertHashtag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertPlace">upsertPlace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertTweet">upsertTweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertTweeter">upsertTweeter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CountryBuilder">CountryBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HashtagBuilder">HashtagBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PlaceBuilder">PlaceBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TweetBuilder">TweetBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TweeterBuilder">TweeterBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-convertSchemaObjectToClass">convertSchemaObjectToClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-schema">schema</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/server/twitterSearch.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const Twit = require(&apos;twit&apos;);
+const moment = require(&apos;moment&apos;);
+import { db } from &apos;./orientdb&apos;;
+import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweetToTweeterViaMention,
+  linkTweetToPlace, linkPlaceToCountry, linkQuoteTweetToOriginalTweet,
+  upsertHashtag, upsertTweet, upsertTweeter, upsertPlace, upsertCountry
+} from &apos;../shared/data/databaseInsertActions&apos;;
+import * as Builders from &apos;../shared/data/databaseObjects&apos;;
+import { newPromiseChain, range } from &apos;../shared/utilities&apos;;
+
+export const TWITTER_ENABLED = true;
+const MAX_TWEETS_FROM_TWITTER_API = 100;
+
+// These keys should be hidden in a private config file or environment variables
+// For simplicity of this assignment, they will be visible here
+export const TwitAccess = new Twit({
+  access_token: &apos;1831536590-kX7HPRraGcbs5t9xz1wg0QdsvbOAW4pFK5L0Y68&apos;,
+  access_token_secret: &apos;ceYqZAulg2MT89Jw11rA44FOwHOFcEccFv9HXFIG9ckJf&apos;,
+  consumer_key: &apos;YiSLB0kOlsTd21UGYT32YOUgg&apos;,
+  consumer_secret: &apos;78b5VrGzkcIkpmftLdlFwirraelPRq2t5bFlgEcMkfaQqQh1Mb&apos;,
+  timeout_ms: 60 * 1000,  // optional HTTP request timeout to apply to all requests.
+});
+
+/**
+ * Convert some raw status from the Twitter API into a proper immutable Tweet object.
+ * @param rawTweet From the Twitter API.
+ * @returns {ImmutableTweet}
+ */
+const buildTweetFromRaw = (rawTweet) =&gt; {
+  const coordinates = findLatitudeLongitude(rawTweet);
+  return Builders.TweetBuilder()
+    .id(rawTweet.id_str)
+    .content(rawTweet.text)
+    .date(moment(new Date(rawTweet.created_at)).format(&apos;YYYY-MM-DD HH:mm:ss&apos;))
+    .likes(rawTweet.favorite_count)
+    .retweets(rawTweet.retweet_count)
+    .latitude(coordinates.latitude)
+    .longitude(coordinates.longitude)
+    .contains_a_quoted_tweet(rawTweet.is_quote_status)
+    .build();
+};
+
+/**
+  * Finds if Latitude/Longitude coordinates exist in raw tweet, otherwise return 0.0 for both
+  * @param rawTweet From the Twitter API.
+  * @returns [latitude, longitude]
+  */
+const findLatitudeLongitude = (rawTweet) =&gt; {
+  let test;
+  try {
+    if (rawTweet.geo) {
+      test = &apos;geo&apos;;
+      if (rawTweet.geo.coordinate) {
+        return {
+          latitude: rawTweet.geo.coordinate[0],
+          longitude: rawTweet.geo.coordinate[1],
+        };
+      } else {
+        return {
+          latitude: rawTweet.geo.coordinates[0],
+          longitude: rawTweet.geo.coordinates[1],
+        };
+      }
+    } else if (rawTweet.coordinates) {
+      test = &apos;coord&apos;;
+      return {
+        latitude: rawTweet.coordinates.coordinate[1],
+        longitude: rawTweet.coordinates.coordinate[0],
+      };
+    } else if (rawTweet.place) {
+      test = &apos;place&apos;;
+      return {
+        latitude: rawTweet.place.bounding_box.coordinates[0][0][1],
+        longitude: rawTweet.place.bounding_box.coordinates[0][0][0],
+      };
+    }
+  } catch (err) {
+    console.warn(`Error parsing ${test} data in tweet #${rawTweet.id_str}.`);
+  }
+
+  return {
+    latitude: 0.0,
+    longitude: 0.0,
+  };
+};
+
+/**
+ * Convert some raw user from the Twitter API into a proper immutable Tweeter object.
+ * @param rawTweeter From the Twitter API.
+ * @param Boolean to signify if the passed in rawTweeter is a mention object
+ * or a full user object that has a profile_image_url_https
+ * @returns {ImmutableTweet}
+ */
+const buildTweeterFromRaw = (rawTweeter, isMentionUser) =&gt; {
+  const tweeter = Builders.TweeterBuilder()
+    .id(rawTweeter.id_str)
+    .name(rawTweeter.name)
+    .handle(rawTweeter.screen_name);
+
+  if (isMentionUser) {
+    tweeter.profile_image_url(&apos;none&apos;)
+      .is_user_mention(true);
+  } else {
+    tweeter.profile_image_url(rawTweeter.profile_image_url_https)
+      .is_user_mention(false);
+  }
+
+  return tweeter.build();
+};
+
+const buildPlaceFromRaw = (rawPlace) =&gt; (
+  Builders.PlaceBuilder()
+    .id(rawPlace.id)
+    .name(rawPlace.name)
+    .full_name(rawPlace.full_name)
+    .type(rawPlace.place_type)
+    .build()
+);
+
+/**
+ * Given some raw status we know is a retweet, insert it and add a RETWEETED link.
+ * @param db The OrientDB instance
+ * @param rawRetweet A raw status from the Twitter API
+ * @param retweeter An immutable Tweeter object
+ * @returns {Promise}
+ */
+const processRawRetweet = (db, rawTweet, retweeter, rawRetweet) =&gt; {
+  const originalTweeter = buildTweeterFromRaw(rawRetweet.user, false);
+  const originalTweet = buildTweetFromRaw(rawRetweet);
+
+  return newPromiseChain()
+    .then(() =&gt; upsertTweeter(db, retweeter))
+    .then(() =&gt; processRawOriginalTweet(db, rawRetweet, originalTweeter))
+    .then(() =&gt; linkTweeterToRetweet(db, retweeter, originalTweet));
+};
+
+const potentiallyLinkQuoteTweetToOriginalTweet = (db, rawQuoteTweet, quotingTweeter, rawOriginalTweet) =&gt; {
+  if (rawQuoteTweet.quoted_status) {
+    const originalTweet = buildTweetFromRaw(rawOriginalTweet);
+    const quoteTweet = buildTweetFromRaw(rawQuoteTweet);
+
+    return newPromiseChain()
+      .then(() =&gt; processTweet(db, rawOriginalTweet))
+      .then(() =&gt; linkQuoteTweetToOriginalTweet(db, quoteTweet, originalTweet));
+  }
+
+  return Promise.resolve();
+};
+
+/**
+ * Link a tweet to all of its hashtags
+ * @param db The OrientDB instance
+ * @param rawHashtags The original hashtags
+ * @param tweet
+ * @returns {Promise}
+ */
+const linkTweetToHashtags = (db, rawHashtags, tweet) =&gt; (
+  Promise.all(
+    rawHashtags.map((rawHashtag) =&gt; {
+      const hashtag = Builders.HashtagBuilder().content(rawHashtag.text.toLowerCase()).build();
+
+      return newPromiseChain()
+        .then(() =&gt; upsertHashtag(db, hashtag))
+        .then((result) =&gt; linkTweetToHashtag(db, tweet, hashtag));
+    })
+  )
+);
+
+const linkTweetToMentions = (db, rawMentions, tweet) =&gt; (
+  Promise.all(
+    rawMentions.map((rawMention) =&gt; {
+      const mentionedTweeter = buildTweeterFromRaw(rawMention, true);
+
+      return newPromiseChain()
+        .then(() =&gt; upsertTweeter(db, mentionedTweeter))
+        .then((result) =&gt; linkTweetToTweeterViaMention(db, tweet, mentionedTweeter));
+    })
+  )
+);
+
+/**
+ * Given a raw status we know is not a retweet, insert it and upsert the user.
+ * @param db The OrientDB instance
+ * @param rawTweet A raw status from the Twitter API
+ * @param originalTweeter An immutable Tweeter object
+ * @returns {Promise}
+ */
+const processRawOriginalTweet = (db, rawTweet, originalTweeter) =&gt; {
+  const tweet = buildTweetFromRaw(rawTweet);
+  const rawHashtags = rawTweet.entities.hashtags;
+  const rawMentions = rawTweet.entities.user_mentions;
+
+  return newPromiseChain()
+    .then(() =&gt; upsertTweet(db, tweet))
+    .then(() =&gt; upsertTweeter(db, originalTweeter))
+    .then(() =&gt; linkTweeterToTweet(db, originalTweeter, tweet))
+    .then(() =&gt; linkTweetToLocation(db, tweet, rawTweet.place))
+    .then(() =&gt; linkTweetToHashtags(db, rawHashtags, tweet))
+    .then(() =&gt; linkTweetToMentions(db, rawMentions, tweet));
+};
+
+/**
+ * Given a tweet, if it has a place upsert the place and link it to a country
+ * @param db the OrientDB instance
+ * @param tweet A processed tweet to link to a place
+ * @param rawTweet A raw tweet&apos;s place property from the Twitter API
+ * @returns {Promise}
+ */
+const linkTweetToLocation = (db, tweet, rawPlace) =&gt; {
+  if (rawPlace) {
+    const place = buildPlaceFromRaw(rawPlace);
+    const country = Builders.CountryBuilder()
+      .code(rawPlace.country_code)
+      .name(rawPlace.country)
+      .build();
+
+    return newPromiseChain()
+      .then(() =&gt; upsertPlace(db, place))
+      .then(() =&gt; upsertCountry(db, country))
+      .then(() =&gt; linkTweetToPlace(db, tweet, place))
+      .then(() =&gt; linkPlaceToCountry(db, place, country));
+  }
+
+  return Promise.resolve();
+};
+
+/**
+ * Given a raw tweet, extract information about the tweeter,
+ * if it was a retweet, etc, and store all information in
+ * the database.
+ * @param db The OrientDB instance
+ * @param rawTweet The original status object from the Twitter API
+ * @returns {Promise.&lt;TwitAccess&gt;}
+ */
+const processTweet = (db, rawTweet) =&gt; {
+  const tweeter = buildTweeterFromRaw(rawTweet.user, false);
+  const rawRetweetedStatus = rawTweet.retweeted_status;
+  const rawQuotedStatus = rawTweet.quoted_status;
+  const id = rawTweet.id;
+
+  let promises = [];
+  let types;
+
+  return newPromiseChain()
+  .then(() =&gt; processRawOriginalTweet(db, rawTweet, tweeter))
+  .then(() =&gt; {
+    // Quotes that are also retweets confuse our system, so only take EITHER retweets or quotes.
+    if (rawRetweetedStatus !== undefined) {
+      return processRawRetweet(db, rawTweet, tweeter, rawRetweetedStatus);
+    }
+    if (rawQuotedStatus !== undefined) {
+      return potentiallyLinkQuoteTweetToOriginalTweet(db, rawTweet, tweeter, rawQuotedStatus);
+    }
+  });
+};
+
+/**
+ * Search the Twitter API for some query, saving and displaying the results.
+ * @param query Query to search twitter
+ */
+export const searchAndSaveFromTwitter = (query, count = 300) =&gt; {
+  if (TWITTER_ENABLED) {
+    console.info(`Searching Twitter for query &apos;${query}&apos;.`);
+    return newPromiseChain()
+      .then(() =&gt; sweepTwitterAndConcat(query, count))
+      .then(
+        (statuses) =&gt; {
+          console.info(`Twitter search for &apos;${query}&apos; successful! Found ${statuses.length} relevant Tweets.`);
+
+          return Promise.all(
+            statuses.map((rawTweet) =&gt; processTweet(db, rawTweet))
+          ).then(() =&gt; console.log(&apos;Successfully processed the Tweets.&apos;));
+        },
+        (rej) =&gt; {
+          console.warn(&apos;Unable to search Twitter.&apos;, rej);
+        }
+      );
+  } else {
+    console.info(`Twitter disabled, not searching query &apos;${query}&apos;.`);
+    return Promise.resolve();
+  }
+};
+
+const sweepTwitterAndConcat = (query, count, existingStatuses = [], lowestId = null) =&gt; {
+  let extendedQuery = query;
+  if (lowestId !== null) {
+    extendedQuery += ` max_id:${lowestId}`;
+  };
+
+  return newPromiseChain()
+    .then(() =&gt; potentiallySearchTwitter(extendedQuery, count))
+    .then((twitStatuses) =&gt; {
+      const countLeft = count - MAX_TWEETS_FROM_TWITTER_API;
+      const added = twitStatuses.length;
+
+      if (countLeft &gt; 0 &amp;&amp; added &gt; 0) {
+        const newLowestId = Math.min(...twitStatuses.map((status) =&gt; status.id));
+
+        return newPromiseChain()
+          .then(() =&gt; sweepTwitterAndConcat(query, countLeft, twitStatuses, newLowestId))
+          .then((results) =&gt; existingStatuses.concat(results));
+      } else {
+        return existingStatuses.concat(twitStatuses);
+      }
+    });
+};
+
+const potentiallySearchTwitter = (exactQuery, count) =&gt; {
+  if (count &gt; 0) {
+    const actualCount = Math.min(count, MAX_TWEETS_FROM_TWITTER_API); // Twitter will only return a max of 100 Tweets at any time
+    return newPromiseChain()
+      .then(() =&gt; TwitAccess.get(&apos;search/tweets&apos;, { q: `${exactQuery} filter:safe`, count: actualCount }))
+      .then((twitResults) =&gt; twitResults.data.statuses);
+  } else {
+    return [];
+  }
+};
+
+export const searchAndSaveResponse = (res, query) =&gt; (
+  searchAndSaveFromTwitter(query).then((result) =&gt; {
+    res.end(JSON.stringify(result));
+  })
+);
+
+/**
+ * Connect to the Twitter Stream API for one minute, processing all results.
+ * @param req HTTP Request object with `query` parameter
+ * @param res HTTP Response object
+ */
+export const stream = (req, res) =&gt; {
+  const stream = TwitAccess.stream(&apos;statuses/filter&apos;, { track: req.params.query });
+
+  stream.on(&apos;tweet&apos;, (tweet) =&gt; {
+    processTweet(tweet);
+    console.log(tweet.text);
+    res.write(`${tweet.text}`);
+  });
+
+  setTimeout(() =&gt; {
+    stream.stop();
+    console.log(&apos;END&apos;);
+    res.end(&apos;END&apos;);
+  }, 60000);
+};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.6)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

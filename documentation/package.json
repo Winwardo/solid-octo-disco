@@ -1,0 +1,73 @@
+{
+  "name": "solid-octo-disco",
+  "version": "1.0.0",
+  "description": "Topher and Vasily's football tweet miner assignment.",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Winwardo/solid-octo-disco.git"
+  },
+  "scripts": {
+    "test-quick": "cross-env NODE_ENV=test mocha ./src/**/*.spec.js --compilers js:babel-core/register",
+    "test": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat coverage/lcov.info | ./node_modules/.bin/codacy-coverage && rm -rf coverage",
+    "lint": "jscs src --fix",
+    "build": "gulp build",
+    "watch": "gulp watch",
+    "dev": "cross-env NODE_ENV=development gulp run",
+    "start": "node build/server.js",
+    "doc": "esdoc -c esdoc.json"
+  },
+  "author": [
+    "Topher Winward",
+    "Vasily Shelkov"
+  ],
+  "license": "All copyright retained.",
+  "homepage": "https://github.com/Winwardo/solid-octo-disco",
+  "dependencies": {
+    "babel-polyfill": "^6.7.4",
+    "body-parser": "^1.15.0",
+    "cross-env": "^1.0.7",
+    "express": "^4.13.4",
+    "isomorphic-fetch": "^2.2.1",
+    "js-builder-decorator": "^0.1.3",
+    "moment": "^2.12.0",
+    "orientjs": "^2.1.11",
+    "react": "^0.14.8",
+    "react-dom": "^0.14.8",
+    "react-redux": "^4.4.1",
+    "redux": "^3.3.1",
+    "redux-thunk": "^2.0.1",
+    "style-loader": "^0.13.1",
+    "twit": "^2.2.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "babel-core": "^6.7.4",
+    "babel-eslint": "^6.0.0",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-2": "^6.5.0",
+    "chai": "^3.5.0",
+    "codacy-coverage": "^1.1.3",
+    "deep-freeze": "0.0.1",
+    "esdoc": "^0.4.6",
+    "esdoc-es7-plugin": "0.0.3",
+    "eslint": "^2.5.3",
+    "eslint-config-airbnb": "^6.2.0",
+    "eslint-plugin-babel": "^3.1.0",
+    "eslint-plugin-react": "^4.2.3",
+    "eventsource-polyfill": "^0.9.6",
+    "extend": "^3.0.0",
+    "gulp": "^3.9.1",
+    "istanbul": "^0.4.2",
+    "jscs": "^2.11.0",
+    "mocha": "^2.4.5",
+    "mocha-lcov-reporter": "^1.2.0",
+    "nodemon": "^1.9.1",
+    "redbox-react": "^1.2.2",
+    "webpack": "^1.12.14",
+    "webpack-dev-middleware": "^1.6.1",
+    "webpack-hot-middleware": "^2.10.0"
+  }
+}

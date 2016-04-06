@@ -1,4 +1,4 @@
-# Certain folders are NOT excluded here, such as documentation: this is the RELEASE branch.
+# Certain folders are NOT excluded here, such as core documentation: this is the RELEASE branch.
 
 # Logs
 logs
@@ -41,3 +41,6 @@ build
 # Database data
 lib/orientdb/databases
 lib/orientdb/log
+
+# Documentation AST - but not the rest of documentation
+documentation/ast
