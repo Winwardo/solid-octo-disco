@@ -13,6 +13,7 @@ import Results from './results/Results.js';
  */
 const App = () => (
   <div>
+
     <Header />
 
     <Search />
