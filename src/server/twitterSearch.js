@@ -2,7 +2,7 @@ const Twit = require('twit');
 const moment = require('moment');
 import { db } from './orientdb';
 import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweetToTweeterViaMention,
-  linkTweetToPlace, linkPlaceToCountry,
+  linkTweetToPlace, linkPlaceToCountry, linkQuoteTweetToOriginalTweet,
   upsertHashtag, upsertTweet, upsertTweeter, upsertPlace, upsertCountry
 } from '../shared/data/databaseInsertActions';
 import * as Builders from '../shared/data/databaseObjects';
@@ -36,6 +36,7 @@ const buildTweetFromRaw = (rawTweet) => {
     .retweets(rawTweet.retweet_count)
     .latitude(coordinates.latitude)
     .longitude(coordinates.longitude)
+    .contains_a_quoted_tweet(rawTweet.is_quote_status)
     .build();
 };
 
@@ -123,7 +124,7 @@ const buildPlaceFromRaw = (rawPlace) => (
  * @param retweeter An immutable Tweeter object
  * @returns {Promise}
  */
-const processRawRetweet = (db, rawRetweet, retweeter) => {
+const processRawRetweet = (db, rawTweet, retweeter, rawRetweet) => {
   const originalTweeter = buildTweeterFromRaw(rawRetweet.user, false);
   const originalTweet = buildTweetFromRaw(rawRetweet);
 
@@ -131,6 +132,19 @@ const processRawRetweet = (db, rawRetweet, retweeter) => {
     .then(() => upsertTweeter(db, retweeter))
     .then(() => processRawOriginalTweet(db, rawRetweet, originalTweeter))
     .then(() => linkTweeterToRetweet(db, retweeter, originalTweet));
+};
+
+const potentiallyLinkQuoteTweetToOriginalTweet = (db, rawQuoteTweet, quotingTweeter, rawOriginalTweet) => {
+  if (rawQuoteTweet.quoted_status) {
+    const originalTweet = buildTweetFromRaw(rawOriginalTweet);
+    const quoteTweet = buildTweetFromRaw(rawQuoteTweet);
+
+    return newPromiseChain()
+      .then(() => processTweet(db, rawOriginalTweet))
+      .then(() => linkQuoteTweetToOriginalTweet(db, quoteTweet, originalTweet));
+  }
+
+  return Promise.resolve();
 };
 
 /**
@@ -221,21 +235,23 @@ const linkTweetToLocation = (db, tweet, rawPlace) => {
 const processTweet = (db, rawTweet) => {
   const tweeter = buildTweeterFromRaw(rawTweet.user, false);
   const rawRetweetedStatus = rawTweet.retweeted_status;
+  const rawQuotedStatus = rawTweet.quoted_status;
   const id = rawTweet.id;
 
-  if (rawRetweetedStatus !== undefined) {
-    return processRawRetweet(db, rawRetweetedStatus, tweeter)
-      .then(
-        (res) => { },
-        (rej) => { console.warn('Rejected retweet #', id, rej); }
-      );
-  } else {
-    return processRawOriginalTweet(db, rawTweet, tweeter)
-      .then(
-        (res) => {  },
-        (rej) => { console.warn('Rejected tweet #', id, rej); }
-      );
-  };
+  let promises = [];
+  let types;
+
+  return newPromiseChain()
+  .then(() => processRawOriginalTweet(db, rawTweet, tweeter))
+  .then(() => {
+    // Quotes that are also retweets confuse our system, so only take EITHER retweets or quotes.
+    if (rawRetweetedStatus !== undefined) {
+      return processRawRetweet(db, rawTweet, tweeter, rawRetweetedStatus);
+    }
+    if (rawQuotedStatus !== undefined) {
+      return potentiallyLinkQuoteTweetToOriginalTweet(db, rawTweet, tweeter, rawQuotedStatus);
+    }
+  });
 };
 
 /**
@@ -253,7 +269,7 @@ export const searchAndSaveFromTwitter = (query, count = 300) => {
 
           return Promise.all(
             statuses.map((rawTweet) => processTweet(db, rawTweet))
-          );
+          ).then(() => console.log('Successfully processed the Tweets.'));
         },
         (rej) => {
           console.warn('Unable to search Twitter.', rej);
@@ -293,7 +309,7 @@ const potentiallySearchTwitter = (exactQuery, count) => {
   if (count > 0) {
     const actualCount = Math.min(count, MAX_TWEETS_FROM_TWITTER_API); // Twitter will only return a max of 100 Tweets at any time
     return newPromiseChain()
-      .then(() => TwitAccess.get('search/tweets', { q: `${exactQuery} -filter:retweets filter:safe`, count: actualCount }))
+      .then(() => TwitAccess.get('search/tweets', { q: `${exactQuery} filter:safe`, count: actualCount }))
       .then((twitResults) => twitResults.data.statuses);
   } else {
     return [];
