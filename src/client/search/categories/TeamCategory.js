@@ -117,7 +117,7 @@ const LeagueTeamsList = ({ id, name, teams, onClickAddTeam, onClickSelectTeam })
 );
 
 const LeagueTeam = ({
-  leagueId, name, crestUrl, onClickAddTeam, onClickSelectTeam
+  leagueId, name, crestUrl, onClickAddTeam, onClickSelectTeam,
 }) => (
   <div
     data-id={leagueId} className="league item"
