@@ -7,7 +7,10 @@ import { Provider } from 'react-redux';
 import { searchTermsReducer, feedReducer } from './search/searchReducer';
 import mostFrequentReducer from './results/mostfrequent/mostFrequentReducer';
 import footballCategoryFiltersReducer from './search/categories/categoryFiltersReducer';
-import { fetchAllFootballSeasons } from './search/categories/categoryFilterActions';
+import { newPromiseChain } from './../shared/utilities';
+import {
+  fetchAllFootballSeasons, fetchAllFootballLeagueTeams
+} from './search/categories/categoryFilterActions';
 import moment from 'moment';
 
 const feedApp = combineReducers({
@@ -28,7 +31,7 @@ const finalStore = createStore(
 );
 
 // fetch all the football seasons on startup
-finalStore.dispatch(fetchAllFootballSeasons(moment().year()));
+finalStore.dispatch(fetchAllFootballSeasons(moment().year() - 1, true));
 
 const rootElement = document.getElementById('root');
 

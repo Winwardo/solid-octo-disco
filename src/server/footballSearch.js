@@ -5,8 +5,12 @@ import { newPromiseChain } from './../shared/utilities';
 // For simplicity of this assignment, they will be visible here
 const footballAccessOptions = {
   method: 'GET',
-  headers: { 'X-Auth-Token': 'f39c0cf21f95409498f8eea5eb129b0f' },
+  headers: {
+    'X-Auth-Token': 'f39c0cf21f95409498f8eea5eb129b0f',
+    'X-Response-Control': 'minified',
+  },
   dataType: 'json',
+
 };
 
 const footballAPIHost = 'http://api.football-data.org';
@@ -14,15 +18,57 @@ const footballAPIVersion = '/v1';
 
 export const searchFootballSeasons = (res, year) => {
   const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/soccerseasons/?season=${year}`;
-  fetchData(res, footballRequestUrl, `${year}'s football seasons`);
+  fetchDataAndRespond(res, footballRequestUrl, `${year}'s football seasons`);
 };
 
-export const searchFootballSeasonTeams = (res, id) => {
-  const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/soccerseasons/${id}/teams`;
-  fetchData(res, footballRequestUrl, `football season with id=${id}' teams`);
+export const searchFootballSeasonTeams = (res, year, leagues) =>
+  newPromiseChain()
+    .then(() =>
+      Promise.all(
+        leagues.map(
+          league => newPromiseChain()
+            .then(() => fetchLeagueTeamsById(league.id))
+            .then(leagueTeams => ({
+              name: league.name,
+              id: league.id,
+              ...leagueTeams,
+            }))
+        )
+      )
+    )
+    .then(
+      (allYearsLeagueTeams) => {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          data: {
+            teamsByLeague: allYearsLeagueTeams,
+          },
+        }));
+      },
+      (rejection) => {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end('An unexpected internal error occurred.');
+        console.warn(`Unable to search for query year:${year}'s league's teams`, rejection);
+      }
+  );
+
+const fetchLeagueTeamsById = (leagueId) => {
+  const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/soccerseasons/${leagueId}/teams`;
+  return newPromiseChain()
+    .then(() => fetch(footballRequestUrl, footballAccessOptions))
+    .then(response => response.json())
+    .then(
+      leagueTeamsResolved => leagueTeamsResolved,
+      rejection => console.warn(`Major error reqesting the league with id:${leagueId}.`, rejection)
+    );
 };
 
-const fetchData = (res, url, name) => {
+export const searchFootballTeamPlayers = (res, teamId) => {
+  const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/teams/${teamId}/players`;
+  fetchDataAndRespond(res, footballRequestUrl, `team with id:${teamId}'s football players`);
+};
+
+const fetchDataAndRespond = (res, url, name) => {
   newPromiseChain()
     .then(() => fetch(url, footballAccessOptions))
     .then(response => response.json())

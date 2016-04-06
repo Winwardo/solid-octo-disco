@@ -4,7 +4,9 @@ import { searchQuery, getQuotedTweetFromParent } from './tweetFinder';
 import { generateDatabase } from './orientdb';
 import { searchAndSaveResponse, stream, TwitAccess } from './twitterSearch';
 import bodyParser from 'body-parser';
-import { searchFootballSeasons, searchFootballSeasonTeams } from './footballSearch';
+import {
+  searchFootballSeasons, searchFootballSeasonTeams, searchFootballTeamPlayers
+} from './footballSearch';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -47,11 +49,6 @@ app.post('/search', (req, res) => {
   searchQuery(req, res);
 });
 
-app.get('/twit/:query', (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'application/json' });
-  searchAndSaveResponse(res, req.params.query);
-});
-
 app.get('/exampleTwitterJson', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
   TwitAccess.get('search/tweets', { q: 'Brussels', count: 300 })
@@ -67,8 +64,12 @@ app.get('/football/seasons/:year', (req, res) => {
   searchFootballSeasons(res, req.params.year);
 });
 
-app.get('/football/seasons/:id/teams', (req, res) => {
-  searchFootballSeasonTeams(res, req.params.id);
+app.post('/football/seasons/:year/teams', (req, res) => {
+  searchFootballSeasonTeams(res, req.params.year, req.body.leagues);
+});
+
+app.get('/football/teams/:teamid/players', (req, res) => {
+  searchFootballTeamPlayers(res, req.params.teamid);
 });
 
 app.get('*', (req, res) => {
