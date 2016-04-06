@@ -227,3 +227,24 @@ const getTweetsAsResults = (data) => (
     (tweet) => ({ data: tweet.tweet, author: tweet.author, source: 'twitter' })
   )
 );
+
+export const getQuotedTweetFromParent = (req, res, id) => {
+  return newPromiseChain()
+    .then(() => {
+      console.log(req.params.id);
+      return db.query(makeTweetQuerySelectingFrom('TRAVERSE OUT FROM (SELECT OUT(\'QUOTED\') FROM (SELECT FROM Tweet WHERE id = :id))'),
+        {
+          params: {
+            id: req.params.id,
+            limit: 1
+          }
+        });
+    })
+    .then((results) => {
+      //console.log("res", results[0])
+      return makeTweetAndAuthorFromDatabaseTweetRecord(results[0]);
+    })
+    .then((final) => res.end(JSON.stringify(final)))
+    .catch((rej) => console.log("poo", rej));
+  //.then((results) => getTweetsAsResults(splattedTweets))
+}

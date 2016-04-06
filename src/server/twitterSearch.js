@@ -140,7 +140,6 @@ const potentiallyLinkQuoteTweetToOriginalTweet = (db, rawQuoteTweet, quotingTwee
     const quoteTweet = buildTweetFromRaw(rawQuoteTweet);
 
     return newPromiseChain()
-      //.then(() => processRawOriginalTweet(db, rawQuoteTweet, quotingTweeter))
       .then(() => processTweet(db, rawOriginalTweet))
       .then(() => linkQuoteTweetToOriginalTweet(db, quoteTweet, originalTweet));
   }

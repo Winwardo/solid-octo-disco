@@ -1,8 +1,8 @@
 import express from 'express';
 import config from '../../webpack.config.js';
-import { searchQuery } from './tweetFinder';
+import { searchQuery, getQuotedTweetFromParent } from './tweetFinder';
 import { generateDatabase } from './orientdb';
-import { searchAndSaveResponse, stream, TwitAccess } from './twitterSearch';
+import { searchAndSaveResponse,stream, TwitAccess } from './twitterSearch';
 import bodyParser from 'body-parser';
 import { searchFootballSeasons, searchFootballSeasonTeams } from './footballSearch';
 
@@ -37,6 +37,10 @@ app.get('/', (req, res) => {
 
 app.get('/orient/generate', (req, res) => {
   generateDatabase(res);
+});
+
+app.get('/tweet/quotedby/:id', (req, res) => {
+  getQuotedTweetFromParent(req, res, req.params.id);
 });
 
 app.post('/search', (req, res) => {

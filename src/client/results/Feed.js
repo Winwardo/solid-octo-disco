@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { setFeedPageNumber, setFeedPageLimit } from '../search/searchActions';
 import { TwitterProfilePicture } from '../Twitter';
+import { fetchPost, newPromiseChain } from '../../shared/utilities';
 
 class Feed extends Component {
   componentDidMount() {
@@ -185,6 +186,11 @@ const Tweet = ({ content }) => {
     goldStar = (<i className="yellow star icon popup" data-title="Popular tweet"/>);
   }
 
+  let quotedContent;
+  if (content.data.contains_a_quoted_tweet) {
+    quotedContent = <QuotedTweet parentId={content.data.id}/>;
+  }
+
   // Just below we use dangerousSetInnerHTML.
   // The content it is display has come from Twitter and is safe to render as actual HTML,
   // as all HTML entities have already been encoded - e.g., instead of <script> a tweet
@@ -202,6 +208,8 @@ const Tweet = ({ content }) => {
       </a>
       <br />
       <div dangerouslySetInnerHTML={{ __html: tweetWithLinks }} />
+
+      {quotedContent}
 
       <div className="meta">
         <span className="date">
@@ -221,5 +229,74 @@ const Tweet = ({ content }) => {
     </div>
   );
 };
+
+const QuotedTweet = React.createClass({
+  getInitialState: () => ({
+    tweetContent: null
+  }),
+
+  componentDidMount: function () {
+    //this.setState({
+    //  tweetContent: {
+    //    data: {
+    //      content: "Hey there",
+    //      likes: 7,
+    //      retweets: 2,
+    //      date: 0,
+    //    },
+    //    author: {
+    //      name: "Name",
+    //      handle: "John",
+    //      profile_image_url: "",
+    //    }
+    //  }
+    //})
+    fetch('/tweet/quotedby/' + this.props.parentId, {})
+      .then((result) => result.json())
+    .then((result) => {
+      console.log("Donennenene", result);
+
+      const trans = {
+        data: result.tweet,
+        author: result.author,
+      };
+
+      console.log(trans);
+
+
+      this.setState({tweetContent: trans});
+    }, (rej) => {
+      console.log("Aww fetch poops", rej);
+    });
+  },
+
+  render: function () {
+    let loadingClass = 'active';
+    let displayableTweetContent;
+
+    if (this.state.tweetContent !== null) {
+      displayableTweetContent = (
+        <div>
+          <Tweet content={this.state.tweetContent} />
+        </div>
+      )
+      loadingClass = '';
+    };
+
+    return (
+      <div>
+      <div className="ui icon message">
+        <i className="left quote icon popup" data-title="Quoting tweet"/>
+        <div className="content">
+          <div className={`ui ${loadingClass} inverted dimmer`}>
+            <div className="ui small text loader">Fetching quoted tweet</div>
+          </div>
+          {displayableTweetContent}
+        </div>
+      </div>
+    </div>
+    );
+  }
+})
 
 export default Feed;
