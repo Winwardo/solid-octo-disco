@@ -16,6 +16,8 @@ const TermItem = ({ onDeleteClick, onToggleParamTypeClick, query, source, paramT
           {paramTypes
             .filter((paramType) => paramType.selected)
             .map((paramType, paramId) => {
+              // This is to create an icon with className or not depending on if
+              // the param type icon is a semantic class (ie #)
               if (paramType.icon.length > 1) {
                 return (
                   <i key={paramId}
@@ -65,6 +67,8 @@ class TermItemMenu extends Component {
     const menuItems = this.props.paramTypes.map((paramType, id) => {
       let paramTypeIcon;
       const highlighted = paramType.selected ? this.props.highlightColor : 'black';
+      // This is to create an icon with className or not depending on if
+      // the param type icon is a semantic class (ie #)
       if (paramType.icon.length > 1) {
         paramTypeIcon = <i className={`inverted ${highlighted} circular ${paramType.icon}`}></i>;
       } else {
