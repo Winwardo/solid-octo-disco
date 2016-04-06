@@ -41,9 +41,9 @@ export const searchQuery = (req, res) => (
  */
 const potentiallySearchTwitter = (searchTwitter, searchTerms) => {
   if (searchTwitter) {
-    const newQuery = buildTwitterQuery(searchTerms);
+    const twitterQueries = buildTwitterQuery(searchTerms);
     return Promise.all(
-      searchTerms.map((queryItem) => refreshFromTwitter(queryItem))
+      twitterQueries.map((twitterQuery) => searchAndSaveFromTwitter(twitterQuery))
     );
   } else {
     return Promise.resolve();
@@ -220,10 +220,6 @@ const makeTweetQuerySelectingFrom = (from) => (
 
 const makeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => (
   tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord))
-);
-
-const refreshFromTwitter = (searchObject) => (
-  searchAndSaveFromTwitter(searchObject.query)
 );
 
 const makeTweetAndAuthorFromDatabaseTweetRecord = (tweetRecord) => (
