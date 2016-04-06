@@ -9,6 +9,7 @@ import {
 class TermsList extends Component {
   componentWillReceiveProps() {
     this.props.onSearchTermsChange();
+    $('.icon.param.types.popup').popup();
   }
 
   render() {
