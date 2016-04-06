@@ -229,14 +229,14 @@ const getTweetsAsResults = (data) => (
   )
 );
 
-export const getQuotedTweetFromParent = (req, res) => (
+export const getQuotedTweetFromParent = (res, id) => (
   newPromiseChain()
     .then(() => (
        db.query(
          makeTweetQuerySelectingFrom('TRAVERSE OUT FROM (SELECT OUT(\'QUOTED\') FROM (SELECT FROM Tweet WHERE id = :id))'),
          {
            params: {
-             id: req.params.id,
+             id: id,
              limit: 1,
            },
          }

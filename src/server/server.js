@@ -40,7 +40,7 @@ app.get('/orient/generate', (req, res) => {
 });
 
 app.get('/tweet/quotedby/:id', (req, res) => {
-  getQuotedTweetFromParent(req, res);
+  getQuotedTweetFromParent(res, req.params.id);
 });
 
 app.post('/search', (req, res) => {
