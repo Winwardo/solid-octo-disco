@@ -47,7 +47,10 @@ class LeagueCategory extends Component {
             // gets rid of the 20XX/YY year at the end of the caption
             const leagueName = league.caption.slice(0, league.caption.length - 7);
             return (
-              <LeagueItem id={league.id} onClickLeague={() => this.props.onClickLeague(leagueName)}
+              <LeagueItem id={league.id} onClickLeague={() => {
+                this.props.onClickLeague(`*${leagueName}`);
+                this.props.onClickLeague(`#${league.league}`);
+              }}
                 name={leagueName}
               />
             );
