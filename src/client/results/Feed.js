@@ -228,12 +228,14 @@ const Tweet = ({ content }) => {
   );
 };
 
-const QuotedTweet = React.createClass({
-  getInitialState: () => ({
-    tweetContent: null,
-  }),
+class QuotedTweet extends Component {
+  getInitialState() {
+    return {
+      tweetContent: null,
+    };
+  }
 
-  componentDidMount: function () {
+  componentDidMount() {
     fetch('/tweet/quotedby/' + this.props.parentId, {})
       .then((result) => result.json())
       .then(
@@ -249,9 +251,9 @@ const QuotedTweet = React.createClass({
           console.warn('Unable to fetch quoted tweet.', rej);
         }
       );
-  },
+  }
 
-  render: function () {
+  render() {
     let loadingClass = 'active';
     let displayableTweetContent;
 
@@ -277,7 +279,7 @@ const QuotedTweet = React.createClass({
       </div>
     </div>
     );
-  },
-});
+  }
+};
 
 export default Feed;
