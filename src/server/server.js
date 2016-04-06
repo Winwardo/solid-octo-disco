@@ -1,10 +1,12 @@
 import express from 'express';
 import config from '../../webpack.config.js';
-import { searchQuery } from './tweetFinder';
+import { searchQuery, getQuotedTweetFromParent } from './tweetFinder';
 import { generateDatabase } from './orientdb';
 import { searchAndSaveResponse, stream, TwitAccess } from './twitterSearch';
 import bodyParser from 'body-parser';
-import { searchFootballSeasons, searchFootballSeasonTeams } from './footballSearch';
+import {
+  searchFootballSeasons, searchFootballSeasonTeams, searchFootballTeamPlayers
+} from './footballSearch';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -39,13 +41,12 @@ app.get('/orient/generate', (req, res) => {
   generateDatabase(res);
 });
 
-app.post('/search', (req, res) => {
-  searchQuery(req, res);
+app.get('/tweet/quotedby/:id', (req, res) => {
+  getQuotedTweetFromParent(res, req.params.id);
 });
 
-app.get('/twit/:query', (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'application/json' });
-  searchAndSaveResponse(res, req.params.query);
+app.post('/search', (req, res) => {
+  searchQuery(req, res);
 });
 
 app.get('/exampleTwitterJson', (req, res) => {
@@ -63,8 +64,12 @@ app.get('/football/seasons/:year', (req, res) => {
   searchFootballSeasons(res, req.params.year);
 });
 
-app.get('/football/seasons/:id/teams', (req, res) => {
-  searchFootballSeasonTeams(res, req.params.id);
+app.post('/football/seasons/:year/teams', (req, res) => {
+  searchFootballSeasonTeams(res, req.params.year, req.body.leagues);
+});
+
+app.get('/football/teams/:teamid/players', (req, res) => {
+  searchFootballTeamPlayers(res, req.params.teamid);
 });
 
 app.get('*', (req, res) => {

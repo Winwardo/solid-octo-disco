@@ -1,11 +1,13 @@
 import { fetchPost, newPromiseChain } from '../../shared/utilities';
 import { doesFeedHaveUsefulResults } from '../tweetAnalysis';
 
+let nextSearchTermId = 0;
+
 export const ADD_SEARCH_TERM = 'ADD_SEARCH_TERM';
-export const addSearchTerm = (id, query) => {
+export const addSearchTerm = (query) => {
   const searchQuery = {
     type: ADD_SEARCH_TERM,
-    id,
+    id: nextSearchTermId++,
     source: 'twitter',
   };
 
