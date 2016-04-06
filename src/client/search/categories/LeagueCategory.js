@@ -25,7 +25,7 @@ class LeagueCategory extends Component {
       "ui purple horizontal label year league count content transition hidden"
 
     return (
-      <div className="ui dropdown labeled icon button leagues">
+      <div className="large ui dropdown labeled icon button leagues">
         {yearsLeagues.length === 0 ? isFetchingLoader : <i className="trophy purple icon"></i>}
         <span className="text">
           {

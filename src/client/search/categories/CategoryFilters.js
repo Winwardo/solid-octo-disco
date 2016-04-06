@@ -61,44 +61,40 @@ class CategoryFilters extends Component {
 
       seasonYearTabsContent.push(
         <div className={tabContentClassName} data-tab={y}>
-          <div className="ui four column grid">
-            <div className="center aligned column">
+          <div className="ui grid">
+            <div className="center aligned four wide column">
               <LeagueCategory leagues={this.props.football.seasonsByYear[y]}
                 currentYear={currentYear} tabYear={y}
                 onClickLeague={this.props.onClickCategoryFilter}
               />
             </div>
-
-            <div className="center aligned column">
-              <div className="ui two column grid">
-                <div className="column">
+            <div className="eight wide column">
+              <div className="ui middle aligned grid">
+                <div className="five wide column">
                   <TeamCategory teamsByLeague={this.props.football.leagueTeamsByYear[y]}
                     onClickAddTeam={this.props.onClickCategoryFilter}
                     onClickSelectTeam={this.props.onClickSelectTeam}
                   />
                 </div>
-                <div className="column">
+                <div className="eleven wide column">
                   {
                     !this.props.football.selectedTeam.isSelected &&
                     this.props.football.leagueTeamsByYear[y] &&
                     !this.props.football.leagueTeamsByYear[y].isFetching &&
-                      <span className="ui purple horizontal tag label">
+                      <span className="ui large purple tag label">
                         Select a team to add players...
                       </span>
                   }
+                  {
+                    this.props.football.selectedTeam.isSelected &&
+                      <PlayerCategory teamName={this.props.football.selectedTeam.name}
+                        teamCrestUrl={this.props.football.selectedTeam.crestUrl}
+                        teamPlayers={this.props.football.selectedTeam.players}
+                        onClickPlayer={this.props.onClickCategoryFilter}
+                      />
+                  }
                 </div>
               </div>
-            </div>
-
-            <div className="center aligned column">
-              {
-                this.props.football.selectedTeam.isSelected &&
-                  <PlayerCategory teamName={this.props.football.selectedTeam.name}
-                    teamCrestUrl={this.props.football.selectedTeam.crestUrl}
-                    teamPlayers={this.props.football.selectedTeam.players}
-                    onClickPlayer={this.props.onClickCategoryFilter}
-                  />
-              }
             </div>
           </div>
         </div>
