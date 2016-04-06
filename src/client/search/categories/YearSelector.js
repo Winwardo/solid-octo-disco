@@ -7,8 +7,9 @@ const YearSelector = ({ seasonYears, currentYear }) => {
     // When season year's leagues have been retrieved remove loader and show the number of them
     if (seasonYears[y]) {
       if (!seasonYears[y].isFetching) {
+        const numberOfLeaguesClassName = "ui purple horizontal label year league count title"
         numberOfLeagues = (
-          <div data-id={y} className="ui purple horizontal label year league count title">
+          <div data-id={y} className={numberOfLeaguesClassName}>
             {seasonYears[y].seasons.length}
           </div>);
       }

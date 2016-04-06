@@ -15,9 +15,13 @@ class CategoryFilters extends Component {
   componentDidMount() {
     $('.menu .item').tab({
       onVisible: (tabPath) => {
+        // animation for the league counts on the tabs
         const currentYear = moment().year() - 1;
+        // for each year tab
         for (let y = currentYear; y >= 2013; y--) {
+          // if the year is the visible tab
           if (parseInt(tabPath) === y) {
+            // then hide the tab's title league count and show the league dropdown's count
             newPromiseChain()
               .then(() =>
                 $(`.label.year.league.count.title[data-id="${y}"]`).transition('slide up'))
@@ -26,6 +30,8 @@ class CategoryFilters extends Component {
               .then(() =>
                 $(`.label.year.league.count.content[data-id="${y}"]`).transition('jiggle'))
           } else {
+            // otherwise if the tab's title league count was hidden show it and hide the
+            // hidden dropdown's count
             if ($(`.label.year.league.count.title[data-id="${y}"]`).hasClass('hidden')) {
               newPromiseChain()
                 .then(() =>
