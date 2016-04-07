@@ -45,9 +45,9 @@ export const INVALIDATE_FEED_RESULTS = 'INVALIDATE_FEED_RESULTS';
 export const invalidateFeedResults = () => {
   const newSearchRequestId = lastSearchRequestId++;
   return (dispatch, getState) => {
-    dispatch({type: INVALIDATE_FEED_RESULTS, requestId: newSearchRequestId});
+    dispatch({ type: INVALIDATE_FEED_RESULTS, requestId: newSearchRequestId });
     dispatch(searchApiForFeed(getState().searchTerms, getState().searchOnlyDB, newSearchRequestId));
-  }
+  };
 };
 
 const searchApiForFeed = (searchTerms, onlySearchDBCache, requestId) =>

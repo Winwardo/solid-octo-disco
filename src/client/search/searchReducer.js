@@ -69,8 +69,8 @@ export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, li
     case INVALIDATE_FEED_RESULTS:
       return {
         ...state,
-        lastRequestId: action.requestId
-      }
+        lastRequestId: action.requestId,
+      };
     case RECEIVE_FEED_RESULTS:
       if (state.lastRequestId > action.requestId) {
         // Response is from an old request, ignore it
