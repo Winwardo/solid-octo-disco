@@ -279,7 +279,7 @@ export const searchAndSaveFromTwitter = (query, count = 300) => {
             statuses.map((rawTweet) => processTweet(db, rawTweet))
           ).then(
             () => console.log('Successfully processed the Tweets.'),
-            // (rej) => console.warn('failed to process the tweet into the database cache', rej)
+            (rej) => console.warn('failed to process the tweet into the database cache', rej)
           );
         },
         (rej) => {
