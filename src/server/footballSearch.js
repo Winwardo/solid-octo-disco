@@ -26,7 +26,7 @@ export const searchFootballSeasons = (res, year) => {
       if (results.length === 0) { // If our cache is empty, call the Football API
         return newPromiseChain()
           .then(() => fetchFromFootballAPI(footballRequestUrl))
-          .then((footballSeasons) => cacheAPIJsonArray(db, 'League', footballSeasons));
+          .then((footballSeasons) => cacheAPIJsonArray(db, 'League', footballSeasons.length > 0 ? footballSeasons : []));
       } else {
         return results; // Return our cached data
       }
@@ -143,5 +143,11 @@ const cacheAPIJsonArray = (db, datatype, dataArray) => (
         (data) => db.insert().into(datatype).set(data).one()
           .then((res) => {}, (rej) => {}))
     ))
-    .then(() => dataArray) // Return the actual API data as we already have it
+    .then(() => {
+      if (dataArray.length > 0) {
+        return dataArray;
+      } else {
+        return {};
+      }
+    }) // Return the actual API data as we already have it
 );

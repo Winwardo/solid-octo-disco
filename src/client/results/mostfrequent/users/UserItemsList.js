@@ -17,7 +17,12 @@ class UserItemsList extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    if (nextProps.isUsersToggledActionHide !== this.props.isUsersToggledActionHide) {
+    // only re-check or unckeck if the usersToggleActionHide has changed
+    // or the feed posts have changed
+    if (
+      nextProps.isUsersToggledActionHide !== this.props.isUsersToggledActionHide ||
+      nextProps.postsLength !== this.props.postsLength
+    ) {
       if (this.props.isUsersToggledActionHide) {
         $('.ui.checkbox.users').checkbox('check');
       } else {
@@ -56,6 +61,7 @@ class UserItemsList extends Component {
 UserItemsList.propTypes = {
   users: React.PropTypes.array,
   isUsersToggledActionHide: React.PropTypes.bool,
+  postsLength: React.PropTypes.number,
 };
 
 let UserItem = ({ dispatch, userInfo }) => (

@@ -31,3 +31,8 @@ export const TOGGLE_ALL_MOST_ACTIVE_USERS = 'TOGGLE_ALL_MOST_ACTIVE_USERS';
 export const toggleAllMostActiveUsersSearch = () => ({
   type: TOGGLE_ALL_MOST_ACTIVE_USERS,
 });
+
+export const RESET_MOST_FREQUENT = 'RESET_MOST_FREQUENT';
+export const resetMostFrequent = () => ({
+  type: RESET_MOST_FREQUENT,
+});

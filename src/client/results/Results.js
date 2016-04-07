@@ -26,6 +26,7 @@ let Results = ({ feed, mostFrequent }) => {
         <MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
           userInfoList={feed.mostFrequentUsers}
           isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
+          postsLength={posts.length}
         />
       </div>
 
@@ -38,7 +39,7 @@ let Results = ({ feed, mostFrequent }) => {
           paginationInfo={feed.paginationInfo}
         />
 
-        <div id="tweetMap" style={{ height: '500px', width:'100%' }} />
+        <div id="tweetMap" style={{ height: '500px', width: '100%' }} />
         <GoogleMap posts={posts.filter((post) => post.data.longitude !== 0)} />
       </div>
 
@@ -46,6 +47,7 @@ let Results = ({ feed, mostFrequent }) => {
         <MostUsedWords filterTerm={mostFrequent.words.filterTerm}
           wordInfoList={feed.groupedMostFrequentWords}
           isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
+          postsLength={posts.length}
         />
       </div>
     </div>

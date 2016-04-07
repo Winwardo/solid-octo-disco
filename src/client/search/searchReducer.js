@@ -64,7 +64,7 @@ export const searchOnlyDB = (state = false, action) => {
   }
 };
 
-export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, limit: 10 }, groupedMostFrequentWords: [], mostFrequentUsers: [], lastRequestTime: moment() }, action) => {
+export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, limit: 10 }, groupedMostFrequentWords: [], mostFrequentUsers: [], lastRequestId: 0 }, action) => {
   switch (action.type) {
     case INVALIDATE_FEED_RESULTS:
       return {

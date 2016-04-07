@@ -1,12 +1,46 @@
-import { combineReducers } from 'redux';
 import { toggleArrayElement } from './../../../shared/utilities';
 import {
   UPDATE_MOST_USED_WORDS_SEARCH_FILTER, TOGGLE_MOST_USED_WORDS,
   UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER, TOGGLE_MOST_ACTIVE_USER,
-  TOGGLE_ALL_MOST_USED_WORDS, TOGGLE_ALL_MOST_ACTIVE_USERS
+  TOGGLE_ALL_MOST_USED_WORDS, TOGGLE_ALL_MOST_ACTIVE_USERS,
+  RESET_MOST_FREQUENT
 } from './mostFrequentActions';
 
-const words = (state = { filterTerm: '', toToggle: [], isToggledActionHide: true }, action) => {
+const mostFrequentInitialState = {
+  filterTerm: '',
+  toToggle: [],
+  isToggledActionHide: true
+};
+
+const initialState = {
+  words: mostFrequentInitialState,
+  users: mostFrequentInitialState,
+};
+
+const mostFrequentReducer = (state = initialState, action) => {
+  switch (action.type) {
+  case RESET_MOST_FREQUENT:
+    return initialState;
+  case UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER:
+  case TOGGLE_MOST_ACTIVE_USER:
+  case TOGGLE_ALL_MOST_ACTIVE_USERS:
+    return {
+      ...state,
+      users: users(state.users, action)
+    };
+  case UPDATE_MOST_USED_WORDS_SEARCH_FILTER:
+  case TOGGLE_MOST_USED_WORDS:
+  case TOGGLE_ALL_MOST_USED_WORDS:
+    return {
+      ...state,
+      words: words(state.words, action)
+    };
+  default:
+    return state;
+  }
+};
+
+const words = (state, action) => {
   switch (action.type) {
   case UPDATE_MOST_USED_WORDS_SEARCH_FILTER:
     return {
@@ -31,7 +65,7 @@ const words = (state = { filterTerm: '', toToggle: [], isToggledActionHide: true
   }
 };
 
-const users = (state = { filterTerm: '', toToggle: [], isToggledActionHide: true }, action) => {
+const users = (state, action) => {
   switch (action.type) {
   case UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER:
     return {
@@ -54,7 +88,4 @@ const users = (state = { filterTerm: '', toToggle: [], isToggledActionHide: true
   }
 };
 
-export default combineReducers({
-  words,
-  users,
-});
+export default mostFrequentReducer;

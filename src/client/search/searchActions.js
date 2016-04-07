@@ -1,5 +1,6 @@
 import { fetchPost, newPromiseChain } from '../../shared/utilities';
 import { doesFeedHaveUsefulResults } from '../tweetAnalysis';
+import { resetMostFrequent } from './../results/mostfrequent/mostFrequentActions';
 
 let nextSearchTermId = 0;
 let lastSearchRequestId = 0;
@@ -77,6 +78,7 @@ const searchDatabaseAsCache = (dispatch, searchTerms, requestId) =>searchDatabas
 export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
 const searchDatabase = (dispatch, searchTerms, requestId, searchTwitter) =>
   newPromiseChain()
+  .then(() => dispatch(resetMostFrequent()))
   .then(() => fetchPost('/search', { searchTerms: searchTerms, searchTwitter: searchTwitter }))
   .then(response => response.json())
   .then(feedResults => {
