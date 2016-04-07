@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addSearchTerm, setAndShowSearchQueryTermValidationError } from './searchActions';
+import { addSearchTerm } from './searchActions';
 
 let AddSearchTerm = ({ dispatch }) => {
   const keywordSearchStyle = {
@@ -18,21 +18,37 @@ let AddSearchTerm = ({ dispatch }) => {
       <input id="addSearchTerm" type="text"
         placeholder="Search a keyword or hashtag"
         onBlur={() => {
+          $('#addSearchTerm').popup('hide');
+          $('#addSearchTerm').popup('destroy');
           $('#searchTermContainer').slideUp('fast');
         }}
 
         onKeyDown={(e) => {
+          $('#addSearchTerm').popup('hide');
+          $('#addSearchTerm').popup('destroy');
           if (e.keyCode === 13) {
-            if (e.target.value.length > 2) {
+            if (e.target.value.length >= 2) {
               dispatch(addSearchTerm(e.target.value));
               e.target.value = '';
             } else {
-              dispatch(setAndShowSearchQueryTermValidationError('The search must be at least 2 characters'));
+              $('#addSearchTerm').popup({
+                popup: '.negative.message.popup'
+              });
+              $('#addSearchTerm').popup('show');
             }
           }
         }}
 
       />
+      <div className="ui negative message popup transition hidden">
+        <div className="header">
+          <i className="red warning circle icon"></i>
+          Search Validation Error
+        </div>
+        <p>
+          Needs to be at least 2 characters
+        </p>
+      </div>
       <i className="link remove circle icon"></i>
     </div>
   );

@@ -11,6 +11,8 @@ const CurrentQueryTerms = () => {
         $('#addSearchTerm').focus();
       });
     } else {
+      $('#addSearchTerm').popup('hide');
+      $('#addSearchTerm').popup('destroy');
       $('#searchTermContainer').slideUp('fast');
     }
   };

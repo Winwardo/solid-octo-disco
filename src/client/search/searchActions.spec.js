@@ -148,23 +148,4 @@ describe('#SearchActions', () => {
     actions.toggleSearchTermParamTypeSelection(id, paramTypeName)
       .should.deep.equal(expectedAction);
   });
-
-  it('should create an action to set an error message', () => {
-    const message = 'example error message';
-
-    const expectedAction = {
-      type: actions.SET_AND_SHOW_SEARCH_QUERY_TERM_VALIDATION_ERROR,
-      message,
-    };
-
-    actions.setAndShowSearchQueryTermValidationError(message).should.deep.equal(expectedAction);
-  });
-
-  it('should create an action to hide an error message', () => {
-    const expectedAction = {
-      type: actions.HIDE_SEARCH_QUERY_TERM_VALIDATION_ERROR,
-    };
-
-    actions.hideSearchQueryTermValidationError().should.deep.equal(expectedAction);
-  });
 });

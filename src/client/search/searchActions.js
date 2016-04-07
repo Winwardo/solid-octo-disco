@@ -44,7 +44,7 @@ export const INVALIDATE_FEED_RESULTS = 'INVALIDATE_FEED_RESULTS';
 export const invalidateFeedResults = () =>
   (dispatch, getState) => {
     dispatch({ type: INVALIDATE_FEED_RESULTS });
-    dispatch(searchApiForFeed(getState().search.terms));
+    dispatch(searchApiForFeed(getState().searchTerms));
   };
 
 export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
@@ -100,15 +100,4 @@ export const SET_FEED_PAGE_LIMIT = 'SET_FEED_PAGE_LIMIT';
 export const setFeedPageLimit = (limit) => ({
   type: SET_FEED_PAGE_LIMIT,
   limit,
-});
-
-export const SET_AND_SHOW_SEARCH_QUERY_TERM_VALIDATION_ERROR = 'SET_AND_SHOW_SEARCH_QUERY_TERM_VALIDATION_ERROR';
-export const setAndShowSearchQueryTermValidationError = (message) => ({
-  type: SET_AND_SHOW_SEARCH_QUERY_TERM_VALIDATION_ERROR,
-  message,
-});
-
-export const HIDE_SEARCH_QUERY_TERM_VALIDATION_ERROR = 'HIDE_SEARCH_QUERY_TERM_VALIDATION_ERROR';
-export const hideSearchQueryTermValidationError = () => ({
-  type: HIDE_SEARCH_QUERY_TERM_VALIDATION_ERROR,
 });

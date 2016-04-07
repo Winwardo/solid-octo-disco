@@ -11,7 +11,7 @@ import { fetchAllFootballSeasons } from './search/categories/categoryFilterActio
 import moment from 'moment';
 
 const feedApp = combineReducers({
-  search: searchTermsReducer,
+  searchTerms: searchTermsReducer,
   mostFrequent: mostFrequentReducer,
   feed: feedReducer,
   football: footballCategoryFiltersReducer,
