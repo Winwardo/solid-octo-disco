@@ -1,6 +1,7 @@
+import moment from 'moment';
 import {
   ADD_SEARCH_TERM, TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION, DELETE_SEARCH_TERM,
-  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT
+  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT, TOGGLE_SEARCH_ONLY_DB
 } from './searchActions';
 import { createTwitterParamTypes, toggleParamType } from '../../shared/utilities';
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
@@ -23,7 +24,6 @@ export const searchTermsReducer = (state = [], action) => {
       ...state.slice(termIndex + 1),
     ];
   }
-
   default:
     return state;
   }
@@ -54,12 +54,21 @@ const searchTermReducer = (state, action) => {
   }
 };
 
+export const searchOnlyDB = (state = false, action) => {
+  switch (action.type) {
+  case TOGGLE_SEARCH_ONLY_DB:
+    return !state;
+  default:
+    return state;
+  }
+};
+
 export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, limit: 10 }, groupedMostFrequentWords: [], mostFrequentUsers: [] }, action) => {
   switch (action.type) {
   case RECEIVE_FEED_RESULTS:
     return {
       ...state,
-      posts: action.data.data.records,
+      posts: sortPostsForFeed(action.data.data.records),
       groupedMostFrequentWords: groupedCountWords(mostFrequentWords(action.data.data.records.map((post) => post.data.content))),
       mostFrequentUsers: mostFrequentUsers(action.data.data.records),
     };
@@ -72,3 +81,10 @@ export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, li
   }
 };
 
+const sortPostsForFeed = (feed) => (
+  [...feed].sort(
+    (post1, post2) => (
+      moment(post2.data.date).diff(moment(post1.data.date))
+    )
+  )
+);

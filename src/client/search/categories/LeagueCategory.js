@@ -46,12 +46,24 @@ class LeagueCategory extends Component {
           {yearsLeagues.map(league => {
             // gets rid of the 20XX/YY year at the end of the caption
             const leagueName = league.caption.slice(0, league.caption.length - 7);
+            const searchesQueriesSameAsLeague = this.props.currentSearchTerms
+            .filter(
+            (searchTerm) => searchTerm.query === leagueName || searchTerm.query === league.league
+            );
+            const leagueAlreadyAddedToSearch = searchesQueriesSameAsLeague.length > 0;
             return (
-              <LeagueItem id={league.id} onClickLeague={() => {
-                this.props.onClickLeague(`*${leagueName}`);
-                this.props.onClickLeague(`#${league.league}`);
-              }}
-                name={leagueName}
+              <LeagueItem key={`league${league.id}`} name={leagueName}
+                alreadyAddedToSearch={leagueAlreadyAddedToSearch}
+                onClickLeague={() => {
+                  if (leagueAlreadyAddedToSearch) {
+                    searchesQueriesSameAsLeague.forEach(
+                      search => this.props.onClickRemoveLeague(search.id)
+                    );
+                  } else {
+                    this.props.onClickAddLeague(`*${leagueName}`);
+                    this.props.onClickAddLeague(`#${league.league}`);
+                  }
+                }}
               />
             );
           })}
@@ -63,15 +75,21 @@ class LeagueCategory extends Component {
 LeagueCategory.propTypes = {
   leagues: React.PropTypes.object,
   tabYear: React.PropTypes.number,
+  currentSearchTerms: React.PropTypes.array,
   currentYear: React.PropTypes.number,
-  onClickLeague: React.PropTypes.func,
+  onClickAddLeague: React.PropTypes.func,
+  onClickRemoveLeague: React.PropTypes.func,
 };
-const LeagueItem = ({ id, name, onClickLeague }) => (
-  <div key={`league${id}`} className="item league"
-    onClick={() => onClickLeague()}>
+const LeagueItem = ({ name, alreadyAddedToSearch, onClickLeague }) => (
+  <div className="item league" onClick={() => onClickLeague()}>
     {name}
     <div className="ui right floated">
-      <i className="add green circle icon float right"></i>
+      {
+        alreadyAddedToSearch ?
+          <i className="remove red circle icon float right"></i>
+        :
+          <i className="add green circle icon float right"></i>
+      }
     </div>
   </div>
 );

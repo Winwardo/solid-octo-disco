@@ -65,7 +65,7 @@ export const buildTwitterQuery = (searchTerms) => {
   let lastQuery = [];
   searchTerms.forEach((searchTerm) => {
     const actualTerm = searchTerm.query;
-    const termWithNoSpaces = actualTerm.replace(' ', '');
+    const termWithNoSpaces = actualTerm.replace(/ /g, '');
     const currentQueryAddition = [];
     let alreadyHadAuthorOrMention = false;
 

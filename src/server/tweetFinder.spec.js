@@ -82,11 +82,11 @@ describe('#QueryBuilder', () => {
   it('should remove spaces in authors/mentions and hashtags', () => {
     tweetFinder.buildTwitterQuery(
       [
-        makeQuery('manchester united', ['keyword', 'author', 'hashtag', 'mention']),
+        makeQuery('manchester united fc', ['keyword', 'author', 'hashtag', 'mention']),
       ]
     ).should.deep.equal(
       [
-        '"manchester united" OR @manchesterunited OR #manchesterunited',
+        '"manchester united fc" OR @manchesterunitedfc OR #manchesterunitedfc',
       ]
     );
   });

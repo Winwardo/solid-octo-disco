@@ -1,27 +1,17 @@
 import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
 import { searchTermsReducer, feedReducer } from './searchReducer';
-import {
-  ADD_SEARCH_TERM, DELETE_SEARCH_TERM,
-  TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION,
-  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT
-} from './searchActions';
+import * as actions from './searchActions';
 import { createTwitterParamTypes } from '../../shared/utilities';
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
 
 describe('#SearchTermsReducer', () => {
   it('should add a hashtag search term', () => {
     const stateBefore = [];
-    const action = {
-      type: ADD_SEARCH_TERM,
-      id: 0,
-      query: 'Football',
-      paramTypes: ['hashtag'],
-      source: 'twitter',
-    };
+    const action = actions.addSearchTerm('#Football');
 
     const stateAfter = [{
-      id: 0,
+      id: action.id,
       query: 'Football',
       paramTypes: createTwitterParamTypes(['hashtag']),
       source: 'twitter',
@@ -40,25 +30,16 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
     }, ];
-    const action = {
-      type: ADD_SEARCH_TERM,
-      id: 1,
-      query: 'Manchester',
-      paramTypes: ['hashtag', 'author'],
-      source: 'twitter',
-    };
+    const action = actions.addSearchTerm('@Manchester');
 
-    const stateAfter = [{
-      id: 0,
-      query: 'Football',
-      paramTypes: createTwitterParamTypes(['mention']),
-      source: 'twitter',
-    }, {
-      id: 1,
-      query: 'Manchester',
-      paramTypes: createTwitterParamTypes(['hashtag', 'author']),
-      source: 'twitter',
-    }, ];
+    const stateAfter = [
+      ...stateBefore,
+      {
+        id: 9,
+        query: 'Manchester',
+        paramTypes: createTwitterParamTypes(['mention', 'author']),
+        source: 'twitter',
+      }, ];
 
     deepFreeze(stateBefore);
     deepFreeze(action);
@@ -73,10 +54,7 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
     }, ];
-    const action = {
-      type: DELETE_SEARCH_TERM,
-      id: 0,
-    };
+    const action = actions.deleteSearchTerm(0);
 
     const stateAfter = [];
 
@@ -98,10 +76,7 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
     }, ];
-    const action = {
-      type: DELETE_SEARCH_TERM,
-      id: 0,
-    };
+    const action = actions.deleteSearchTerm(0);
 
     const stateAfter = [{
       id: 1,
@@ -128,11 +103,7 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
     }, ];
-    const action = {
-      type: TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION,
-      id: 0,
-      paramTypeName: 'author',
-    };
+    const action = actions.toggleSearchTermParamTypeSelection(0, 'author');
 
     const stateAfter = [{
       id: 0,
@@ -154,16 +125,16 @@ describe('#SearchTermsReducer', () => {
 });
 
 describe('#FeedReducer', () => {
-  it('can receive new feed results, and will group them', () => {
+  it('can receive new feed results, and will group and sort them', () => {
     const stateBefore = {};
 
     const records = [
-      { data:{ content:'some record' }, author:{ id: '1' } },
-      { data:{ content:'another' }, author:{ id: '2' } },
+      { data:{ content:'some record', date: '2016-04-06' }, author:{ id: '1' } },
+      { data:{ content:'another', date: '2014-04-06' }, author:{ id: '2' } },
     ];
 
     const action = {
-      type: RECEIVE_FEED_RESULTS,
+      type: actions.RECEIVE_FEED_RESULTS,
       data: {
         data: {
           records: records,
@@ -187,7 +158,7 @@ describe('#FeedReducer', () => {
     const stateBefore = { paginationInfo: { number: 1, limit: 10 } };
 
     const action = {
-      type: SET_FEED_PAGE_NUMBER,
+      type: actions.SET_FEED_PAGE_NUMBER,
       number: 5,
     };
 
@@ -203,7 +174,7 @@ describe('#FeedReducer', () => {
     const stateBefore = { paginationInfo: { number: 1, limit: 10 } };
 
     const action = {
-      type: SET_FEED_PAGE_LIMIT,
+      type: actions.SET_FEED_PAGE_LIMIT,
       limit: 5,
     };
 

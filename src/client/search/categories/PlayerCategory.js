@@ -8,15 +8,17 @@ class PlayerCategory extends Component {
     });
   }
 
-  componentDidUpdate() {
-    if ($('.ui.dropdown.players').dropdown('is hidden')) {
-      $('.ui.dropdown.players').dropdown('show');
+  componentDidUpdate(prevProps) {
+    if (prevProps.teamPlayers !== this.props.teamPlayers) {
+      if ($('.ui.dropdown.players').dropdown('is hidden')) {
+        $('.ui.dropdown.players').dropdown('show');
+      }
     }
   }
 
   render() {
     return (
-      <div className="ui labeled button">
+      <div className="ui labeled">
         <div className="ui dropdown labeled icon button players category">
           <span className="text">
             <img className="ui small image" src={this.props.teamCrestUrl} />
@@ -35,10 +37,27 @@ class PlayerCategory extends Component {
               <i className="search icon"></i>
               <input type="text" placeholder="Search players..." />
             </div>
-            {this.props.teamPlayers.map(player =>
-              <TeamPlayer key={`player${player.id}`} name={player.name}
-                nationality={player.nationality.toLowerCase()} onClick={this.props.onClickPlayer}
-              />
+            {this.props.teamPlayers.map(player => {
+              const searchesQueriesSameAsPlayer = this.props.currentSearchTerms
+              .filter((searchTerm) => searchTerm.query === player.name);
+              const playerAlreadyAddedToSearch = searchesQueriesSameAsPlayer.length > 0;
+
+              return (
+                <TeamPlayer key={`player${player.id}`} name={player.name}
+                  alreadyAddedToSearch={playerAlreadyAddedToSearch}
+                  nationality={player.nationality.toLowerCase()}
+                  onClick={() => {
+                    if (playerAlreadyAddedToSearch) {
+                      searchesQueriesSameAsPlayer.forEach(
+                      search => this.props.onClickRemovePlayer(search.id)
+                      );
+                    } else {
+                      this.props.onClickAddPlayer(player.name);
+                    }
+                  }}
+                />
+              );
+            }
             )}
           </div>
         </div>
@@ -56,15 +75,22 @@ PlayerCategory.propTypes = {
   teamCrestUrl: React.PropTypes.string,
   isTeamPlayersFetching: React.PropTypes.boolean,
   teamPlayers: React.PropTypes.array,
-  onClickPlayer: React.PropTypes.func,
+  currentSearchTerms: React.PropTypes.array,
+  onClickAddPlayer: React.PropTypes.func,
+  onClickRemovePlayer: React.PropTypes.func,
 };
 
-const TeamPlayer = ({ name, nationality, onClick }) => (
+const TeamPlayer = ({ name, nationality, alreadyAddedToSearch, onClick }) => (
   <div className="item player" onClick={() => onClick(name)}>
     <i className={`${getSemanticCountryFlagName(nationality)} flag`} />
     {name}
     <div className="ui right floated">
-      <i className="add green circle icon float right"></i>
+      {
+        alreadyAddedToSearch ?
+          <i className="remove red circle icon float right"></i>
+        :
+          <i className="add green circle icon float right"></i>
+      }
     </div>
   </div>
 );
