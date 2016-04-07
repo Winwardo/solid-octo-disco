@@ -231,7 +231,7 @@ const Tweet = ({ content }) => {
 
 class QuotedTweet extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       tweetContent: null,
     };
