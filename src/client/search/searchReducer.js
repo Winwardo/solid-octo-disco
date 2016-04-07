@@ -1,8 +1,7 @@
 import moment from 'moment';
 import {
   ADD_SEARCH_TERM, TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION, DELETE_SEARCH_TERM,
-  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT,
-  SET_AND_SHOW_SEARCH_QUERY_TERM_VALIDATION_ERROR, HIDE_SEARCH_QUERY_TERM_VALIDATION_ERROR
+  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT, TOGGLE_SEARCH_ONLY_DB
 } from './searchActions';
 import { createTwitterParamTypes, toggleParamType } from '../../shared/utilities';
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
@@ -50,6 +49,15 @@ const searchTermReducer = (state, action) => {
     };
   }
 
+  default:
+    return state;
+  }
+};
+
+export const searchOnlyDB = (state = false, action) => {
+  switch (action.type) {
+  case TOGGLE_SEARCH_ONLY_DB:
+    return !state;
   default:
     return state;
   }

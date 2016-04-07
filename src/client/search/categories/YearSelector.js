@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API } from './CategoryFilters';
 
-const YearSelector = ({ seasonYears, currentYear }) => {
+const YearSelector = ({ seasonYears, currentYear, onClickToggleDbOnlySearch }) => {
   let seasonYearButtons = [];
   for (let y = currentYear; y >= EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API; y--) {
     let numberOfLeagues = (
@@ -34,6 +34,12 @@ const YearSelector = ({ seasonYears, currentYear }) => {
   return (
     <div className="ui top attached tabular menu">
       {seasonYearButtons}
+      <div className="ui slider cache checkbox" style={{ float: 'right', marginLeft: 'auto' }}
+        onClick={() => onClickToggleDbOnlySearch()}
+      >
+        <input type="checkbox" tabIndex="0" />
+        <label>Search DB Cache Only</label>
+      </div>
     </div>
   );
 };

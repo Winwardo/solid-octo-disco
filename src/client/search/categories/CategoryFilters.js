@@ -6,9 +6,10 @@ import LeagueCategory from './LeagueCategory';
 import TeamCategory from './TeamCategory';
 import PlayerCategory from './PlayerCategory';
 import {
-  fetchAllFootballLeagueTeams, fetchFootballTeamPlayers, removeSelectedFootballTeamPlayers
+  fetchAllFootballLeagueTeams,
+  fetchFootballTeamPlayers, removeSelectedFootballTeamPlayers
 } from './categoryFilterActions';
-import { addSearchTerm, deleteSearchTerm } from './../searchActions';
+import { addSearchTerm, deleteSearchTerm, toggleSearchOnlyDb } from './../searchActions';
 import moment from 'moment';
 
 export const EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API = 2013;
@@ -115,7 +116,9 @@ class CategoryFilters extends Component {
 
     return (
       <div>
-        <YearSelector seasonYears={this.props.football.seasonsByYear} currentYear={currentYear} />
+        <YearSelector seasonYears={this.props.football.seasonsByYear} currentYear={currentYear}
+          onClickToggleDbOnlySearch={this.props.onClickToggleDbOnlySearch}
+        />
         {seasonYearTabsContent}
       </div>
     );
@@ -123,6 +126,8 @@ class CategoryFilters extends Component {
 }
 CategoryFilters.propTypes = {
   football: React.PropTypes.object,
+  onClickCategoryFilter: React.PropTypes.func,
+  onClickToggleDbOnlySearch: React.PropTypes.func,
   currentSearchTerms: React.PropTypes.array,
   onClickAddCategoryFilter: React.PropTypes.func,
   onClickRemoveCategoryFilter: React.PropTypes.func,
@@ -145,6 +150,9 @@ const mapDispatchToProps = (dispatch) => ({
     }
 
     return false;
+  },
+  onClickToggleDbOnlySearch: () => {
+    dispatch(toggleSearchOnlyDb());
   },
 });
 
