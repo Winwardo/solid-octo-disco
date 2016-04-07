@@ -76,3 +76,7 @@ a:hover .tweet.fullname {
 #addSearchTerm:-ms-input-placeholder {
     color:    #999;
 }
+
+.ui.slider.cache.checkbox input:checked~.box:before, .ui.slider.cache.checkbox input:checked~label:before {
+  background-color: #a333c8!important
+}
