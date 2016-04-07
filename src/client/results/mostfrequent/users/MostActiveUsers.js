@@ -4,7 +4,7 @@ import MostFrequent from './../MostFrequent';
 import { updateActiveUsersSearch, toggleAllMostActiveUsersSearch } from './../mostFrequentActions';
 import UserItemsList from './UserItemsList';
 
-const MostActiveUsers = ({ dispatch, userInfoList, isUsersToggledActionHide, filterTerm }) => {
+const MostActiveUsers = ({ dispatch, userInfoList, isUsersToggledActionHide, filterTerm, postsLength }) => {
   const filteredItems = userInfoList.filter(
     (userInfo) => {
       const matchUserName = userInfo.author.name.toLowerCase().includes(filterTerm.toLowerCase());
@@ -15,7 +15,7 @@ const MostActiveUsers = ({ dispatch, userInfoList, isUsersToggledActionHide, fil
   ).slice(0, 100);
 
   return (
-    <MostFrequent title="Most Active Users"
+    <MostFrequent title={`${filteredItems.length} Most Active Users`}
       filterTerm={filterTerm}
       onTypingInSearchBar={(newFilterTerm) => {
         dispatch(updateActiveUsersSearch(newFilterTerm));
@@ -25,7 +25,9 @@ const MostActiveUsers = ({ dispatch, userInfoList, isUsersToggledActionHide, fil
       }}
       currentToggledAction={isUsersToggledActionHide}
     >
-      <UserItemsList users={filteredItems} isUsersToggledActionHide={isUsersToggledActionHide} />
+      <UserItemsList users={filteredItems} postsLength={postsLength}
+        isUsersToggledActionHide={isUsersToggledActionHide}
+      />
     </MostFrequent>
   );
 };

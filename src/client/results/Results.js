@@ -26,6 +26,7 @@ let Results = ({ feed, mostFrequent }) => {
         <MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
           userInfoList={feed.mostFrequentUsers}
           isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
+          postsLength={posts.length}
         />
       </div>
 
