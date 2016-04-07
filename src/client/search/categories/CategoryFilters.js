@@ -79,7 +79,9 @@ class CategoryFilters extends Component {
               <div className="ui middle aligned grid">
                 <div className="five wide column">
                   <TeamCategory teamsByLeague={this.props.football.leagueTeamsByYear[y]}
+                    currentSearchTerms={this.props.currentSearchTerms}
                     onClickAddTeam={this.props.onClickCategoryFilter}
+                    onClickRemoveTeam={this.props.onClickRemoveCategoryFilter}
                     onClickSelectTeam={this.props.onClickSelectTeam}
                   />
                 </div>

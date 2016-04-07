@@ -72,7 +72,9 @@ class TeamCategory extends Component {
             {leagueTeams.map(league => (
               <LeagueTeamsList key={`leagueteams${league.id}`} id={league.id}
                 name={league.name.slice(0, league.name.length - 7)}
-                teams={league.teams} onClickAddTeam={this.props.onClickAddTeam}
+                teams={league.teams} currentSearchTerms={this.props.currentSearchTerms}
+                onClickAddTeam={this.props.onClickAddTeam}
+                onClickRemoveTeam={this.props.onClickRemoveTeam}
                 onClickSelectTeam={this.props.onClickSelectTeam}
               />
             ))}
@@ -84,11 +86,15 @@ class TeamCategory extends Component {
 }
 TeamCategory.propTypes = {
   teamsByLeague: React.PropTypes.object,
+  currentSearchTerms: React.PropTypes.array,
   onClickAddTeam: React.PropTypes.func,
+  onClickRemoveTeam: React.PropTypes.func,
   onClickSelectTeam: React.PropTypes.func,
 };
 
-const LeagueTeamsList = ({ id, name, teams, onClickAddTeam, onClickSelectTeam }) => (
+const LeagueTeamsList = ({
+  id, name, teams, currentSearchTerms, onClickAddTeam, onClickRemoveTeam, onClickSelectTeam
+}) => (
   <div data-id={id} className="league section">
     <div className="title">
       <i className="dropdown icon"></i>
@@ -99,30 +105,44 @@ const LeagueTeamsList = ({ id, name, teams, onClickAddTeam, onClickSelectTeam })
     </div>
     <div className="content">
       <div className="items">
-        {teams.map(team =>
-          <LeagueTeam key={`league${id}team${team.id}`}
-            leagueId={id} name={team.name} crestUrl={team.crestUrl}
-            onClickAddTeam={() => {
-              onClickAddTeam(`^#${team.name}`);
-              onClickAddTeam(`#${team.shortName}`);
-            }}
-            onClickSelectTeam={() =>
-              onClickSelectTeam(team.id, team.name, team.shortName, team.crestUrl)
-            }
-          />
-        )}
+        {teams.map(team => {
+          const searchesQueriesSameAsTeam = currentSearchTerms
+          .filter(
+          (searchTerm) => searchTerm.query === team.name || searchTerm.query === team.shortName
+          )
+          const teamAlreadyAddedToSearch = searchesQueriesSameAsTeam.length > 0;
+          return (
+            <LeagueTeam key={`league${id}team${team.id}`}
+              leagueId={id} name={team.name} crestUrl={team.crestUrl}
+              alreadyAddedToSearch={teamAlreadyAddedToSearch}
+              onClickTeam={() => {
+                if (teamAlreadyAddedToSearch) {
+                  searchesQueriesSameAsTeam.forEach(
+                    search => onClickRemoveTeam(search.id)
+                  );
+                } else {
+                  onClickAddTeam(`^#${team.name}`);
+                  onClickAddTeam(`#${team.shortName}`);
+                }
+              }}
+              onClickSelectTeam={() =>
+                onClickSelectTeam(team.id, team.name, team.shortName, team.crestUrl)
+              }
+            />
+          )
+        })}
       </div>
     </div>
   </div>
 );
 
 const LeagueTeam = ({
-  leagueId, name, crestUrl, onClickAddTeam, onClickSelectTeam,
+  leagueId, name, crestUrl, alreadyAddedToSearch, onClickTeam, onClickSelectTeam,
 }) => (
   <div
     data-id={leagueId} className="league item"
     style={{ cursor: 'pointer' }}
-    onClick={() => onClickAddTeam()}
+    onClick={() => onClickTeam()}
   >
     <div className="ui three column grid">
       <div className="column">
@@ -131,7 +151,12 @@ const LeagueTeam = ({
       </div>
 
       <div className="center aligned column">
-        <i className="add green circle icon float right"></i>
+        {
+          alreadyAddedToSearch ?
+            <i className="remove red circle icon float right"></i>
+          :
+            <i className="add green circle icon float right"></i>
+        }
       </div>
 
       <div className="column">
