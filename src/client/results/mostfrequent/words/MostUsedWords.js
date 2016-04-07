@@ -7,7 +7,9 @@ import {
 } from './../mostFrequentActions';
 import WordItemsList from './WordItemsList';
 
-const MostUsedWords = ({ dispatch, wordInfoList, isWordsToggledActionHide, filterTerm }) => {
+const MostUsedWords = ({
+  dispatch, wordInfoList, isWordsToggledActionHide, filterTerm, postsLength
+}) => {
   const filteredItems = wordInfoList.filter(
     (wordInfo) => wordInfo.word.toLowerCase().includes(filterTerm.toLowerCase())
   ).slice(0, 100);
@@ -23,7 +25,8 @@ const MostUsedWords = ({ dispatch, wordInfoList, isWordsToggledActionHide, filte
       }}
       currentToggledAction={isWordsToggledActionHide}
     >
-      <WordItemsList words={filteredItems} isWordsToggledActionHide={isWordsToggledActionHide}
+      <WordItemsList words={filteredItems} postsLength={postsLength}
+        isWordsToggledActionHide={isWordsToggledActionHide}
         toggleMostUsedWords={(word) => {
           dispatch(toggleMostUsedWords(word));
         }}
