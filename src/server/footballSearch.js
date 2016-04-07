@@ -84,14 +84,14 @@ const fetchLeagueTeamsById = (leagueId) => {
           .then(() => fetchFromFootballAPI(footballRequestUrl))
           .then((league) =>
             cacheAPIJsonArray(db, 'Team', league.teams.map(
-              (team) => ({...team, leagueid: leagueId}))
+              (team) => ({ ...team, leagueid: leagueId }))
             )
           );
       } else {
         return results;
       }
     })
-    .then((teams) => ({teams: teams}))
+    .then((teams) => ({ teams: teams }))
     .then(
       leagueTeamsResolved => leagueTeamsResolved,
       rejection => console.warn(`Major error requesting the league with id:${leagueId}.`, rejection)
@@ -109,14 +109,14 @@ export const searchFootballTeamPlayers = (res, teamId) => {
           .then(() => fetchFromFootballAPI(footballRequestUrl))
           .then((league) =>
             cacheAPIJsonArray(db, 'Player', league.players.map(
-              (player) => ({...player, teamid: teamId}))
+              (player) => ({ ...player, teamid: teamId }))
             )
           );
       } else {
         return results; // Return our cached data
       }
     })
-    .then((players) => ({players: players}))
+    .then((players) => ({ players: players }))
     .then(
       (footballPlayers) => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -131,15 +131,14 @@ export const searchFootballTeamPlayers = (res, teamId) => {
 
 const fetchFromFootballAPI = (footballRequestUrl) => (
   newPromiseChain()
-    .then(() => console.info("Hitting Football API:", footballRequestUrl))
+    .then(() => console.info('Hitting Football API:', footballRequestUrl))
     .then(() => fetch(footballRequestUrl, footballAccessOptions))
     .then(response => response.json())
-)
-
+);
 
 const cacheAPIJsonArray = (db, datatype, dataArray) => (
   newPromiseChain()
-    .then(() => Promise.all( // Insert all the seasons to our cache
+    .then(() => Promise.all(// Insert all the seasons to our cache
       dataArray.map(
         (data) => db.insert().into(datatype).set(data).one()
           .then((res) => {}, (rej) => {}))

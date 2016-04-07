@@ -98,7 +98,7 @@ export const schema = {
     ],
     indexes: [
       { properties: ['id'], type: UNIQUE, },
-    ]
+    ],
   },
   Team: {
     superclass: Vertex,
@@ -110,7 +110,7 @@ export const schema = {
     ],
     indexes: [
       { properties: ['id'], type: UNIQUE, },
-    ]
+    ],
   },
   Player: {
     superclass: Vertex,
@@ -121,7 +121,7 @@ export const schema = {
     ],
     indexes: [
       { properties: ['id'], type: UNIQUE, },
-    ]
+    ],
   },
   TWEETED: EmptyEdge,
   RETWEETED: EmptyEdge,
