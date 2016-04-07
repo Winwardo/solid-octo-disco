@@ -69,15 +69,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FEED_RESULTS">RECEIVE_FEED_RESULTS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_LIMIT">SET_FEED_PAGE_LIMIT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_NUMBER">SET_FEED_PAGE_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_ONLY_DB">TOGGLE_SEARCH_ONLY_DB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION">TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addSearchTerm">addSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-deleteSearchTerm">deleteSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateFeedResults">invalidateFeedResults</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchApiForFeed">searchApiForFeed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageLimit">setFeedPageLimit</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageNumber">setFeedPageNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchOnlyDb">toggleSearchOnlyDb</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchTermParamTypeSelection">toggleSearchTermParamTypeSelection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-feedReducer">feedReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchOnlyDB">searchOnlyDB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchTermsReducer">searchTermsReducer</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search/categories</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/LeagueCategory.js~LeagueCategory.html">LeagueCategory</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/PlayerCategory.js~PlayerCategory.html">PlayerCategory</a></span></span></li>
@@ -544,38 +546,38 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="0">
-  <td data-ice="testDescription" style="padding-left: 10px"><span class="toggle closed"></span><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber12"><p>#SearchTermsReducer</p>
+  <td data-ice="testDescription" style="padding-left: 10px"><span class="toggle closed"></span><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber8"><p>#SearchTermsReducer</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">5</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber13"><p>should add a hashtag search term</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber9"><p>should add a hashtag search term</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber36"><p>should add a new query to existing queries</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber26"><p>should add a new query to existing queries</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber69"><p>should return empty search terms when deleting search terms with single term</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber50"><p>should return empty search terms when deleting search terms with single term</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber89"><p>should delete term with id</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber67"><p>should delete term with id</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber119"><p>should edit term paramType with id</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber94"><p>should edit term paramType with id</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -583,26 +585,26 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="0">
-  <td data-ice="testDescription" style="padding-left: 10px"><span class="toggle closed"></span><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber156"><p>#FeedReducer</p>
+  <td data-ice="testDescription" style="padding-left: 10px"><span class="toggle closed"></span><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber127"><p>#FeedReducer</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">3</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber157"><p>can receive new feed results, and will group them</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber128"><p>can receive new feed results, and will group and sort them</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber186"><p>can set the pagination page</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber157"><p>can set the pagination page</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber202"><p>can set the pagination limit</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="file/src/client/search/searchReducer.spec.js.html#lineNumber173"><p>can set the pagination limit</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
