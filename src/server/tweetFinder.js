@@ -70,22 +70,24 @@ export const buildTwitterQuery = (searchTerms) => {
     let alreadyHadAuthorOrMention = false;
 
     searchTerm.paramTypes.forEach((paramType) => {
-      switch (paramType.name) {
-        case 'keyword':
-          currentQueryAddition.push(`"${actualTerm}"`);
-          break;
-        case 'hashtag':
-          currentQueryAddition.push(`#${termWithNoSpaces}`);
-          break;
-        case 'author':
-        case 'mention':
-          if (!alreadyHadAuthorOrMention) {
-            alreadyHadAuthorOrMention = true;
-            currentQueryAddition.push(`@${termWithNoSpaces}`);
-          }
-          break;
-        default:
-          break;
+      if (paramType.selected) {
+        switch (paramType.name) {
+          case 'keyword':
+            currentQueryAddition.push(`"${actualTerm}"`);
+            break;
+          case 'hashtag':
+            currentQueryAddition.push(`#${termWithNoSpaces}`);
+            break;
+          case 'author':
+          case 'mention':
+            if (!alreadyHadAuthorOrMention) {
+              alreadyHadAuthorOrMention = true;
+              currentQueryAddition.push(`@${termWithNoSpaces}`);
+            }
+            break;
+          default:
+            break;
+        }
       }
     });
 
