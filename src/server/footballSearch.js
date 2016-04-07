@@ -140,7 +140,9 @@ const fetchFromFootballAPI = (footballRequestUrl) => (
 const cacheAPIJsonArray = (db, datatype, dataArray) => (
   newPromiseChain()
     .then(() => Promise.all( // Insert all the seasons to our cache
-      dataArray.map((data) => db.insert().into(datatype).set(data).one())
+      dataArray.map(
+        (data) => db.insert().into(datatype).set(data).one()
+          .then((res) => {}, (rej) => {}))
     ))
     .then(() => dataArray) // Return the actual API data as we already have it
 );
