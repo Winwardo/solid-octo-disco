@@ -1,8 +1,8 @@
-import moment from 'moment';
 import { fetchPost, newPromiseChain } from '../../shared/utilities';
 import { doesFeedHaveUsefulResults } from '../tweetAnalysis';
 
 let nextSearchTermId = 0;
+let lastSearchRequestId = 0;
 
 export const ADD_SEARCH_TERM = 'ADD_SEARCH_TERM';
 export const addSearchTerm = (query) => {
@@ -43,45 +43,44 @@ const addQueryParamTypes = (searchQuery, query, paramTypes) => ({
 
 export const INVALIDATE_FEED_RESULTS = 'INVALIDATE_FEED_RESULTS';
 export const invalidateFeedResults = () => {
-  const requestTime = moment();
-  console.log("rt", requestTime);
+  const newSearchRequestId = lastSearchRequestId++;
   return (dispatch, getState) => {
-    dispatch({type: INVALIDATE_FEED_RESULTS, requestTime: requestTime});
-    dispatch(searchApiForFeed(getState().searchTerms, getState().searchOnlyDB, requestTime));
+    dispatch({type: INVALIDATE_FEED_RESULTS, requestId: newSearchRequestId});
+    dispatch(searchApiForFeed(getState().searchTerms, getState().searchOnlyDB, newSearchRequestId));
   }
 };
 
-const searchApiForFeed = (searchTerms, onlySearchDBCache, requestTime) =>
+const searchApiForFeed = (searchTerms, onlySearchDBCache, requestId) =>
     (dispatch) => (
     newPromiseChain()
       .then(() => NProgress.start())
-      .then(() => searchDatabaseAsCache(dispatch, searchTerms, requestTime))
+      .then(() => searchDatabaseAsCache(dispatch, searchTerms, requestId))
       .then(feedResults => {
         if (!onlySearchDBCache) {
-          return searchTwitterIfResultsArentGoodEnough(dispatch, searchTerms, requestTime, feedResults);
+          return searchTwitterIfResultsArentGoodEnough(dispatch, searchTerms, requestId, feedResults);
         }
       })
       .then(() => NProgress.done())
 );
 
-const searchTwitterIfResultsArentGoodEnough = (dispatch, searchTerms, requestTime, feedResults) => {
+const searchTwitterIfResultsArentGoodEnough = (dispatch, searchTerms, requestId, feedResults) => {
   if (!doesFeedHaveUsefulResults(feedResults)) {
-    return searchDatabaseAndTwitter(dispatch, searchTerms, requestTime);
+    return searchDatabaseAndTwitter(dispatch, searchTerms, requestId);
   } else {
     return Promise.resolve();
   }
 };
 
-const searchDatabaseAndTwitter = (dispatch, searchTerms, requestTime) => searchDatabase(dispatch, searchTerms, requestTime, true);
-const searchDatabaseAsCache = (dispatch, searchTerms, requestTime) =>searchDatabase(dispatch, searchTerms, requestTime, false);
+const searchDatabaseAndTwitter = (dispatch, searchTerms, requestId) => searchDatabase(dispatch, searchTerms, requestId, true);
+const searchDatabaseAsCache = (dispatch, searchTerms, requestId) =>searchDatabase(dispatch, searchTerms, requestId, false);
 
 export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
-const searchDatabase = (dispatch, searchTerms, requestTime, searchTwitter) =>
+const searchDatabase = (dispatch, searchTerms, requestId, searchTwitter) =>
   newPromiseChain()
   .then(() => fetchPost('/search', { searchTerms: searchTerms, searchTwitter: searchTwitter }))
   .then(response => response.json())
   .then(feedResults => {
-    dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults, requestTime: requestTime });
+    dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults, requestId: requestId });
     return feedResults;
   });
 
