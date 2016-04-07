@@ -41,19 +41,23 @@ const addQueryParamTypes = (searchQuery, query, paramTypes) => ({
 });
 
 export const INVALIDATE_FEED_RESULTS = 'INVALIDATE_FEED_RESULTS';
-export const invalidateFeedResults = () =>
+export const invalidateFeedResults = (onlySearchDBCache) =>
   (dispatch, getState) => {
     dispatch({ type: INVALIDATE_FEED_RESULTS });
-    dispatch(searchApiForFeed(getState().searchTerms));
+    dispatch(searchApiForFeed(getState().searchTerms, onlySearchDBCache));
   };
 
 export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
-export const searchApiForFeed = (searchTerms) =>
+const searchApiForFeed = (searchTerms, onlySearchDBCache) =>
     (dispatch) => (
     newPromiseChain()
       .then(() => NProgress.start())
       .then(() => searchDatabaseAsCache(dispatch, searchTerms))
-      .then(feedResults => searchTwitterIfResultsArentGoodEnough(dispatch, searchTerms, feedResults))
+      .then(feedResults => {
+        if(!onlySearchDBCache) {
+          return searchTwitterIfResultsArentGoodEnough(dispatch, searchTerms, feedResults)
+        }
+      })
       .then(() => NProgress.done())
 );
 
