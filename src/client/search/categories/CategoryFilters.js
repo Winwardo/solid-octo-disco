@@ -71,7 +71,7 @@ class CategoryFilters extends Component {
               <LeagueCategory leagues={this.props.football.seasonsByYear[y]}
                 currentYear={currentYear} tabYear={y}
                 currentSearchTerms={this.props.currentSearchTerms}
-                onClickAddLeague={this.props.onClickCategoryFilter}
+                onClickAddLeague={this.props.onClickAddCategoryFilter}
                 onClickRemoveLeague={this.props.onClickRemoveCategoryFilter}
               />
             </div>
@@ -80,7 +80,7 @@ class CategoryFilters extends Component {
                 <div className="five wide column">
                   <TeamCategory teamsByLeague={this.props.football.leagueTeamsByYear[y]}
                     currentSearchTerms={this.props.currentSearchTerms}
-                    onClickAddTeam={this.props.onClickCategoryFilter}
+                    onClickAddTeam={this.props.onClickAddCategoryFilter}
                     onClickRemoveTeam={this.props.onClickRemoveCategoryFilter}
                     onClickSelectTeam={this.props.onClickSelectTeam}
                   />
@@ -101,7 +101,7 @@ class CategoryFilters extends Component {
                         teamCrestUrl={this.props.football.selectedTeam.crestUrl}
                         teamPlayers={this.props.football.selectedTeam.players}
                         currentSearchTerms={this.props.currentSearchTerms}
-                        onClickAddPlayer={this.props.onClickCategoryFilter}
+                        onClickAddPlayer={this.props.onClickAddCategoryFilter}
                         onClickRemovePlayer={this.props.onClickRemoveCategoryFilter}
                       />
                   }
@@ -124,7 +124,7 @@ class CategoryFilters extends Component {
 CategoryFilters.propTypes = {
   football: React.PropTypes.object,
   currentSearchTerms: React.PropTypes.array,
-  onClickCategoryFilter: React.PropTypes.func,
+  onClickAddCategoryFilter: React.PropTypes.func,
   onClickRemoveCategoryFilter: React.PropTypes.func,
 };
 
@@ -134,7 +134,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onClickCategoryFilter: (newTerm) => dispatch(addSearchTerm(newTerm)),
+  onClickAddCategoryFilter: (newTerm) => dispatch(addSearchTerm(newTerm)),
   onClickRemoveCategoryFilter: (id) => dispatch(deleteSearchTerm(id)),
   onClickSelectTeam: (id, name, shortName, crestUrl) =>
     dispatch(fetchFootballTeamPlayers(id, name, shortName, crestUrl)),

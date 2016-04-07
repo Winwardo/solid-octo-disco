@@ -93,7 +93,7 @@ TeamCategory.propTypes = {
 };
 
 const LeagueTeamsList = ({
-  id, name, teams, currentSearchTerms, onClickAddTeam, onClickRemoveTeam, onClickSelectTeam
+  id, name, teams, currentSearchTerms, onClickAddTeam, onClickRemoveTeam, onClickSelectTeam,
 }) => (
   <div data-id={id} className="league section">
     <div className="title">
@@ -109,7 +109,7 @@ const LeagueTeamsList = ({
           const searchesQueriesSameAsTeam = currentSearchTerms
           .filter(
           (searchTerm) => searchTerm.query === team.name || searchTerm.query === team.shortName
-          )
+          );
           const teamAlreadyAddedToSearch = searchesQueriesSameAsTeam.length > 0;
           return (
             <LeagueTeam key={`league${id}team${team.id}`}
@@ -129,7 +129,7 @@ const LeagueTeamsList = ({
                 onClickSelectTeam(team.id, team.name, team.shortName, team.crestUrl)
               }
             />
-          )
+          );
         })}
       </div>
     </div>

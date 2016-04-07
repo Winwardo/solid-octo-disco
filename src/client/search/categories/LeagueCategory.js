@@ -49,7 +49,7 @@ class LeagueCategory extends Component {
             const searchesQueriesSameAsLeague = this.props.currentSearchTerms
             .filter(
             (searchTerm) => searchTerm.query === leagueName || searchTerm.query === league.league
-            )
+            );
             const leagueAlreadyAddedToSearch = searchesQueriesSameAsLeague.length > 0;
             return (
               <LeagueItem key={`league${league.id}`} name={leagueName}

@@ -32,7 +32,7 @@ let AddSearchTerm = ({ dispatch }) => {
               e.target.value = '';
             } else {
               $('#addSearchTerm').popup({
-                popup: '.negative.message.popup'
+                popup: '.negative.message.popup',
               });
               $('#addSearchTerm').popup('show');
             }
