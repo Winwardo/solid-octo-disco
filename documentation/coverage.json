@@ -1,27 +1,27 @@
 {
-  "coverage": "17.68%",
-  "expectCount": 147,
+  "coverage": "17.33%",
+  "expectCount": 150,
   "actualCount": 26,
   "files": {
     "src/client/search/searchActions.js": {
       "expectCount": 15,
       "actualCount": 0,
       "undocumentLines": [
-        6,
-        84,
-        43,
-        50,
-        103,
-        97,
-        109,
+        8,
+        89,
+        45,
+        78,
+        108,
+        102,
+        114,
+        95,
+        9,
         90,
-        7,
-        85,
-        44,
-        104,
-        98,
-        110,
-        91
+        46,
+        109,
+        103,
+        115,
+        96
       ]
     },
     "src/client/search/AddSearchTerm.js": {
@@ -107,7 +107,7 @@
       "actualCount": 4,
       "undocumentLines": [
         6,
-        283
+        285
       ]
     },
     "src/client/results/mostfrequent/MostFrequent.js": {
@@ -152,6 +152,26 @@
         81
       ]
     },
+    "src/client/results/mostfrequent/mostFrequentActions.js": {
+      "expectCount": 14,
+      "actualCount": 0,
+      "undocumentLines": [
+        35,
+        30,
+        25,
+        19,
+        13,
+        7,
+        1,
+        36,
+        31,
+        26,
+        20,
+        14,
+        8,
+        2
+      ]
+    },
     "src/client/results/Results.js": {
       "expectCount": 1,
       "actualCount": 0,
@@ -169,24 +189,6 @@
       "actualCount": 0,
       "undocumentLines": [
         4
-      ]
-    },
-    "src/client/results/mostfrequent/mostFrequentActions.js": {
-      "expectCount": 12,
-      "actualCount": 0,
-      "undocumentLines": [
-        30,
-        25,
-        19,
-        13,
-        7,
-        1,
-        31,
-        26,
-        20,
-        14,
-        8,
-        2
       ]
     },
     "src/server/twitterSearch.js": {
@@ -228,7 +230,7 @@
         7,
         8,
         19,
-        32
+        37
       ]
     },
     "src/client/results/mostfrequent/words/WordItemsList.js": {
@@ -238,7 +240,7 @@
         3,
         4,
         17,
-        27
+        30
       ]
     },
     "src/client/search/categories/YearSelector.js": {
@@ -278,9 +280,9 @@
       "expectCount": 3,
       "actualCount": 0,
       "undocumentLines": [
-        66,
-        57,
-        9
+        67,
+        58,
+        10
       ]
     },
     "src/client/search/categories/categoryFiltersReducer.js": {
@@ -307,6 +309,13 @@
         50,
         34,
         6
+      ]
+    },
+    "src/client/results/mostfrequent/mostFrequentReducer.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        20
       ]
     },
     "src/shared/data/databaseSchema.js": {

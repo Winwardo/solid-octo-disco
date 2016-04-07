@@ -45,18 +45,21 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RESET_MOST_FREQUENT">RESET_MOST_FREQUENT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_ACTIVE_USERS">TOGGLE_ALL_MOST_ACTIVE_USERS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_USED_WORDS">TOGGLE_ALL_MOST_USED_WORDS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_ACTIVE_USER">TOGGLE_MOST_ACTIVE_USER</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_USED_WORDS">TOGGLE_MOST_USED_WORDS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER">UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_USED_WORDS_SEARCH_FILTER">UPDATE_MOST_USED_WORDS_SEARCH_FILTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-resetMostFrequent">resetMostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostActiveUsersSearch">toggleAllMostActiveUsersSearch</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostUsedWordsSearch">toggleAllMostUsedWordsSearch</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostActiveUser">toggleMostActiveUser</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostUsedWords">toggleMostUsedWords</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateActiveUsersSearch">updateActiveUsersSearch</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateMostUsedWordsSearch">updateMostUsedWordsSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentReducer">mostFrequentReducer</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent/users</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/mostfrequent/users/UserItemsList.js~UserItemsList.html">UserItemsList</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent/words</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/mostfrequent/words/WordItemsList.js~WordItemsList.html">WordItemsList</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AddSearchTerm">AddSearchTerm</a></span></span></li>
@@ -160,15 +163,49 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/client/results/mostfrequent/mostFrequentReducer.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { combineReducers } from &apos;redux&apos;;
-import { toggleArrayElement } from &apos;./../../../shared/utilities&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { toggleArrayElement } from &apos;./../../../shared/utilities&apos;;
 import {
   UPDATE_MOST_USED_WORDS_SEARCH_FILTER, TOGGLE_MOST_USED_WORDS,
   UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER, TOGGLE_MOST_ACTIVE_USER,
-  TOGGLE_ALL_MOST_USED_WORDS, TOGGLE_ALL_MOST_ACTIVE_USERS
+  TOGGLE_ALL_MOST_USED_WORDS, TOGGLE_ALL_MOST_ACTIVE_USERS,
+  RESET_MOST_FREQUENT
 } from &apos;./mostFrequentActions&apos;;
 
-const words = (state = { filterTerm: &apos;&apos;, toToggle: [], isToggledActionHide: true }, action) =&gt; {
+const mostFrequentInitialState = {
+  filterTerm: &apos;&apos;,
+  toToggle: [],
+  isToggledActionHide: true
+};
+
+const initialState = {
+  words: mostFrequentInitialState,
+  users: mostFrequentInitialState,
+};
+
+const mostFrequentReducer = (state = initialState, action) =&gt; {
+  switch (action.type) {
+  case RESET_MOST_FREQUENT:
+    return initialState;
+  case UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER:
+  case TOGGLE_MOST_ACTIVE_USER:
+  case TOGGLE_ALL_MOST_ACTIVE_USERS:
+    return {
+      ...state,
+      users: users(state.users, action)
+    };
+  case UPDATE_MOST_USED_WORDS_SEARCH_FILTER:
+  case TOGGLE_MOST_USED_WORDS:
+  case TOGGLE_ALL_MOST_USED_WORDS:
+    return {
+      ...state,
+      words: words(state.words, action)
+    };
+  default:
+    return state;
+  }
+};
+
+const words = (state, action) =&gt; {
   switch (action.type) {
   case UPDATE_MOST_USED_WORDS_SEARCH_FILTER:
     return {
@@ -193,7 +230,7 @@ const words = (state = { filterTerm: &apos;&apos;, toToggle: [], isToggledAction
   }
 };
 
-const users = (state = { filterTerm: &apos;&apos;, toToggle: [], isToggledActionHide: true }, action) =&gt; {
+const users = (state, action) =&gt; {
   switch (action.type) {
   case UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER:
     return {
@@ -216,10 +253,7 @@ const users = (state = { filterTerm: &apos;&apos;, toToggle: [], isToggledAction
   }
 };
 
-export default combineReducers({
-  words,
-  users,
-});
+export default mostFrequentReducer;
 </code></pre>
 
 </div>

@@ -637,13 +637,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html#lineNumber69",
+    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html#lineNumber86",
     "#categoryFilterActions footballTeamPlayers should create an action to select and request football team players",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html#lineNumber86",
+    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html#lineNumber69",
     "#categoryFilterActions footballTeamPlayers should create an action to select and request football team players",
     "test"
   ],
@@ -879,6 +879,12 @@ window.esdocSearchIndex = [
     "solid-octo-disco/src/client/search/categories/categoryfilteractions.js~request_years_football_leagues_teams",
     "variable/index.html#static-variable-REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS",
     "<span>REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/categories/categoryFilterActions.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~reset_most_frequent",
+    "variable/index.html#static-variable-RESET_MOST_FREQUENT",
+    "<span>RESET_MOST_FREQUENT</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
@@ -1218,6 +1224,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentreducer.js~mostfrequentreducer",
+    "variable/index.html#static-variable-mostFrequentReducer",
+    "<span>mostFrequentReducer</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentReducer.js</span>",
+    "variable"
+  ],
+  [
     "solid-octo-disco/src/client/tweetanalysis.js~mostfrequentusers",
     "variable/index.html#static-variable-mostFrequentUsers",
     "<span>mostFrequentUsers</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/tweetAnalysis.js</span>",
@@ -1287,6 +1299,12 @@ window.esdocSearchIndex = [
     "solid-octo-disco/src/client/search/categories/categoryfilteractions.js~requestyearsfootballleaguesteams",
     "variable/index.html#static-variable-requestYearsFootballLeaguesTeams",
     "<span>requestYearsFootballLeaguesTeams</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/categories/categoryFilterActions.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~resetmostfrequent",
+    "variable/index.html#static-variable-resetMostFrequent",
+    "<span>resetMostFrequent</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
@@ -1927,15 +1945,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/results/mostfrequent/mostfrequentactions.spec.js",
-    "test-file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html",
-    "src/client/results/mostfrequent/mostFrequentActions.spec.js",
-    "testFile"
-  ],
-  [
-    "src/client/results/mostfrequent/mostfrequentactions.spec.js",
     "file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html",
     "src/client/results/mostfrequent/mostFrequentActions.spec.js",
     "file"
+  ],
+  [
+    "src/client/results/mostfrequent/mostfrequentactions.spec.js",
+    "test-file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html",
+    "src/client/results/mostfrequent/mostFrequentActions.spec.js",
+    "testFile"
   ],
   [
     "src/client/results/mostfrequent/mostfrequentreducer.js",
@@ -1945,15 +1963,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/results/mostfrequent/mostfrequentreducer.spec.js",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html",
-    "src/client/results/mostfrequent/mostFrequentReducer.spec.js",
-    "testFile"
-  ],
-  [
-    "src/client/results/mostfrequent/mostfrequentreducer.spec.js",
     "file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html",
     "src/client/results/mostfrequent/mostFrequentReducer.spec.js",
     "file"
+  ],
+  [
+    "src/client/results/mostfrequent/mostfrequentreducer.spec.js",
+    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html",
+    "src/client/results/mostfrequent/mostFrequentReducer.spec.js",
+    "testFile"
   ],
   [
     "src/client/results/mostfrequent/users/mostactiveusers.js",
@@ -2125,15 +2143,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/search/categories/categoryfilteractions.spec.js",
-    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html",
-    "src/client/search/categories/categoryFilterActions.spec.js",
-    "testFile"
-  ],
-  [
-    "src/client/search/categories/categoryfilteractions.spec.js",
     "file/src/client/search/categories/categoryFilterActions.spec.js.html",
     "src/client/search/categories/categoryFilterActions.spec.js",
     "file"
+  ],
+  [
+    "src/client/search/categories/categoryfilteractions.spec.js",
+    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html",
+    "src/client/search/categories/categoryFilterActions.spec.js",
+    "testFile"
   ],
   [
     "src/client/search/categories/categoryfiltersreducer.js",
@@ -2197,15 +2215,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/tweetanalysis.spec.js",
-    "test-file/src/client/tweetAnalysis.spec.js.html",
-    "src/client/tweetAnalysis.spec.js",
-    "testFile"
-  ],
-  [
-    "src/client/tweetanalysis.spec.js",
     "file/src/client/tweetAnalysis.spec.js.html",
     "src/client/tweetAnalysis.spec.js",
     "file"
+  ],
+  [
+    "src/client/tweetanalysis.spec.js",
+    "test-file/src/client/tweetAnalysis.spec.js.html",
+    "src/client/tweetAnalysis.spec.js",
+    "testFile"
   ],
   [
     "src/server/examplesearch.js",
@@ -2239,15 +2257,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/server/tweetfinder.spec.js",
-    "file/src/server/tweetFinder.spec.js.html",
-    "src/server/tweetFinder.spec.js",
-    "file"
-  ],
-  [
-    "src/server/tweetfinder.spec.js",
     "test-file/src/server/tweetFinder.spec.js.html",
     "src/server/tweetFinder.spec.js",
     "testFile"
+  ],
+  [
+    "src/server/tweetfinder.spec.js",
+    "file/src/server/tweetFinder.spec.js.html",
+    "src/server/tweetFinder.spec.js",
+    "file"
   ],
   [
     "src/server/twittersearch.js",
@@ -2269,15 +2287,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/shared/data/databaseobjects.spec.js",
-    "file/src/shared/data/databaseObjects.spec.js.html",
-    "src/shared/data/databaseObjects.spec.js",
-    "file"
-  ],
-  [
-    "src/shared/data/databaseobjects.spec.js",
     "test-file/src/shared/data/databaseObjects.spec.js.html",
     "src/shared/data/databaseObjects.spec.js",
     "testFile"
+  ],
+  [
+    "src/shared/data/databaseobjects.spec.js",
+    "file/src/shared/data/databaseObjects.spec.js.html",
+    "src/shared/data/databaseObjects.spec.js",
+    "file"
   ],
   [
     "src/shared/data/databaseschema.js",

@@ -45,18 +45,21 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RESET_MOST_FREQUENT">RESET_MOST_FREQUENT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_ACTIVE_USERS">TOGGLE_ALL_MOST_ACTIVE_USERS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_USED_WORDS">TOGGLE_ALL_MOST_USED_WORDS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_ACTIVE_USER">TOGGLE_MOST_ACTIVE_USER</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_USED_WORDS">TOGGLE_MOST_USED_WORDS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER">UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_USED_WORDS_SEARCH_FILTER">UPDATE_MOST_USED_WORDS_SEARCH_FILTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-resetMostFrequent">resetMostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostActiveUsersSearch">toggleAllMostActiveUsersSearch</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostUsedWordsSearch">toggleAllMostUsedWordsSearch</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostActiveUser">toggleMostActiveUser</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostUsedWords">toggleMostUsedWords</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateActiveUsersSearch">updateActiveUsersSearch</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateMostUsedWordsSearch">updateMostUsedWordsSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentReducer">mostFrequentReducer</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent/users</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/mostfrequent/users/UserItemsList.js~UserItemsList.html">UserItemsList</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent/words</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/mostfrequent/words/WordItemsList.js~WordItemsList.html">WordItemsList</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AddSearchTerm">AddSearchTerm</a></span></span></li>
@@ -162,8 +165,10 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/client/search/searchActions.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { fetchPost, newPromiseChain } from &apos;../../shared/utilities&apos;;
 import { doesFeedHaveUsefulResults } from &apos;../tweetAnalysis&apos;;
+import { resetMostFrequent } from &apos;./../results/mostfrequent/mostFrequentActions&apos;;
 
 let nextSearchTermId = 0;
+let lastSearchRequestId = 0;
 
 export const ADD_SEARCH_TERM = &apos;ADD_SEARCH_TERM&apos;;
 export const addSearchTerm = (query) =&gt; {
@@ -203,43 +208,46 @@ const addQueryParamTypes = (searchQuery, query, paramTypes) =&gt; ({
 });
 
 export const INVALIDATE_FEED_RESULTS = &apos;INVALIDATE_FEED_RESULTS&apos;;
-export const invalidateFeedResults = () =&gt;
-  (dispatch, getState) =&gt; {
-    dispatch({ type: INVALIDATE_FEED_RESULTS });
-    dispatch(searchApiForFeed(getState().searchTerms, getState().searchOnlyDB));
+export const invalidateFeedResults = () =&gt; {
+  const newSearchRequestId = lastSearchRequestId++;
+  return (dispatch, getState) =&gt; {
+    dispatch({ type: INVALIDATE_FEED_RESULTS, requestId: newSearchRequestId });
+    dispatch(searchApiForFeed(getState().searchTerms, getState().searchOnlyDB, newSearchRequestId));
   };
+};
 
-export const RECEIVE_FEED_RESULTS = &apos;RECEIVE_FEED_RESULTS&apos;;
-const searchApiForFeed = (searchTerms, onlySearchDBCache) =&gt;
+const searchApiForFeed = (searchTerms, onlySearchDBCache, requestId) =&gt;
     (dispatch) =&gt; (
     newPromiseChain()
       .then(() =&gt; NProgress.start())
-      .then(() =&gt; searchDatabaseAsCache(dispatch, searchTerms))
+      .then(() =&gt; searchDatabaseAsCache(dispatch, searchTerms, requestId))
       .then(feedResults =&gt; {
         if (!onlySearchDBCache) {
-          return searchTwitterIfResultsArentGoodEnough(dispatch, searchTerms, feedResults);
+          return searchTwitterIfResultsArentGoodEnough(dispatch, searchTerms, requestId, feedResults);
         }
       })
       .then(() =&gt; NProgress.done())
 );
 
-const searchTwitterIfResultsArentGoodEnough = (dispatch, searchTerms, feedResults) =&gt; {
+const searchTwitterIfResultsArentGoodEnough = (dispatch, searchTerms, requestId, feedResults) =&gt; {
   if (!doesFeedHaveUsefulResults(feedResults)) {
-    return searchDatabaseAndTwitter(dispatch, searchTerms);
+    return searchDatabaseAndTwitter(dispatch, searchTerms, requestId);
   } else {
     return Promise.resolve();
   }
 };
 
-const searchDatabaseAndTwitter = (dispatch, searchTerms) =&gt; searchDatabase(dispatch, searchTerms, true);
-const searchDatabaseAsCache = (dispatch, searchTerms) =&gt;searchDatabase(dispatch, searchTerms, false);
+const searchDatabaseAndTwitter = (dispatch, searchTerms, requestId) =&gt; searchDatabase(dispatch, searchTerms, requestId, true);
+const searchDatabaseAsCache = (dispatch, searchTerms, requestId) =&gt;searchDatabase(dispatch, searchTerms, requestId, false);
 
-const searchDatabase = (dispatch, searchTerms, searchTwitter) =&gt;
+export const RECEIVE_FEED_RESULTS = &apos;RECEIVE_FEED_RESULTS&apos;;
+const searchDatabase = (dispatch, searchTerms, requestId, searchTwitter) =&gt;
   newPromiseChain()
+  .then(() =&gt; dispatch(resetMostFrequent()))
   .then(() =&gt; fetchPost(&apos;/search&apos;, { searchTerms: searchTerms, searchTwitter: searchTwitter }))
   .then(response =&gt; response.json())
   .then(feedResults =&gt; {
-    dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults });
+    dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults, requestId: requestId });
     return feedResults;
   });
 

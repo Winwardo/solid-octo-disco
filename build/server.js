@@ -247,7 +247,9 @@
 	    var currentQueryAddition = [];
 	    var alreadyHadAuthorOrMention = false;
 
-	    searchTerm.paramTypes.forEach(function (paramType) {
+	    searchTerm.paramTypes.filter(function (paramType) {
+	      return paramType.selected;
+	    }).forEach(function (paramType) {
 	      switch (paramType.name) {
 	        case 'keyword':
 	          currentQueryAddition.push('"' + actualTerm + '"');
@@ -1610,7 +1612,7 @@
 	      return (0, _utilities.newPromiseChain)().then(function () {
 	        return fetchFromFootballAPI(footballRequestUrl);
 	      }).then(function (footballSeasons) {
-	        return cacheAPIJsonArray(_orientdb.db, 'League', footballSeasons);
+	        return cacheAPIJsonArray(_orientdb.db, 'League', footballSeasons.length > 0 ? footballSeasons : []);
 	      });
 	    } else {
 	      return results; // Return our cached data
@@ -1723,7 +1725,11 @@
 	      return db.insert().into(datatype).set(data).one().then(function (res) {}, function (rej) {});
 	    }));
 	  }).then(function () {
-	    return dataArray;
+	    if (dataArray.length > 0) {
+	      return dataArray;
+	    } else {
+	      return {};
+	    }
 	  }) // Return the actual API data as we already have it
 	  ;
 	};

@@ -45,18 +45,21 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RESET_MOST_FREQUENT">RESET_MOST_FREQUENT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_ACTIVE_USERS">TOGGLE_ALL_MOST_ACTIVE_USERS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_USED_WORDS">TOGGLE_ALL_MOST_USED_WORDS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_ACTIVE_USER">TOGGLE_MOST_ACTIVE_USER</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_USED_WORDS">TOGGLE_MOST_USED_WORDS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER">UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_USED_WORDS_SEARCH_FILTER">UPDATE_MOST_USED_WORDS_SEARCH_FILTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-resetMostFrequent">resetMostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostActiveUsersSearch">toggleAllMostActiveUsersSearch</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostUsedWordsSearch">toggleAllMostUsedWordsSearch</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostActiveUser">toggleMostActiveUser</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostUsedWords">toggleMostUsedWords</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateActiveUsersSearch">updateActiveUsersSearch</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateMostUsedWordsSearch">updateMostUsedWordsSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentReducer">mostFrequentReducer</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent/users</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/mostfrequent/users/UserItemsList.js~UserItemsList.html">UserItemsList</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent/words</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/mostfrequent/words/WordItemsList.js~WordItemsList.html">WordItemsList</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AddSearchTerm">AddSearchTerm</a></span></span></li>
@@ -163,7 +166,8 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import moment from &apos;moment&apos;;
 import {
   ADD_SEARCH_TERM, TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION, DELETE_SEARCH_TERM,
-  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT, TOGGLE_SEARCH_ONLY_DB
+  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT, TOGGLE_SEARCH_ONLY_DB,
+  INVALIDATE_FEED_RESULTS
 } from &apos;./searchActions&apos;;
 import { createTwitterParamTypes, toggleParamType } from &apos;../../shared/utilities&apos;;
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from &apos;./../tweetAnalysis&apos;;
@@ -225,21 +229,32 @@ export const searchOnlyDB = (state = false, action) =&gt; {
   }
 };
 
-export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, limit: 10 }, groupedMostFrequentWords: [], mostFrequentUsers: [] }, action) =&gt; {
+export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, limit: 10 }, groupedMostFrequentWords: [], mostFrequentUsers: [], lastRequestId: 0 }, action) =&gt; {
   switch (action.type) {
-  case RECEIVE_FEED_RESULTS:
-    return {
-      ...state,
-      posts: sortPostsForFeed(action.data.data.records),
-      groupedMostFrequentWords: groupedCountWords(mostFrequentWords(action.data.data.records.map((post) =&gt; post.data.content))),
-      mostFrequentUsers: mostFrequentUsers(action.data.data.records),
-    };
-  case SET_FEED_PAGE_NUMBER:
-    return { ...state, paginationInfo: { ...state.paginationInfo, number: action.number } };
-  case SET_FEED_PAGE_LIMIT:
-    return { ...state, paginationInfo: { ...state.paginationInfo, limit: action.limit } };
-  default:
-    return state;
+    case INVALIDATE_FEED_RESULTS:
+      return {
+        ...state,
+        lastRequestId: action.requestId,
+      };
+    case RECEIVE_FEED_RESULTS:
+      if (state.lastRequestId &gt; action.requestId) {
+        // Response is from an old request, ignore it
+        return state;
+      } else {
+        // Response is from the most recent request, actually show the posts
+        return {
+          ...state,
+          posts: sortPostsForFeed(action.data.data.records),
+          groupedMostFrequentWords: groupedCountWords(mostFrequentWords(action.data.data.records.map((post) =&gt; post.data.content))),
+          mostFrequentUsers: mostFrequentUsers(action.data.data.records),
+        };
+      }
+    case SET_FEED_PAGE_NUMBER:
+      return { ...state, paginationInfo: { ...state.paginationInfo, number: action.number } };
+    case SET_FEED_PAGE_LIMIT:
+      return { ...state, paginationInfo: { ...state.paginationInfo, limit: action.limit } };
+    default:
+      return state;
   }
 };
 

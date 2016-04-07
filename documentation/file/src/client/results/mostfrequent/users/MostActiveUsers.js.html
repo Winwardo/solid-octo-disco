@@ -45,18 +45,21 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RESET_MOST_FREQUENT">RESET_MOST_FREQUENT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_ACTIVE_USERS">TOGGLE_ALL_MOST_ACTIVE_USERS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_USED_WORDS">TOGGLE_ALL_MOST_USED_WORDS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_ACTIVE_USER">TOGGLE_MOST_ACTIVE_USER</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_USED_WORDS">TOGGLE_MOST_USED_WORDS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER">UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_USED_WORDS_SEARCH_FILTER">UPDATE_MOST_USED_WORDS_SEARCH_FILTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-resetMostFrequent">resetMostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostActiveUsersSearch">toggleAllMostActiveUsersSearch</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostUsedWordsSearch">toggleAllMostUsedWordsSearch</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostActiveUser">toggleMostActiveUser</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostUsedWords">toggleMostUsedWords</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateActiveUsersSearch">updateActiveUsersSearch</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateMostUsedWordsSearch">updateMostUsedWordsSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentReducer">mostFrequentReducer</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent/users</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/mostfrequent/users/UserItemsList.js~UserItemsList.html">UserItemsList</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent/words</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/mostfrequent/words/WordItemsList.js~WordItemsList.html">WordItemsList</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AddSearchTerm">AddSearchTerm</a></span></span></li>
@@ -166,7 +169,9 @@ import MostFrequent from &apos;./../MostFrequent&apos;;
 import { updateActiveUsersSearch, toggleAllMostActiveUsersSearch } from &apos;./../mostFrequentActions&apos;;
 import UserItemsList from &apos;./UserItemsList&apos;;
 
-const MostActiveUsers = ({ dispatch, userInfoList, isUsersToggledActionHide, filterTerm }) =&gt; {
+const MostActiveUsers = ({
+  dispatch, userInfoList, isUsersToggledActionHide, filterTerm, postsLength
+}) =&gt; {
   const filteredItems = userInfoList.filter(
     (userInfo) =&gt; {
       const matchUserName = userInfo.author.name.toLowerCase().includes(filterTerm.toLowerCase());
@@ -177,7 +182,7 @@ const MostActiveUsers = ({ dispatch, userInfoList, isUsersToggledActionHide, fil
   ).slice(0, 100);
 
   return (
-    &lt;MostFrequent title=&quot;Most Active Users&quot;
+    &lt;MostFrequent title={`${filteredItems.length} Most Active Users`}
       filterTerm={filterTerm}
       onTypingInSearchBar={(newFilterTerm) =&gt; {
         dispatch(updateActiveUsersSearch(newFilterTerm));
@@ -187,7 +192,9 @@ const MostActiveUsers = ({ dispatch, userInfoList, isUsersToggledActionHide, fil
       }}
       currentToggledAction={isUsersToggledActionHide}
     &gt;
-      &lt;UserItemsList users={filteredItems} isUsersToggledActionHide={isUsersToggledActionHide} /&gt;
+      &lt;UserItemsList users={filteredItems} postsLength={postsLength}
+        isUsersToggledActionHide={isUsersToggledActionHide}
+      /&gt;
     &lt;/MostFrequent&gt;
   );
 };
