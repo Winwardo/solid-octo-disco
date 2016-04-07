@@ -69,24 +69,26 @@ export const buildTwitterQuery = (searchTerms) => {
     const currentQueryAddition = [];
     let alreadyHadAuthorOrMention = false;
 
-    searchTerm.paramTypes.forEach((paramType) => {
-      switch (paramType.name) {
-        case 'keyword':
-          currentQueryAddition.push(`"${actualTerm}"`);
-          break;
-        case 'hashtag':
-          currentQueryAddition.push(`#${termWithNoSpaces}`);
-          break;
-        case 'author':
-        case 'mention':
-          if (!alreadyHadAuthorOrMention) {
-            alreadyHadAuthorOrMention = true;
-            currentQueryAddition.push(`@${termWithNoSpaces}`);
-          }
-          break;
-        default:
-          break;
-      }
+    searchTerm.paramTypes
+      .filter((paramType) => paramType.selected)
+      .forEach((paramType) => {
+        switch (paramType.name) {
+          case 'keyword':
+            currentQueryAddition.push(`"${actualTerm}"`);
+            break;
+          case 'hashtag':
+            currentQueryAddition.push(`#${termWithNoSpaces}`);
+            break;
+          case 'author':
+          case 'mention':
+            if (!alreadyHadAuthorOrMention) {
+              alreadyHadAuthorOrMention = true;
+              currentQueryAddition.push(`@${termWithNoSpaces}`);
+            }
+            break;
+          default:
+            break;
+        }
     });
 
     if (lastQuery.length + currentQueryAddition.length <= maxTwitterQueryTerms) {

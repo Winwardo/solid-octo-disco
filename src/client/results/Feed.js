@@ -204,6 +204,8 @@ const Tweet = ({ content }) => {
       {goldStar}
       <a href={`//twitter.com/${content.author.handle}`} target="_blank">
         <strong className="tweet fullname header">{decodedAuthorName}</strong>
+        &nbsp;
+        <span style={{color: '#A333C8'}}>@{content.author.handle}</span>
       </a>
       <br />
       <div dangerouslySetInnerHTML={{ __html: tweetWithLinks }} />
