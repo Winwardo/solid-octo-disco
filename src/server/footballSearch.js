@@ -25,9 +25,7 @@ export const searchFootballSeasons = (res, year) => {
     .then((results) => {
       if (results.length === 0) { // If our cache is empty, call the Football API
         return newPromiseChain()
-          .then(() => console.log("Hitting Football API."))
-          .then(() => fetch(footballRequestUrl, footballAccessOptions))
-          .then(response => response.json())
+          .then(() => fetchFromFootballAPI(footballRequestUrl))
           .then((footballSeasons) => cacheAPIJsonArray(db, 'League', footballSeasons));
       } else {
         return results; // Return our cached data
@@ -79,11 +77,24 @@ export const searchFootballSeasonTeams = (res, year, leagues) =>
 const fetchLeagueTeamsById = (leagueId) => {
   const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/soccerseasons/${leagueId}/teams`;
   return newPromiseChain()
-    .then(() => fetch(footballRequestUrl, footballAccessOptions))
-    .then(response => response.json())
+    .then(() => db.query('SELECT FROM team WHERE leagueid=:leagueid', { params: { leagueid: leagueId } }))
+    .then((results) => {
+      if (results.length === 0) {
+        return newPromiseChain()
+          .then(() => fetchFromFootballAPI(footballRequestUrl))
+          .then((league) =>
+            cacheAPIJsonArray(db, 'Team', league.teams.map(
+              (team) => ({...team, leagueid: leagueId}))
+            )
+          );
+      } else {
+        return results;
+      }
+    })
+    .then((teams) => ({teams: teams}))
     .then(
       leagueTeamsResolved => leagueTeamsResolved,
-      rejection => console.warn(`Major error reqesting the league with id:${leagueId}.`, rejection)
+      rejection => console.warn(`Major error requesting the league with id:${leagueId}.`, rejection)
     );
 };
 
@@ -94,14 +105,13 @@ export const searchFootballTeamPlayers = (res, teamId) => {
     .then(() => db.query('SELECT FROM player WHERE teamid=:teamid', { params: { teamid: teamId } }))
     .then((results) => {
       if (results.length === 0) { // If our cache is empty, call the Football API
-        console.log("Nothing in cache")
         return newPromiseChain()
-          .then(() => console.log("Hitting Football API."))
-          .then(() => fetch(footballRequestUrl, footballAccessOptions))
-          .then(response => response.json())
-          .then((league) => {
-            return cacheAPIJsonArray(db, 'Player', league.players.map((player) => ({...player, teamid: teamId})))
-          });
+          .then(() => fetchFromFootballAPI(footballRequestUrl))
+          .then((league) =>
+            cacheAPIJsonArray(db, 'Player', league.players.map(
+              (player) => ({...player, teamid: teamId}))
+            )
+          );
       } else {
         return results; // Return our cached data
       }
@@ -117,15 +127,18 @@ export const searchFootballTeamPlayers = (res, teamId) => {
         res.end('An unexpected internal error occurred.');
         console.warn(`Unable to get ${teamId}`, rejection);
       });
-
-
-  //fetchDataAndRespond(res, footballRequestUrl, `team with id:${teamId}'s football players`);
 };
+
+const fetchFromFootballAPI = (footballRequestUrl) => (
+  newPromiseChain()
+    .then(() => console.info("Hitting Football API:", footballRequestUrl))
+    .then(() => fetch(footballRequestUrl, footballAccessOptions))
+    .then(response => response.json())
+)
 
 
 const cacheAPIJsonArray = (db, datatype, dataArray) => (
   newPromiseChain()
-    .then(() => console.log("Caching:", datatype, dataArray.length, dataArray[0]))
     .then(() => Promise.all( // Insert all the seasons to our cache
       dataArray.map((data) => db.insert().into(datatype).set(data).one())
     ))
