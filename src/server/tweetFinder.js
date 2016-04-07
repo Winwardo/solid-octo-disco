@@ -69,8 +69,9 @@ export const buildTwitterQuery = (searchTerms) => {
     const currentQueryAddition = [];
     let alreadyHadAuthorOrMention = false;
 
-    searchTerm.paramTypes.forEach((paramType) => {
-      if (paramType.selected) {
+    searchTerm.paramTypes
+      .filter((paramType) => paramType.selected)
+      .forEach((paramType) => {
         switch (paramType.name) {
           case 'keyword':
             currentQueryAddition.push(`"${actualTerm}"`);
@@ -88,7 +89,6 @@ export const buildTwitterQuery = (searchTerms) => {
           default:
             break;
         }
-      }
     });
 
     if (lastQuery.length + currentQueryAddition.length <= maxTwitterQueryTerms) {
