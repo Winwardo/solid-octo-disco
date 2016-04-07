@@ -67,18 +67,16 @@ export const searchOnlyDB = (state = false, action) => {
 export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, limit: 10 }, groupedMostFrequentWords: [], mostFrequentUsers: [], lastRequestTime: moment() }, action) => {
   switch (action.type) {
     case INVALIDATE_FEED_RESULTS:
-      console.log("hey")
       return {
         ...state,
-        lastRequestTime: action.requestTime
+        lastRequestId: action.requestId
       }
     case RECEIVE_FEED_RESULTS:
-      console.log("Come on please")
-      if (state.lastRequestTime.isAfter(action.requestTime)) {
-        console.log("Don't use invalid response");
+      if (state.lastRequestId > action.requestId) {
+        // Response is from an old request, ignore it
         return state;
       } else {
-        console.log("Actual response")
+        // Response is from the most recent request, actually show the posts
         return {
           ...state,
           posts: sortPostsForFeed(action.data.data.records),
