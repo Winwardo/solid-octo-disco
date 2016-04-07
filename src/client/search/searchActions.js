@@ -1,5 +1,6 @@
 import { fetchPost, newPromiseChain } from '../../shared/utilities';
 import { doesFeedHaveUsefulResults } from '../tweetAnalysis';
+import { resetMostFrequent } from './../results/mostfrequent/mostFrequentActions';
 
 let nextSearchTermId = 0;
 let lastSearchRequestId = 0;
@@ -47,6 +48,7 @@ export const invalidateFeedResults = () => {
   return (dispatch, getState) => {
     dispatch({ type: INVALIDATE_FEED_RESULTS, requestId: newSearchRequestId });
     dispatch(searchApiForFeed(getState().searchTerms, getState().searchOnlyDB, newSearchRequestId));
+    dispatch(resetMostFrequent());
   };
 };
 
