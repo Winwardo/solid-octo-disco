@@ -41,10 +41,10 @@ const addQueryParamTypes = (searchQuery, query, paramTypes) => ({
 });
 
 export const INVALIDATE_FEED_RESULTS = 'INVALIDATE_FEED_RESULTS';
-export const invalidateFeedResults = (onlySearchDBCache) =>
+export const invalidateFeedResults = () =>
   (dispatch, getState) => {
     dispatch({ type: INVALIDATE_FEED_RESULTS });
-    dispatch(searchApiForFeed(getState().searchTerms, onlySearchDBCache));
+    dispatch(searchApiForFeed(getState().searchTerms, getState().searchOnlyDB));
   };
 
 export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
@@ -104,4 +104,9 @@ export const SET_FEED_PAGE_LIMIT = 'SET_FEED_PAGE_LIMIT';
 export const setFeedPageLimit = (limit) => ({
   type: SET_FEED_PAGE_LIMIT,
   limit,
+});
+
+export const TOGGLE_SEARCH_ONLY_DB = 'TOGGLE_SEARCH_ONLY_DB';
+export const toggleSearchOnlyDb = () => ({
+  type: TOGGLE_SEARCH_ONLY_DB,
 });

@@ -4,7 +4,7 @@ import React from 'react';
 import { combineReducers, compose, applyMiddleware, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
-import { searchTermsReducer, feedReducer } from './search/searchReducer';
+import { searchTermsReducer, feedReducer, searchOnlyDB } from './search/searchReducer';
 import mostFrequentReducer from './results/mostfrequent/mostFrequentReducer';
 import footballCategoryFiltersReducer from './search/categories/categoryFiltersReducer';
 import { newPromiseChain } from './../shared/utilities';
@@ -18,6 +18,7 @@ const feedApp = combineReducers({
   mostFrequent: mostFrequentReducer,
   feed: feedReducer,
   football: footballCategoryFiltersReducer,
+  searchOnlyDB
 });
 
 const middlewares = [thunkMiddleware];

@@ -8,7 +8,7 @@ import {
 
 class TermsList extends Component {
   componentWillReceiveProps() {
-    this.props.onSearchTermsChange(false);
+    this.props.onSearchTermsChange();
     $('.icon.param.types.popup').popup();
   }
 
@@ -47,9 +47,7 @@ const mapDispatchToProps = (dispatch) => ({
   onSearchTermDeleteClick: (id) => {
     dispatch(deleteSearchTerm(id));
   },
-  onSearchTermsChange: throttleFunction(
-    (onlySearchDBCache) => dispatch(invalidateFeedResults(onlySearchDBCache)), 1000
-  ),
+  onSearchTermsChange: throttleFunction(() => dispatch(invalidateFeedResults()), 1000),
 });
 
 export default connect(
