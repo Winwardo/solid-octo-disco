@@ -4,7 +4,9 @@ import MostFrequent from './../MostFrequent';
 import { updateActiveUsersSearch, toggleAllMostActiveUsersSearch } from './../mostFrequentActions';
 import UserItemsList from './UserItemsList';
 
-const MostActiveUsers = ({ dispatch, userInfoList, isUsersToggledActionHide, filterTerm, postsLength }) => {
+const MostActiveUsers = ({
+  dispatch, userInfoList, isUsersToggledActionHide, filterTerm, postsLength
+}) => {
   const filteredItems = userInfoList.filter(
     (userInfo) => {
       const matchUserName = userInfo.author.name.toLowerCase().includes(filterTerm.toLowerCase());
