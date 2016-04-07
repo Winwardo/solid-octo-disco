@@ -95,6 +95,7 @@ export const schema = {
       { name: 'id', type: Integer },
       { name: 'year', type: String },
       { name: 'caption', type: String },
+      { name: 'league', type: String },
     ],
     indexes: [
       { properties: ['id'], type: UNIQUE, },
