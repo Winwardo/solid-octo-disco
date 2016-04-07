@@ -67,6 +67,7 @@ class TermItemMenu extends Component {
     const menuItems = this.props.paramTypes.map((paramType, id) => {
       let paramTypeIcon;
       const highlighted = paramType.selected ? this.props.highlightColor : 'black';
+
       // This is to create an icon with className or not depending on if
       // the param type icon is a semantic class (ie #)
       if (paramType.icon.length > 1) {

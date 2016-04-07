@@ -18,7 +18,7 @@ const feedApp = combineReducers({
   mostFrequent: mostFrequentReducer,
   feed: feedReducer,
   football: footballCategoryFiltersReducer,
-  searchOnlyDB
+  searchOnlyDB,
 });
 
 const middlewares = [thunkMiddleware];

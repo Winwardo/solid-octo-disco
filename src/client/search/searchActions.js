@@ -54,8 +54,8 @@ const searchApiForFeed = (searchTerms, onlySearchDBCache) =>
       .then(() => NProgress.start())
       .then(() => searchDatabaseAsCache(dispatch, searchTerms))
       .then(feedResults => {
-        if(!onlySearchDBCache) {
-          return searchTwitterIfResultsArentGoodEnough(dispatch, searchTerms, feedResults)
+        if (!onlySearchDBCache) {
+          return searchTwitterIfResultsArentGoodEnough(dispatch, searchTerms, feedResults);
         }
       })
       .then(() => NProgress.done())
