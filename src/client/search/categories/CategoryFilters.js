@@ -100,7 +100,9 @@ class CategoryFilters extends Component {
                         isTeamPlayersFetching={this.props.football.selectedTeam.isFetching}
                         teamCrestUrl={this.props.football.selectedTeam.crestUrl}
                         teamPlayers={this.props.football.selectedTeam.players}
-                        onClickPlayer={this.props.onClickCategoryFilter}
+                        currentSearchTerms={this.props.currentSearchTerms}
+                        onClickAddPlayer={this.props.onClickCategoryFilter}
+                        onClickRemovePlayer={this.props.onClickRemoveCategoryFilter}
                       />
                   }
                 </div>
