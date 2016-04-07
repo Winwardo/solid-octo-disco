@@ -9,7 +9,7 @@ import {
   fetchAllFootballLeagueTeams,
   fetchFootballTeamPlayers, removeSelectedFootballTeamPlayers
 } from './categoryFilterActions';
-import { addSearchTerm, toggleSearchOnlyDb } from './../searchActions';
+import { addSearchTerm, deleteSearchTerm, toggleSearchOnlyDb } from './../searchActions';
 import moment from 'moment';
 
 export const EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API = 2013;
@@ -71,14 +71,18 @@ class CategoryFilters extends Component {
             <div className="center aligned four wide column">
               <LeagueCategory leagues={this.props.football.seasonsByYear[y]}
                 currentYear={currentYear} tabYear={y}
-                onClickLeague={this.props.onClickCategoryFilter}
+                currentSearchTerms={this.props.currentSearchTerms}
+                onClickAddLeague={this.props.onClickAddCategoryFilter}
+                onClickRemoveLeague={this.props.onClickRemoveCategoryFilter}
               />
             </div>
             <div className="eight wide column">
               <div className="ui middle aligned grid">
                 <div className="five wide column">
                   <TeamCategory teamsByLeague={this.props.football.leagueTeamsByYear[y]}
-                    onClickAddTeam={this.props.onClickCategoryFilter}
+                    currentSearchTerms={this.props.currentSearchTerms}
+                    onClickAddTeam={this.props.onClickAddCategoryFilter}
+                    onClickRemoveTeam={this.props.onClickRemoveCategoryFilter}
                     onClickSelectTeam={this.props.onClickSelectTeam}
                   />
                 </div>
@@ -97,7 +101,9 @@ class CategoryFilters extends Component {
                         isTeamPlayersFetching={this.props.football.selectedTeam.isFetching}
                         teamCrestUrl={this.props.football.selectedTeam.crestUrl}
                         teamPlayers={this.props.football.selectedTeam.players}
-                        onClickPlayer={this.props.onClickCategoryFilter}
+                        currentSearchTerms={this.props.currentSearchTerms}
+                        onClickAddPlayer={this.props.onClickAddCategoryFilter}
+                        onClickRemovePlayer={this.props.onClickRemoveCategoryFilter}
                       />
                   }
                 </div>
@@ -122,12 +128,19 @@ CategoryFilters.propTypes = {
   football: React.PropTypes.object,
   onClickCategoryFilter: React.PropTypes.func,
   onClickToggleDbOnlySearch: React.PropTypes.func,
+  currentSearchTerms: React.PropTypes.array,
+  onClickAddCategoryFilter: React.PropTypes.func,
+  onClickRemoveCategoryFilter: React.PropTypes.func,
 };
 
-const mapStateToProps = (state) => ({ football: state.football });
+const mapStateToProps = (state) => ({
+  football: state.football,
+  currentSearchTerms: state.searchTerms,
+});
 
 const mapDispatchToProps = (dispatch) => ({
-  onClickCategoryFilter: (newTerm) => dispatch(addSearchTerm(newTerm)),
+  onClickAddCategoryFilter: (newTerm) => dispatch(addSearchTerm(newTerm)),
+  onClickRemoveCategoryFilter: (id) => dispatch(deleteSearchTerm(id)),
   onClickSelectTeam: (id, name, shortName, crestUrl) =>
     dispatch(fetchFootballTeamPlayers(id, name, shortName, crestUrl)),
   onClickYearTab: (year, leagueLength) => {
