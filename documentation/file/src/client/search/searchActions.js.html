@@ -69,15 +69,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FEED_RESULTS">RECEIVE_FEED_RESULTS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_LIMIT">SET_FEED_PAGE_LIMIT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_NUMBER">SET_FEED_PAGE_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_ONLY_DB">TOGGLE_SEARCH_ONLY_DB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION">TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addSearchTerm">addSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-deleteSearchTerm">deleteSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateFeedResults">invalidateFeedResults</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchApiForFeed">searchApiForFeed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageLimit">setFeedPageLimit</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageNumber">setFeedPageNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchOnlyDb">toggleSearchOnlyDb</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchTermParamTypeSelection">toggleSearchTermParamTypeSelection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-feedReducer">feedReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchOnlyDB">searchOnlyDB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchTermsReducer">searchTermsReducer</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search/categories</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/LeagueCategory.js~LeagueCategory.html">LeagueCategory</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/PlayerCategory.js~PlayerCategory.html">PlayerCategory</a></span></span></li>
@@ -204,16 +206,20 @@ export const INVALIDATE_FEED_RESULTS = &apos;INVALIDATE_FEED_RESULTS&apos;;
 export const invalidateFeedResults = () =&gt;
   (dispatch, getState) =&gt; {
     dispatch({ type: INVALIDATE_FEED_RESULTS });
-    dispatch(searchApiForFeed(getState().searchTerms));
+    dispatch(searchApiForFeed(getState().searchTerms, getState().searchOnlyDB));
   };
 
 export const RECEIVE_FEED_RESULTS = &apos;RECEIVE_FEED_RESULTS&apos;;
-export const searchApiForFeed = (searchTerms) =&gt;
+const searchApiForFeed = (searchTerms, onlySearchDBCache) =&gt;
     (dispatch) =&gt; (
     newPromiseChain()
       .then(() =&gt; NProgress.start())
       .then(() =&gt; searchDatabaseAsCache(dispatch, searchTerms))
-      .then(feedResults =&gt; searchTwitterIfResultsArentGoodEnough(dispatch, searchTerms, feedResults))
+      .then(feedResults =&gt; {
+        if (!onlySearchDBCache) {
+          return searchTwitterIfResultsArentGoodEnough(dispatch, searchTerms, feedResults);
+        }
+      })
       .then(() =&gt; NProgress.done())
 );
 
@@ -260,6 +266,11 @@ export const SET_FEED_PAGE_LIMIT = &apos;SET_FEED_PAGE_LIMIT&apos;;
 export const setFeedPageLimit = (limit) =&gt; ({
   type: SET_FEED_PAGE_LIMIT,
   limit,
+});
+
+export const TOGGLE_SEARCH_ONLY_DB = &apos;TOGGLE_SEARCH_ONLY_DB&apos;;
+export const toggleSearchOnlyDb = () =&gt; ({
+  type: TOGGLE_SEARCH_ONLY_DB,
 });
 </code></pre>
 

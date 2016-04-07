@@ -69,15 +69,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FEED_RESULTS">RECEIVE_FEED_RESULTS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_LIMIT">SET_FEED_PAGE_LIMIT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_NUMBER">SET_FEED_PAGE_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_ONLY_DB">TOGGLE_SEARCH_ONLY_DB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION">TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addSearchTerm">addSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-deleteSearchTerm">deleteSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateFeedResults">invalidateFeedResults</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchApiForFeed">searchApiForFeed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageLimit">setFeedPageLimit</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageNumber">setFeedPageNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchOnlyDb">toggleSearchOnlyDb</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchTermParamTypeSelection">toggleSearchTermParamTypeSelection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-feedReducer">feedReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchOnlyDB">searchOnlyDB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchTermsReducer">searchTermsReducer</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search/categories</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/LeagueCategory.js~LeagueCategory.html">LeagueCategory</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/PlayerCategory.js~PlayerCategory.html">PlayerCategory</a></span></span></li>
@@ -161,7 +163,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import React, { Component } from &apos;react&apos;;
 import { EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API } from &apos;./CategoryFilters&apos;;
 
-const YearSelector = ({ seasonYears, currentYear }) =&gt; {
+const YearSelector = ({ seasonYears, currentYear, onClickToggleDbOnlySearch }) =&gt; {
   let seasonYearButtons = [];
   for (let y = currentYear; y &gt;= EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API; y--) {
     let numberOfLeagues = (
@@ -194,6 +196,12 @@ const YearSelector = ({ seasonYears, currentYear }) =&gt; {
   return (
     &lt;div className=&quot;ui top attached tabular menu&quot;&gt;
       {seasonYearButtons}
+      &lt;div className=&quot;ui slider cache checkbox&quot; style={{ float: &apos;right&apos;, marginLeft: &apos;auto&apos; }}
+        onClick={() =&gt; onClickToggleDbOnlySearch()}
+      &gt;
+        &lt;input type=&quot;checkbox&quot; tabIndex=&quot;0&quot; /&gt;
+        &lt;label&gt;Search DB Cache Only&lt;/label&gt;
+      &lt;/div&gt;
     &lt;/div&gt;
   );
 };

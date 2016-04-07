@@ -243,7 +243,7 @@
 	  var lastQuery = [];
 	  searchTerms.forEach(function (searchTerm) {
 	    var actualTerm = searchTerm.query;
-	    var termWithNoSpaces = actualTerm.replace(' ', '');
+	    var termWithNoSpaces = actualTerm.replace(/ /g, '');
 	    var currentQueryAddition = [];
 	    var alreadyHadAuthorOrMention = false;
 
@@ -649,6 +649,21 @@
 	    superclass: Vertex,
 	    properties: [{ name: 'code', type: String }, { name: 'name', type: String }],
 	    indexes: [{ properties: ['code'], type: UNIQUE }, { properties: ['name'], type: LUCENE }]
+	  },
+	  League: {
+	    superclass: Vertex,
+	    properties: [{ name: 'id', type: Integer }, { name: 'year', type: String }, { name: 'caption', type: String }, { name: 'league', type: String }],
+	    indexes: [{ properties: ['id'], type: UNIQUE }]
+	  },
+	  Team: {
+	    superclass: Vertex,
+	    properties: [{ name: 'id', type: Integer }, { name: 'name', type: String }, { name: 'shortName', type: String }, { name: 'crestUrl', type: String }],
+	    indexes: [{ properties: ['id'], type: UNIQUE }]
+	  },
+	  Player: {
+	    superclass: Vertex,
+	    properties: [{ name: 'id', type: Integer }, { name: 'name', type: String }, { name: 'nationality', type: String }],
+	    indexes: [{ properties: ['id'], type: UNIQUE }]
 	  },
 	  TWEETED: EmptyEdge,
 	  RETWEETED: EmptyEdge,
@@ -1563,6 +1578,8 @@
 
 	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 
+	var _orientdb = __webpack_require__(4);
+
 	var _utilities = __webpack_require__(7);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1584,7 +1601,28 @@
 
 	var searchFootballSeasons = exports.searchFootballSeasons = function searchFootballSeasons(res, year) {
 	  var footballRequestUrl = '' + footballAPIHost + footballAPIVersion + '/soccerseasons/?season=' + year;
-	  fetchDataAndRespond(res, footballRequestUrl, year + '\'s football seasons');
+
+	  return (0, _utilities.newPromiseChain)().then(function () {
+	    return _orientdb.db.query('SELECT FROM league WHERE year=:year', { params: { year: year } });
+	  }).then(function (results) {
+	    if (results.length === 0) {
+	      // If our cache is empty, call the Football API
+	      return (0, _utilities.newPromiseChain)().then(function () {
+	        return fetchFromFootballAPI(footballRequestUrl);
+	      }).then(function (footballSeasons) {
+	        return cacheAPIJsonArray(_orientdb.db, 'League', footballSeasons);
+	      });
+	    } else {
+	      return results; // Return our cached data
+	    }
+	  }).then(function (footballSeasons) {
+	    res.writeHead(200, { 'Content-Type': 'application/json' });
+	    res.end(JSON.stringify(footballSeasons));
+	  }, function (rejection) {
+	    res.writeHead(500, { 'Content-Type': 'application/json' });
+	    res.end('An unexpected internal error occurred.');
+	    console.warn('Unable to get ' + year, rejection);
+	  });
 	};
 
 	var searchFootballSeasonTeams = exports.searchFootballSeasonTeams = function searchFootballSeasonTeams(res, year, leagues) {
@@ -1616,34 +1654,78 @@
 	var fetchLeagueTeamsById = function fetchLeagueTeamsById(leagueId) {
 	  var footballRequestUrl = '' + footballAPIHost + footballAPIVersion + '/soccerseasons/' + leagueId + '/teams';
 	  return (0, _utilities.newPromiseChain)().then(function () {
-	    return (0, _isomorphicFetch2.default)(footballRequestUrl, footballAccessOptions);
-	  }).then(function (response) {
-	    return response.json();
+	    return _orientdb.db.query('SELECT FROM team WHERE leagueid=:leagueid', { params: { leagueid: leagueId } });
+	  }).then(function (results) {
+	    if (results.length === 0) {
+	      return (0, _utilities.newPromiseChain)().then(function () {
+	        return fetchFromFootballAPI(footballRequestUrl);
+	      }).then(function (league) {
+	        return cacheAPIJsonArray(_orientdb.db, 'Team', league.teams.map(function (team) {
+	          return _extends({}, team, { leagueid: leagueId });
+	        }));
+	      });
+	    } else {
+	      return results;
+	    }
+	  }).then(function (teams) {
+	    return { teams: teams };
 	  }).then(function (leagueTeamsResolved) {
 	    return leagueTeamsResolved;
 	  }, function (rejection) {
-	    return console.warn('Major error reqesting the league with id:' + leagueId + '.', rejection);
+	    return console.warn('Major error requesting the league with id:' + leagueId + '.', rejection);
 	  });
 	};
 
 	var searchFootballTeamPlayers = exports.searchFootballTeamPlayers = function searchFootballTeamPlayers(res, teamId) {
 	  var footballRequestUrl = '' + footballAPIHost + footballAPIVersion + '/teams/' + teamId + '/players';
-	  fetchDataAndRespond(res, footballRequestUrl, 'team with id:' + teamId + '\'s football players');
-	};
 
-	var fetchDataAndRespond = function fetchDataAndRespond(res, url, name) {
-	  (0, _utilities.newPromiseChain)().then(function () {
-	    return (0, _isomorphicFetch2.default)(url, footballAccessOptions);
-	  }).then(function (response) {
-	    return response.json();
-	  }).then(function (footballSeasons) {
+	  return (0, _utilities.newPromiseChain)().then(function () {
+	    return _orientdb.db.query('SELECT FROM player WHERE teamid=:teamid', { params: { teamid: teamId } });
+	  }).then(function (results) {
+	    if (results.length === 0) {
+	      // If our cache is empty, call the Football API
+	      return (0, _utilities.newPromiseChain)().then(function () {
+	        return fetchFromFootballAPI(footballRequestUrl);
+	      }).then(function (league) {
+	        return cacheAPIJsonArray(_orientdb.db, 'Player', league.players.map(function (player) {
+	          return _extends({}, player, { teamid: teamId });
+	        }));
+	      });
+	    } else {
+	      return results; // Return our cached data
+	    }
+	  }).then(function (players) {
+	    return { players: players };
+	  }).then(function (footballPlayers) {
 	    res.writeHead(200, { 'Content-Type': 'application/json' });
-	    res.end(JSON.stringify(footballSeasons));
+	    res.end(JSON.stringify(footballPlayers));
 	  }, function (rejection) {
 	    res.writeHead(500, { 'Content-Type': 'application/json' });
 	    res.end('An unexpected internal error occurred.');
-	    console.warn('Unable to get ' + name, rejection);
+	    console.warn('Unable to get ' + teamId, rejection);
 	  });
+	};
+
+	var fetchFromFootballAPI = function fetchFromFootballAPI(footballRequestUrl) {
+	  return (0, _utilities.newPromiseChain)().then(function () {
+	    return console.info('Hitting Football API:', footballRequestUrl);
+	  }).then(function () {
+	    return (0, _isomorphicFetch2.default)(footballRequestUrl, footballAccessOptions);
+	  }).then(function (response) {
+	    return response.json();
+	  });
+	};
+
+	var cacheAPIJsonArray = function cacheAPIJsonArray(db, datatype, dataArray) {
+	  return (0, _utilities.newPromiseChain)().then(function () {
+	    return Promise.all( // Insert all the seasons to our cache
+	    dataArray.map(function (data) {
+	      return db.insert().into(datatype).set(data).one().then(function (res) {}, function (rej) {});
+	    }));
+	  }).then(function () {
+	    return dataArray;
+	  }) // Return the actual API data as we already have it
+	  ;
 	};
 
 /***/ },

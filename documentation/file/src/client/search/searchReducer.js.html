@@ -69,15 +69,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FEED_RESULTS">RECEIVE_FEED_RESULTS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_LIMIT">SET_FEED_PAGE_LIMIT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_NUMBER">SET_FEED_PAGE_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_ONLY_DB">TOGGLE_SEARCH_ONLY_DB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION">TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addSearchTerm">addSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-deleteSearchTerm">deleteSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateFeedResults">invalidateFeedResults</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchApiForFeed">searchApiForFeed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageLimit">setFeedPageLimit</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageNumber">setFeedPageNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchOnlyDb">toggleSearchOnlyDb</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchTermParamTypeSelection">toggleSearchTermParamTypeSelection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-feedReducer">feedReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchOnlyDB">searchOnlyDB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchTermsReducer">searchTermsReducer</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search/categories</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/LeagueCategory.js~LeagueCategory.html">LeagueCategory</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/PlayerCategory.js~PlayerCategory.html">PlayerCategory</a></span></span></li>
@@ -158,9 +160,10 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/client/search/searchReducer.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import moment from &apos;moment&apos;;
+import {
   ADD_SEARCH_TERM, TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION, DELETE_SEARCH_TERM,
-  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT
+  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT, TOGGLE_SEARCH_ONLY_DB
 } from &apos;./searchActions&apos;;
 import { createTwitterParamTypes, toggleParamType } from &apos;../../shared/utilities&apos;;
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from &apos;./../tweetAnalysis&apos;;
@@ -183,7 +186,6 @@ export const searchTermsReducer = (state = [], action) =&gt; {
       ...state.slice(termIndex + 1),
     ];
   }
-
   default:
     return state;
   }
@@ -214,12 +216,21 @@ const searchTermReducer = (state, action) =&gt; {
   }
 };
 
+export const searchOnlyDB = (state = false, action) =&gt; {
+  switch (action.type) {
+  case TOGGLE_SEARCH_ONLY_DB:
+    return !state;
+  default:
+    return state;
+  }
+};
+
 export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, limit: 10 }, groupedMostFrequentWords: [], mostFrequentUsers: [] }, action) =&gt; {
   switch (action.type) {
   case RECEIVE_FEED_RESULTS:
     return {
       ...state,
-      posts: action.data.data.records,
+      posts: sortPostsForFeed(action.data.data.records),
       groupedMostFrequentWords: groupedCountWords(mostFrequentWords(action.data.data.records.map((post) =&gt; post.data.content))),
       mostFrequentUsers: mostFrequentUsers(action.data.data.records),
     };
@@ -232,6 +243,13 @@ export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, li
   }
 };
 
+const sortPostsForFeed = (feed) =&gt; (
+  [...feed].sort(
+    (post1, post2) =&gt; (
+      moment(post2.data.date).diff(moment(post1.data.date))
+    )
+  )
+);
 </code></pre>
 
 </div>

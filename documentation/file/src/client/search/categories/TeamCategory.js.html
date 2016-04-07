@@ -69,15 +69,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FEED_RESULTS">RECEIVE_FEED_RESULTS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_LIMIT">SET_FEED_PAGE_LIMIT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_NUMBER">SET_FEED_PAGE_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_ONLY_DB">TOGGLE_SEARCH_ONLY_DB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION">TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addSearchTerm">addSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-deleteSearchTerm">deleteSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateFeedResults">invalidateFeedResults</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchApiForFeed">searchApiForFeed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageLimit">setFeedPageLimit</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageNumber">setFeedPageNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchOnlyDb">toggleSearchOnlyDb</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchTermParamTypeSelection">toggleSearchTermParamTypeSelection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-feedReducer">feedReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchOnlyDB">searchOnlyDB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchTermsReducer">searchTermsReducer</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search/categories</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/LeagueCategory.js~LeagueCategory.html">LeagueCategory</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/PlayerCategory.js~PlayerCategory.html">PlayerCategory</a></span></span></li>
@@ -232,7 +234,9 @@ class TeamCategory extends Component {
             {leagueTeams.map(league =&gt; (
               &lt;LeagueTeamsList key={`leagueteams${league.id}`} id={league.id}
                 name={league.name.slice(0, league.name.length - 7)}
-                teams={league.teams} onClickAddTeam={this.props.onClickAddTeam}
+                teams={league.teams} currentSearchTerms={this.props.currentSearchTerms}
+                onClickAddTeam={this.props.onClickAddTeam}
+                onClickRemoveTeam={this.props.onClickRemoveTeam}
                 onClickSelectTeam={this.props.onClickSelectTeam}
               /&gt;
             ))}
@@ -244,11 +248,15 @@ class TeamCategory extends Component {
 }
 TeamCategory.propTypes = {
   teamsByLeague: React.PropTypes.object,
+  currentSearchTerms: React.PropTypes.array,
   onClickAddTeam: React.PropTypes.func,
+  onClickRemoveTeam: React.PropTypes.func,
   onClickSelectTeam: React.PropTypes.func,
 };
 
-const LeagueTeamsList = ({ id, name, teams, onClickAddTeam, onClickSelectTeam }) =&gt; (
+const LeagueTeamsList = ({
+  id, name, teams, currentSearchTerms, onClickAddTeam, onClickRemoveTeam, onClickSelectTeam,
+}) =&gt; (
   &lt;div data-id={id} className=&quot;league section&quot;&gt;
     &lt;div className=&quot;title&quot;&gt;
       &lt;i className=&quot;dropdown icon&quot;&gt;&lt;/i&gt;
@@ -259,30 +267,44 @@ const LeagueTeamsList = ({ id, name, teams, onClickAddTeam, onClickSelectTeam })
     &lt;/div&gt;
     &lt;div className=&quot;content&quot;&gt;
       &lt;div className=&quot;items&quot;&gt;
-        {teams.map(team =&gt;
-          &lt;LeagueTeam key={`league${id}team${team.id}`}
-            leagueId={id} name={team.name} crestUrl={team.crestUrl}
-            onClickAddTeam={() =&gt; {
-              onClickAddTeam(`^#${team.name}`);
-              onClickAddTeam(`#${team.shortName}`);
-            }}
-            onClickSelectTeam={() =&gt;
-              onClickSelectTeam(team.id, team.name, team.shortName, team.crestUrl)
-            }
-          /&gt;
-        )}
+        {teams.map(team =&gt; {
+          const searchesQueriesSameAsTeam = currentSearchTerms
+          .filter(
+          (searchTerm) =&gt; searchTerm.query === team.name || searchTerm.query === team.shortName
+          );
+          const teamAlreadyAddedToSearch = searchesQueriesSameAsTeam.length &gt; 0;
+          return (
+            &lt;LeagueTeam key={`league${id}team${team.id}`}
+              leagueId={id} name={team.name} crestUrl={team.crestUrl}
+              alreadyAddedToSearch={teamAlreadyAddedToSearch}
+              onClickTeam={() =&gt; {
+                if (teamAlreadyAddedToSearch) {
+                  searchesQueriesSameAsTeam.forEach(
+                    search =&gt; onClickRemoveTeam(search.id)
+                  );
+                } else {
+                  onClickAddTeam(`^#${team.name}`);
+                  onClickAddTeam(`#${team.shortName}`);
+                }
+              }}
+              onClickSelectTeam={() =&gt;
+                onClickSelectTeam(team.id, team.name, team.shortName, team.crestUrl)
+              }
+            /&gt;
+          );
+        })}
       &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 );
 
 const LeagueTeam = ({
-  leagueId, name, crestUrl, onClickAddTeam, onClickSelectTeam,
+  leagueId, name, crestUrl, alreadyAddedToSearch, onClickTeam, onClickSelectTeam,
 }) =&gt; (
   &lt;div
     data-id={leagueId} className=&quot;league item&quot;
     style={{ cursor: &apos;pointer&apos; }}
-    onClick={() =&gt; onClickAddTeam()}
+    onClick={() =&gt; onClickTeam()}
   &gt;
     &lt;div className=&quot;ui three column grid&quot;&gt;
       &lt;div className=&quot;column&quot;&gt;
@@ -291,7 +313,12 @@ const LeagueTeam = ({
       &lt;/div&gt;
 
       &lt;div className=&quot;center aligned column&quot;&gt;
-        &lt;i className=&quot;add green circle icon float right&quot;&gt;&lt;/i&gt;
+        {
+          alreadyAddedToSearch ?
+            &lt;i className=&quot;remove red circle icon float right&quot;&gt;&lt;/i&gt;
+          :
+            &lt;i className=&quot;add green circle icon float right&quot;&gt;&lt;/i&gt;
+        }
       &lt;/div&gt;
 
       &lt;div className=&quot;column&quot;&gt;

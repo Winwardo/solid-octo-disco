@@ -69,15 +69,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FEED_RESULTS">RECEIVE_FEED_RESULTS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_LIMIT">SET_FEED_PAGE_LIMIT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_NUMBER">SET_FEED_PAGE_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_ONLY_DB">TOGGLE_SEARCH_ONLY_DB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION">TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addSearchTerm">addSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-deleteSearchTerm">deleteSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateFeedResults">invalidateFeedResults</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchApiForFeed">searchApiForFeed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageLimit">setFeedPageLimit</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageNumber">setFeedPageNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchOnlyDb">toggleSearchOnlyDb</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchTermParamTypeSelection">toggleSearchTermParamTypeSelection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-feedReducer">feedReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchOnlyDB">searchOnlyDB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchTermsReducer">searchTermsReducer</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search/categories</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/LeagueCategory.js~LeagueCategory.html">LeagueCategory</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/PlayerCategory.js~PlayerCategory.html">PlayerCategory</a></span></span></li>
@@ -159,6 +161,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/server/footballSearch.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import fetch from &apos;isomorphic-fetch&apos;;
+import  { db } from &apos;./orientdb&apos;;
 import { newPromiseChain } from &apos;./../shared/utilities&apos;;
 
 // These keys should be hidden in a private config file or environment variables
@@ -178,7 +181,28 @@ const footballAPIVersion = &apos;/v1&apos;;
 
 export const searchFootballSeasons = (res, year) =&gt; {
   const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/soccerseasons/?season=${year}`;
-  fetchDataAndRespond(res, footballRequestUrl, `${year}&apos;s football seasons`);
+
+  return newPromiseChain()
+    .then(() =&gt; db.query(&apos;SELECT FROM league WHERE year=:year&apos;, { params: { year: year } }))
+    .then((results) =&gt; {
+      if (results.length === 0) { // If our cache is empty, call the Football API
+        return newPromiseChain()
+          .then(() =&gt; fetchFromFootballAPI(footballRequestUrl))
+          .then((footballSeasons) =&gt; cacheAPIJsonArray(db, &apos;League&apos;, footballSeasons));
+      } else {
+        return results; // Return our cached data
+      }
+    })
+    .then(
+      (footballSeasons) =&gt; {
+        res.writeHead(200, { &apos;Content-Type&apos;: &apos;application/json&apos; });
+        res.end(JSON.stringify(footballSeasons));
+      },
+      (rejection) =&gt; {
+        res.writeHead(500, { &apos;Content-Type&apos;: &apos;application/json&apos; });
+        res.end(&apos;An unexpected internal error occurred.&apos;);
+        console.warn(`Unable to get ${year}`, rejection);
+      });
 };
 
 export const searchFootballSeasonTeams = (res, year, leagues) =&gt;
@@ -215,34 +239,74 @@ export const searchFootballSeasonTeams = (res, year, leagues) =&gt;
 const fetchLeagueTeamsById = (leagueId) =&gt; {
   const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/soccerseasons/${leagueId}/teams`;
   return newPromiseChain()
-    .then(() =&gt; fetch(footballRequestUrl, footballAccessOptions))
-    .then(response =&gt; response.json())
+    .then(() =&gt; db.query(&apos;SELECT FROM team WHERE leagueid=:leagueid&apos;, { params: { leagueid: leagueId } }))
+    .then((results) =&gt; {
+      if (results.length === 0) {
+        return newPromiseChain()
+          .then(() =&gt; fetchFromFootballAPI(footballRequestUrl))
+          .then((league) =&gt;
+            cacheAPIJsonArray(db, &apos;Team&apos;, league.teams.map(
+              (team) =&gt; ({ ...team, leagueid: leagueId }))
+            )
+          );
+      } else {
+        return results;
+      }
+    })
+    .then((teams) =&gt; ({ teams: teams }))
     .then(
       leagueTeamsResolved =&gt; leagueTeamsResolved,
-      rejection =&gt; console.warn(`Major error reqesting the league with id:${leagueId}.`, rejection)
+      rejection =&gt; console.warn(`Major error requesting the league with id:${leagueId}.`, rejection)
     );
 };
 
 export const searchFootballTeamPlayers = (res, teamId) =&gt; {
   const footballRequestUrl = `${footballAPIHost}${footballAPIVersion}/teams/${teamId}/players`;
-  fetchDataAndRespond(res, footballRequestUrl, `team with id:${teamId}&apos;s football players`);
-};
 
-const fetchDataAndRespond = (res, url, name) =&gt; {
-  newPromiseChain()
-    .then(() =&gt; fetch(url, footballAccessOptions))
-    .then(response =&gt; response.json())
+  return newPromiseChain()
+    .then(() =&gt; db.query(&apos;SELECT FROM player WHERE teamid=:teamid&apos;, { params: { teamid: teamId } }))
+    .then((results) =&gt; {
+      if (results.length === 0) { // If our cache is empty, call the Football API
+        return newPromiseChain()
+          .then(() =&gt; fetchFromFootballAPI(footballRequestUrl))
+          .then((league) =&gt;
+            cacheAPIJsonArray(db, &apos;Player&apos;, league.players.map(
+              (player) =&gt; ({ ...player, teamid: teamId }))
+            )
+          );
+      } else {
+        return results; // Return our cached data
+      }
+    })
+    .then((players) =&gt; ({ players: players }))
     .then(
-      footballSeasons =&gt; {
+      (footballPlayers) =&gt; {
         res.writeHead(200, { &apos;Content-Type&apos;: &apos;application/json&apos; });
-        res.end(JSON.stringify(footballSeasons));
+        res.end(JSON.stringify(footballPlayers));
       },
       (rejection) =&gt; {
         res.writeHead(500, { &apos;Content-Type&apos;: &apos;application/json&apos; });
         res.end(&apos;An unexpected internal error occurred.&apos;);
-        console.warn(`Unable to get ${name}`, rejection);
+        console.warn(`Unable to get ${teamId}`, rejection);
       });
 };
+
+const fetchFromFootballAPI = (footballRequestUrl) =&gt; (
+  newPromiseChain()
+    .then(() =&gt; console.info(&apos;Hitting Football API:&apos;, footballRequestUrl))
+    .then(() =&gt; fetch(footballRequestUrl, footballAccessOptions))
+    .then(response =&gt; response.json())
+);
+
+const cacheAPIJsonArray = (db, datatype, dataArray) =&gt; (
+  newPromiseChain()
+    .then(() =&gt; Promise.all(// Insert all the seasons to our cache
+      dataArray.map(
+        (data) =&gt; db.insert().into(datatype).set(data).one()
+          .then((res) =&gt; {}, (rej) =&gt; {}))
+    ))
+    .then(() =&gt; dataArray) // Return the actual API data as we already have it
+);
 </code></pre>
 
 </div>

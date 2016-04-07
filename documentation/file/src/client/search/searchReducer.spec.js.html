@@ -69,15 +69,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FEED_RESULTS">RECEIVE_FEED_RESULTS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_LIMIT">SET_FEED_PAGE_LIMIT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_NUMBER">SET_FEED_PAGE_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_ONLY_DB">TOGGLE_SEARCH_ONLY_DB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION">TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addSearchTerm">addSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-deleteSearchTerm">deleteSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateFeedResults">invalidateFeedResults</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchApiForFeed">searchApiForFeed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageLimit">setFeedPageLimit</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageNumber">setFeedPageNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchOnlyDb">toggleSearchOnlyDb</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchTermParamTypeSelection">toggleSearchTermParamTypeSelection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-feedReducer">feedReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchOnlyDB">searchOnlyDB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchTermsReducer">searchTermsReducer</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search/categories</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/LeagueCategory.js~LeagueCategory.html">LeagueCategory</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/PlayerCategory.js~PlayerCategory.html">PlayerCategory</a></span></span></li>
@@ -161,27 +163,17 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { should } from &apos;chai&apos;;
 import deepFreeze from &apos;deep-freeze&apos;;
 import { searchTermsReducer, feedReducer } from &apos;./searchReducer&apos;;
-import {
-  ADD_SEARCH_TERM, DELETE_SEARCH_TERM,
-  TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION,
-  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT
-} from &apos;./searchActions&apos;;
+import * as actions from &apos;./searchActions&apos;;
 import { createTwitterParamTypes } from &apos;../../shared/utilities&apos;;
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from &apos;./../tweetAnalysis&apos;;
 
 describe(&apos;#SearchTermsReducer&apos;, () =&gt; {
   it(&apos;should add a hashtag search term&apos;, () =&gt; {
     const stateBefore = [];
-    const action = {
-      type: ADD_SEARCH_TERM,
-      id: 0,
-      query: &apos;Football&apos;,
-      paramTypes: [&apos;hashtag&apos;],
-      source: &apos;twitter&apos;,
-    };
+    const action = actions.addSearchTerm(&apos;#Football&apos;);
 
     const stateAfter = [{
-      id: 0,
+      id: action.id,
       query: &apos;Football&apos;,
       paramTypes: createTwitterParamTypes([&apos;hashtag&apos;]),
       source: &apos;twitter&apos;,
@@ -200,25 +192,16 @@ describe(&apos;#SearchTermsReducer&apos;, () =&gt; {
       paramTypes: createTwitterParamTypes([&apos;mention&apos;]),
       source: &apos;twitter&apos;,
     }, ];
-    const action = {
-      type: ADD_SEARCH_TERM,
-      id: 1,
-      query: &apos;Manchester&apos;,
-      paramTypes: [&apos;hashtag&apos;, &apos;author&apos;],
-      source: &apos;twitter&apos;,
-    };
+    const action = actions.addSearchTerm(&apos;@Manchester&apos;);
 
-    const stateAfter = [{
-      id: 0,
-      query: &apos;Football&apos;,
-      paramTypes: createTwitterParamTypes([&apos;mention&apos;]),
-      source: &apos;twitter&apos;,
-    }, {
-      id: 1,
-      query: &apos;Manchester&apos;,
-      paramTypes: createTwitterParamTypes([&apos;hashtag&apos;, &apos;author&apos;]),
-      source: &apos;twitter&apos;,
-    }, ];
+    const stateAfter = [
+      ...stateBefore,
+      {
+        id: 9,
+        query: &apos;Manchester&apos;,
+        paramTypes: createTwitterParamTypes([&apos;mention&apos;, &apos;author&apos;]),
+        source: &apos;twitter&apos;,
+      }, ];
 
     deepFreeze(stateBefore);
     deepFreeze(action);
@@ -233,10 +216,7 @@ describe(&apos;#SearchTermsReducer&apos;, () =&gt; {
       paramTypes: createTwitterParamTypes([&apos;mention&apos;]),
       source: &apos;twitter&apos;,
     }, ];
-    const action = {
-      type: DELETE_SEARCH_TERM,
-      id: 0,
-    };
+    const action = actions.deleteSearchTerm(0);
 
     const stateAfter = [];
 
@@ -258,10 +238,7 @@ describe(&apos;#SearchTermsReducer&apos;, () =&gt; {
       paramTypes: createTwitterParamTypes([&apos;hashtag&apos;, &apos;author&apos;]),
       source: &apos;twitter&apos;,
     }, ];
-    const action = {
-      type: DELETE_SEARCH_TERM,
-      id: 0,
-    };
+    const action = actions.deleteSearchTerm(0);
 
     const stateAfter = [{
       id: 1,
@@ -288,11 +265,7 @@ describe(&apos;#SearchTermsReducer&apos;, () =&gt; {
       paramTypes: createTwitterParamTypes([&apos;hashtag&apos;, &apos;author&apos;]),
       source: &apos;twitter&apos;,
     }, ];
-    const action = {
-      type: TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION,
-      id: 0,
-      paramTypeName: &apos;author&apos;,
-    };
+    const action = actions.toggleSearchTermParamTypeSelection(0, &apos;author&apos;);
 
     const stateAfter = [{
       id: 0,
@@ -314,16 +287,16 @@ describe(&apos;#SearchTermsReducer&apos;, () =&gt; {
 });
 
 describe(&apos;#FeedReducer&apos;, () =&gt; {
-  it(&apos;can receive new feed results, and will group them&apos;, () =&gt; {
+  it(&apos;can receive new feed results, and will group and sort them&apos;, () =&gt; {
     const stateBefore = {};
 
     const records = [
-      { data:{ content:&apos;some record&apos; }, author:{ id: &apos;1&apos; } },
-      { data:{ content:&apos;another&apos; }, author:{ id: &apos;2&apos; } },
+      { data:{ content:&apos;some record&apos;, date: &apos;2016-04-06&apos; }, author:{ id: &apos;1&apos; } },
+      { data:{ content:&apos;another&apos;, date: &apos;2014-04-06&apos; }, author:{ id: &apos;2&apos; } },
     ];
 
     const action = {
-      type: RECEIVE_FEED_RESULTS,
+      type: actions.RECEIVE_FEED_RESULTS,
       data: {
         data: {
           records: records,
@@ -347,7 +320,7 @@ describe(&apos;#FeedReducer&apos;, () =&gt; {
     const stateBefore = { paginationInfo: { number: 1, limit: 10 } };
 
     const action = {
-      type: SET_FEED_PAGE_NUMBER,
+      type: actions.SET_FEED_PAGE_NUMBER,
       number: 5,
     };
 
@@ -363,7 +336,7 @@ describe(&apos;#FeedReducer&apos;, () =&gt; {
     const stateBefore = { paginationInfo: { number: 1, limit: 10 } };
 
     const action = {
-      type: SET_FEED_PAGE_LIMIT,
+      type: actions.SET_FEED_PAGE_LIMIT,
       limit: 5,
     };
 

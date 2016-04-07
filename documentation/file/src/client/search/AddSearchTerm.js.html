@@ -69,15 +69,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FEED_RESULTS">RECEIVE_FEED_RESULTS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_LIMIT">SET_FEED_PAGE_LIMIT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_NUMBER">SET_FEED_PAGE_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_ONLY_DB">TOGGLE_SEARCH_ONLY_DB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION">TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addSearchTerm">addSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-deleteSearchTerm">deleteSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateFeedResults">invalidateFeedResults</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchApiForFeed">searchApiForFeed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageLimit">setFeedPageLimit</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageNumber">setFeedPageNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchOnlyDb">toggleSearchOnlyDb</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchTermParamTypeSelection">toggleSearchTermParamTypeSelection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-feedReducer">feedReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchOnlyDB">searchOnlyDB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchTermsReducer">searchTermsReducer</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search/categories</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/LeagueCategory.js~LeagueCategory.html">LeagueCategory</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/PlayerCategory.js~PlayerCategory.html">PlayerCategory</a></span></span></li>
@@ -178,17 +180,37 @@ let AddSearchTerm = ({ dispatch }) =&gt; {
       &lt;input id=&quot;addSearchTerm&quot; type=&quot;text&quot;
         placeholder=&quot;Search a keyword or hashtag&quot;
         onBlur={() =&gt; {
+          $(&apos;#addSearchTerm&apos;).popup(&apos;hide&apos;);
+          $(&apos;#addSearchTerm&apos;).popup(&apos;destroy&apos;);
           $(&apos;#searchTermContainer&apos;).slideUp(&apos;fast&apos;);
         }}
 
         onKeyDown={(e) =&gt; {
+          $(&apos;#addSearchTerm&apos;).popup(&apos;hide&apos;);
+          $(&apos;#addSearchTerm&apos;).popup(&apos;destroy&apos;);
           if (e.keyCode === 13) {
-            dispatch(addSearchTerm(e.target.value));
-            e.target.value = &apos;&apos;;
+            if (e.target.value.length &gt;= 2) {
+              dispatch(addSearchTerm(e.target.value));
+              e.target.value = &apos;&apos;;
+            } else {
+              $(&apos;#addSearchTerm&apos;).popup({
+                popup: &apos;.negative.message.popup&apos;,
+              });
+              $(&apos;#addSearchTerm&apos;).popup(&apos;show&apos;);
+            }
           }
         }}
 
       /&gt;
+      &lt;div className=&quot;ui negative message popup transition hidden&quot;&gt;
+        &lt;div className=&quot;header&quot;&gt;
+          &lt;i className=&quot;red warning circle icon&quot;&gt;&lt;/i&gt;
+          Search Validation Error
+        &lt;/div&gt;
+        &lt;p&gt;
+          Needs to be at least 2 characters
+        &lt;/p&gt;
+      &lt;/div&gt;
       &lt;i className=&quot;link remove circle icon&quot;&gt;&lt;/i&gt;
     &lt;/div&gt;
   );

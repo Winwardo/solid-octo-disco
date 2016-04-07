@@ -1,26 +1,27 @@
 {
-  "coverage": "17.93%",
-  "expectCount": 145,
+  "coverage": "17.68%",
+  "expectCount": 147,
   "actualCount": 26,
   "files": {
     "src/client/search/searchActions.js": {
-      "expectCount": 14,
+      "expectCount": 15,
       "actualCount": 0,
       "undocumentLines": [
         6,
-        80,
+        84,
         43,
         50,
-        99,
-        93,
-        86,
+        103,
+        97,
+        109,
+        90,
         7,
-        81,
+        85,
         44,
-        51,
-        100,
-        94,
-        87
+        104,
+        98,
+        110,
+        91
       ]
     },
     "src/client/search/AddSearchTerm.js": {
@@ -57,7 +58,7 @@
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [
-        14
+        15
       ]
     },
     "src/client/results/Feed.js": {
@@ -123,7 +124,7 @@
         4,
         5,
         11,
-        17
+        19
       ]
     },
     "src/client/search/categories/categoryFilterActions.js": {
@@ -263,7 +264,7 @@
       "expectCount": 5,
       "actualCount": 4,
       "undocumentLines": [
-        185
+        181
       ]
     },
     "src/server/exampleSearch.js": {
@@ -274,11 +275,12 @@
       ]
     },
     "src/client/search/searchReducer.js": {
-      "expectCount": 2,
+      "expectCount": 3,
       "actualCount": 0,
       "undocumentLines": [
+        66,
         57,
-        8
+        9
       ]
     },
     "src/client/search/categories/categoryFiltersReducer.js": {
@@ -318,9 +320,9 @@
       "expectCount": 3,
       "actualCount": 0,
       "undocumentLines": [
-        24,
-        19,
-        66
+        46,
+        20,
+        101
       ]
     }
   }

@@ -13,25 +13,25 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber156",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber127",
     "#FeedReducer",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber157",
-    "#FeedReducer can receive new feed results, and will group them",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber128",
+    "#FeedReducer can receive new feed results, and will group and sort them",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber202",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber173",
     "#FeedReducer can set the pagination limit",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber186",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber157",
     "#FeedReducer can set the pagination page",
     "test"
   ],
@@ -313,37 +313,37 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber12",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber8",
     "#SearchTermsReducer",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber13",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber9",
     "#SearchTermsReducer should add a hashtag search term",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber36",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber26",
     "#SearchTermsReducer should add a new query to existing queries",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber89",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber67",
     "#SearchTermsReducer should delete term with id",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber119",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber94",
     "#SearchTermsReducer should edit term paramType with id",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber69",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber50",
     "#SearchTermsReducer should return empty search terms when deleting search terms with single term",
     "test"
   ],
@@ -637,13 +637,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html#lineNumber86",
+    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html#lineNumber69",
     "#categoryFilterActions footballTeamPlayers should create an action to select and request football team players",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html#lineNumber69",
+    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html#lineNumber86",
     "#categoryFilterActions footballTeamPlayers should create an action to select and request football team players",
     "test"
   ],
@@ -939,6 +939,12 @@ window.esdocSearchIndex = [
     "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~toggle_most_used_words",
     "variable/index.html#static-variable-TOGGLE_MOST_USED_WORDS",
     "<span>TOGGLE_MOST_USED_WORDS</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/search/searchactions.js~toggle_search_only_db",
+    "variable/index.html#static-variable-TOGGLE_SEARCH_ONLY_DB",
+    "<span>TOGGLE_SEARCH_ONLY_DB</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchActions.js</span>",
     "variable"
   ],
   [
@@ -1302,12 +1308,6 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/search/searchactions.js~searchapiforfeed",
-    "variable/index.html#static-variable-searchApiForFeed",
-    "<span>searchApiForFeed</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchActions.js</span>",
-    "variable"
-  ],
-  [
     "solid-octo-disco/src/server/footballsearch.js~searchfootballseasonteams",
     "variable/index.html#static-variable-searchFootballSeasonTeams",
     "<span>searchFootballSeasonTeams</span> <span class=\"search-result-import-path\">solid-octo-disco/src/server/footballSearch.js</span>",
@@ -1323,6 +1323,12 @@ window.esdocSearchIndex = [
     "solid-octo-disco/src/server/footballsearch.js~searchfootballteamplayers",
     "variable/index.html#static-variable-searchFootballTeamPlayers",
     "<span>searchFootballTeamPlayers</span> <span class=\"search-result-import-path\">solid-octo-disco/src/server/footballSearch.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/search/searchreducer.js~searchonlydb",
+    "variable/index.html#static-variable-searchOnlyDB",
+    "<span>searchOnlyDB</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchReducer.js</span>",
     "variable"
   ],
   [
@@ -1401,6 +1407,12 @@ window.esdocSearchIndex = [
     "solid-octo-disco/src/shared/utilities.js~toggleparamtype",
     "variable/index.html#static-variable-toggleParamType",
     "<span>toggleParamType</span> <span class=\"search-result-import-path\">solid-octo-disco/src/shared/utilities.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/search/searchactions.js~togglesearchonlydb",
+    "variable/index.html#static-variable-toggleSearchOnlyDb",
+    "<span>toggleSearchOnlyDb</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchActions.js</span>",
     "variable"
   ],
   [
@@ -1933,15 +1945,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/results/mostfrequent/mostfrequentreducer.spec.js",
-    "file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html",
-    "src/client/results/mostfrequent/mostFrequentReducer.spec.js",
-    "file"
-  ],
-  [
-    "src/client/results/mostfrequent/mostfrequentreducer.spec.js",
     "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html",
     "src/client/results/mostfrequent/mostFrequentReducer.spec.js",
     "testFile"
+  ],
+  [
+    "src/client/results/mostfrequent/mostfrequentreducer.spec.js",
+    "file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html",
+    "src/client/results/mostfrequent/mostFrequentReducer.spec.js",
+    "file"
   ],
   [
     "src/client/results/mostfrequent/users/mostactiveusers.js",
@@ -2131,15 +2143,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/search/categories/categoryfiltersreducer.spec.js",
-    "test-file/src/client/search/categories/categoryFiltersReducer.spec.js.html",
-    "src/client/search/categories/categoryFiltersReducer.spec.js",
-    "testFile"
-  ],
-  [
-    "src/client/search/categories/categoryfiltersreducer.spec.js",
     "file/src/client/search/categories/categoryFiltersReducer.spec.js.html",
     "src/client/search/categories/categoryFiltersReducer.spec.js",
     "file"
+  ],
+  [
+    "src/client/search/categories/categoryfiltersreducer.spec.js",
+    "test-file/src/client/search/categories/categoryFiltersReducer.spec.js.html",
+    "src/client/search/categories/categoryFiltersReducer.spec.js",
+    "testFile"
   ],
   [
     "src/client/search/searchactions.js",
@@ -2167,15 +2179,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/search/searchreducer.spec.js",
-    "file/src/client/search/searchReducer.spec.js.html",
-    "src/client/search/searchReducer.spec.js",
-    "file"
-  ],
-  [
-    "src/client/search/searchreducer.spec.js",
     "test-file/src/client/search/searchReducer.spec.js.html",
     "src/client/search/searchReducer.spec.js",
     "testFile"
+  ],
+  [
+    "src/client/search/searchreducer.spec.js",
+    "file/src/client/search/searchReducer.spec.js.html",
+    "src/client/search/searchReducer.spec.js",
+    "file"
   ],
   [
     "src/client/tweetanalysis.js",
@@ -2185,15 +2197,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/tweetanalysis.spec.js",
-    "file/src/client/tweetAnalysis.spec.js.html",
-    "src/client/tweetAnalysis.spec.js",
-    "file"
-  ],
-  [
-    "src/client/tweetanalysis.spec.js",
     "test-file/src/client/tweetAnalysis.spec.js.html",
     "src/client/tweetAnalysis.spec.js",
     "testFile"
+  ],
+  [
+    "src/client/tweetanalysis.spec.js",
+    "file/src/client/tweetAnalysis.spec.js.html",
+    "src/client/tweetAnalysis.spec.js",
+    "file"
   ],
   [
     "src/server/examplesearch.js",
@@ -2227,15 +2239,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/server/tweetfinder.spec.js",
-    "test-file/src/server/tweetFinder.spec.js.html",
-    "src/server/tweetFinder.spec.js",
-    "testFile"
-  ],
-  [
-    "src/server/tweetfinder.spec.js",
     "file/src/server/tweetFinder.spec.js.html",
     "src/server/tweetFinder.spec.js",
     "file"
+  ],
+  [
+    "src/server/tweetfinder.spec.js",
+    "test-file/src/server/tweetFinder.spec.js.html",
+    "src/server/tweetFinder.spec.js",
+    "testFile"
   ],
   [
     "src/server/twittersearch.js",
@@ -2257,15 +2269,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/shared/data/databaseobjects.spec.js",
-    "test-file/src/shared/data/databaseObjects.spec.js.html",
-    "src/shared/data/databaseObjects.spec.js",
-    "testFile"
-  ],
-  [
-    "src/shared/data/databaseobjects.spec.js",
     "file/src/shared/data/databaseObjects.spec.js.html",
     "src/shared/data/databaseObjects.spec.js",
     "file"
+  ],
+  [
+    "src/shared/data/databaseobjects.spec.js",
+    "test-file/src/shared/data/databaseObjects.spec.js.html",
+    "src/shared/data/databaseObjects.spec.js",
+    "testFile"
   ],
   [
     "src/shared/data/databaseschema.js",

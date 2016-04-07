@@ -69,15 +69,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FEED_RESULTS">RECEIVE_FEED_RESULTS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_LIMIT">SET_FEED_PAGE_LIMIT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_NUMBER">SET_FEED_PAGE_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_ONLY_DB">TOGGLE_SEARCH_ONLY_DB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION">TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addSearchTerm">addSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-deleteSearchTerm">deleteSearchTerm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateFeedResults">invalidateFeedResults</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchApiForFeed">searchApiForFeed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageLimit">setFeedPageLimit</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageNumber">setFeedPageNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchOnlyDb">toggleSearchOnlyDb</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchTermParamTypeSelection">toggleSearchTermParamTypeSelection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-feedReducer">feedReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchOnlyDB">searchOnlyDB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchTermsReducer">searchTermsReducer</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search/categories</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/LeagueCategory.js~LeagueCategory.html">LeagueCategory</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/PlayerCategory.js~PlayerCategory.html">PlayerCategory</a></span></span></li>
@@ -161,13 +163,47 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import React, { Component } from &apos;react&apos;;
 
 const TermItem = ({ onDeleteClick, onToggleParamTypeClick, query, source, paramTypes, id }) =&gt; (
-  &lt;div data-id={id} className=&quot;ui multiple compact dropdown labeled icon violet button&quot;
+  &lt;div data-id={id} className=&quot;ui multiple dropdown labeled icon violet button&quot;
     onClick={(e) =&gt; e.stopPropagation()}
   &gt;
-    &lt;span&gt;
-      &lt;i className={`${source} icon`}&gt;&lt;/i&gt;
-      {query}
-    &lt;/span&gt;
+    &lt;div className=&quot;ui grid&quot;&gt;
+      &lt;div className=&quot;two wide middle aligned column&quot; style={{ paddingLeft: 0 }}&gt;
+        &lt;i className={`large blue ${source} icon`}&gt;&lt;/i&gt;
+      &lt;/div&gt;
+      &lt;div className=&quot;thirteen wide center aligned column&quot;&gt;
+        &lt;div style={{ fontSize: &apos;1.25em&apos;, whiteSpace: &apos;nowrap&apos;, paddingBottom: &apos;5px&apos; }}&gt;
+          {query}
+        &lt;/div&gt;
+        &lt;div&gt;
+          {paramTypes
+            .filter((paramType) =&gt; paramType.selected)
+            .map((paramType, paramId) =&gt; {
+              // This is to create an icon with className or not depending on if
+              // the param type icon is a semantic class (ie #)
+              if (paramType.icon.length &gt; 1) {
+                return (
+                  &lt;i key={paramId}
+                    className={`tiny inverted blue circular ${paramType.icon} param types popup`}
+                    data-title={`Search by ${paramType.name}`}
+                  /&gt;
+                );
+              } else {
+                return (
+                  &lt;i key={paramId} className={&apos;tiny inverted blue circular icon param types popup&apos;}
+                    data-title={`Search by ${paramType.name}`}
+                  &gt;
+                    {paramType.icon}
+                  &lt;/i&gt;
+                );
+              }
+            })
+          }
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;i className=&quot;dropdown icon&quot; style={{ paddingTop: 0, paddingRight: &apos;25px&apos; }}&gt;&lt;/i&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
     &lt;i className=&quot;delete icon&quot; onClick={() =&gt; onDeleteClick()}&gt;&lt;/i&gt;
     &lt;TermItemMenu
       termId={id}
@@ -193,6 +229,9 @@ class TermItemMenu extends Component {
     const menuItems = this.props.paramTypes.map((paramType, id) =&gt; {
       let paramTypeIcon;
       const highlighted = paramType.selected ? this.props.highlightColor : &apos;black&apos;;
+
+      // This is to create an icon with className or not depending on if
+      // the param type icon is a semantic class (ie #)
       if (paramType.icon.length &gt; 1) {
         paramTypeIcon = &lt;i className={`inverted ${highlighted} circular ${paramType.icon}`}&gt;&lt;/i&gt;;
       } else {
