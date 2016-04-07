@@ -1,7 +1,8 @@
 import moment from 'moment';
 import {
   ADD_SEARCH_TERM, TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION, DELETE_SEARCH_TERM,
-  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT, TOGGLE_SEARCH_ONLY_DB
+  RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT, TOGGLE_SEARCH_ONLY_DB,
+  INVALIDATE_FEED_RESULTS
 } from './searchActions';
 import { createTwitterParamTypes, toggleParamType } from '../../shared/utilities';
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
@@ -63,21 +64,34 @@ export const searchOnlyDB = (state = false, action) => {
   }
 };
 
-export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, limit: 10 }, groupedMostFrequentWords: [], mostFrequentUsers: [] }, action) => {
+export const feedReducer = (state = { posts: [], paginationInfo: { number: 1, limit: 10 }, groupedMostFrequentWords: [], mostFrequentUsers: [], lastRequestTime: moment() }, action) => {
   switch (action.type) {
-  case RECEIVE_FEED_RESULTS:
-    return {
-      ...state,
-      posts: sortPostsForFeed(action.data.data.records),
-      groupedMostFrequentWords: groupedCountWords(mostFrequentWords(action.data.data.records.map((post) => post.data.content))),
-      mostFrequentUsers: mostFrequentUsers(action.data.data.records),
-    };
-  case SET_FEED_PAGE_NUMBER:
-    return { ...state, paginationInfo: { ...state.paginationInfo, number: action.number } };
-  case SET_FEED_PAGE_LIMIT:
-    return { ...state, paginationInfo: { ...state.paginationInfo, limit: action.limit } };
-  default:
-    return state;
+    case INVALIDATE_FEED_RESULTS:
+      console.log("hey")
+      return {
+        ...state,
+        lastRequestTime: action.requestTime
+      }
+    case RECEIVE_FEED_RESULTS:
+      console.log("Come on please")
+      if (state.lastRequestTime.isAfter(action.requestTime)) {
+        console.log("Don't use invalid response");
+        return state;
+      } else {
+        console.log("Actual response")
+        return {
+          ...state,
+          posts: sortPostsForFeed(action.data.data.records),
+          groupedMostFrequentWords: groupedCountWords(mostFrequentWords(action.data.data.records.map((post) => post.data.content))),
+          mostFrequentUsers: mostFrequentUsers(action.data.data.records),
+        };
+      }
+    case SET_FEED_PAGE_NUMBER:
+      return { ...state, paginationInfo: { ...state.paginationInfo, number: action.number } };
+    case SET_FEED_PAGE_LIMIT:
+      return { ...state, paginationInfo: { ...state.paginationInfo, limit: action.limit } };
+    default:
+      return state;
   }
 };
 
