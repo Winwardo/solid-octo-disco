@@ -225,7 +225,7 @@ export const normaliseQueryTerm = (query) => {
   } else {
     return `"${query}"`; // add quotes to preserve order
   };
-};;
+};
 
 const makeTweetQuerySelectingFrom = (from) => (
   `SELECT `
@@ -253,15 +253,21 @@ const makeTweetAndAuthorFromDatabaseTweetRecord = (tweetRecord) => (
   }
 );
 
-const buildTweeterFromDatabaseTweetRecord = (record) => (
-  TweeterBuilder()
-    .id(record.authorId)
-    .name(record.authorName)
-    .handle(record.authorHandle)
-    .profile_image_url(record.authorProfileImage)
-    .is_user_mention(record.isUserMention)
-    .build()
-);
+const buildTweeterFromDatabaseTweetRecord = (record) => {
+  // will spit out which record couldn't be processed.
+  if (!(record.authorId && record.authorName && record.authorHandle && record.authorProfileImage)) {
+    console.log('this record is invalid and cannot be processed', record)
+  }
+  return (
+    TweeterBuilder()
+      .id(record.authorId)
+      .name(record.authorName)
+      .handle(record.authorHandle)
+      .profile_image_url(record.authorProfileImage)
+      .is_user_mention(record.isUserMention)
+      .build()
+  );
+};
 
 const buildTweetFromDatabaseRecord = (record) => (
   TweetBuilder()

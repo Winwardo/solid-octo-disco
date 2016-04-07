@@ -34,7 +34,7 @@ export const schema = {
       { name: 'retweets', type: Integer },
       { name: 'longitude', type: Double },
       { name: 'latitude', type: Double },
-      { name: 'contains_a_quoted_tweet', type: Boolean },
+      { name: 'contains_a_quoted_tweet', type: String },
     ],
     indexes: [
       { properties: ['id'], type: UNIQUE, },

@@ -36,7 +36,7 @@ const buildTweetFromRaw = (rawTweet) => {
     .retweets(rawTweet.retweet_count)
     .latitude(coordinates.latitude)
     .longitude(coordinates.longitude)
-    .contains_a_quoted_tweet(rawTweet.is_quote_status)
+    .contains_a_quoted_tweet(rawTweet.quoted_status ? rawTweet.id_str : '')
     .build();
 };
 
@@ -120,31 +120,46 @@ const buildPlaceFromRaw = (rawPlace) => (
 /**
  * Given some raw status we know is a retweet, insert it and add a RETWEETED link.
  * @param db The OrientDB instance
- * @param rawRetweet A raw status from the Twitter API
- * @param retweeter An immutable Tweeter object
+ * @param retweeter An immutable Tweeter object representing the author of the rawTweet
+ * @param rawRetweet A raw status from the Twitter API representing a retweet
  * @returns {Promise}
  */
-const processRawRetweet = (db, rawTweet, retweeter, rawRetweet) => {
+const processRawRetweet = (db, retweeter, rawRetweet) => {
   const originalTweeter = buildTweeterFromRaw(rawRetweet.user, false);
   const originalTweet = buildTweetFromRaw(rawRetweet);
+  const rawQuotedStatus = rawRetweet.quoted_status;
 
   return newPromiseChain()
     .then(() => upsertTweeter(db, retweeter))
-    .then(() => processRawOriginalTweet(db, rawRetweet, originalTweeter))
+    .then(() => {
+      // if the retweet is a quoted tweet then process the quote tweet
+      // link the quote tweet to the retweet
+      if (rawQuotedStatus) {
+        return processQuoteTweet(db, rawRetweet, rawQuotedStatus);
+      }
+
+      return processRawOriginalTweet(db, rawRetweet, originalTweeter);
+    })
     .then(() => linkTweeterToRetweet(db, retweeter, originalTweet));
 };
 
-const potentiallyLinkQuoteTweetToOriginalTweet = (db, rawQuoteTweet, quotingTweeter, rawOriginalTweet) => {
-  if (rawQuoteTweet.quoted_status) {
-    const originalTweet = buildTweetFromRaw(rawOriginalTweet);
-    const quoteTweet = buildTweetFromRaw(rawQuoteTweet);
+/**
+ * Given some raw status we know is a quote, insert it and a QUOTED link.
+ * @param db The OrientDB instance
+ * @param rawQuoteTweet A raw status from the twitter API which represents the tweet that quoted the rawOriginalTweet
+ * @param rawOriginalTweet A raw status from the twitter API which represents the tweet that was quoted
+ * @returns {Promise}
+ */
+const processQuoteTweet = (db, rawQuoteTweet, rawOriginalTweet) => {
+  const originalTweet = buildTweetFromRaw(rawOriginalTweet);
+  const originalTweeter = buildTweeterFromRaw(rawOriginalTweet.user, false);
+  const quoteTweet = buildTweetFromRaw(rawQuoteTweet);
+  const quoteTweeter = buildTweeterFromRaw(rawQuoteTweet.user, false);
 
-    return newPromiseChain()
-      .then(() => processTweet(db, rawOriginalTweet))
-      .then(() => linkQuoteTweetToOriginalTweet(db, quoteTweet, originalTweet));
-  }
-
-  return Promise.resolve();
+  return newPromiseChain()
+    .then(() => processRawOriginalTweet(db, rawOriginalTweet, originalTweeter))
+    .then(() => processRawOriginalTweet(db, rawQuoteTweet, quoteTweeter))
+    .then(() => linkQuoteTweetToOriginalTweet(db, quoteTweet, originalTweet));
 };
 
 /**
@@ -161,7 +176,7 @@ const linkTweetToHashtags = (db, rawHashtags, tweet) => (
 
       return newPromiseChain()
         .then(() => upsertHashtag(db, hashtag))
-        .then((result) => linkTweetToHashtag(db, tweet, hashtag));
+        .then(() => linkTweetToHashtag(db, tweet, hashtag));
     })
   )
 );
@@ -173,7 +188,7 @@ const linkTweetToMentions = (db, rawMentions, tweet) => (
 
       return newPromiseChain()
         .then(() => upsertTweeter(db, mentionedTweeter))
-        .then((result) => linkTweetToTweeterViaMention(db, tweet, mentionedTweeter));
+        .then(() => linkTweetToTweeterViaMention(db, tweet, mentionedTweeter));
     })
   )
 );
@@ -236,22 +251,15 @@ const processTweet = (db, rawTweet) => {
   const tweeter = buildTweeterFromRaw(rawTweet.user, false);
   const rawRetweetedStatus = rawTweet.retweeted_status;
   const rawQuotedStatus = rawTweet.quoted_status;
-  const id = rawTweet.id;
 
-  let promises = [];
-  let types;
+  if (rawRetweetedStatus) {
+    return processRawRetweet(db, tweeter, rawRetweetedStatus);
+  }
+  if (rawQuotedStatus) {
+    return processQuoteTweet(db, rawTweet, rawQuotedStatus);
+  }
 
-  return newPromiseChain()
-  .then(() => processRawOriginalTweet(db, rawTweet, tweeter))
-  .then(() => {
-    // Quotes that are also retweets confuse our system, so only take EITHER retweets or quotes.
-    if (rawRetweetedStatus !== undefined) {
-      return processRawRetweet(db, rawTweet, tweeter, rawRetweetedStatus);
-    }
-    if (rawQuotedStatus !== undefined) {
-      return potentiallyLinkQuoteTweetToOriginalTweet(db, rawTweet, tweeter, rawQuotedStatus);
-    }
-  });
+  return processRawOriginalTweet(db, rawTweet, tweeter);
 };
 
 /**
@@ -269,7 +277,10 @@ export const searchAndSaveFromTwitter = (query, count = 300) => {
 
           return Promise.all(
             statuses.map((rawTweet) => processTweet(db, rawTweet))
-          ).then(() => console.log('Successfully processed the Tweets.'));
+          ).then(
+            () => console.log('Successfully processed the Tweets.'),
+            // (rej) => console.warn('failed to process the tweet into the database cache', rej)
+          );
         },
         (rej) => {
           console.warn('Unable to search Twitter.', rej);
