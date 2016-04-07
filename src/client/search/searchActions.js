@@ -48,7 +48,6 @@ export const invalidateFeedResults = () => {
   return (dispatch, getState) => {
     dispatch({ type: INVALIDATE_FEED_RESULTS, requestId: newSearchRequestId });
     dispatch(searchApiForFeed(getState().searchTerms, getState().searchOnlyDB, newSearchRequestId));
-    dispatch(resetMostFrequent());
   };
 };
 
@@ -79,6 +78,7 @@ const searchDatabaseAsCache = (dispatch, searchTerms, requestId) =>searchDatabas
 export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
 const searchDatabase = (dispatch, searchTerms, requestId, searchTwitter) =>
   newPromiseChain()
+  .then(() => dispatch(resetMostFrequent()))
   .then(() => fetchPost('/search', { searchTerms: searchTerms, searchTwitter: searchTwitter }))
   .then(response => response.json())
   .then(feedResults => {
