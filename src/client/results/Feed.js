@@ -184,12 +184,12 @@ const Tweet = ({ content }) => {
 
   let goldStar;
   if (content.data.likes + content.data.retweets > 10) {
-    goldStar = (<i className="yellow star icon popup" data-title="Popular tweet"/>);
+    goldStar = (<i className="yellow star icon popup" data-title="Popular tweet" />);
   }
 
   let quotedContent;
   if (content.data.contains_a_quoted_tweet) {
-    quotedContent = <QuotedTweet parentId={content.data.id}/>;
+    quotedContent = <QuotedTweet tweetId={content.data.contains_a_quoted_tweet} />;
   }
 
   // Just below we use dangerousSetInnerHTML.
@@ -240,7 +240,7 @@ class QuotedTweet extends Component {
   }
 
   componentDidMount() {
-    fetch('/tweet/quotedby/' + this.props.parentId, {})
+    fetch(`/tweet/${this.props.tweetId}`, {})
       .then((result) => result.json())
       .then(
         (result) => {
@@ -268,12 +268,12 @@ class QuotedTweet extends Component {
         </div>
       );
       loadingClass = '';
-    };
+    }
 
     return (
       <div>
       <div className="ui icon message">
-        <i className="left quote icon popup" data-title="Quoting tweet"/>
+        <i className="left quote icon popup" data-title="Quoting tweet" />
         <div className="content">
           <div className={`ui ${loadingClass} inverted dimmer`}>
             <div className="ui small text loader">Fetching quoted tweet</div>
@@ -284,6 +284,9 @@ class QuotedTweet extends Component {
     </div>
     );
   }
+}
+QuotedTweet.propTypes = {
+  tweetId: React.PropTypes.string,
 };
 
 export default Feed;

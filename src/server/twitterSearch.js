@@ -36,7 +36,7 @@ const buildTweetFromRaw = (rawTweet) => {
     .retweets(rawTweet.retweet_count)
     .latitude(coordinates.latitude)
     .longitude(coordinates.longitude)
-    .contains_a_quoted_tweet(rawTweet.quoted_status ? rawTweet.id_str : '')
+    .contains_a_quoted_tweet(rawTweet.quoted_status ? rawTweet.quoted_status.id_str : '')
     .build();
 };
 
