@@ -14,18 +14,23 @@ class TermsList extends Component {
 
   render() {
     return (
-      <div onClick={this.props.showSearchTerm}>
-        <i className="icon search"></i>
-        {this.props.searchTerms.map(term => (
-          <TermItem
-            onToggleParamTypeClick={(paramTypeToggle) =>
-              this.props.onSearchTermParamTypeToggleClick(term.id, paramTypeToggle)
-            }
-            key={term.id}
-            {...term}
-            onDeleteClick={() => this.props.onSearchTermDeleteClick(term.id)}
-          />
-        ))}
+      <div onClick={this.props.showSearchTerm} className="ui grid">
+        <div className="one wide column">
+          <i className="icon search"></i>
+        </div>
+
+        <div className="fifteen wide column">
+          {this.props.searchTerms.map(term => (
+            <TermItem
+              onToggleParamTypeClick={(paramTypeToggle) =>
+                this.props.onSearchTermParamTypeToggleClick(term.id, paramTypeToggle)
+              }
+              key={term.id}
+              {...term}
+              onDeleteClick={() => this.props.onSearchTermDeleteClick(term.id)}
+            />
+          ))}
+        </div>
       </div>
     );
   }
