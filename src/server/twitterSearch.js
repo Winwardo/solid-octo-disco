@@ -5,8 +5,9 @@ import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweet
   linkTweetToPlace, linkPlaceToCountry, linkQuoteTweetToOriginalTweet,
   upsertHashtag, upsertTweet, upsertTweeter, upsertPlace, upsertCountry
 } from '../shared/data/databaseInsertActions';
+import { getOriginalTweetUserFromQuoteTweet } from './tweetFinder';
 import * as Builders from '../shared/data/databaseObjects';
-import { newPromiseChain, range } from '../shared/utilities';
+import { newPromiseChain } from '../shared/utilities';
 
 export const TWITTER_ENABLED = true;
 const MAX_TWEETS_FROM_TWITTER_API = 100;
@@ -152,13 +153,19 @@ const processRawRetweet = (db, retweeter, rawRetweet) => {
  */
 const processQuoteTweet = (db, rawQuoteTweet, rawOriginalTweet) => {
   const originalTweet = buildTweetFromRaw(rawOriginalTweet);
-  const originalTweeter = buildTweeterFromRaw(rawOriginalTweet.user, false);
   const quoteTweet = buildTweetFromRaw(rawQuoteTweet);
   const quoteTweeter = buildTweeterFromRaw(rawQuoteTweet.user, false);
 
   return newPromiseChain()
-    .then(() => processRawOriginalTweet(db, rawOriginalTweet, originalTweeter))
     .then(() => processRawOriginalTweet(db, rawQuoteTweet, quoteTweeter))
+    .then(() => {
+      if (rawOriginalTweet.user) {
+        return buildTweeterFromRaw(rawOriginalTweet.user, false);
+      }
+
+      return getOriginalTweetUserFromQuoteTweet(rawOriginalTweet);
+    })
+    .then((originalTweeter) => processRawOriginalTweet(db, rawOriginalTweet, originalTweeter))
     .then(() => linkQuoteTweetToOriginalTweet(db, quoteTweet, originalTweet));
 };
 

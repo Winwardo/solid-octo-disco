@@ -2,7 +2,7 @@ import express from 'express';
 import config from '../../webpack.config.js';
 import { searchQuery, getQuotedTweetFromParent } from './tweetFinder';
 import { generateDatabase } from './orientdb';
-import { searchAndSaveResponse, stream, TwitAccess } from './twitterSearch';
+import { stream, TwitAccess } from './twitterSearch';
 import bodyParser from 'body-parser';
 import {
   searchFootballSeasons, searchFootballSeasonTeams, searchFootballTeamPlayers

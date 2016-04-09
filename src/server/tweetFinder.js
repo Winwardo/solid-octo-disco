@@ -27,9 +27,9 @@ export const searchQuery = (req, res) => (
         res.end(JSON.stringify(presentableTweets));
       },
       (rejection) => {
+        console.warn(`Unable to search for query '${req.body.searchTerms}'`, rejection);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end('An unexpected internal error occurred.');
-        console.warn(`Unable to search for query '${query}'`, rejection);
       }
     )
 );
@@ -73,23 +73,23 @@ export const buildTwitterQuery = (searchTerms) => {
       .filter((paramType) => paramType.selected)
       .forEach((paramType) => {
         switch (paramType.name) {
-          case 'keyword':
-            currentQueryAddition.push(`"${actualTerm}"`);
-            break;
-          case 'hashtag':
-            currentQueryAddition.push(`#${termWithNoSpaces}`);
-            break;
-          case 'author':
-          case 'mention':
-            if (!alreadyHadAuthorOrMention) {
-              alreadyHadAuthorOrMention = true;
-              currentQueryAddition.push(`@${termWithNoSpaces}`);
-            }
-            break;
-          default:
-            break;
+        case 'keyword':
+          currentQueryAddition.push(`"${actualTerm}"`);
+          break;
+        case 'hashtag':
+          currentQueryAddition.push(`#${termWithNoSpaces}`);
+          break;
+        case 'author':
+        case 'mention':
+          if (!alreadyHadAuthorOrMention) {
+            alreadyHadAuthorOrMention = true;
+            currentQueryAddition.push(`@${termWithNoSpaces}`);
+          }
+          break;
+        default:
+          break;
         }
-    });
+      });
 
     if (lastQuery.length + currentQueryAddition.length <= maxTwitterQueryTerms) {
       lastQuery = lastQuery.concat(currentQueryAddition);
@@ -110,7 +110,7 @@ const splatTogether = (allTweetResults, type) => {
   if (type === 'OR') {
     return unionTweets(allTweetResults);
   } else {
-    throw(`Undefined splatting of type ${type} occurred. Type should be 'AND' or 'OR'.`);
+    throw (`Undefined splatting of type ${type} occurred. Type should be 'AND' or 'OR'.`);
   }
 };
 
@@ -168,13 +168,13 @@ const searchDatabase = (searchObject, alreadyAttemptedRefresh = false) => (
 
 const searchByParamType = (searchObject, paramType) => {
   switch (paramType) {
-    case 'keyword': return searchByKeyword(searchObject.query);
-    case 'author': return searchByAuthor(searchObject.query);
-    case 'mention': return searchByMention(searchObject.query);
-    case 'hashtag': return searchByHashtag(searchObject.query);
+  case 'keyword': return searchByKeyword(searchObject.query);
+  case 'author': return searchByAuthor(searchObject.query);
+  case 'mention': return searchByMention(searchObject.query);
+  case 'hashtag': return searchByHashtag(searchObject.query);
   }
 
-  throw(`Invalid paramType for database Tweet searching: '${paramType}'. Should be [author, hashtag, keyword, mention].`);
+  throw (`Invalid paramType for database Tweet searching: '${paramType}'. Should be [author, hashtag, keyword, mention].`);
 };
 
 const searchByKeyword = (keyword) => {
@@ -224,7 +224,7 @@ export const normaliseQueryTerm = (query) => {
     }
   } else {
     return `"${query}"`; // add quotes to preserve order
-  };
+  }
 };
 
 const makeTweetQuerySelectingFrom = (from) => (
@@ -295,13 +295,13 @@ export const getQuotedTweetFromParent = (res, id) => (
          makeTweetQuerySelectingFrom('TRAVERSE OUT FROM (SELECT OUT(\'QUOTED\') FROM (SELECT FROM Tweet WHERE id = :id))'),
          {
            params: {
-             id: id,
+             id,
              limit: 1,
            },
          }
        )
     ))
-    .then((results) =>   makeTweetAndAuthorFromDatabaseTweetRecord(results[0]))
+    .then((results) => makeTweetAndAuthorFromDatabaseTweetRecord(results[0]))
     .then(
       (response) => res.status(200).end(JSON.stringify(response)),
       (rej) => res.status(500).end(
@@ -312,3 +312,7 @@ export const getQuotedTweetFromParent = (res, id) => (
       )
     )
 );
+
+export const getOriginalTweetUserFromTweet = (tweetId) => {
+
+}
