@@ -9,7 +9,7 @@ import {
 const mostFrequentInitialState = {
   filterTerm: '',
   toToggle: [],
-  isToggledActionHide: true
+  isToggledActionHide: true,
 };
 
 const initialState = {
@@ -26,14 +26,14 @@ const mostFrequentReducer = (state = initialState, action) => {
   case TOGGLE_ALL_MOST_ACTIVE_USERS:
     return {
       ...state,
-      users: users(state.users, action)
+      users: users(state.users, action),
     };
   case UPDATE_MOST_USED_WORDS_SEARCH_FILTER:
   case TOGGLE_MOST_USED_WORDS:
   case TOGGLE_ALL_MOST_USED_WORDS:
     return {
       ...state,
-      words: words(state.words, action)
+      words: words(state.words, action),
     };
   default:
     return state;

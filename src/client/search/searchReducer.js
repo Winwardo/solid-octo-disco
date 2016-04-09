@@ -68,13 +68,13 @@ const feedReducerInitialState = {
   posts: [],
   paginationInfo: {
     number: 1,
-    limit: 10
+    limit: 10,
   },
   groupedMostFrequentWords: [],
   mostFrequentUsers: [],
   fetchingRequestFromDB: false,
-  lastRequestId: 0 ,
-}
+  lastRequestId: 0,
+};
 
 export const feedReducer = (state = feedReducerInitialState, action) => {
   switch (action.type) {
@@ -82,7 +82,7 @@ export const feedReducer = (state = feedReducerInitialState, action) => {
       return {
         ...state,
         lastRequestId: action.requestId,
-        fetchingRequestFromDB: true
+        fetchingRequestFromDB: true,
       };
     case RECEIVE_FEED_RESULTS:
       if (state.lastRequestId > action.requestId) {
@@ -95,7 +95,7 @@ export const feedReducer = (state = feedReducerInitialState, action) => {
           posts: sortPostsForFeed(action.data.data.records),
           groupedMostFrequentWords: groupedCountWords(mostFrequentWords(action.data.data.records.map((post) => post.data.content))),
           mostFrequentUsers: mostFrequentUsers(action.data.data.records),
-          fetchingRequestFromDB: action.fetchedRequestFromTwitter
+          fetchingRequestFromDB: action.fetchedRequestFromTwitter,
         };
       }
     case SET_FEED_PAGE_NUMBER:

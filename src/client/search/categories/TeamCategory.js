@@ -163,7 +163,7 @@ const LeagueTeam = ({
         <div className="mini ui fluid right floated purple button"
           onClick={(e) => {
             e.stopPropagation();
-            $('.ui.dropdown.teams').dropdown('hide')
+            $('.ui.dropdown.teams').dropdown('hide');
             onClickSelectTeam();
           }}
         >

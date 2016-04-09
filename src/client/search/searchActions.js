@@ -95,7 +95,7 @@ const receiveFeedResults = (data, requestId, recievedFromTwitter) => ({
   type: RECEIVE_FEED_RESULTS,
   data,
   requestId,
-  fetchedRequestFromTwitter: recievedFromTwitter
+  fetchedRequestFromTwitter: recievedFromTwitter,
 });
 
 export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';

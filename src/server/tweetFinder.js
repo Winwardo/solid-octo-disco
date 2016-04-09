@@ -260,7 +260,7 @@ const makeTweetAndAuthorFromDatabaseTweetRecord = (tweetRecord) => (
 const buildTweeterFromDatabaseTweetRecord = (record) => {
   // will spit out which record couldn't be processed.
   if (!(record.authorId && record.authorName && record.authorHandle && record.authorProfileImage)) {
-    console.log('this record is invalid and cannot be processed', record)
+    console.log('this record is invalid and cannot be processed', record);
   }
   return (
     TweeterBuilder()
