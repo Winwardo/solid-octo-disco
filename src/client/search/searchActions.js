@@ -72,19 +72,31 @@ const searchTwitterIfResultsArentGoodEnough = (dispatch, searchTerms, requestId,
   }
 };
 
-const searchDatabaseAndTwitter = (dispatch, searchTerms, requestId) => searchDatabase(dispatch, searchTerms, requestId, true);
-const searchDatabaseAsCache = (dispatch, searchTerms, requestId) =>searchDatabase(dispatch, searchTerms, requestId, false);
+const searchDatabaseAndTwitter = (dispatch, searchTerms, requestId) =>
+  searchDatabase(dispatch, searchTerms, requestId, true);
+const searchDatabaseAsCache = (dispatch, searchTerms, requestId) =>
+  searchDatabase(dispatch, searchTerms, requestId, false);
 
-export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
 const searchDatabase = (dispatch, searchTerms, requestId, searchTwitter) =>
   newPromiseChain()
   .then(() => dispatch(resetMostFrequent()))
-  .then(() => fetchPost('/search', { searchTerms: searchTerms, searchTwitter: searchTwitter }))
+  .then(() => fetchPost('/search', { searchTerms, searchTwitter }))
   .then(response => response.json())
   .then(feedResults => {
-    dispatch({ type: RECEIVE_FEED_RESULTS, data: feedResults, requestId: requestId });
+    if (searchTwitter) {
+      dispatch(receiveFeedResults(feedResults, requestId, true));
+    }
+    dispatch(receiveFeedResults(feedResults, requestId, false));
     return feedResults;
   });
+
+export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
+const receiveFeedResults = (data, requestId, recievedFromTwitter) => ({
+  type: RECEIVE_FEED_RESULTS,
+  data,
+  requestId,
+  fetchedRequestFromTwitter: recievedFromTwitter
+});
 
 export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';
 export const deleteSearchTerm = (id) => ({

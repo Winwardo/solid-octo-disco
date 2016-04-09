@@ -50,6 +50,17 @@ let Results = ({ feed, mostFrequent }) => {
           postsLength={posts.length}
         />
       </div>
+
+      <div className={`ui ${feed.posts.length > 0 && feed.fetchingRequestFromDB && 'active'} dimmer`}>
+        <div className="content">
+          <div className="center">
+            <h2 className="ui inverted icon header">
+              <div className="ui large text loader">Fetching posts from the database!</div>
+            </h2>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   );
