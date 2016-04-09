@@ -1,7 +1,7 @@
 import { db } from './orientdb';
 import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
 import { newPromiseChain, flattenImmutableObject } from '../shared/utilities';
-import { searchAndSaveFromTwitter } from './twitterSearch';
+import { searchAndSaveFromTwitter, buildTweeterFromRaw, TwitAccess } from './twitterSearch';
 
 export const MAX_TWEET_RESULTS = 500;
 
@@ -27,9 +27,9 @@ export const searchQuery = (req, res) => (
         res.end(JSON.stringify(presentableTweets));
       },
       (rejection) => {
+        console.warn(`Unable to search for query '${req.body.searchTerms}'`, rejection);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end('An unexpected internal error occurred.');
-        console.warn(`Unable to search for query '${query}'`, rejection);
       }
     )
 );
@@ -73,23 +73,23 @@ export const buildTwitterQuery = (searchTerms) => {
       .filter((paramType) => paramType.selected)
       .forEach((paramType) => {
         switch (paramType.name) {
-          case 'keyword':
-            currentQueryAddition.push(`"${actualTerm}"`);
-            break;
-          case 'hashtag':
-            currentQueryAddition.push(`#${termWithNoSpaces}`);
-            break;
-          case 'author':
-          case 'mention':
-            if (!alreadyHadAuthorOrMention) {
-              alreadyHadAuthorOrMention = true;
-              currentQueryAddition.push(`@${termWithNoSpaces}`);
-            }
-            break;
-          default:
-            break;
+        case 'keyword':
+          currentQueryAddition.push(`"${actualTerm}"`);
+          break;
+        case 'hashtag':
+          currentQueryAddition.push(`#${termWithNoSpaces}`);
+          break;
+        case 'author':
+        case 'mention':
+          if (!alreadyHadAuthorOrMention) {
+            alreadyHadAuthorOrMention = true;
+            currentQueryAddition.push(`@${termWithNoSpaces}`);
+          }
+          break;
+        default:
+          break;
         }
-    });
+      });
 
     if (lastQuery.length + currentQueryAddition.length <= maxTwitterQueryTerms) {
       lastQuery = lastQuery.concat(currentQueryAddition);
@@ -110,7 +110,7 @@ const splatTogether = (allTweetResults, type) => {
   if (type === 'OR') {
     return unionTweets(allTweetResults);
   } else {
-    throw(`Undefined splatting of type ${type} occurred. Type should be 'AND' or 'OR'.`);
+    throw (`Undefined splatting of type ${type} occurred. Type should be 'AND' or 'OR'.`);
   }
 };
 
@@ -168,13 +168,13 @@ const searchDatabase = (searchObject, alreadyAttemptedRefresh = false) => (
 
 const searchByParamType = (searchObject, paramType) => {
   switch (paramType) {
-    case 'keyword': return searchByKeyword(searchObject.query);
-    case 'author': return searchByAuthor(searchObject.query);
-    case 'mention': return searchByMention(searchObject.query);
-    case 'hashtag': return searchByHashtag(searchObject.query);
+  case 'keyword': return searchByKeyword(searchObject.query);
+  case 'author': return searchByAuthor(searchObject.query);
+  case 'mention': return searchByMention(searchObject.query);
+  case 'hashtag': return searchByHashtag(searchObject.query);
   }
 
-  throw(`Invalid paramType for database Tweet searching: '${paramType}'. Should be [author, hashtag, keyword, mention].`);
+  throw (`Invalid paramType for database Tweet searching: '${paramType}'. Should be [author, hashtag, keyword, mention].`);
 };
 
 const searchByKeyword = (keyword) => {
@@ -224,7 +224,7 @@ export const normaliseQueryTerm = (query) => {
     }
   } else {
     return `"${query}"`; // add quotes to preserve order
-  };
+  }
 };
 
 const makeTweetQuerySelectingFrom = (from) => (
@@ -241,18 +241,6 @@ const makeTweetQuerySelectingFrom = (from) => (
     + ' UNWIND authorId, authorName, authorHandle, authorProfileImage, isUserMention ' // Converts from ['Steve'] to 'Steve'
     + ' LIMIT :limit ' // Don't select too many results
 );
-
-// SELECT *,
-// IN(TWEETED).id AS authorId,
-// IN(TWEETED).name AS authorName,
-// IN(TWEETED).handle AS authorHandle,
-// IN(TWEETED).profile_image_url AS authorProfileImage,
-// IN(TWEETED).is_user_mention AS IsUserMention
-// FROM (SELECT from tweet where id = '718763167116095488')
-// WHERE @class = 'Tweet'
-// ORDER BY date DESC
-// UNWIND authorId, authorName, authorHandle, authorProfileImage, isUserMention
-// LIMIT 1
 
 const makeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => (
   tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord))
@@ -318,3 +306,26 @@ export const getTweetFromDb = (res, id) => (
       )
     )
 );
+
+/**
+ * Used in ./twitterSearch.js:169.
+ * Tries to get the missing user tweeter for the original tweet from DB
+ * If not in DB then make a call to twitter to retrieve the whole tweet that contains the user tweeter
+ * @param String representing the original tweet's id
+ * @return Tweeter An Immutable Object representing the tweet's user
+ */
+export const getOriginalTweetUserFromTweet = (tweetId) =>
+  newPromiseChain()
+    .then(() => (
+       db.query(
+         makeTweetQuerySelectingFrom('SELECT FROM tweet WHERE id =:id'), { params: { id: tweetId, limit: 1 }, }
+       )
+    ))
+    .then(tweetRecords => {
+      if (tweetRecords.length === 1) {
+        return buildTweeterFromDatabaseTweetRecord(tweetRecords[0]);
+      }
+
+      return TwitAccess.get('statuses/show/:id', { id: tweetId })
+        .then(tweetResult => buildTweeterFromRaw(tweetResult.data.user, false));
+    });

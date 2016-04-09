@@ -5,8 +5,9 @@ import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweet
   linkTweetToPlace, linkPlaceToCountry, linkQuoteTweetToOriginalTweet,
   upsertHashtag, upsertTweet, upsertTweeter, upsertPlace, upsertCountry
 } from '../shared/data/databaseInsertActions';
+import { getOriginalTweetUserFromTweet } from './tweetFinder';
 import * as Builders from '../shared/data/databaseObjects';
-import { newPromiseChain, range } from '../shared/utilities';
+import { newPromiseChain } from '../shared/utilities';
 
 export const TWITTER_ENABLED = true;
 const MAX_TWEETS_FROM_TWITTER_API = 100;
@@ -91,7 +92,7 @@ const findLatitudeLongitude = (rawTweet) => {
  * or a full user object that has a profile_image_url_https
  * @returns {ImmutableTweet}
  */
-const buildTweeterFromRaw = (rawTweeter, isMentionUser) => {
+export const buildTweeterFromRaw = (rawTweeter, isMentionUser) => {
   const tweeter = Builders.TweeterBuilder()
     .id(rawTweeter.id_str)
     .name(rawTweeter.name)
@@ -152,13 +153,22 @@ const processRawRetweet = (db, retweeter, rawRetweet) => {
  */
 const processQuoteTweet = (db, rawQuoteTweet, rawOriginalTweet) => {
   const originalTweet = buildTweetFromRaw(rawOriginalTweet);
-  const originalTweeter = buildTweeterFromRaw(rawOriginalTweet.user, false);
   const quoteTweet = buildTweetFromRaw(rawQuoteTweet);
   const quoteTweeter = buildTweeterFromRaw(rawQuoteTweet.user, false);
 
   return newPromiseChain()
-    .then(() => processRawOriginalTweet(db, rawOriginalTweet, originalTweeter))
     .then(() => processRawOriginalTweet(db, rawQuoteTweet, quoteTweeter))
+    .then(() => {
+      // There's an edge case where the quote in a quoted tweet doesn't have a user Object
+      // found this is particular to a certain android client
+      if (rawOriginalTweet.user) {
+        return buildTweeterFromRaw(rawOriginalTweet.user, false);
+      }
+
+      // If there isn't a user then try to get the user (see ./twitterFinder.js:317-331)
+      return getOriginalTweetUserFromTweet(rawOriginalTweet.id_str);
+    })
+    .then((originalTweeter) => processRawOriginalTweet(db, rawOriginalTweet, originalTweeter))
     .then(() => linkQuoteTweetToOriginalTweet(db, quoteTweet, originalTweet));
 };
 
