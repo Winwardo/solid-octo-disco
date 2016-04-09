@@ -159,11 +159,14 @@ const processQuoteTweet = (db, rawQuoteTweet, rawOriginalTweet) => {
   return newPromiseChain()
     .then(() => processRawOriginalTweet(db, rawQuoteTweet, quoteTweeter))
     .then(() => {
+      // There's an edge case where the quote in a quoted tweet doesn't have a user Object
+      // found this is particular to a certain android client
       if (rawOriginalTweet.user) {
         return buildTweeterFromRaw(rawOriginalTweet.user, false);
       }
 
-      return getOriginalTweetUserFromQuoteTweet(rawOriginalTweet);
+      // If there isn't a user then try to get the user (see ./twitterFinder.js:317-331)
+      return getOriginalTweetUserFromQuoteTweet(rawOriginalTweet.id_str);
     })
     .then((originalTweeter) => processRawOriginalTweet(db, rawOriginalTweet, originalTweeter))
     .then(() => linkQuoteTweetToOriginalTweet(db, quoteTweet, originalTweet));

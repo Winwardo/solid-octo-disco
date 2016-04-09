@@ -1,7 +1,7 @@
 import { db } from './orientdb';
 import { TweetBuilder, TweeterBuilder } from '../shared/data/databaseObjects';
 import { newPromiseChain, flattenImmutableObject } from '../shared/utilities';
-import { searchAndSaveFromTwitter } from './twitterSearch';
+import { searchAndSaveFromTwitter, buildTweeterFromRaw, TwitAccess } from './twitterSearch';
 
 export const MAX_TWEET_RESULTS = 500;
 
@@ -242,18 +242,6 @@ const makeTweetQuerySelectingFrom = (from) => (
     + ' LIMIT :limit ' // Don't select too many results
 );
 
-// SELECT *,
-// IN(TWEETED).id AS authorId,
-// IN(TWEETED).name AS authorName,
-// IN(TWEETED).handle AS authorHandle,
-// IN(TWEETED).profile_image_url AS authorProfileImage,
-// IN(TWEETED).is_user_mention AS IsUserMention
-// FROM (SELECT from tweet where id = '718763167116095488')
-// WHERE @class = 'Tweet'
-// ORDER BY date DESC
-// UNWIND authorId, authorName, authorHandle, authorProfileImage, isUserMention
-// LIMIT 1
-
 const makeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => (
   tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord))
 );
@@ -304,17 +292,7 @@ export const getTweetFromDb = (res, id) => (
   newPromiseChain()
     .then(() => (
        db.query(
-<<<<<<< HEAD
-         makeTweetQuerySelectingFrom('TRAVERSE OUT FROM (SELECT OUT(\'QUOTED\') FROM (SELECT FROM Tweet WHERE id = :id))'),
-         {
-           params: {
-             id,
-             limit: 1,
-           },
-         }
-=======
          makeTweetQuerySelectingFrom('SELECT FROM tweet WHERE id =:id'), { params: { id, limit: 1 }, }
->>>>>>> master
        )
     ))
     .then((results) => makeTweetAndAuthorFromDatabaseTweetRecord(results[0]))
@@ -329,6 +307,25 @@ export const getTweetFromDb = (res, id) => (
     )
 );
 
-export const getOriginalTweetUserFromTweet = (tweetId) => {
+/**
+ * Used in ./twitterSearch.js:169.
+ * Tries to get the missing user tweeter for the original tweet from DB
+ * If not in DB then make a call to twitter to retrieve the whole tweet that contains the user tweeter
+ * @param String representing the original tweet's id
+ * @return Tweeter An Immutable Object representing the tweet's user
+ */
+export const getOriginalTweetUserFromTweet = (tweetId) =>
+  newPromiseChain()
+    .then(() => (
+       db.query(
+         makeTweetQuerySelectingFrom('SELECT FROM tweet WHERE id =:id'), { params: { id: tweetId, limit: 1 }, }
+       )
+    ))
+    .then(tweetRecords => {
+      if (tweetRecords.length === 1) {
+        return buildTweeterFromDatabaseTweetRecord(tweetRecords[0]);
+      }
 
-}
+      return TwitAccess.get('statuses/show/:id', { id: tweetId })
+        .then(tweetResult => buildTweeterFromRaw(tweetResult.data.user, false));
+    });
