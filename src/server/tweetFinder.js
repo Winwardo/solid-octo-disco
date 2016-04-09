@@ -229,18 +229,30 @@ export const normaliseQueryTerm = (query) => {
 
 const makeTweetQuerySelectingFrom = (from) => (
   `SELECT `
-    + `  *` // All the tweet data
-    + `, in('TWEETED').id AS authorId ` // Now the tweet info
-    + `, in('TWEETED').name AS authorName `
-    + `, in('TWEETED').handle AS authorHandle `
-    + `, in('TWEETED').profile_image_url as authorProfileImage `
-    + `, in('TWEETED').is_user_mention as isUserMention `
+    + '  *' // All the tweet data
+    + ', in(\'TWEETED\').id AS authorId ' // Now the tweet info
+    + ', in(\'TWEETED\').name AS authorName '
+    + ', in(\'TWEETED\').handle AS authorHandle '
+    + ', in(\'TWEETED\').profile_image_url as authorProfileImage '
+    + ', in(\'TWEETED\').is_user_mention as isUserMention '
     + ` FROM (${from}) ` // Selected from a subset of tweets
-    + ` WHERE @class = 'Tweet' ` // Don't accidentally select authors or hastags etc
-    + ` ORDER BY date DESC ` // Might be irrelevant
-    + ` UNWIND authorId, authorName, authorHandle, authorProfileImage, isUserMention ` // Converts from ['Steve'] to 'Steve'
-    + ` LIMIT :limit ` // Don't select too many results
+    + ' WHERE @class = \'Tweet\' ' // Don't accidentally select authors or hastags etc
+    + ' ORDER BY date DESC ' // Might be irrelevant
+    + ' UNWIND authorId, authorName, authorHandle, authorProfileImage, isUserMention ' // Converts from ['Steve'] to 'Steve'
+    + ' LIMIT :limit ' // Don't select too many results
 );
+
+// SELECT *,
+// IN(TWEETED).id AS authorId,
+// IN(TWEETED).name AS authorName,
+// IN(TWEETED).handle AS authorHandle,
+// IN(TWEETED).profile_image_url AS authorProfileImage,
+// IN(TWEETED).is_user_mention AS IsUserMention
+// FROM (SELECT from tweet where id = '718763167116095488')
+// WHERE @class = 'Tweet'
+// ORDER BY date DESC
+// UNWIND authorId, authorName, authorHandle, authorProfileImage, isUserMention
+// LIMIT 1
 
 const makeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => (
   tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord))
@@ -288,25 +300,19 @@ const getTweetsAsResults = (data) => (
   )
 );
 
-export const getQuotedTweetFromParent = (res, id) => (
+export const getTweetFromDb = (res, id) => (
   newPromiseChain()
     .then(() => (
        db.query(
-         makeTweetQuerySelectingFrom('TRAVERSE OUT FROM (SELECT OUT(\'QUOTED\') FROM (SELECT FROM Tweet WHERE id = :id))'),
-         {
-           params: {
-             id: id,
-             limit: 1,
-           },
-         }
+         makeTweetQuerySelectingFrom('SELECT FROM tweet WHERE id =:id'), { params: { id, limit: 1 }, }
        )
     ))
-    .then((results) =>   makeTweetAndAuthorFromDatabaseTweetRecord(results[0]))
+    .then((results) => makeTweetAndAuthorFromDatabaseTweetRecord(results[0]))
     .then(
       (response) => res.status(200).end(JSON.stringify(response)),
       (rej) => res.status(500).end(
         JSON.stringify({
-          message: 'Unable to get quoted tweet from parent.',
+          message: 'Unable to get tweet from the database.',
           reason: rej,
         })
       )
