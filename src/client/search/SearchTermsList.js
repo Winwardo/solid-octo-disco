@@ -16,7 +16,7 @@ class TermsList extends Component {
     return (
       <div onClick={this.props.showSearchTerm} className="ui grid">
         <div className="one wide column">
-          <i className="icon search"></i>
+          <i className="large search icon"></i>
         </div>
 
         <div className="fifteen wide column">

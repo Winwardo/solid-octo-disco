@@ -56,7 +56,6 @@ class TermItemMenu extends Component {
   componentDidMount() {
     $(`.ui.dropdown[data-id="${this.props.termId}"]`)
       .dropdown({
-        transition: 'drop',
         action: (value, text) => {
           this.props.onToggleParamType(text);
         },

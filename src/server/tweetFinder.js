@@ -150,7 +150,7 @@ const resultsToPresentableOutput = (results) => (
   }
 );
 
-const searchDatabase = (searchObject, alreadyAttemptedRefresh = false) => (
+const searchDatabase = (searchObject) => (
   newPromiseChain()
     .then(() => Promise.all(
       searchObject.paramTypes
@@ -158,8 +158,10 @@ const searchDatabase = (searchObject, alreadyAttemptedRefresh = false) => (
         .map((paramType) => searchByParamType(searchObject, paramType.name))
       )
     )
-    .then((searchResults) => searchResults.reduce((previous, current) => previous.concat(current), []))
-    .then((tweetRecords) => makeTweets(alreadyAttemptedRefresh, searchObject, tweetRecords))
+    .then((searchResults) => searchResults.reduce(
+      (previous, current) => previous.concat(current), []
+    ))
+    .then((tweetRecords) => makeTweets(tweetRecords))
     .then(
       (resolved) => resolved,
       (rejection) => console.warn('Major error querying the database.', rejection)
@@ -242,8 +244,10 @@ const makeTweetQuerySelectingFrom = (from) => (
     + ' LIMIT :limit ' // Don't select too many results
 );
 
-const makeTweets = (alreadyAttemptedRefresh, searchObject, tweetRecords) => (
-  tweetRecords.map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord))
+const makeTweets = (tweetRecords) => (
+  tweetRecords
+    .filter(tweetRecord => tweetRecord.id && tweetRecord.authorId)
+    .map(tweetRecord => makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord))
 );
 
 const makeTweetAndAuthorFromDatabaseTweetRecord = (tweetRecord) => (
