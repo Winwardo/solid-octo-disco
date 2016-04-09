@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 
 const TermItem = ({ onDeleteClick, onToggleParamTypeClick, query, source, paramTypes, id }) => (
   <div data-id={id} className="ui multiple dropdown labeled icon violet button"
-    onClick={(e) => e.stopPropagation()}
+    onClick={(e) => e.stopPropagation()} style={{ marginBottom: '7px', marginRight: '5px' }}
   >
     <div className="ui grid">
       <div className="two wide middle aligned column" style={{ paddingLeft: 0 }}>
         <i className={`large blue ${source} icon`}></i>
       </div>
       <div className="thirteen wide center aligned column">
-        <div style={{ fontSize: '1.25em', whiteSpace: 'nowrap', paddingBottom: '5px' }}>
+        <div style={{ fontSize: '1.25em', whiteSpace: 'nowrap', paddingBottom: '5px', paddingTop: '5px' }}>
           {query}
         </div>
         <div>
@@ -56,7 +56,6 @@ class TermItemMenu extends Component {
   componentDidMount() {
     $(`.ui.dropdown[data-id="${this.props.termId}"]`)
       .dropdown({
-        transition: 'drop',
         action: (value, text) => {
           this.props.onToggleParamType(text);
         },

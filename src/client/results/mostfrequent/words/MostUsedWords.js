@@ -8,7 +8,7 @@ import {
 import WordItemsList from './WordItemsList';
 
 const MostUsedWords = ({
-  dispatch, wordInfoList, isWordsToggledActionHide, filterTerm, postsLength
+  dispatch, wordInfoList, isWordsToggledActionHide, filterTerm, postsLength,
 }) => {
   const filteredItems = wordInfoList.filter(
     (wordInfo) => wordInfo.word.toLowerCase().includes(filterTerm.toLowerCase())

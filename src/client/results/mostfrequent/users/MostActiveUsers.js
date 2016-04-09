@@ -5,7 +5,7 @@ import { updateActiveUsersSearch, toggleAllMostActiveUsersSearch } from './../mo
 import UserItemsList from './UserItemsList';
 
 const MostActiveUsers = ({
-  dispatch, userInfoList, isUsersToggledActionHide, filterTerm, postsLength
+  dispatch, userInfoList, isUsersToggledActionHide, filterTerm, postsLength,
 }) => {
   const filteredItems = userInfoList.filter(
     (userInfo) => {
