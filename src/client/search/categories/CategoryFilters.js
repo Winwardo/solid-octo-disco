@@ -16,6 +16,7 @@ export const EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API = 2013;
 
 class CategoryFilters extends Component {
   componentDidMount() {
+    $('.ui.slider.cache.checkbox').checkbox();
     $('.menu .item').tab({
       onVisible: (tabPath) => {
         // animation for the league counts on the tabs

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class TeamCategory extends Component {
   componentDidMount() {
     $('.ui.dropdown.teams').dropdown({
-      action: 'hide',
+      action: 'nothing',
     });
     $('.ui.accordion.teams').accordion();
   }
@@ -163,6 +163,7 @@ const LeagueTeam = ({
         <div className="mini ui fluid right floated purple button"
           onClick={(e) => {
             e.stopPropagation();
+            $('.ui.dropdown.teams').dropdown('hide')
             onClickSelectTeam();
           }}
         >
