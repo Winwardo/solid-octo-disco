@@ -70,8 +70,8 @@ app.get('/football/teams/:teamid/players', (req, res) => {
 // Used for development purposes to make sure we're hitting the correct twitter end point
 app.get('/exampleTwitterJson', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
-  TwitAccess.get('search/tweets', { q: 'Brussels', count: 300 })
-    .then(tweets => res.end(JSON.stringify(tweets.data.statuses)));
+  TwitAccess.get('statuses/show/:id', { id: '718691141239975936' }) //718691141239975936, 717000298338750465, 693770454784425984, 718691141239975936
+    .then(tweets => res.end(JSON.stringify(tweets.data.user)));
 });
 
 app.get('*', (req, res) => {

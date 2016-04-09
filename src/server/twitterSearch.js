@@ -5,7 +5,7 @@ import { linkTweetToHashtag, linkTweeterToTweet, linkTweeterToRetweet, linkTweet
   linkTweetToPlace, linkPlaceToCountry, linkQuoteTweetToOriginalTweet,
   upsertHashtag, upsertTweet, upsertTweeter, upsertPlace, upsertCountry
 } from '../shared/data/databaseInsertActions';
-import { getOriginalTweetUserFromQuoteTweet } from './tweetFinder';
+import { getOriginalTweetUserFromTweet } from './tweetFinder';
 import * as Builders from '../shared/data/databaseObjects';
 import { newPromiseChain } from '../shared/utilities';
 
@@ -92,7 +92,7 @@ const findLatitudeLongitude = (rawTweet) => {
  * or a full user object that has a profile_image_url_https
  * @returns {ImmutableTweet}
  */
-const buildTweeterFromRaw = (rawTweeter, isMentionUser) => {
+export const buildTweeterFromRaw = (rawTweeter, isMentionUser) => {
   const tweeter = Builders.TweeterBuilder()
     .id(rawTweeter.id_str)
     .name(rawTweeter.name)
@@ -166,7 +166,7 @@ const processQuoteTweet = (db, rawQuoteTweet, rawOriginalTweet) => {
       }
 
       // If there isn't a user then try to get the user (see ./twitterFinder.js:317-331)
-      return getOriginalTweetUserFromQuoteTweet(rawOriginalTweet.id_str);
+      return getOriginalTweetUserFromTweet(rawOriginalTweet.id_str);
     })
     .then((originalTweeter) => processRawOriginalTweet(db, rawOriginalTweet, originalTweeter))
     .then(() => linkQuoteTweetToOriginalTweet(db, quoteTweet, originalTweet));
