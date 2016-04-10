@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 class WordItemsList extends Component {
   componentDidMount() {
+    // change height to bottom of the page
     if (this.props.isWordsToggledActionHide) {
       $('.ui.checkbox.words').checkbox('check');
     } else {
@@ -12,13 +13,7 @@ class WordItemsList extends Component {
         trigger: '.title .conflated-word-selector',
       },
     });
-
-    // change height to bottom of the page
-    $('#wordItemList').css('height', `${$(window).height() - $('#wordItemList').offset().top}px`);
-    // $(window).scroll(() => {
-    //   const heightToBottomOfScreen = $(window).height() - ($(window).scrollTop() + $('#wordItemList').offset().top);
-    //   $('#wordItemList').css('height', `${heightToBottomOfScreen}px`);
-    // });
+    $('.wordItemList').css('height', `${$(window).height() - ($(window).height() / 5)}px`);
   }
 
   componentDidUpdate(nextProps) {
@@ -32,18 +27,13 @@ class WordItemsList extends Component {
         $('.ui.checkbox.words').checkbox('uncheck');
       }
     }
-
     // change height to bottom of the page
-    $('#wordItemList').css('height', `${$(window).height() - $('#wordItemList').offset().top}px`);
-    // $(window).scroll(() => {
-    //   const heightToBottomOfScreen = $(window).height() - ($(window).scrollTop() + $('#wordItemList').offset().top);
-    //   $('#wordItemList').css('height', `${heightToBottomOfScreen}px`);
-    // });
+    $('.wordItemList').css('height', `${$(window).height() - ($(window).height() / 5)}px`);
   }
 
   render() {
     return (
-      <div id="wordItemList" style={{ overflowY: 'scroll' }}>
+      <div className="wordItemList" style={{ overflowY: 'scroll' }}>
         <div className="ui fluid accordion words" style={{ overflow: 'hidden' }}>
           {this.props.words.map((wordInfo, id) =>
             <ConflatedWordItem key={wordInfo.word} accordianIndex={id}
@@ -107,7 +97,6 @@ const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWords, conflatedWordI
             // Sends off the action with the children's conflated word's variants that need to be toggled.
             toggleMostUsedWords(toggleWords);
           }}>
-            <label>Show</label>
             <input type="checkbox" name="example" />
           </div>
         </div>
@@ -158,7 +147,6 @@ const WordItem = ({ toggleMostUsedWords, makeupInfo, conflatedWord, checkboxId, 
           $(`.ui.checkbox.words[data-id="${conflatedWord}master"]`).checkbox(action);
         }
       }}>
-        <label>Show</label>
         <input type="checkbox" name="example" />
       </div>
     </td>

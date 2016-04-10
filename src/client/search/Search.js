@@ -10,15 +10,11 @@ import CategoryFilters from './categories/CategoryFilters';
  */
 const Search = () => (
   <div className="row">
-    <div className="ui left aligned container">
+    <div className="ui container">
       <CurrentQueryTerms />
-      <Filters />
+      <CategoryFilters />
     </div>
   </div>
-);
-
-const Filters = () => (
-  <CategoryFilters />
 );
 
 export default Search;

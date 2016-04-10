@@ -14,7 +14,7 @@ class UserItemsList extends Component {
     $('.ui.dropdown.userwords').dropdown({
       action: 'nothing',
     });
-    $('#userItemsList').css('height', `${$(window).height() - $('#userItemsList').offset().top}px`);
+    $('#userItemsList').css('height', `${$(window).height() - ($(window).height() / 5)}px`);
   }
 
   componentDidUpdate(nextProps) {
@@ -33,7 +33,7 @@ class UserItemsList extends Component {
     $('.ui.dropdown.userwords').dropdown({
       action: 'nothing',
     });
-    $('#userItemsList').css('height', `${$(window).height() - $('#userItemsList').offset().top}px`);
+    $('#userItemsList').css('height', `${$(window).height() - ($(window).height() / 5)}px`);
   }
 
   render() {

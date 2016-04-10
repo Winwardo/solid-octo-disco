@@ -18,7 +18,7 @@ const CurrentQueryTerms = () => {
   };
 
   return (
-    <div className="row ui raised segment">
+    <div className="ui raised segment">
       <div style={{ cursor: 'text' }}>
         <SearchTermsList showSearchTerm={showAddSearchTerm} />
         <AddSearchTerm />
