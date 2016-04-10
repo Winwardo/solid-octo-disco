@@ -6,6 +6,11 @@ import MostActiveUsers from './mostfrequent/users/MostActiveUsers';
 import GoogleMap from './GoogleMap';
 
 class Results extends Component {
+  componentDidMount() {
+    $('.ui.sticky').sticky({ context: '#feed' });
+    $('.tabular.menu.results .item.active').tab();
+  }
+
   componentDidUpdate() {
     $('.ui.sticky').sticky({ context: '#feed' });
     $('.tabular.menu.results .item').tab();
@@ -41,9 +46,30 @@ class Results extends Component {
           </div>
         </div>
 
-        <div id="feed" className="col-md-7 col-lg-5">
+        <div className="col-sm-12 col-md-6 col-md-push-6 hidden-lg-up">
+          <div className="ui tabular menu results">
+            <div className="purple item active" data-tab="top-users">Top Users</div>
+            <div className="purple item" data-tab="top-words">Top Words</div>
+          </div>
+          <div className="ui tab active" data-tab="top-users">
+            <MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
+              userInfoList={feed.mostFrequentUsers}
+              isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
+              postsLength={posts.length}
+            />
+          </div>
+          <div className="ui tab" data-tab="top-words">
+            <MostUsedWords filterTerm={mostFrequent.words.filterTerm}
+              wordInfoList={feed.groupedMostFrequentWords}
+              isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
+              postsLength={posts.length}
+            />
+          </div>
+        </div>
+
+        <div id="feed" className="col-sm-12 col-md-6 col-md-pull-6 col-lg-5 col-lg-pull-0">
           <div className="hidden-md-down row">
-            <div id="tweetMap" className="computer only" style={{ height: '450px', width: '100%' }} ></div>
+            <div id="tweetMap" style={{ height: '450px', width: '100%' }} ></div>
             <GoogleMap posts={posts.filter((post) => post.data.longitude !== 0)} />
           </div>
 
@@ -56,29 +82,6 @@ class Results extends Component {
               isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
               paginationInfo={feed.paginationInfo}
             />
-          </div>
-        </div>
-
-        <div className="hidden-lg-up col-md-5">
-          <div className="ui purple segment">
-            <div className="ui tabular menu results">
-              <div className="item active" data-tab="top-users">Top Users</div>
-              <div className="item" data-tab="top-words">Top Words</div>
-            </div>
-            <div className="ui tab" data-tab="top-users">
-              <MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
-                userInfoList={feed.mostFrequentUsers}
-                isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
-                postsLength={posts.length}
-              />
-            </div>
-            <div className="ui tab" data-tab="top-words">
-              <MostUsedWords filterTerm={mostFrequent.words.filterTerm}
-                wordInfoList={feed.groupedMostFrequentWords}
-                isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
-                postsLength={posts.length}
-              />
-            </div>
           </div>
         </div>
 

@@ -63,12 +63,12 @@ const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWords, conflatedWordI
                 {conflatedWordInfo.count}
               </div>
             </div>
-            <div className="ten wide column">
+            <div className="eleven wide column">
               {conflatedWordInfo.word} <i className="dropdown icon" />
             </div>
           </div>
         </div>
-        <div className="four wide column">
+        <div className="three wide column">
           <div data-id={`${conflatedWordInfo.word}master`} className="ui checkbox words" onClick={() => {
             // Makes sure the accordian is open so that the user can see which words are being toggled
             $('.ui.accordion.words').accordion('open', accordianIndex);
@@ -103,7 +103,7 @@ const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWords, conflatedWordI
       </div>
     </div>
     <div className="content">
-      <table className="ui very basic celled table">
+      <table className="ui very basic celled unstackable table">
         <tbody>
           {
             conflatedWordInfo.makeup.map((makeupInfo, id) => (
