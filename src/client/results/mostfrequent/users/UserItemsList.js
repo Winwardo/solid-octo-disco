@@ -14,6 +14,7 @@ class UserItemsList extends Component {
     $('.ui.dropdown.userwords').dropdown({
       action: 'nothing',
     });
+    $('#userItemsList').css('height', `${$(window).height() - $('#userItemsList').offset().top}px`);
   }
 
   componentDidUpdate(nextProps) {
@@ -32,12 +33,13 @@ class UserItemsList extends Component {
     $('.ui.dropdown.userwords').dropdown({
       action: 'nothing',
     });
+    $('#userItemsList').css('height', `${$(window).height() - $('#userItemsList').offset().top}px`);
   }
 
   render() {
     return (
-      <div>
-        <table className="ui very basic table">
+      <div id="userItemsList" style={{ overflowY: 'scroll' }}>
+        <table className="ui very basic table" style={{ overflowY: 'hidden' }} >
           <thead>
             <tr>
               <th className="eight wide"></th>

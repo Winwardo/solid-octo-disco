@@ -12,6 +12,13 @@ class WordItemsList extends Component {
         trigger: '.title .conflated-word-selector',
       },
     });
+
+    // change height to bottom of the page
+    $('#wordItemList').css('height', `${$(window).height() - $('#wordItemList').offset().top}px`);
+    // $(window).scroll(() => {
+    //   const heightToBottomOfScreen = $(window).height() - ($(window).scrollTop() + $('#wordItemList').offset().top);
+    //   $('#wordItemList').css('height', `${heightToBottomOfScreen}px`);
+    // });
   }
 
   componentDidUpdate(nextProps) {
@@ -25,11 +32,18 @@ class WordItemsList extends Component {
         $('.ui.checkbox.words').checkbox('uncheck');
       }
     }
+
+    // change height to bottom of the page
+    $('#wordItemList').css('height', `${$(window).height() - $('#wordItemList').offset().top}px`);
+    // $(window).scroll(() => {
+    //   const heightToBottomOfScreen = $(window).height() - ($(window).scrollTop() + $('#wordItemList').offset().top);
+    //   $('#wordItemList').css('height', `${heightToBottomOfScreen}px`);
+    // });
   }
 
   render() {
     return (
-      <div style={{ height: '300px', overflowY: 'scroll' }}>
+      <div id="wordItemList" style={{ overflowY: 'scroll' }}>
         <div className="ui fluid accordion words" style={{ overflow: 'hidden' }}>
           {this.props.words.map((wordInfo, id) =>
             <ConflatedWordItem key={wordInfo.word} accordianIndex={id}
