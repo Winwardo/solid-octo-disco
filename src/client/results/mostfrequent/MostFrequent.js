@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import SlidingSearchBar from './SearchBar';
 
-const MostFrequent = ({ title, filterTerm, onTypingInSearchBar, onToggleAll, currentToggledAction, children }) => (
-  <div>
-    <h3>{title}</h3>
+const MostFrequent = ({
+  title, icon, count, filterTerm, onTypingInSearchBar, onToggleAll, currentToggledAction, children
+}) => (
+  <div className="ui raised purple segment">
+    <div className="ui one statistics">
+      <div className="purple statistic">
+        <div className="value">
+          <i className={icon}></i> {count}
+        </div>
+        <div className="label">{title}</div>
+      </div>
+    </div>
+    <br />
     <div>
       <div className="ui two column grid">
         <div className="column">

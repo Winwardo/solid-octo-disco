@@ -9,9 +9,11 @@ import CategoryFilters from './categories/CategoryFilters';
  * breakdown of the interface.
  */
 const Search = () => (
-  <div className="ui left aligned container">
-    <CurrentQueryTerms />
-    <Filters />
+  <div className="row">
+    <div className="ui left aligned container">
+      <CurrentQueryTerms />
+      <Filters />
+    </div>
   </div>
 );
 

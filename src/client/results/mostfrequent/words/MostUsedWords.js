@@ -15,7 +15,9 @@ const MostUsedWords = ({
   ).slice(0, 100);
 
   return (
-    <MostFrequent title="Most Used Words"
+    <MostFrequent title="Top Words"
+      icon="file text icon"
+      count={filteredItems.length}
       filterTerm={filterTerm}
       onTypingInSearchBar={(newFilterTerm) => {
         dispatch(updateMostUsedWordsSearch(newFilterTerm));

@@ -9,19 +9,20 @@ let Results = ({ feed, mostFrequent }) => {
   const posts = feed.posts;
   if (posts.length === 0) {
     return (
-      <div className="ui violet inverted center aligned segment">
-        <h2 className="ui inverted header">
-          <div className="sub header">
-            Start using Socto by typing into the search bar or by using the filters.
+      <div className="row">
+        <div className="column">
+          <div className="ui violet inverted center aligned segment">
+            <h3 className="ui inverted header">
+              Start using Socto by typing into the search bar or by using the filters.
+            </h3>
           </div>
-        </h2>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="ui grid">
-
+    <div className="row" style={{ margin: '0px 25px'}}>
       <div className="four wide column">
         <MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
           userInfoList={feed.mostFrequentUsers}
@@ -60,9 +61,7 @@ let Results = ({ feed, mostFrequent }) => {
           </div>
         </div>
       </div>
-
     </div>
-
   );
 };
 

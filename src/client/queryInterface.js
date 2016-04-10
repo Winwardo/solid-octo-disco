@@ -16,11 +16,12 @@ const App = () => (
 
     <Header />
 
-    <Search />
+    <div className="ui grid">
+      <Search />
+      <Results />
+    </div>
 
-    <Results />
-
-    {/* <Footer /> *//* <Footer /> */}
+    {/* <Footer /> */}
   </div>
 );
 
