@@ -99,11 +99,13 @@ class Results extends Component {
           </div>
 
         </div>
-        <div className={`ui ${feed.posts.length > 0 && feed.fetchingRequestFromDB && 'active'} purple dimmer`}>
+        <div className={`ui ${feed.posts.length > 0 && feed.fetchingRequestFromDB && 'active'} purple dimmer`}
+          style={{ display: 'fixed'}}
+        >
           <div className="content">
             <div className="center">
               <h2 className="ui inverted icon header">
-                <div className="ui large text loader">Fetching posts from the database!</div>
+                <div className="ui large text loader">Fetching posts from the database</div>
               </h2>
             </div>
           </div>
