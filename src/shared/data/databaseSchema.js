@@ -35,6 +35,7 @@ export const schema = {
       { name: 'longitude', type: Double },
       { name: 'latitude', type: Double },
       { name: 'contains_a_quoted_tweet', type: String },
+      { name: 'image_url', type: String },
     ],
     indexes: [
       { properties: ['id'], type: UNIQUE, },

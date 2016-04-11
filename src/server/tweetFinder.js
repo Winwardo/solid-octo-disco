@@ -241,7 +241,7 @@ const makeTweetQuerySelectingFrom = (from) => (
     + ` FROM (${from}) ` // Selected from a subset of tweets
     + ' WHERE @class = \'Tweet\' ' // Don't accidentally select authors or hastags etc
     + ' ORDER BY date DESC ' // Might be irrelevant
-    + ' UNWIND authorId, authorName, authorHandle, authorProfileImage, isUserMention ' // Converts from ['Steve'] to 'Steve'
+    + ' UNWIND authorId, authorName, authorHandle, authorProfileImage, isUserMention, isVerified ' // Converts from ['Steve'] to 'Steve'
     + ' LIMIT :limit ' // Don't select too many results
 );
 
@@ -285,6 +285,7 @@ const buildTweetFromDatabaseRecord = (record) => (
     .longitude(record.longitude)
     .latitude(record.latitude)
     .contains_a_quoted_tweet(record.contains_a_quoted_tweet)
+    .image_url(record.image_url)
     .build()
 );
 

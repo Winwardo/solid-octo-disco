@@ -29,6 +29,8 @@ export const TwitAccess = new Twit({
  */
 const buildTweetFromRaw = (rawTweet) => {
   const coordinates = findLatitudeLongitude(rawTweet);
+  const image_url = getImageUrl(rawTweet);
+
   return Builders.TweetBuilder()
     .id(rawTweet.id_str)
     .content(rawTweet.text)
@@ -38,6 +40,7 @@ const buildTweetFromRaw = (rawTweet) => {
     .latitude(coordinates.latitude)
     .longitude(coordinates.longitude)
     .contains_a_quoted_tweet(rawTweet.quoted_status ? rawTweet.quoted_status.id_str : '')
+    .image_url(image_url)
     .build();
 };
 
@@ -84,6 +87,14 @@ const findLatitudeLongitude = (rawTweet) => {
     longitude: 0.0,
   };
 };
+
+const getImageUrl = (rawTweet) => {
+  try {
+    return rawTweet.entities.media[0].media_url_https;
+  } catch (err) {
+    return 'none';
+  }
+}
 
 /**
  * Convert some raw user from the Twitter API into a proper immutable Tweeter object.

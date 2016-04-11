@@ -34,7 +34,7 @@ export const upsertTweeter = (db, tweeter) => {
 export const upsertTweet = (db, tweet) => (
   runQueryOnImmutableObject(
     db,
-    'UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets, longitude=:longitude, latitude=:latitude, contains_a_quoted_tweet=:contains_a_quoted_tweet UPSERT WHERE id=:id',
+    'UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets, longitude=:longitude, latitude=:latitude, contains_a_quoted_tweet=:contains_a_quoted_tweet, image_url=:image_url UPSERT WHERE id=:id',
     tweet
   ).then(() => {}, (rej) => { console.error('Upsert tweet', rej); })
 );

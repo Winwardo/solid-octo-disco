@@ -194,8 +194,15 @@ const Tweet = ({ content }) => {
 
   let verifiedImage;
   if (content.author.is_verified) {
-    console.log("ver", content.author.handle, content.author.is_verified);
     verifiedImage = <img className="popup image" src="public/images/verified.png" alt="User is verified on Twitter." data-title="User is verified on Twitter" />
+  }
+
+  const image_url = content.data.image_url;
+  let tweetImage;
+  if (image_url !== 'none') {
+    tweetImage = <a href={image_url} target="_blank">
+        <img className="ui bordered centered rounded image" style={{maxHeight: '400px', width: '60%'}} src={image_url} alt={`Embedded image: ${image_url}`} />
+      </a>
   }
 
   // Just below we use dangerousSetInnerHTML.
@@ -216,6 +223,7 @@ const Tweet = ({ content }) => {
       <br />
       <div dangerouslySetInnerHTML={{ __html: tweetWithLinks }} />
 
+      {tweetImage}
       {quotedContent}
 
       <div className="meta">
