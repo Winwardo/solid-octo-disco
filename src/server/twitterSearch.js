@@ -88,12 +88,22 @@ const findLatitudeLongitude = (rawTweet) => {
   };
 };
 
+/**
+ * Pulls the image url out of a tweet if it has one.
+ * @param rawTweet
+ * @returns {*} A direct link to the image being displayed
+ */
 const getImageUrl = (rawTweet) => {
   try {
-    return rawTweet.entities.media[0].media_url_https;
+    const media = rawTweet.entities.media[0];
+    if (media.type === 'photo') {
+      return media.media_url_https;
+    }
   } catch (err) {
     return 'none';
   }
+
+  return 'none';
 }
 
 /**
