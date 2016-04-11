@@ -35,6 +35,7 @@ class Results extends Component {
     }
 
     return (
+      <div style={{ width: '100%' }}>
         <div className="row" style={{ margin: '0px 25px' }}>
           <div className="hidden-md-down col-lg-4">
             <div className="ui sticky">
@@ -97,16 +98,17 @@ class Results extends Component {
             </div>
           </div>
 
-          <div className={`ui ${feed.posts.length > 0 && feed.fetchingRequestFromDB && 'active'} purple dimmer`}>
-            <div className="content">
-              <div className="center">
-                <h2 className="ui inverted icon header">
-                  <div className="ui large text loader">Fetching posts from the database!</div>
-                </h2>
-              </div>
+        </div>
+        <div className={`ui ${feed.posts.length > 0 && feed.fetchingRequestFromDB && 'active'} purple dimmer`}>
+          <div className="content">
+            <div className="center">
+              <h2 className="ui inverted icon header">
+                <div className="ui large text loader">Fetching posts from the database!</div>
+              </h2>
             </div>
           </div>
         </div>
+      </div>
     );
   }
 }
