@@ -11,8 +11,8 @@ export const upsertTweeter = (db, tweeter) => {
   // and therefore has profile image information
   const checkQuery = 'SELECT FROM tweeter WHERE id=:id';
 
-  const update = 'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention WHERE id=:id';
-  const upsert = 'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention UPSERT WHERE id=:id';
+  const update = 'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention, is_verified=:is_verified WHERE id=:id';
+  const upsert = 'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention, is_verified=:is_verified UPSERT WHERE id=:id';
 
   return newPromiseChain()
     .then(() => runQueryOnImmutableObject(db, checkQuery, tweeter))

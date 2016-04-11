@@ -99,10 +99,14 @@ export const buildTweeterFromRaw = (rawTweeter, isMentionUser) => {
     .handle(rawTweeter.screen_name);
 
   if (isMentionUser) {
-    tweeter.profile_image_url('none')
+    tweeter
+      .profile_image_url('none')
+      .is_verified(false)
       .is_user_mention(true);
   } else {
-    tweeter.profile_image_url(rawTweeter.profile_image_url_https)
+    tweeter
+      .profile_image_url(rawTweeter.profile_image_url_https)
+      .is_verified(rawTweeter.verified)
       .is_user_mention(false);
   }
 

@@ -49,6 +49,7 @@ export const schema = {
       { name: 'handle', type: String },
       { name: 'profile_image_url', type: String },
       { name: 'is_user_mention', type: Boolean },
+      { name: 'is_verified', type: Boolean },
     ],
     indexes: [
       { properties: ['id'], type: UNIQUE, },

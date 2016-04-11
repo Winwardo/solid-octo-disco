@@ -63,10 +63,10 @@ const createClassProperties = (clazz, properties) => {
  * @param schema See ./shared/data/databaseSchema.js for an example
  */
 const insertClassesFromSchema = (db, schema) => {
-  Object.keys(schema).forEach((name) => {
+  return Promise.all(Object.keys(schema).map((name) => {
     const clazz = schema[name];
-    insertClass(db, name, clazz);
-  });
+    return insertClass(db, name, clazz);
+  }));
 };
 
 /**
@@ -88,17 +88,22 @@ export const generateDatabase = (res) => {
     });
 
     if (foundDb === null) {
-      SERVER.create(DATABASE_NAME).then((db) => {
-        insertClassesFromSchema(db, schema);
-        res.end(JSON.stringify(
-          `Attempted to generate new database ${DATABASE_NAME} with classes.`
-        ));
-      });
+      return newPromiseChain()
+        .then(() => SERVER.create(DATABASE_NAME))
+        .then((db) => insertClassesFromSchema(db, schema))
+        .then(() => {
+          res.end(JSON.stringify(
+            `Attempted to generate new database ${DATABASE_NAME} with classes.`
+          ));
+        });
     } else {
-      insertClassesFromSchema(foundDb, schema);
-      res.end(JSON.stringify(
-        `Found database ${DATABASE_NAME}, attempted to add missing classes.`
-      ));
+      return newPromiseChain()
+        .then(() => insertClassesFromSchema(foundDb, schema))
+        .then(() => {
+          res.end(JSON.stringify(
+            `Found database ${DATABASE_NAME}, attempted to add missing classes.`
+          ));
+        });
     }
   });
 };

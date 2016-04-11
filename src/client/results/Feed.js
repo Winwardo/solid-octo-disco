@@ -192,6 +192,12 @@ const Tweet = ({ content }) => {
     quotedContent = <QuotedTweet tweetId={content.data.contains_a_quoted_tweet} />;
   }
 
+  let verifiedImage;
+  if (content.author.is_verified) {
+    console.log("ver", content.author.handle, content.author.is_verified);
+    verifiedImage = <img className="popup image" src="public/images/verified.png" alt="User is verified on Twitter." data-title="User is verified on Twitter" />
+  }
+
   // Just below we use dangerousSetInnerHTML.
   // The content it is display has come from Twitter and is safe to render as actual HTML,
   // as all HTML entities have already been encoded - e.g., instead of <script> a tweet
@@ -205,7 +211,7 @@ const Tweet = ({ content }) => {
       <a href={`//twitter.com/${content.author.handle}`} target="_blank">
         <strong className="tweet fullname header">{decodedAuthorName}</strong>
         &nbsp;
-        <span style={{color: '#A333C8'}}>@{content.author.handle}</span>
+        <span style={{color: '#A333C8'}}>@{content.author.handle} {verifiedImage}</span>
       </a>
       <br />
       <div dangerouslySetInnerHTML={{ __html: tweetWithLinks }} />
