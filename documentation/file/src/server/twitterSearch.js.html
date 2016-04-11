@@ -505,7 +505,7 @@ const sweepTwitterAndConcat = (query, count, existingStatuses = [], lowestId = n
       const added = twitStatuses.length;
 
       if (countLeft &gt; 0 &amp;&amp; added &gt; 0) {
-        const newLowestId = Math.min(...twitStatuses.map((status) =&gt; status.id));
+        const newLowestId = twitStatuses.map((status) =&gt; status.id_str).sort()[0];
 
         return newPromiseChain()
           .then(() =&gt; sweepTwitterAndConcat(query, countLeft, twitStatuses, newLowestId))
@@ -520,7 +520,7 @@ const potentiallySearchTwitter = (exactQuery, count) =&gt; {
   if (count &gt; 0) {
     const actualCount = Math.min(count, MAX_TWEETS_FROM_TWITTER_API); // Twitter will only return a max of 100 Tweets at any time
     return newPromiseChain()
-      .then(() =&gt; TwitAccess.get(&apos;search/tweets&apos;, { q: `${exactQuery} filter:safe`, count: actualCount }))
+      .then(() =&gt; TwitAccess.get(&apos;search/tweets&apos;, { q: `${exactQuery} filter:safe -filter:retweets`, count: actualCount }))
       .then((twitResults) =&gt; twitResults.data.statuses);
   } else {
     return [];
