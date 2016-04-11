@@ -36,7 +36,6 @@ jspm_packages
 coverage.html
 
 # Database data
-lib/orientdb/databases
 lib/orientdb/log
 
 # Documentation AST - but not the rest of documentation
