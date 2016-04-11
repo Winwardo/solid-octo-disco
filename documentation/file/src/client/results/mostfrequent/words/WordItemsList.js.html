@@ -41,7 +41,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentWords">mostFrequentWords</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Feed.js~Feed.html">Feed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/GoogleMap.js~GoogleMap.html">GoogleMap</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Results.js~Results.html">Results</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RESET_MOST_FREQUENT">RESET_MOST_FREQUENT</a></span></span></li>
@@ -167,6 +167,7 @@
 
 class WordItemsList extends Component {
   componentDidMount() {
+    // change height to bottom of the page
     if (this.props.isWordsToggledActionHide) {
       $(&apos;.ui.checkbox.words&apos;).checkbox(&apos;check&apos;);
     } else {
@@ -177,12 +178,14 @@ class WordItemsList extends Component {
         trigger: &apos;.title .conflated-word-selector&apos;,
       },
     });
+    $(&apos;.wordItemList&apos;).css(&apos;height&apos;, `${$(window).height() - ($(window).height() / 5)}px`);
   }
 
   componentDidUpdate(nextProps) {
     if (
       nextProps.isWordsToggledActionHide !== this.props.isWordsToggledActionHide ||
-      nextProps.postsLength !== this.props.postsLength
+      nextProps.postsLength !== this.props.postsLength ||
+      nextProps.filterTerm !== this.props.filterTerm
     ) {
       if (this.props.isWordsToggledActionHide) {
         $(&apos;.ui.checkbox.words&apos;).checkbox(&apos;check&apos;);
@@ -190,14 +193,17 @@ class WordItemsList extends Component {
         $(&apos;.ui.checkbox.words&apos;).checkbox(&apos;uncheck&apos;);
       }
     }
+    // change height to bottom of the page
+    $(&apos;.wordItemList&apos;).css(&apos;height&apos;, `${$(window).height() - ($(window).height() / 5)}px`);
   }
 
   render() {
     return (
-      &lt;div style={{ height: &apos;300px&apos;, overflowY: &apos;scroll&apos; }}&gt;
-        &lt;div className=&quot;ui fluid accordion words&quot; style={{ overflow: &apos;hidden&apos; }}&gt;
+      &lt;div className=&quot;wordItemList&quot; style={{ overflowY: &apos;scroll&apos; }}&gt;
+        &lt;div data-id={this.props.componentId} className=&quot;ui fluid accordion words&quot; style={{ overflow: &apos;hidden&apos; }}&gt;
           {this.props.words.map((wordInfo, id) =&gt;
             &lt;ConflatedWordItem key={wordInfo.word} accordianIndex={id}
+              componentId={this.props.componentId}
               conflatedWordInfo={wordInfo}
               toggleMostUsedWords={this.props.toggleMostUsedWords}
             /&gt;
@@ -208,12 +214,14 @@ class WordItemsList extends Component {
   }
 }
 WordItemsList.propTypes = {
+  componentId: React.PropTypes.string,
   words: React.PropTypes.array,
   isWordsToggledActionHide: React.PropTypes.bool,
   postsLength: React.PropTypes.number,
+  filterTerm: React.PropTypes.string,
 };
 
-const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWords, conflatedWordInfo }) =&gt; (
+const ConflatedWordItem = ({ componentId, accordianIndex, toggleMostUsedWords, conflatedWordInfo }) =&gt; (
   &lt;div&gt;
     &lt;div className=&quot;title&quot;&gt;
       &lt;div className=&quot;ui grid&quot;&gt;
@@ -224,28 +232,28 @@ const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWords, conflatedWordI
                 {conflatedWordInfo.count}
               &lt;/div&gt;
             &lt;/div&gt;
-            &lt;div className=&quot;ten wide column&quot;&gt;
+            &lt;div className=&quot;eleven wide column&quot;&gt;
               {conflatedWordInfo.word} &lt;i className=&quot;dropdown icon&quot; /&gt;
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/div&gt;
-        &lt;div className=&quot;four wide column&quot;&gt;
-          &lt;div data-id={`${conflatedWordInfo.word}master`} className=&quot;ui checkbox words&quot; onClick={() =&gt; {
+        &lt;div className=&quot;three wide column&quot;&gt;
+          &lt;div data-id={`${conflatedWordInfo.word}master${componentId}`} className=&quot;ui checkbox words&quot; onClick={() =&gt; {
             // Makes sure the accordian is open so that the user can see which words are being toggled
-            $(&apos;.ui.accordion.words&apos;).accordion(&apos;open&apos;, accordianIndex);
+            $(`.ui.accordion.words[data-id=${componentId}]`).accordion(&apos;open&apos;, accordianIndex);
 
             // Sets the semantic-ui checkbox action method dependant on whether
             // the master checkbox(conflated word) is checked/unchecked after being clicked
-            const masterChecked = $(`.ui.checkbox.words[data-id=&quot;${conflatedWordInfo.word}master&quot;]`).checkbox(&apos;is checked&apos;);
+            const masterChecked = $(`.ui.checkbox.words[data-id=&quot;${conflatedWordInfo.word}master${componentId}&quot;]`).checkbox(&apos;is checked&apos;);
             const action = getSemanticCheckboxActionName(masterChecked);
 
             // Created an array of toggle words to send a single redux action instead of several
             let toggleWords = [];
 
             // Loops through each child checkboxes&apos;(conflated word&apos;s variants)
-            $(`.ui.checkbox.words[data-id^=&quot;${conflatedWordInfo.word}child&quot;]`).each((index) =&gt; {
-              const $childCheckbox = $(`.ui.checkbox.words[data-id=&quot;${conflatedWordInfo.word}child${index}&quot;]`);
-
+            $(`.ui.checkbox.words[data-id^=&quot;${conflatedWordInfo.word}child${componentId}&quot;]`).each((index) =&gt; {
+              console.log(&apos;works!&apos;)
+              const $childCheckbox = $(`.ui.checkbox.words[data-id=&quot;${conflatedWordInfo.word}child${componentId}${index}&quot;]`);
               // To see if it&apos;s the same checked/unchecked state as the master(conflated word).
               // This is to make sure that it doesn&apos;t toggle words that aren&apos;t meant to be
               // toggled in the state tree.
@@ -258,18 +266,18 @@ const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWords, conflatedWordI
             // Sends off the action with the children&apos;s conflated word&apos;s variants that need to be toggled.
             toggleMostUsedWords(toggleWords);
           }}&gt;
-            &lt;label&gt;Show&lt;/label&gt;
             &lt;input type=&quot;checkbox&quot; name=&quot;example&quot; /&gt;
           &lt;/div&gt;
         &lt;/div&gt;
       &lt;/div&gt;
     &lt;/div&gt;
     &lt;div className=&quot;content&quot;&gt;
-      &lt;table className=&quot;ui very basic celled table&quot;&gt;
+      &lt;table className=&quot;ui very basic celled unstackable table&quot;&gt;
         &lt;tbody&gt;
           {
             conflatedWordInfo.makeup.map((makeupInfo, id) =&gt; (
-              &lt;WordItem key={makeupInfo.word} conflatedWord={`${conflatedWordInfo.word}`}
+              &lt;WordItem componentId={componentId} key={makeupInfo.word}
+                conflatedWord={`${conflatedWordInfo.word}`}
                 checkboxId={id}
                 makeupInfo={makeupInfo}
                 conflatedWordCount={conflatedWordInfo.count}
@@ -283,7 +291,7 @@ const ConflatedWordItem = ({ accordianIndex, toggleMostUsedWords, conflatedWordI
   &lt;/div&gt;
 );
 
-const WordItem = ({ toggleMostUsedWords, makeupInfo, conflatedWord, checkboxId, conflatedWordCount }) =&gt; (
+const WordItem = ({ componentId, toggleMostUsedWords, makeupInfo, conflatedWord, checkboxId, conflatedWordCount }) =&gt; (
   &lt;tr&gt;
     &lt;td className=&quot;right aligned&quot; style={{ width: &apos;60px&apos; }}&gt;
       {Math.round(makeupInfo.count / conflatedWordCount * 100)}%
@@ -291,25 +299,24 @@ const WordItem = ({ toggleMostUsedWords, makeupInfo, conflatedWord, checkboxId, 
     &lt;td className=&quot;right aligned&quot; style={{ width: &apos;60px&apos; }}&gt;{makeupInfo.count}&lt;/td&gt;
     &lt;td&gt;{makeupInfo.word}&lt;/td&gt;
     &lt;td&gt;
-      &lt;div data-id={`${conflatedWord}child${checkboxId}`} className=&quot;ui checkbox words&quot; onClick={() =&gt; {
+      &lt;div data-id={`${conflatedWord}child${componentId}${checkboxId}`} className=&quot;ui checkbox words&quot; onClick={() =&gt; {
         toggleMostUsedWords([makeupInfo.word]);
-        const $thisCheckbox = $(`.ui.checkbox.words[data-id^=&quot;${conflatedWord}child${checkboxId}&quot;]`).checkbox(&apos;is checked&apos;);
+        const $thisCheckbox = $(`.ui.checkbox.words[data-id^=&quot;${conflatedWord}child${componentId}${checkboxId}&quot;]`).checkbox(&apos;is checked&apos;);
         const action = getSemanticCheckboxActionName($thisCheckbox);
 
         // Checks if all the other conflated word&apos;s variants are the same state (checked/unchecked)
         let allCheckboxesSame = true;
-        $(`.ui.checkbox.words[data-id^=&quot;${conflatedWord}child&quot;]`).each((index) =&gt; {
-          if ($thisCheckbox !== $(`.ui.checkbox.words[data-id^=&quot;${conflatedWord}child${index}&quot;]`).checkbox(&apos;is checked&apos;)) {
+        $(`.ui.checkbox.words[data-id^=&quot;${conflatedWord}child${componentId}&quot;]`).each((index) =&gt; {
+          if ($thisCheckbox !== $(`.ui.checkbox.words[data-id^=&quot;${conflatedWord}child${componentId}${index}&quot;]`).checkbox(&apos;is checked&apos;)) {
             allCheckboxesSame = false;
           }
         });
 
         // If they are, then check/uncheck the master checkbox
         if (allCheckboxesSame) {
-          $(`.ui.checkbox.words[data-id=&quot;${conflatedWord}master&quot;]`).checkbox(action);
+          $(`.ui.checkbox.words[data-id=&quot;${conflatedWord}master${componentId}&quot;]`).checkbox(action);
         }
       }}&gt;
-        &lt;label&gt;Show&lt;/label&gt;
         &lt;input type=&quot;checkbox&quot; name=&quot;example&quot; /&gt;
       &lt;/div&gt;
     &lt;/td&gt;

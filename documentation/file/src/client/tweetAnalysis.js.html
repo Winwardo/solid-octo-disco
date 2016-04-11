@@ -41,7 +41,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentWords">mostFrequentWords</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Feed.js~Feed.html">Feed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/GoogleMap.js~GoogleMap.html">GoogleMap</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Results.js~Results.html">Results</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RESET_MOST_FREQUENT">RESET_MOST_FREQUENT</a></span></span></li>
@@ -223,21 +223,17 @@ export const groupedCountWords = (countedWords) =&gt; {
  * @returns {Array}\
  */
 export const mostFrequentUsers = (tweets, minimumTopUserCount = 10) =&gt; {
-  const topUsers = categoriseByUser(tweets);
+  const sortedTopUsers = categoriseByUser(tweets).sort((tweetList1, tweetList2) =&gt; (
+    tweetList2.posts.length - tweetList1.posts.length
+  ));
   let topRestUsers = [];
-  if (topUsers.length &gt; minimumTopUserCount) {
-    topRestUsers = topUsers
+  if (sortedTopUsers.length &gt; minimumTopUserCount) {
+    topRestUsers = sortedTopUsers
       .slice(minimumTopUserCount + 1)
       .filter(user =&gt; user.posts.length &gt; 1);
   }
 
-  const allTopUsers = [...topUsers.slice(0, minimumTopUserCount), ...topRestUsers];
-  return (
-    allTopUsers
-      .sort((tweetList1, tweetList2) =&gt; (
-        tweetList2.posts.length - tweetList1.posts.length
-      ))
-  );
+  return [...sortedTopUsers.slice(0, minimumTopUserCount), ...topRestUsers];
 };
 
 /**

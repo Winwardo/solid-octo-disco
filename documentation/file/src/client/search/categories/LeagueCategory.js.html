@@ -41,7 +41,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentWords">mostFrequentWords</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Feed.js~Feed.html">Feed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/GoogleMap.js~GoogleMap.html">GoogleMap</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Results.js~Results.html">Results</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RESET_MOST_FREQUENT">RESET_MOST_FREQUENT</a></span></span></li>
@@ -190,7 +190,7 @@ class LeagueCategory extends Component {
       &apos;ui purple horizontal label year league count content transition hidden&apos;;
 
     return (
-      &lt;div className=&quot;large ui dropdown labeled icon button leagues category&quot;&gt;
+      &lt;div className=&quot;large fluid ui dropdown labeled icon button leagues category&quot; style={{ paddingLeft: &apos;13px!important&apos;, paddingRight: &apos;38px!important&apos;}}&gt;
         {yearsLeagues.length === 0 ? isFetchingLoader : &lt;i className=&quot;trophy purple icon&quot;&gt;&lt;/i&gt;}
         &lt;span className=&quot;text&quot;&gt;
           {
@@ -245,6 +245,7 @@ LeagueCategory.propTypes = {
   onClickAddLeague: React.PropTypes.func,
   onClickRemoveLeague: React.PropTypes.func,
 };
+
 const LeagueItem = ({ name, alreadyAddedToSearch, onClickLeague }) =&gt; (
   &lt;div className=&quot;item league&quot; onClick={() =&gt; onClickLeague()}&gt;
     {name}

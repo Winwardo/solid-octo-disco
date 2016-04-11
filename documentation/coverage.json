@@ -1,6 +1,6 @@
 {
-  "coverage": "18.66%",
-  "expectCount": 150,
+  "coverage": "18.3%",
+  "expectCount": 153,
   "actualCount": 28,
   "files": {
     "src/client/search/searchActions.js": {
@@ -173,10 +173,13 @@
       ]
     },
     "src/client/results/Results.js": {
-      "expectCount": 1,
+      "expectCount": 4,
       "actualCount": 0,
       "undocumentLines": [
-        8
+        8,
+        9,
+        14,
+        19
       ]
     },
     "src/client/search/Search.js": {
@@ -229,8 +232,8 @@
       "undocumentLines": [
         7,
         8,
-        19,
-        37
+        20,
+        40
       ]
     },
     "src/client/results/mostfrequent/words/WordItemsList.js": {
@@ -239,8 +242,8 @@
       "undocumentLines": [
         3,
         4,
-        17,
-        30
+        19,
+        35
       ]
     },
     "src/client/search/categories/YearSelector.js": {

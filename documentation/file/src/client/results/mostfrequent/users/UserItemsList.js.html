@@ -41,7 +41,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentWords">mostFrequentWords</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Feed.js~Feed.html">Feed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/GoogleMap.js~GoogleMap.html">GoogleMap</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Results.js~Results.html">Results</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RESET_MOST_FREQUENT">RESET_MOST_FREQUENT</a></span></span></li>
@@ -179,6 +179,7 @@ class UserItemsList extends Component {
     $(&apos;.ui.dropdown.userwords&apos;).dropdown({
       action: &apos;nothing&apos;,
     });
+    $(&apos;.userItemsList&apos;).css(&apos;height&apos;, `${$(window).height() - ($(window).height() / 5)}px`);
   }
 
   componentDidUpdate(nextProps) {
@@ -186,7 +187,8 @@ class UserItemsList extends Component {
     // or the feed posts have changed
     if (
       nextProps.isUsersToggledActionHide !== this.props.isUsersToggledActionHide ||
-      nextProps.postsLength !== this.props.postsLength
+      nextProps.postsLength !== this.props.postsLength ||
+      nextProps.filterTerm !== this.props.filterTerm
     ) {
       if (this.props.isUsersToggledActionHide) {
         $(&apos;.ui.checkbox.users&apos;).checkbox(&apos;check&apos;);
@@ -197,21 +199,22 @@ class UserItemsList extends Component {
     $(&apos;.ui.dropdown.userwords&apos;).dropdown({
       action: &apos;nothing&apos;,
     });
+    $(&apos;.userItemsList&apos;).css(&apos;height&apos;, `${$(window).height() - ($(window).height() / 5)}px`);
   }
 
   render() {
     return (
-      &lt;div&gt;
-        &lt;table className=&quot;ui very basic table&quot;&gt;
+      &lt;div className=&quot;userItemsList&quot; style={{ overflowY: &apos;scroll&apos; }}&gt;
+        &lt;table className=&quot;ui very basic unstackable table&quot; style={{ overflowY: &apos;hidden&apos; }} &gt;
           &lt;thead&gt;
             &lt;tr&gt;
               &lt;th className=&quot;eight wide&quot;&gt;&lt;/th&gt;
               &lt;th className=&quot;one wide&quot;&gt;&lt;/th&gt;
-              &lt;th className=&quot;six wide&quot;&gt;
+              &lt;th className=&quot;six wide&quot; style={{ paddingLeft: &apos;0px&apos; }}&gt;
                 &lt;i className=&quot;trophy yellow icon&quot;&gt;&lt;/i&gt;
                 Top Words
               &lt;/th&gt;
-              &lt;th className=&quot;one wide&quot;&gt;Show&lt;/th&gt;
+              &lt;th className=&quot;one wide&quot; style={{ borderLeft: &apos;2px solid rgba(34,36,38,.1)&apos; }}&gt;Show&lt;/th&gt;
             &lt;/tr&gt;
           &lt;/thead&gt;
           &lt;tbody&gt;
@@ -227,11 +230,12 @@ UserItemsList.propTypes = {
   users: React.PropTypes.array,
   isUsersToggledActionHide: React.PropTypes.bool,
   postsLength: React.PropTypes.number,
+  filterTerm: React.PropTypes.string,
 };
 
 let UserItem = ({ dispatch, userInfo }) =&gt; (
   &lt;tr&gt;
-    &lt;td className=&quot;left aligned&quot;&gt;
+    &lt;td className=&quot;left aligned&quot; style={{ paddingRight: &apos;0px&apos; }}&gt;
       &lt;h4 className=&quot;ui image header&quot;&gt;
         &lt;TwitterProfilePicture author={userInfo.author} size=&quot;mini&quot; /&gt;
         &lt;div className=&quot;content&quot;&gt;
@@ -247,13 +251,13 @@ let UserItem = ({ dispatch, userInfo }) =&gt; (
       &lt;i className={`${userInfo.source} blue icon`}&gt;{userInfo.posts.length}&lt;/i&gt;
     &lt;/td&gt;
 
-    &lt;td&gt;
+    &lt;td style={{ paddingLeft: &apos;0px&apos; }}&gt;
       &lt;UserItemMostUsedWords
         usersMostUsedWords={mostFrequentWords(userInfo.posts.map(post =&gt; post.content))}
       /&gt;
     &lt;/td&gt;
 
-    &lt;td className=&quot;left aligned&quot;&gt;
+    &lt;td className=&quot;center aligned&quot; style={{ borderLeft: &apos;1px solid rgba(34,36,38,.1)&apos; }}&gt;
       &lt;div className=&quot;ui checkbox users&quot; onClick={() =&gt; {
         dispatch(toggleMostActiveUser(userInfo.author.id));
       }}&gt;
@@ -271,9 +275,9 @@ const UserItemMostUsedWords = ({ usersMostUsedWords }) =&gt; {
   }
 
   return (
-    &lt;div className=&quot;ui pointing fluid dropdown userwords&quot;&gt;
+    &lt;div className=&quot;ui fluid pointing dropdown userwords&quot;&gt;
       &lt;div className=&quot;text&quot;&gt;&lt;strong&gt;{topWord.word}&lt;/strong&gt; x{topWord.count}&lt;/div&gt;
-      &lt;i className=&quot;dropdown icon&quot;&gt;&lt;/i&gt;
+      &lt;i className=&quot;dropdown icon&quot; style={{ marginLeft: &apos;0px&apos;, marginTop: &apos;2px&apos; }}&gt;&lt;/i&gt;
       &lt;div className=&quot;menu&quot;&gt;
         {usersMostUsedWords.slice(1).map(
           frequentWord =&gt; (

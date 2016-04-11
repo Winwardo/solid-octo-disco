@@ -41,7 +41,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentWords">mostFrequentWords</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Feed.js~Feed.html">Feed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/GoogleMap.js~GoogleMap.html">GoogleMap</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Results.js~Results.html">Results</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RESET_MOST_FREQUENT">RESET_MOST_FREQUENT</a></span></span></li>
@@ -174,14 +174,12 @@ import CategoryFilters from &apos;./categories/CategoryFilters&apos;;
  * breakdown of the interface.
  */
 const Search = () =&gt; (
-  &lt;div className=&quot;ui left aligned container&quot;&gt;
-    &lt;CurrentQueryTerms /&gt;
-    &lt;Filters /&gt;
+  &lt;div className=&quot;row&quot;&gt;
+    &lt;div className=&quot;ui container&quot;&gt;
+      &lt;CurrentQueryTerms /&gt;
+      &lt;CategoryFilters /&gt;
+    &lt;/div&gt;
   &lt;/div&gt;
-);
-
-const Filters = () =&gt; (
-  &lt;CategoryFilters /&gt;
 );
 
 export default Search;

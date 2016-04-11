@@ -41,7 +41,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentWords">mostFrequentWords</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Feed.js~Feed.html">Feed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/GoogleMap.js~GoogleMap.html">GoogleMap</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Results.js~Results.html">Results</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RESET_MOST_FREQUENT">RESET_MOST_FREQUENT</a></span></span></li>
@@ -233,8 +233,8 @@ class CategoryFilters extends Component {
 
       seasonYearTabsContent.push(
         &lt;div key={`yearcontent${y}`} className={tabContentClassName} data-tab={y}&gt;
-          &lt;div className=&quot;ui grid&quot;&gt;
-            &lt;div className=&quot;center aligned four wide column&quot;&gt;
+          &lt;div className=&quot;ui stackable grid&quot;&gt;
+            &lt;div className=&quot;four wide column&quot; style={{ paddingRight: &apos;0px&apos;}}&gt;
               &lt;LeagueCategory leagues={this.props.football.seasonsByYear[y]}
                 currentYear={currentYear} tabYear={y}
                 currentSearchTerms={this.props.currentSearchTerms}
@@ -242,9 +242,9 @@ class CategoryFilters extends Component {
                 onClickRemoveLeague={this.props.onClickRemoveCategoryFilter}
               /&gt;
             &lt;/div&gt;
-            &lt;div className=&quot;eight wide column&quot;&gt;
-              &lt;div className=&quot;ui middle aligned grid&quot;&gt;
-                &lt;div className=&quot;five wide column&quot;&gt;
+            &lt;div className=&quot;twelve wide column&quot;&gt;
+              &lt;div className=&quot;ui stackable grid&quot;&gt;
+                &lt;div className=&quot;five wide column&quot; style={{ paddingLeft: &apos;7px&apos; }}&gt;
                   &lt;TeamCategory teamsByLeague={this.props.football.leagueTeamsByYear[y]}
                     currentSearchTerms={this.props.currentSearchTerms}
                     onClickAddTeam={this.props.onClickAddCategoryFilter}
@@ -252,7 +252,7 @@ class CategoryFilters extends Component {
                     onClickSelectTeam={this.props.onClickSelectTeam}
                   /&gt;
                 &lt;/div&gt;
-                &lt;div className=&quot;eleven wide column&quot;&gt;
+                &lt;div className=&quot;middle aligned eleven wide column&quot; style={{ paddingLeft: &apos;0px&apos;, paddingRight: &apos;0px&apos; }}&gt;
                   {
                     !this.props.football.selectedTeam.isSelected &amp;&amp;
                     this.props.football.leagueTeamsByYear[y] &amp;&amp;

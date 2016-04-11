@@ -637,13 +637,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html#lineNumber69",
+    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html#lineNumber86",
     "#categoryFilterActions footballTeamPlayers should create an action to select and request football team players",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html#lineNumber86",
+    "test-file/src/client/search/categories/categoryFilterActions.spec.js.html#lineNumber69",
     "#categoryFilterActions footballTeamPlayers should create an action to select and request football team players",
     "test"
   ],
@@ -889,9 +889,9 @@ window.esdocSearchIndex = [
   ],
   [
     "solid-octo-disco/src/client/results/results.js~results",
-    "variable/index.html#static-variable-Results",
+    "class/src/client/results/Results.js~Results.html",
     "<span>Results</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/Results.js</span>",
-    "variable"
+    "class"
   ],
   [
     "solid-octo-disco/src/client/search/categories/categoryfilteractions.js~select_and_request_football_team",
@@ -1926,6 +1926,24 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/client/results/results.js~results#componentdidmount",
+    "class/src/client/results/Results.js~Results.html#instance-method-componentDidMount",
+    "src/client/results/Results.js~Results#componentDidMount",
+    "method"
+  ],
+  [
+    "src/client/results/results.js~results#componentdidupdate",
+    "class/src/client/results/Results.js~Results.html#instance-method-componentDidUpdate",
+    "src/client/results/Results.js~Results#componentDidUpdate",
+    "method"
+  ],
+  [
+    "src/client/results/results.js~results#render",
+    "class/src/client/results/Results.js~Results.html#instance-method-render",
+    "src/client/results/Results.js~Results#render",
+    "method"
+  ],
+  [
     "src/client/results/mostfrequent/mostfrequent.js",
     "file/src/client/results/mostfrequent/MostFrequent.js.html",
     "src/client/results/mostfrequent/MostFrequent.js",
@@ -1945,15 +1963,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/results/mostfrequent/mostfrequentactions.spec.js",
-    "test-file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html",
-    "src/client/results/mostfrequent/mostFrequentActions.spec.js",
-    "testFile"
-  ],
-  [
-    "src/client/results/mostfrequent/mostfrequentactions.spec.js",
     "file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html",
     "src/client/results/mostfrequent/mostFrequentActions.spec.js",
     "file"
+  ],
+  [
+    "src/client/results/mostfrequent/mostfrequentactions.spec.js",
+    "test-file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html",
+    "src/client/results/mostfrequent/mostFrequentActions.spec.js",
+    "testFile"
   ],
   [
     "src/client/results/mostfrequent/mostfrequentreducer.js",
@@ -2179,15 +2197,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/search/searchactions.spec.js",
-    "file/src/client/search/searchActions.spec.js.html",
-    "src/client/search/searchActions.spec.js",
-    "file"
-  ],
-  [
-    "src/client/search/searchactions.spec.js",
     "test-file/src/client/search/searchActions.spec.js.html",
     "src/client/search/searchActions.spec.js",
     "testFile"
+  ],
+  [
+    "src/client/search/searchactions.spec.js",
+    "file/src/client/search/searchActions.spec.js.html",
+    "src/client/search/searchActions.spec.js",
+    "file"
   ],
   [
     "src/client/search/searchreducer.js",
@@ -2197,15 +2215,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/search/searchreducer.spec.js",
-    "test-file/src/client/search/searchReducer.spec.js.html",
-    "src/client/search/searchReducer.spec.js",
-    "testFile"
-  ],
-  [
-    "src/client/search/searchreducer.spec.js",
     "file/src/client/search/searchReducer.spec.js.html",
     "src/client/search/searchReducer.spec.js",
     "file"
+  ],
+  [
+    "src/client/search/searchreducer.spec.js",
+    "test-file/src/client/search/searchReducer.spec.js.html",
+    "src/client/search/searchReducer.spec.js",
+    "testFile"
   ],
   [
     "src/client/tweetanalysis.js",
@@ -2251,15 +2269,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/server/tweetfinder.spec.js",
-    "file/src/server/tweetFinder.spec.js.html",
-    "src/server/tweetFinder.spec.js",
-    "file"
-  ],
-  [
-    "src/server/tweetfinder.spec.js",
     "test-file/src/server/tweetFinder.spec.js.html",
     "src/server/tweetFinder.spec.js",
     "testFile"
+  ],
+  [
+    "src/server/tweetfinder.spec.js",
+    "file/src/server/tweetFinder.spec.js.html",
+    "src/server/tweetFinder.spec.js",
+    "file"
   ],
   [
     "src/server/twittersearch.js",

@@ -41,7 +41,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentWords">mostFrequentWords</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Feed.js~Feed.html">Feed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/GoogleMap.js~GoogleMap.html">GoogleMap</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/Results.js~Results.html">Results</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RESET_MOST_FREQUENT">RESET_MOST_FREQUENT</a></span></span></li>
@@ -170,65 +170,118 @@ import MostUsedWords from &apos;./mostfrequent/words/MostUsedWords&apos;;
 import MostActiveUsers from &apos;./mostfrequent/users/MostActiveUsers&apos;;
 import GoogleMap from &apos;./GoogleMap&apos;;
 
-let Results = ({ feed, mostFrequent }) =&gt; {
-  const posts = feed.posts;
-  if (posts.length === 0) {
-    return (
-      &lt;div className=&quot;ui violet inverted center aligned segment&quot;&gt;
-        &lt;h2 className=&quot;ui inverted header&quot;&gt;
-          &lt;div className=&quot;sub header&quot;&gt;
-            Start using Socto by typing into the search bar or by using the filters.
-          &lt;/div&gt;
-        &lt;/h2&gt;
-      &lt;/div&gt;
-    );
+class Results extends Component {
+  componentDidMount() {
+    $(&apos;.ui.sticky&apos;).sticky({ context: &apos;#feed&apos; });
+    $(&apos;.tabular.menu.results .item.active&apos;).tab();
   }
 
-  return (
-    &lt;div className=&quot;ui grid&quot;&gt;
+  componentDidUpdate() {
+    $(&apos;.ui.sticky&apos;).sticky({ context: &apos;#feed&apos; });
+    $(&apos;.tabular.menu.results .item&apos;).tab();
+  }
 
-      &lt;div className=&quot;four wide column&quot;&gt;
-        &lt;MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
-          userInfoList={feed.mostFrequentUsers}
-          isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
-          postsLength={posts.length}
-        /&gt;
-      &lt;/div&gt;
+  render() {
+    const { mostFrequent, feed } = this.props;
 
-      &lt;div className=&quot;eight wide column&quot;&gt;
-        &lt;Feed feed={posts}
-          toggledWords={mostFrequent.words.toToggle}
-          isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
-          toggledUsers={mostFrequent.users.toToggle}
-          isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
-          paginationInfo={feed.paginationInfo}
-        /&gt;
+    const posts = feed.posts;
+    if (posts.length === 0) {
+      return (
+        &lt;div className=&quot;row&quot;&gt;
+          &lt;div className=&quot;col-xs-12&quot;&gt;
+            &lt;div className=&quot;ui violet inverted center aligned segment&quot;&gt;
+              &lt;h3 className=&quot;ui inverted header&quot;&gt;
+                Start using Socto by typing into the search bar or by using the filters.
+              &lt;/h3&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      );
+    }
 
-        &lt;div id=&quot;tweetMap&quot; style={{ height: &apos;500px&apos;, width: &apos;100%&apos; }} /&gt;
-        &lt;GoogleMap posts={posts.filter((post) =&gt; post.data.longitude !== 0)} /&gt;
-      &lt;/div&gt;
+    return (
+      &lt;div style={{ width: &apos;100%&apos; }}&gt;
+        &lt;div className=&quot;row&quot; style={{ margin: &apos;0px 25px&apos; }}&gt;
+          &lt;div className=&quot;hidden-md-down col-lg-4&quot;&gt;
+            &lt;div className=&quot;ui sticky&quot;&gt;
+              &lt;MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
+                userInfoList={feed.mostFrequentUsers}
+                isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
+                postsLength={posts.length}
+              /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
 
-      &lt;div className=&quot;four wide column&quot;&gt;
-        &lt;MostUsedWords filterTerm={mostFrequent.words.filterTerm}
-          wordInfoList={feed.groupedMostFrequentWords}
-          isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
-          postsLength={posts.length}
-        /&gt;
-      &lt;/div&gt;
+          &lt;div className=&quot;col-sm-12 col-md-6 col-md-push-6 hidden-lg-up&quot;&gt;
+            &lt;div className=&quot;ui tabular menu results&quot;&gt;
+              &lt;div className=&quot;purple item active&quot; data-tab=&quot;top-users&quot;&gt;Top Users&lt;/div&gt;
+              &lt;div className=&quot;purple item&quot; data-tab=&quot;top-words&quot;&gt;Top Words&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div className=&quot;ui tab active&quot; data-tab=&quot;top-users&quot;&gt;
+              &lt;MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
+                userInfoList={feed.mostFrequentUsers}
+                isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
+                postsLength={posts.length}
+              /&gt;
+            &lt;/div&gt;
+            &lt;div className=&quot;ui tab&quot; data-tab=&quot;top-words&quot;&gt;
+              &lt;MostUsedWords filterTerm={mostFrequent.words.filterTerm}
+                wordInfoList={feed.groupedMostFrequentWords}
+                isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
+                postsLength={posts.length}
+                componentId=&quot;1&quot;
+              /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
 
-      &lt;div className={`ui ${feed.posts.length &gt; 0 &amp;&amp; feed.fetchingRequestFromDB &amp;&amp; &apos;active&apos;} dimmer`}&gt;
-        &lt;div className=&quot;content&quot;&gt;
-          &lt;div className=&quot;center&quot;&gt;
-            &lt;h2 className=&quot;ui inverted icon header&quot;&gt;
-              &lt;div className=&quot;ui large text loader&quot;&gt;Fetching posts from the database!&lt;/div&gt;
-            &lt;/h2&gt;
+          &lt;div id=&quot;feed&quot; className=&quot;col-sm-12 col-md-6 col-md-pull-6 col-lg-5 col-lg-pull-0&quot;&gt;
+            &lt;div className=&quot;hidden-md-down row&quot;&gt;
+              &lt;div id=&quot;tweetMap&quot; style={{ height: &apos;450px&apos;, width: &apos;100%&apos; }} &gt;&lt;/div&gt;
+              &lt;GoogleMap posts={posts.filter((post) =&gt; post.data.longitude !== 0)} /&gt;
+            &lt;/div&gt;
+
+
+            &lt;div className=&quot;row&quot;&gt;
+              &lt;Feed feed={posts}
+                toggledWords={mostFrequent.words.toToggle}
+                isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
+                toggledUsers={mostFrequent.users.toToggle}
+                isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
+                paginationInfo={feed.paginationInfo}
+              /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div className=&quot;hidden-md-down col-lg-3&quot;&gt;
+            &lt;div className=&quot;ui sticky&quot;&gt;
+              &lt;MostUsedWords filterTerm={mostFrequent.words.filterTerm}
+                wordInfoList={feed.groupedMostFrequentWords}
+                isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
+                postsLength={posts.length}
+                componentId=&quot;2&quot;
+              /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+        &lt;/div&gt;
+        &lt;div className={`ui ${feed.posts.length &gt; 0 &amp;&amp; feed.fetchingRequestFromDB &amp;&amp; &apos;active&apos;} purple dimmer`}
+          style={{ position: &apos;fixed&apos;}}
+        &gt;
+          &lt;div className=&quot;content&quot;&gt;
+            &lt;div className=&quot;center&quot;&gt;
+              &lt;h2 className=&quot;ui inverted icon header&quot;&gt;
+                &lt;div className=&quot;ui large text loader&quot;&gt;Fetching posts from the database&lt;/div&gt;
+              &lt;/h2&gt;
+            &lt;/div&gt;
           &lt;/div&gt;
         &lt;/div&gt;
       &lt;/div&gt;
-
-    &lt;/div&gt;
-
-  );
+    );
+  }
+}
+Results.propTypes = {
+  feed: React.PropTypes.object,
+  mostFrequent: React.PropTypes.object,
 };
 
 const mapStateToProps = (state) =&gt; ({
