@@ -29,6 +29,8 @@ export const TwitAccess = new Twit({
  */
 const buildTweetFromRaw = (rawTweet) => {
   const coordinates = findLatitudeLongitude(rawTweet);
+  const image_url = getImageUrl(rawTweet);
+
   return Builders.TweetBuilder()
     .id(rawTweet.id_str)
     .content(rawTweet.text)
@@ -38,6 +40,7 @@ const buildTweetFromRaw = (rawTweet) => {
     .latitude(coordinates.latitude)
     .longitude(coordinates.longitude)
     .contains_a_quoted_tweet(rawTweet.quoted_status ? rawTweet.quoted_status.id_str : '')
+    .image_url(image_url)
     .build();
 };
 
@@ -86,6 +89,24 @@ const findLatitudeLongitude = (rawTweet) => {
 };
 
 /**
+ * Pulls the image url out of a tweet if it has one.
+ * @param rawTweet
+ * @returns {*} A direct link to the image being displayed
+ */
+const getImageUrl = (rawTweet) => {
+  try {
+    const media = rawTweet.entities.media[0];
+    if (media.type === 'photo') {
+      return media.media_url_https;
+    }
+  } catch (err) {
+    return 'none';
+  }
+
+  return 'none';
+}
+
+/**
  * Convert some raw user from the Twitter API into a proper immutable Tweeter object.
  * @param rawTweeter From the Twitter API.
  * @param Boolean to signify if the passed in rawTweeter is a mention object
@@ -99,10 +120,14 @@ export const buildTweeterFromRaw = (rawTweeter, isMentionUser) => {
     .handle(rawTweeter.screen_name);
 
   if (isMentionUser) {
-    tweeter.profile_image_url('none')
+    tweeter
+      .profile_image_url('none')
+      .is_verified(false)
       .is_user_mention(true);
   } else {
-    tweeter.profile_image_url(rawTweeter.profile_image_url_https)
+    tweeter
+      .profile_image_url(rawTweeter.profile_image_url_https)
+      .is_verified(rawTweeter.verified)
       .is_user_mention(false);
   }
 
