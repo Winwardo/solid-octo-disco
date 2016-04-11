@@ -31,6 +31,7 @@ const MostActiveUsers = ({
     >
       <UserItemsList users={filteredItems} postsLength={postsLength}
         isUsersToggledActionHide={isUsersToggledActionHide}
+        filterTerm={filterTerm}
       />
     </MostFrequent>
   );

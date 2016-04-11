@@ -19,7 +19,8 @@ class WordItemsList extends Component {
   componentDidUpdate(nextProps) {
     if (
       nextProps.isWordsToggledActionHide !== this.props.isWordsToggledActionHide ||
-      nextProps.postsLength !== this.props.postsLength
+      nextProps.postsLength !== this.props.postsLength ||
+      nextProps.filterTerm !== this.props.filterTerm
     ) {
       if (this.props.isWordsToggledActionHide) {
         $('.ui.checkbox.words').checkbox('check');
@@ -52,6 +53,7 @@ WordItemsList.propTypes = {
   words: React.PropTypes.array,
   isWordsToggledActionHide: React.PropTypes.bool,
   postsLength: React.PropTypes.number,
+  filterTerm: React.PropTypes.string,
 };
 
 const ConflatedWordItem = ({ componentId, accordianIndex, toggleMostUsedWords, conflatedWordInfo }) => (

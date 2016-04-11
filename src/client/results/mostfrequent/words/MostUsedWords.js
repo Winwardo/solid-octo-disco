@@ -28,6 +28,7 @@ const MostUsedWords = ({
       currentToggledAction={isWordsToggledActionHide}
     >
       <WordItemsList words={filteredItems} postsLength={postsLength}
+        filterTerm={filterTerm}
         componentId={componentId}
         isWordsToggledActionHide={isWordsToggledActionHide}
         toggleMostUsedWords={(word) => {
