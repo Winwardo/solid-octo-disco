@@ -29,7 +29,7 @@ class Feed extends Component {
     const paginatedFeed = paginatePosts(filteredFeed, paginationInfo);
 
     return (
-      <div>
+      <div className="ui raised purple segment">
         <div className="ui two column grid">
           <div className="column">
             <h3>Search results</h3>

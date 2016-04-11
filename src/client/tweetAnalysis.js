@@ -58,21 +58,17 @@ export const groupedCountWords = (countedWords) => {
  * @returns {Array}\
  */
 export const mostFrequentUsers = (tweets, minimumTopUserCount = 10) => {
-  const topUsers = categoriseByUser(tweets);
+  const sortedTopUsers = categoriseByUser(tweets).sort((tweetList1, tweetList2) => (
+    tweetList2.posts.length - tweetList1.posts.length
+  ));
   let topRestUsers = [];
-  if (topUsers.length > minimumTopUserCount) {
-    topRestUsers = topUsers
+  if (sortedTopUsers.length > minimumTopUserCount) {
+    topRestUsers = sortedTopUsers
       .slice(minimumTopUserCount + 1)
       .filter(user => user.posts.length > 1);
   }
 
-  const allTopUsers = [...topUsers.slice(0, minimumTopUserCount), ...topRestUsers];
-  return (
-    allTopUsers
-      .sort((tweetList1, tweetList2) => (
-        tweetList2.posts.length - tweetList1.posts.length
-      ))
-  );
+  return [...sortedTopUsers.slice(0, minimumTopUserCount), ...topRestUsers];
 };
 
 /**
