@@ -1,8 +1,8 @@
 import express from 'express';
 import config from '../../webpack.config.js';
-import { searchQuery, getQuotedTweetFromParent } from './tweetFinder';
+import { searchQuery, getTweetFromDb } from './tweetFinder';
 import { generateDatabase } from './orientdb';
-import { searchAndSaveResponse, stream, TwitAccess } from './twitterSearch';
+import { stream, TwitAccess } from './twitterSearch';
 import bodyParser from 'body-parser';
 import {
   searchFootballSeasons, searchFootballSeasonTeams, searchFootballTeamPlayers
@@ -41,20 +41,15 @@ app.get('/orient/generate', (req, res) => {
   generateDatabase(res);
 });
 
-app.get('/tweet/quotedby/:id', (req, res) => {
-  getQuotedTweetFromParent(res, req.params.id);
-});
-
 app.post('/search', (req, res) => {
   searchQuery(req, res);
 });
 
-app.get('/exampleTwitterJson', (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'application/json' });
-  TwitAccess.get('search/tweets', { q: 'Brussels', count: 300 })
-    .then(tweets => res.end(JSON.stringify(tweets.data.statuses)));
+app.get('/tweet/:id', (req, res) => {
+  getTweetFromDb(res, req.params.id);
 });
 
+// not used in Socto web interface, example test if we could stream
 app.get('/twit/stream/:query', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
   stream(req, res);
@@ -70,6 +65,13 @@ app.post('/football/seasons/:year/teams', (req, res) => {
 
 app.get('/football/teams/:teamid/players', (req, res) => {
   searchFootballTeamPlayers(res, req.params.teamid);
+});
+
+// Used for development purposes to make sure we're hitting the correct twitter end point
+app.get('/exampleTwitterJson', (req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  TwitAccess.get('statuses/show/:id', { id: '718691141239975936' }) //718691141239975936, 717000298338750465, 693770454784425984, 718691141239975936
+    .then(tweets => res.end(JSON.stringify(tweets.data.user)));
 });
 
 app.get('*', (req, res) => {

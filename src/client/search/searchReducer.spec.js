@@ -140,12 +140,14 @@ describe('#FeedReducer', () => {
           records: records,
         },
       },
+      fetchedRequestFromTwitter: false,
     };
 
     const stateAfter = {
       posts: records,
       groupedMostFrequentWords: groupedCountWords(mostFrequentWords(records.map((post) => post.data.content))),
       mostFrequentUsers: mostFrequentUsers(records),
+      fetchingRequestFromDB: false,
     };
 
     deepFreeze(stateBefore);
