@@ -100,7 +100,7 @@ class Results extends Component {
 
         </div>
         <div className={`ui ${feed.posts.length > 0 && feed.fetchingRequestFromDB && 'active'} purple dimmer`}
-          style={{ display: 'fixed'}}
+          style={{ position: 'fixed'}}
         >
           <div className="content">
             <div className="center">
