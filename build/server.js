@@ -101,21 +101,15 @@
 	  (0, _orientdb.generateDatabase)(res);
 	});
 
-	app.get('/tweet/quotedby/:id', function (req, res) {
-	  (0, _tweetFinder.getQuotedTweetFromParent)(res, req.params.id);
-	});
-
 	app.post('/search', function (req, res) {
 	  (0, _tweetFinder.searchQuery)(req, res);
 	});
 
-	app.get('/exampleTwitterJson', function (req, res) {
-	  res.writeHead(200, { 'Content-Type': 'application/json' });
-	  _twitterSearch.TwitAccess.get('search/tweets', { q: 'Brussels', count: 300 }).then(function (tweets) {
-	    return res.end(JSON.stringify(tweets.data.statuses));
-	  });
+	app.get('/tweet/:id', function (req, res) {
+	  (0, _tweetFinder.getTweetFromDb)(res, req.params.id);
 	});
 
+	// not used in Socto web interface, example test if we could stream
 	app.get('/twit/stream/:query', function (req, res) {
 	  res.writeHead(200, { 'Content-Type': 'application/json' });
 	  (0, _twitterSearch.stream)(req, res);
@@ -131,6 +125,15 @@
 
 	app.get('/football/teams/:teamid/players', function (req, res) {
 	  (0, _footballSearch.searchFootballTeamPlayers)(res, req.params.teamid);
+	});
+
+	// Used for development purposes to make sure we're hitting the correct twitter end point
+	app.get('/exampleTwitterJson', function (req, res) {
+	  res.writeHead(200, { 'Content-Type': 'application/json' });
+	  _twitterSearch.TwitAccess.get('statuses/show/:id', { id: '718691141239975936' }) //718691141239975936, 717000298338750465, 693770454784425984, 718691141239975936
+	  .then(function (tweets) {
+	    return res.end(JSON.stringify(tweets.data.user));
+	  });
 	});
 
 	app.get('*', function (req, res) {
@@ -168,7 +171,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.getQuotedTweetFromParent = exports.normaliseQueryTerm = exports.unionTweets = exports.buildTwitterQuery = exports.searchQuery = exports.MAX_TWEET_RESULTS = undefined;
+	exports.getOriginalTweetUserFromTweet = exports.getTweetFromDb = exports.normaliseQueryTerm = exports.unionTweets = exports.buildTwitterQuery = exports.searchQuery = exports.MAX_TWEET_RESULTS = undefined;
 
 	var _orientdb = __webpack_require__(4);
 
@@ -206,9 +209,9 @@
 	    res.writeHead(200, { 'Content-Type': 'application/json' });
 	    res.end(JSON.stringify(presentableTweets));
 	  }, function (rejection) {
+	    console.warn('Unable to search for query \'' + req.body.searchTerms + '\'', rejection);
 	    res.writeHead(500, { 'Content-Type': 'application/json' });
 	    res.end('An unexpected internal error occurred.');
-	    console.warn('Unable to search for query \'' + query + '\'', rejection);
 	  });
 	};
 
@@ -329,7 +332,6 @@
 	};
 
 	var searchDatabase = function searchDatabase(searchObject) {
-	  var alreadyAttemptedRefresh = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 	  return (0, _utilities.newPromiseChain)().then(function () {
 	    return Promise.all(searchObject.paramTypes.filter(function (paramType) {
 	      return paramType.selected;
@@ -341,7 +343,7 @@
 	      return previous.concat(current);
 	    }, []);
 	  }).then(function (tweetRecords) {
-	    return makeTweets(alreadyAttemptedRefresh, searchObject, tweetRecords);
+	    return makeTweets(tweetRecords);
 	  }).then(function (resolved) {
 	    return resolved;
 	  }, function (rejection) {
@@ -403,8 +405,8 @@
 	      }
 	  } else {
 	    return '"' + query + '"'; // add quotes to preserve order
-	  };
-	};;
+	  }
+	};
 
 	var makeTweetQuerySelectingFrom = function makeTweetQuerySelectingFrom(from) {
 	  return 'SELECT ' + '  *' // All the tweet data
@@ -417,8 +419,10 @@
 	  ;
 	};
 
-	var makeTweets = function makeTweets(alreadyAttemptedRefresh, searchObject, tweetRecords) {
-	  return tweetRecords.map(function (tweetRecord) {
+	var makeTweets = function makeTweets(tweetRecords) {
+	  return tweetRecords.filter(function (tweetRecord) {
+	    return tweetRecord.id && tweetRecord.authorId;
+	  }).map(function (tweetRecord) {
 	    return makeTweetAndAuthorFromDatabaseTweetRecord(tweetRecord);
 	  });
 	};
@@ -431,6 +435,10 @@
 	};
 
 	var buildTweeterFromDatabaseTweetRecord = function buildTweeterFromDatabaseTweetRecord(record) {
+	  // will spit out which record couldn't be processed.
+	  if (!(record.authorId && record.authorName && record.authorHandle && record.authorProfileImage)) {
+	    console.log('this record is invalid and cannot be processed', record);
+	  }
 	  return (0, _databaseObjects.TweeterBuilder)().id(record.authorId).name(record.authorName).handle(record.authorHandle).profile_image_url(record.authorProfileImage).is_user_mention(record.isUserMention).build();
 	};
 
@@ -444,23 +452,39 @@
 	  });
 	};
 
-	var getQuotedTweetFromParent = exports.getQuotedTweetFromParent = function getQuotedTweetFromParent(res, id) {
+	var getTweetFromDb = exports.getTweetFromDb = function getTweetFromDb(res, id) {
 	  return (0, _utilities.newPromiseChain)().then(function () {
-	    return _orientdb.db.query(makeTweetQuerySelectingFrom('TRAVERSE OUT FROM (SELECT OUT(\'QUOTED\') FROM (SELECT FROM Tweet WHERE id = :id))'), {
-	      params: {
-	        id: id,
-	        limit: 1
-	      }
-	    });
+	    return _orientdb.db.query(makeTweetQuerySelectingFrom('SELECT FROM tweet WHERE id =:id'), { params: { id: id, limit: 1 } });
 	  }).then(function (results) {
 	    return makeTweetAndAuthorFromDatabaseTweetRecord(results[0]);
 	  }).then(function (response) {
 	    return res.status(200).end(JSON.stringify(response));
 	  }, function (rej) {
 	    return res.status(500).end(JSON.stringify({
-	      message: 'Unable to get quoted tweet from parent.',
+	      message: 'Unable to get tweet from the database.',
 	      reason: rej
 	    }));
+	  });
+	};
+
+	/**
+	 * Used in ./twitterSearch.js:169.
+	 * Tries to get the missing user tweeter for the original tweet from DB
+	 * If not in DB then make a call to twitter to retrieve the whole tweet that contains the user tweeter
+	 * @param String representing the original tweet's id
+	 * @return Tweeter An Immutable Object representing the tweet's user
+	 */
+	var getOriginalTweetUserFromTweet = exports.getOriginalTweetUserFromTweet = function getOriginalTweetUserFromTweet(tweetId) {
+	  return (0, _utilities.newPromiseChain)().then(function () {
+	    return _orientdb.db.query(makeTweetQuerySelectingFrom('SELECT FROM tweet WHERE id =:id'), { params: { id: tweetId, limit: 1 } });
+	  }).then(function (tweetRecords) {
+	    if (tweetRecords.length === 1) {
+	      return buildTweeterFromDatabaseTweetRecord(tweetRecords[0]);
+	    }
+
+	    return _twitterSearch.TwitAccess.get('statuses/show/:id', { id: tweetId }).then(function (tweetResult) {
+	      return (0, _twitterSearch.buildTweeterFromRaw)(tweetResult.data.user, false);
+	    });
 	  });
 	};
 
@@ -629,7 +653,7 @@
 	var schema = exports.schema = {
 	  Tweet: {
 	    superclass: Vertex,
-	    properties: [{ name: 'id', type: String }, { name: 'content', type: String }, { name: 'date', type: Datetime }, { name: 'likes', type: Integer }, { name: 'retweets', type: Integer }, { name: 'longitude', type: Double }, { name: 'latitude', type: Double }, { name: 'contains_a_quoted_tweet', type: Boolean }],
+	    properties: [{ name: 'id', type: String }, { name: 'content', type: String }, { name: 'date', type: Datetime }, { name: 'likes', type: Integer }, { name: 'retweets', type: Integer }, { name: 'longitude', type: Double }, { name: 'latitude', type: Double }, { name: 'contains_a_quoted_tweet', type: String }],
 	    indexes: [{ properties: ['id'], type: UNIQUE }, { properties: ['content'], type: LUCENE }]
 	  },
 	  Tweeter: {
@@ -1010,13 +1034,15 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.stream = exports.searchAndSaveResponse = exports.searchAndSaveFromTwitter = exports.TwitAccess = exports.TWITTER_ENABLED = undefined;
+	exports.stream = exports.searchAndSaveResponse = exports.searchAndSaveFromTwitter = exports.buildTweeterFromRaw = exports.TwitAccess = exports.TWITTER_ENABLED = undefined;
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	var _orientdb = __webpack_require__(4);
 
 	var _databaseInsertActions = __webpack_require__(12);
+
+	var _tweetFinder = __webpack_require__(3);
 
 	var _databaseObjects = __webpack_require__(9);
 
@@ -1050,7 +1076,7 @@
 	// optional HTTP request timeout to apply to all requests.
 	var buildTweetFromRaw = function buildTweetFromRaw(rawTweet) {
 	  var coordinates = findLatitudeLongitude(rawTweet);
-	  return Builders.TweetBuilder().id(rawTweet.id_str).content(rawTweet.text).date(moment(new Date(rawTweet.created_at)).format('YYYY-MM-DD HH:mm:ss')).likes(rawTweet.favorite_count).retweets(rawTweet.retweet_count).latitude(coordinates.latitude).longitude(coordinates.longitude).contains_a_quoted_tweet(rawTweet.is_quote_status).build();
+	  return Builders.TweetBuilder().id(rawTweet.id_str).content(rawTweet.text).date(moment(new Date(rawTweet.created_at)).format('YYYY-MM-DD HH:mm:ss')).likes(rawTweet.favorite_count).retweets(rawTweet.retweet_count).latitude(coordinates.latitude).longitude(coordinates.longitude).contains_a_quoted_tweet(rawTweet.quoted_status ? rawTweet.quoted_status.id_str : '').build();
 	};
 
 	/**
@@ -1104,7 +1130,7 @@
 	 * or a full user object that has a profile_image_url_https
 	 * @returns {ImmutableTweet}
 	 */
-	var buildTweeterFromRaw = function buildTweeterFromRaw(rawTweeter, isMentionUser) {
+	var buildTweeterFromRaw = exports.buildTweeterFromRaw = function buildTweeterFromRaw(rawTweeter, isMentionUser) {
 	  var tweeter = Builders.TweeterBuilder().id(rawTweeter.id_str).name(rawTweeter.name).handle(rawTweeter.screen_name);
 
 	  if (isMentionUser) {
@@ -1123,42 +1149,58 @@
 	/**
 	 * Given some raw status we know is a retweet, insert it and add a RETWEETED link.
 	 * @param db The OrientDB instance
-	 * @param rawRetweet A raw status from the Twitter API
-	 * @param retweeter An immutable Tweeter object
+	 * @param retweeter An immutable Tweeter object representing the author of the rawTweet
+	 * @param rawRetweet A raw status from the Twitter API representing a retweet
 	 * @returns {Promise}
 	 */
-	var processRawRetweet = function processRawRetweet(db, rawTweet, retweeter, rawRetweet) {
+	var processRawRetweet = function processRawRetweet(db, retweeter, rawRetweet) {
 	  var originalTweeter = buildTweeterFromRaw(rawRetweet.user, false);
 	  var originalTweet = buildTweetFromRaw(rawRetweet);
+	  var rawQuotedStatus = rawRetweet.quoted_status;
 
 	  return (0, _utilities.newPromiseChain)().then(function () {
 	    return (0, _databaseInsertActions.upsertTweeter)(db, retweeter);
 	  }).then(function () {
+	    // if the retweet is a quoted tweet then process the quote tweet
+	    // link the quote tweet to the retweet
+	    if (rawQuotedStatus) {
+	      return processQuoteTweet(db, rawRetweet, rawQuotedStatus);
+	    }
+
 	    return processRawOriginalTweet(db, rawRetweet, originalTweeter);
 	  }).then(function () {
 	    return (0, _databaseInsertActions.linkTweeterToRetweet)(db, retweeter, originalTweet);
 	  });
 	};
 
-	var potentiallyLinkQuoteTweetToOriginalTweet = function potentiallyLinkQuoteTweetToOriginalTweet(db, rawQuoteTweet, quotingTweeter, rawOriginalTweet) {
-	  if (rawQuoteTweet.quoted_status) {
-	    var _ret = function () {
-	      var originalTweet = buildTweetFromRaw(rawOriginalTweet);
-	      var quoteTweet = buildTweetFromRaw(rawQuoteTweet);
+	/**
+	 * Given some raw status we know is a quote, insert it and a QUOTED link.
+	 * @param db The OrientDB instance
+	 * @param rawQuoteTweet A raw status from the twitter API which represents the tweet that quoted the rawOriginalTweet
+	 * @param rawOriginalTweet A raw status from the twitter API which represents the tweet that was quoted
+	 * @returns {Promise}
+	 */
+	var processQuoteTweet = function processQuoteTweet(db, rawQuoteTweet, rawOriginalTweet) {
+	  var originalTweet = buildTweetFromRaw(rawOriginalTweet);
+	  var quoteTweet = buildTweetFromRaw(rawQuoteTweet);
+	  var quoteTweeter = buildTweeterFromRaw(rawQuoteTweet.user, false);
 
-	      return {
-	        v: (0, _utilities.newPromiseChain)().then(function () {
-	          return processTweet(db, rawOriginalTweet);
-	        }).then(function () {
-	          return (0, _databaseInsertActions.linkQuoteTweetToOriginalTweet)(db, quoteTweet, originalTweet);
-	        })
-	      };
-	    }();
+	  return (0, _utilities.newPromiseChain)().then(function () {
+	    return processRawOriginalTweet(db, rawQuoteTweet, quoteTweeter);
+	  }).then(function () {
+	    // There's an edge case where the quote in a quoted tweet doesn't have a user Object
+	    // found this is particular to a certain android client
+	    if (rawOriginalTweet.user) {
+	      return buildTweeterFromRaw(rawOriginalTweet.user, false);
+	    }
 
-	    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
-	  }
-
-	  return Promise.resolve();
+	    // If there isn't a user then try to get the user (see ./twitterFinder.js:317-331)
+	    return (0, _tweetFinder.getOriginalTweetUserFromTweet)(rawOriginalTweet.id_str);
+	  }).then(function (originalTweeter) {
+	    return processRawOriginalTweet(db, rawOriginalTweet, originalTweeter);
+	  }).then(function () {
+	    return (0, _databaseInsertActions.linkQuoteTweetToOriginalTweet)(db, quoteTweet, originalTweet);
+	  });
 	};
 
 	/**
@@ -1174,7 +1216,7 @@
 
 	    return (0, _utilities.newPromiseChain)().then(function () {
 	      return (0, _databaseInsertActions.upsertHashtag)(db, hashtag);
-	    }).then(function (result) {
+	    }).then(function () {
 	      return (0, _databaseInsertActions.linkTweetToHashtag)(db, tweet, hashtag);
 	    });
 	  }));
@@ -1186,7 +1228,7 @@
 
 	    return (0, _utilities.newPromiseChain)().then(function () {
 	      return (0, _databaseInsertActions.upsertTweeter)(db, mentionedTweeter);
-	    }).then(function (result) {
+	    }).then(function () {
 	      return (0, _databaseInsertActions.linkTweetToTweeterViaMention)(db, tweet, mentionedTweeter);
 	    });
 	  }));
@@ -1228,7 +1270,7 @@
 	 */
 	var linkTweetToLocation = function linkTweetToLocation(db, tweet, rawPlace) {
 	  if (rawPlace) {
-	    var _ret2 = function () {
+	    var _ret = function () {
 	      var place = buildPlaceFromRaw(rawPlace);
 	      var country = Builders.CountryBuilder().code(rawPlace.country_code).name(rawPlace.country).build();
 
@@ -1245,7 +1287,7 @@
 	      };
 	    }();
 
-	    if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+	    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 	  }
 
 	  return Promise.resolve();
@@ -1263,22 +1305,15 @@
 	  var tweeter = buildTweeterFromRaw(rawTweet.user, false);
 	  var rawRetweetedStatus = rawTweet.retweeted_status;
 	  var rawQuotedStatus = rawTweet.quoted_status;
-	  var id = rawTweet.id;
 
-	  var promises = [];
-	  var types = void 0;
+	  if (rawRetweetedStatus) {
+	    return processRawRetweet(db, tweeter, rawRetweetedStatus);
+	  }
+	  if (rawQuotedStatus) {
+	    return processQuoteTweet(db, rawTweet, rawQuotedStatus);
+	  }
 
-	  return (0, _utilities.newPromiseChain)().then(function () {
-	    return processRawOriginalTweet(db, rawTweet, tweeter);
-	  }).then(function () {
-	    // Quotes that are also retweets confuse our system, so only take EITHER retweets or quotes.
-	    if (rawRetweetedStatus !== undefined) {
-	      return processRawRetweet(db, rawTweet, tweeter, rawRetweetedStatus);
-	    }
-	    if (rawQuotedStatus !== undefined) {
-	      return potentiallyLinkQuoteTweetToOriginalTweet(db, rawTweet, tweeter, rawQuotedStatus);
-	    }
-	  });
+	  return processRawOriginalTweet(db, rawTweet, tweeter);
 	};
 
 	/**
@@ -1299,6 +1334,8 @@
 	        return processTweet(_orientdb.db, rawTweet);
 	      })).then(function () {
 	        return console.log('Successfully processed the Tweets.');
+	      }, function (rej) {
+	        return console.warn('failed to process the tweet into the database cache', rej);
 	      });
 	    }, function (rej) {
 	      console.warn('Unable to search Twitter.', rej);
@@ -1325,7 +1362,7 @@
 	    var added = twitStatuses.length;
 
 	    if (countLeft > 0 && added > 0) {
-	      var _ret3 = function () {
+	      var _ret2 = function () {
 	        var newLowestId = Math.min.apply(Math, _toConsumableArray(twitStatuses.map(function (status) {
 	          return status.id;
 	        })));
@@ -1339,7 +1376,7 @@
 	        };
 	      }();
 
-	      if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object") return _ret3.v;
+	      if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
 	    } else {
 	      return existingStatuses.concat(twitStatuses);
 	    }
@@ -1348,7 +1385,7 @@
 
 	var potentiallySearchTwitter = function potentiallySearchTwitter(exactQuery, count) {
 	  if (count > 0) {
-	    var _ret4 = function () {
+	    var _ret3 = function () {
 	      var actualCount = Math.min(count, MAX_TWEETS_FROM_TWITTER_API); // Twitter will only return a max of 100 Tweets at any time
 	      return {
 	        v: (0, _utilities.newPromiseChain)().then(function () {
@@ -1359,7 +1396,7 @@
 	      };
 	    }();
 
-	    if ((typeof _ret4 === 'undefined' ? 'undefined' : _typeof(_ret4)) === "object") return _ret4.v;
+	    if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object") return _ret3.v;
 	  } else {
 	    return [];
 	  }
