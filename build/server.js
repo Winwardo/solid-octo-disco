@@ -160,7 +160,7 @@
 /* 2 */
 /***/ function(module, exports) {
 
-	// module.exports = require("C:\\Users\\Topher\\Documents\\GitHub\\solid-octo-disco\\webpack.config.js");
+	module.exports = require("C:\\Users\\Topher\\Documents\\GitHub\\solid-octo-disco\\webpack.config.js");
 
 /***/ },
 /* 3 */
@@ -411,10 +411,10 @@
 	var makeTweetQuerySelectingFrom = function makeTweetQuerySelectingFrom(from) {
 	  return 'SELECT ' + '  *' // All the tweet data
 	   + ', in(\'TWEETED\').id AS authorId ' // Now the tweet info
-	   + ', in(\'TWEETED\').name AS authorName ' + ', in(\'TWEETED\').handle AS authorHandle ' + ', in(\'TWEETED\').profile_image_url as authorProfileImage ' + ', in(\'TWEETED\').is_user_mention as isUserMention ' + (' FROM (' + from + ') ') // Selected from a subset of tweets
+	   + ', in(\'TWEETED\').name AS authorName ' + ', in(\'TWEETED\').handle AS authorHandle ' + ', in(\'TWEETED\').profile_image_url as authorProfileImage ' + ', in(\'TWEETED\').is_verified as isVerified ' + ', in(\'TWEETED\').is_user_mention as isUserMention ' + (' FROM (' + from + ') ') // Selected from a subset of tweets
 	   + ' WHERE @class = \'Tweet\' ' // Don't accidentally select authors or hastags etc
 	   + ' ORDER BY date DESC ' // Might be irrelevant
-	   + ' UNWIND authorId, authorName, authorHandle, authorProfileImage, isUserMention ' // Converts from ['Steve'] to 'Steve'
+	   + ' UNWIND authorId, authorName, authorHandle, authorProfileImage, isUserMention, isVerified ' // Converts from ['Steve'] to 'Steve'
 	   + ' LIMIT :limit ' // Don't select too many results
 	  ;
 	};
@@ -439,11 +439,11 @@
 	  if (!(record.authorId && record.authorName && record.authorHandle && record.authorProfileImage)) {
 	    console.log('this record is invalid and cannot be processed', record);
 	  }
-	  return (0, _databaseObjects.TweeterBuilder)().id(record.authorId).name(record.authorName).handle(record.authorHandle).profile_image_url(record.authorProfileImage).is_user_mention(record.isUserMention).build();
+	  return (0, _databaseObjects.TweeterBuilder)().id(record.authorId).name(record.authorName).handle(record.authorHandle).profile_image_url(record.authorProfileImage).is_user_mention(record.isUserMention).is_verified(record.isVerified).build();
 	};
 
 	var buildTweetFromDatabaseRecord = function buildTweetFromDatabaseRecord(record) {
-	  return (0, _databaseObjects.TweetBuilder)().id(record.id).content(record.content).date(record.date.toISOString()).likes(record.likes).retweets(record.retweets).longitude(record.longitude).latitude(record.latitude).contains_a_quoted_tweet(record.contains_a_quoted_tweet).build();
+	  return (0, _databaseObjects.TweetBuilder)().id(record.id).content(record.content).date(record.date.toISOString()).likes(record.likes).retweets(record.retweets).longitude(record.longitude).latitude(record.latitude).contains_a_quoted_tweet(record.contains_a_quoted_tweet).image_url(record.image_url).build();
 	};
 
 	var getTweetsAsResults = function getTweetsAsResults(data) {
@@ -577,10 +577,10 @@
 	 * @param schema See ./shared/data/databaseSchema.js for an example
 	 */
 	var insertClassesFromSchema = function insertClassesFromSchema(db, schema) {
-	  Object.keys(schema).forEach(function (name) {
+	  return Promise.all(Object.keys(schema).map(function (name) {
 	    var clazz = schema[name];
-	    insertClass(db, name, clazz);
-	  });
+	    return insertClass(db, name, clazz);
+	  }));
 	};
 
 	/**
@@ -602,13 +602,19 @@
 	    });
 
 	    if (foundDb === null) {
-	      SERVER.create(DATABASE_NAME).then(function (db) {
-	        insertClassesFromSchema(db, _databaseSchema.schema);
+	      return (0, _utilities.newPromiseChain)().then(function () {
+	        return SERVER.create(DATABASE_NAME);
+	      }).then(function (db) {
+	        return insertClassesFromSchema(db, _databaseSchema.schema);
+	      }).then(function () {
 	        res.end(JSON.stringify('Attempted to generate new database ' + DATABASE_NAME + ' with classes.'));
 	      });
 	    } else {
-	      insertClassesFromSchema(foundDb, _databaseSchema.schema);
-	      res.end(JSON.stringify('Found database ' + DATABASE_NAME + ', attempted to add missing classes.'));
+	      return (0, _utilities.newPromiseChain)().then(function () {
+	        return insertClassesFromSchema(foundDb, _databaseSchema.schema);
+	      }).then(function () {
+	        res.end(JSON.stringify('Found database ' + DATABASE_NAME + ', attempted to add missing classes.'));
+	      });
 	    }
 	  });
 	};
@@ -653,12 +659,12 @@
 	var schema = exports.schema = {
 	  Tweet: {
 	    superclass: Vertex,
-	    properties: [{ name: 'id', type: String }, { name: 'content', type: String }, { name: 'date', type: Datetime }, { name: 'likes', type: Integer }, { name: 'retweets', type: Integer }, { name: 'longitude', type: Double }, { name: 'latitude', type: Double }, { name: 'contains_a_quoted_tweet', type: String }],
+	    properties: [{ name: 'id', type: String }, { name: 'content', type: String }, { name: 'date', type: Datetime }, { name: 'likes', type: Integer }, { name: 'retweets', type: Integer }, { name: 'longitude', type: Double }, { name: 'latitude', type: Double }, { name: 'contains_a_quoted_tweet', type: String }, { name: 'image_url', type: String }],
 	    indexes: [{ properties: ['id'], type: UNIQUE }, { properties: ['content'], type: LUCENE }]
 	  },
 	  Tweeter: {
 	    superclass: Vertex,
-	    properties: [{ name: 'id', type: String }, { name: 'name', type: String }, { name: 'handle', type: String }, { name: 'profile_image_url', type: String }, { name: 'is_user_mention', type: Boolean }],
+	    properties: [{ name: 'id', type: String }, { name: 'name', type: String }, { name: 'handle', type: String }, { name: 'profile_image_url', type: String }, { name: 'is_user_mention', type: Boolean }, { name: 'is_verified', type: Boolean }],
 	    indexes: [{ properties: ['id'], type: UNIQUE }, { properties: ['name'], type: LUCENE }, { properties: ['handle'], type: LUCENE }]
 	  },
 	  Hashtag: {
@@ -1076,7 +1082,9 @@
 	// optional HTTP request timeout to apply to all requests.
 	var buildTweetFromRaw = function buildTweetFromRaw(rawTweet) {
 	  var coordinates = findLatitudeLongitude(rawTweet);
-	  return Builders.TweetBuilder().id(rawTweet.id_str).content(rawTweet.text).date(moment(new Date(rawTweet.created_at)).format('YYYY-MM-DD HH:mm:ss')).likes(rawTweet.favorite_count).retweets(rawTweet.retweet_count).latitude(coordinates.latitude).longitude(coordinates.longitude).contains_a_quoted_tweet(rawTweet.quoted_status ? rawTweet.quoted_status.id_str : '').build();
+	  var image_url = getImageUrl(rawTweet);
+
+	  return Builders.TweetBuilder().id(rawTweet.id_str).content(rawTweet.text).date(moment(new Date(rawTweet.created_at)).format('YYYY-MM-DD HH:mm:ss')).likes(rawTweet.favorite_count).retweets(rawTweet.retweet_count).latitude(coordinates.latitude).longitude(coordinates.longitude).contains_a_quoted_tweet(rawTweet.quoted_status ? rawTweet.quoted_status.id_str : '').image_url(image_url).build();
 	};
 
 	/**
@@ -1124,6 +1132,24 @@
 	};
 
 	/**
+	 * Pulls the image url out of a tweet if it has one.
+	 * @param rawTweet
+	 * @returns {*} A direct link to the image being displayed
+	 */
+	var getImageUrl = function getImageUrl(rawTweet) {
+	  try {
+	    var media = rawTweet.entities.media[0];
+	    if (media.type === 'photo') {
+	      return media.media_url_https;
+	    }
+	  } catch (err) {
+	    return 'none';
+	  }
+
+	  return 'none';
+	};
+
+	/**
 	 * Convert some raw user from the Twitter API into a proper immutable Tweeter object.
 	 * @param rawTweeter From the Twitter API.
 	 * @param Boolean to signify if the passed in rawTweeter is a mention object
@@ -1134,9 +1160,9 @@
 	  var tweeter = Builders.TweeterBuilder().id(rawTweeter.id_str).name(rawTweeter.name).handle(rawTweeter.screen_name);
 
 	  if (isMentionUser) {
-	    tweeter.profile_image_url('none').is_user_mention(true);
+	    tweeter.profile_image_url('none').is_verified(false).is_user_mention(true);
 	  } else {
-	    tweeter.profile_image_url(rawTweeter.profile_image_url_https).is_user_mention(false);
+	    tweeter.profile_image_url(rawTweeter.profile_image_url_https).is_verified(rawTweeter.verified).is_user_mention(false);
 	  }
 
 	  return tweeter.build();
@@ -1454,8 +1480,8 @@
 	  // and therefore has profile image information
 	  var checkQuery = 'SELECT FROM tweeter WHERE id=:id';
 
-	  var update = 'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention WHERE id=:id';
-	  var upsert = 'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention UPSERT WHERE id=:id';
+	  var update = 'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention, is_verified=:is_verified WHERE id=:id';
+	  var upsert = 'UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention, is_verified=:is_verified UPSERT WHERE id=:id';
 
 	  return (0, _utilities.newPromiseChain)().then(function () {
 	    return runQueryOnImmutableObject(db, checkQuery, tweeter);
@@ -1476,7 +1502,7 @@
 	};
 
 	var upsertTweet = exports.upsertTweet = function upsertTweet(db, tweet) {
-	  return runQueryOnImmutableObject(db, 'UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets, longitude=:longitude, latitude=:latitude, contains_a_quoted_tweet=:contains_a_quoted_tweet UPSERT WHERE id=:id', tweet).then(function () {}, function (rej) {
+	  return runQueryOnImmutableObject(db, 'UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets, longitude=:longitude, latitude=:latitude, contains_a_quoted_tweet=:contains_a_quoted_tweet, image_url=:image_url UPSERT WHERE id=:id', tweet).then(function () {}, function (rej) {
 	    console.error('Upsert tweet', rej);
 	  });
 	};
