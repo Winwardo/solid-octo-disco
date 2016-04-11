@@ -160,7 +160,7 @@
 /* 2 */
 /***/ function(module, exports) {
 
-	module.exports = require("C:\\Users\\Topher\\Documents\\GitHub\\solid-octo-disco\\webpack.config.js");
+	// module.exports = require("C:\\Users\\Topher\\Documents\\GitHub\\solid-octo-disco\\webpack.config.js");
 
 /***/ },
 /* 3 */
