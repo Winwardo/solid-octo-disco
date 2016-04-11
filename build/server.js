@@ -1058,8 +1058,6 @@
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 	var Twit = __webpack_require__(13);
 	var moment = __webpack_require__(14);
 	var TWITTER_ENABLED = exports.TWITTER_ENABLED = true;
@@ -1389,9 +1387,9 @@
 
 	    if (countLeft > 0 && added > 0) {
 	      var _ret2 = function () {
-	        var newLowestId = Math.min.apply(Math, _toConsumableArray(twitStatuses.map(function (status) {
-	          return status.id;
-	        })));
+	        var newLowestId = twitStatuses.map(function (status) {
+	          return status.id_str;
+	        }).sort()[0];
 
 	        return {
 	          v: (0, _utilities.newPromiseChain)().then(function () {
@@ -1415,7 +1413,7 @@
 	      var actualCount = Math.min(count, MAX_TWEETS_FROM_TWITTER_API); // Twitter will only return a max of 100 Tweets at any time
 	      return {
 	        v: (0, _utilities.newPromiseChain)().then(function () {
-	          return TwitAccess.get('search/tweets', { q: exactQuery + ' filter:safe', count: actualCount });
+	          return TwitAccess.get('search/tweets', { q: exactQuery + ' filter:safe -filter:retweets', count: actualCount });
 	        }).then(function (twitResults) {
 	          return twitResults.data.statuses;
 	        })
