@@ -1,27 +1,27 @@
 {
-  "coverage": "17.33%",
+  "coverage": "18.66%",
   "expectCount": 150,
-  "actualCount": 26,
+  "actualCount": 28,
   "files": {
     "src/client/search/searchActions.js": {
       "expectCount": 15,
       "actualCount": 0,
       "undocumentLines": [
         8,
-        89,
+        101,
         45,
-        78,
-        108,
-        102,
+        93,
+        120,
         114,
-        95,
+        126,
+        107,
         9,
-        90,
+        102,
         46,
-        109,
-        103,
+        121,
         115,
-        96
+        127,
+        108
       ]
     },
     "src/client/search/AddSearchTerm.js": {
@@ -103,11 +103,11 @@
       ]
     },
     "src/server/tweetFinder.js": {
-      "expectCount": 6,
-      "actualCount": 4,
+      "expectCount": 7,
+      "actualCount": 5,
       "undocumentLines": [
         6,
-        285
+        295
       ]
     },
     "src/client/results/mostfrequent/MostFrequent.js": {
@@ -192,12 +192,12 @@
       ]
     },
     "src/server/twitterSearch.js": {
-      "expectCount": 5,
-      "actualCount": 2,
+      "expectCount": 6,
+      "actualCount": 3,
       "undocumentLines": [
-        11,
-        16,
-        319
+        12,
+        17,
+        340
       ]
     },
     "src/client/search/categories/TeamCategory.js": {
@@ -263,24 +263,15 @@
       ]
     },
     "src/client/tweetAnalysis.js": {
-      "expectCount": 5,
+      "expectCount": 4,
       "actualCount": 4,
-      "undocumentLines": [
-        181
-      ]
-    },
-    "src/server/exampleSearch.js": {
-      "expectCount": 1,
-      "actualCount": 0,
-      "undocumentLines": [
-        1
-      ]
+      "undocumentLines": []
     },
     "src/client/search/searchReducer.js": {
       "expectCount": 3,
       "actualCount": 0,
       "undocumentLines": [
-        67,
+        79,
         58,
         10
       ]
