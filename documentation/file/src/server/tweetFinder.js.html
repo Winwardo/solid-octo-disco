@@ -401,11 +401,12 @@ const makeTweetQuerySelectingFrom = (from) =&gt; (
     + &apos;, in(\&apos;TWEETED\&apos;).name AS authorName &apos;
     + &apos;, in(\&apos;TWEETED\&apos;).handle AS authorHandle &apos;
     + &apos;, in(\&apos;TWEETED\&apos;).profile_image_url as authorProfileImage &apos;
+    + &apos;, in(\&apos;TWEETED\&apos;).is_verified as isVerified &apos;
     + &apos;, in(\&apos;TWEETED\&apos;).is_user_mention as isUserMention &apos;
     + ` FROM (${from}) ` // Selected from a subset of tweets
     + &apos; WHERE @class = \&apos;Tweet\&apos; &apos; // Don&apos;t accidentally select authors or hastags etc
     + &apos; ORDER BY date DESC &apos; // Might be irrelevant
-    + &apos; UNWIND authorId, authorName, authorHandle, authorProfileImage, isUserMention &apos; // Converts from [&apos;Steve&apos;] to &apos;Steve&apos;
+    + &apos; UNWIND authorId, authorName, authorHandle, authorProfileImage, isUserMention, isVerified &apos; // Converts from [&apos;Steve&apos;] to &apos;Steve&apos;
     + &apos; LIMIT :limit &apos; // Don&apos;t select too many results
 );
 
@@ -434,6 +435,7 @@ const buildTweeterFromDatabaseTweetRecord = (record) =&gt; {
       .handle(record.authorHandle)
       .profile_image_url(record.authorProfileImage)
       .is_user_mention(record.isUserMention)
+      .is_verified(record.isVerified)
       .build()
   );
 };
@@ -448,6 +450,7 @@ const buildTweetFromDatabaseRecord = (record) =&gt; (
     .longitude(record.longitude)
     .latitude(record.latitude)
     .contains_a_quoted_tweet(record.contains_a_quoted_tweet)
+    .image_url(record.image_url)
     .build()
 );
 

@@ -200,6 +200,7 @@ export const schema = {
       { name: &apos;longitude&apos;, type: Double },
       { name: &apos;latitude&apos;, type: Double },
       { name: &apos;contains_a_quoted_tweet&apos;, type: String },
+      { name: &apos;image_url&apos;, type: String },
     ],
     indexes: [
       { properties: [&apos;id&apos;], type: UNIQUE, },
@@ -214,6 +215,7 @@ export const schema = {
       { name: &apos;handle&apos;, type: String },
       { name: &apos;profile_image_url&apos;, type: String },
       { name: &apos;is_user_mention&apos;, type: Boolean },
+      { name: &apos;is_verified&apos;, type: Boolean },
     ],
     indexes: [
       { properties: [&apos;id&apos;], type: UNIQUE, },

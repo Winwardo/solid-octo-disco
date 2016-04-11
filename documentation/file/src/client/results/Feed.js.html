@@ -357,6 +357,19 @@ const Tweet = ({ content }) =&gt; {
     quotedContent = &lt;QuotedTweet tweetId={content.data.contains_a_quoted_tweet} /&gt;;
   }
 
+  let verifiedImage;
+  if (content.author.is_verified) {
+    verifiedImage = &lt;img className=&quot;popup image&quot; src=&quot;public/images/verified.png&quot; alt=&quot;User is verified on Twitter.&quot; data-title=&quot;User is verified on Twitter&quot; /&gt;
+  }
+
+  const image_url = content.data.image_url;
+  let tweetImage;
+  if (image_url !== &apos;none&apos;) {
+    tweetImage = &lt;a href={image_url} target=&quot;_blank&quot;&gt;
+        &lt;img className=&quot;ui bordered centered rounded image&quot; style={{maxHeight: &apos;400px&apos;, width: &apos;60%&apos;}} src={image_url} alt={`Embedded image: ${image_url}`} /&gt;
+      &lt;/a&gt;
+  }
+
   // Just below we use dangerousSetInnerHTML.
   // The content it is display has come from Twitter and is safe to render as actual HTML,
   // as all HTML entities have already been encoded - e.g., instead of &lt;script&gt; a tweet
@@ -370,11 +383,12 @@ const Tweet = ({ content }) =&gt; {
       &lt;a href={`//twitter.com/${content.author.handle}`} target=&quot;_blank&quot;&gt;
         &lt;strong className=&quot;tweet fullname header&quot;&gt;{decodedAuthorName}&lt;/strong&gt;
         &amp;nbsp;
-        &lt;span style={{color: &apos;#A333C8&apos;}}&gt;@{content.author.handle}&lt;/span&gt;
+        &lt;span style={{color: &apos;#A333C8&apos;}}&gt;@{content.author.handle} {verifiedImage}&lt;/span&gt;
       &lt;/a&gt;
       &lt;br /&gt;
       &lt;div dangerouslySetInnerHTML={{ __html: tweetWithLinks }} /&gt;
 
+      {tweetImage}
       {quotedContent}
 
       &lt;div className=&quot;meta&quot;&gt;

@@ -176,8 +176,8 @@ export const upsertTweeter = (db, tweeter) =&gt; {
   // and therefore has profile image information
   const checkQuery = &apos;SELECT FROM tweeter WHERE id=:id&apos;;
 
-  const update = &apos;UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention WHERE id=:id&apos;;
-  const upsert = &apos;UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention UPSERT WHERE id=:id&apos;;
+  const update = &apos;UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention, is_verified=:is_verified WHERE id=:id&apos;;
+  const upsert = &apos;UPDATE tweeter SET id=:id, name=:name, handle=:handle, profile_image_url=:profile_image_url, is_user_mention=:is_user_mention, is_verified=:is_verified UPSERT WHERE id=:id&apos;;
 
   return newPromiseChain()
     .then(() =&gt; runQueryOnImmutableObject(db, checkQuery, tweeter))
@@ -199,7 +199,7 @@ export const upsertTweeter = (db, tweeter) =&gt; {
 export const upsertTweet = (db, tweet) =&gt; (
   runQueryOnImmutableObject(
     db,
-    &apos;UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets, longitude=:longitude, latitude=:latitude, contains_a_quoted_tweet=:contains_a_quoted_tweet UPSERT WHERE id=:id&apos;,
+    &apos;UPDATE tweet SET id=:id, content=:content, date=:date, likes=:likes, retweets=:retweets, longitude=:longitude, latitude=:latitude, contains_a_quoted_tweet=:contains_a_quoted_tweet, image_url=:image_url UPSERT WHERE id=:id&apos;,
     tweet
   ).then(() =&gt; {}, (rej) =&gt; { console.error(&apos;Upsert tweet&apos;, rej); })
 );

@@ -107,7 +107,7 @@
       "actualCount": 5,
       "undocumentLines": [
         6,
-        295
+        298
       ]
     },
     "src/client/results/mostfrequent/MostFrequent.js": {
@@ -197,7 +197,7 @@
       "undocumentLines": [
         12,
         17,
-        340
+        365
       ]
     },
     "src/client/search/categories/TeamCategory.js": {
@@ -259,7 +259,7 @@
       "expectCount": 2,
       "actualCount": 1,
       "undocumentLines": [
-        106
+        111
       ]
     },
     "src/client/tweetAnalysis.js": {
