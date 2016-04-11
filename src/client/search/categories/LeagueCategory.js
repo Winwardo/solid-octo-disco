@@ -25,7 +25,7 @@ class LeagueCategory extends Component {
       'ui purple horizontal label year league count content transition hidden';
 
     return (
-      <div className="large ui dropdown labeled icon button leagues category">
+      <div className="large fluid ui dropdown labeled icon button leagues category" style={{ paddingLeft: '13px!important', paddingRight: '38px!important'}}>
         {yearsLeagues.length === 0 ? isFetchingLoader : <i className="trophy purple icon"></i>}
         <span className="text">
           {
@@ -80,6 +80,7 @@ LeagueCategory.propTypes = {
   onClickAddLeague: React.PropTypes.func,
   onClickRemoveLeague: React.PropTypes.func,
 };
+
 const LeagueItem = ({ name, alreadyAddedToSearch, onClickLeague }) => (
   <div className="item league" onClick={() => onClickLeague()}>
     {name}

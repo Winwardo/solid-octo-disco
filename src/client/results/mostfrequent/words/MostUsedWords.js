@@ -8,14 +8,16 @@ import {
 import WordItemsList from './WordItemsList';
 
 const MostUsedWords = ({
-  dispatch, wordInfoList, isWordsToggledActionHide, filterTerm, postsLength,
+  dispatch, wordInfoList, isWordsToggledActionHide, filterTerm, postsLength, componentId
 }) => {
   const filteredItems = wordInfoList.filter(
     (wordInfo) => wordInfo.word.toLowerCase().includes(filterTerm.toLowerCase())
   ).slice(0, 100);
 
   return (
-    <MostFrequent title="Most Used Words"
+    <MostFrequent title="Top Words"
+      icon="file text icon"
+      count={filteredItems.length}
       filterTerm={filterTerm}
       onTypingInSearchBar={(newFilterTerm) => {
         dispatch(updateMostUsedWordsSearch(newFilterTerm));
@@ -26,6 +28,8 @@ const MostUsedWords = ({
       currentToggledAction={isWordsToggledActionHide}
     >
       <WordItemsList words={filteredItems} postsLength={postsLength}
+        filterTerm={filterTerm}
+        componentId={componentId}
         isWordsToggledActionHide={isWordsToggledActionHide}
         toggleMostUsedWords={(word) => {
           dispatch(toggleMostUsedWords(word));

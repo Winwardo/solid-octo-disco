@@ -68,8 +68,8 @@ class CategoryFilters extends Component {
 
       seasonYearTabsContent.push(
         <div key={`yearcontent${y}`} className={tabContentClassName} data-tab={y}>
-          <div className="ui grid">
-            <div className="center aligned four wide column">
+          <div className="ui stackable grid">
+            <div className="four wide column" style={{ paddingRight: '0px'}}>
               <LeagueCategory leagues={this.props.football.seasonsByYear[y]}
                 currentYear={currentYear} tabYear={y}
                 currentSearchTerms={this.props.currentSearchTerms}
@@ -77,9 +77,9 @@ class CategoryFilters extends Component {
                 onClickRemoveLeague={this.props.onClickRemoveCategoryFilter}
               />
             </div>
-            <div className="eight wide column">
-              <div className="ui middle aligned grid">
-                <div className="five wide column">
+            <div className="twelve wide column">
+              <div className="ui stackable grid">
+                <div className="five wide column" style={{ paddingLeft: '7px' }}>
                   <TeamCategory teamsByLeague={this.props.football.leagueTeamsByYear[y]}
                     currentSearchTerms={this.props.currentSearchTerms}
                     onClickAddTeam={this.props.onClickAddCategoryFilter}
@@ -87,7 +87,7 @@ class CategoryFilters extends Component {
                     onClickSelectTeam={this.props.onClickSelectTeam}
                   />
                 </div>
-                <div className="eleven wide column">
+                <div className="middle aligned eleven wide column" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
                   {
                     !this.props.football.selectedTeam.isSelected &&
                     this.props.football.leagueTeamsByYear[y] &&

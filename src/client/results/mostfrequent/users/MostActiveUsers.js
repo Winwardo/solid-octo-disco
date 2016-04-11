@@ -17,7 +17,9 @@ const MostActiveUsers = ({
   ).slice(0, 100);
 
   return (
-    <MostFrequent title={`${filteredItems.length} Most Active Users`}
+    <MostFrequent title="Top Users"
+      icon="user icon"
+      count={filteredItems.length}
       filterTerm={filterTerm}
       onTypingInSearchBar={(newFilterTerm) => {
         dispatch(updateActiveUsersSearch(newFilterTerm));
@@ -29,6 +31,7 @@ const MostActiveUsers = ({
     >
       <UserItemsList users={filteredItems} postsLength={postsLength}
         isUsersToggledActionHide={isUsersToggledActionHide}
+        filterTerm={filterTerm}
       />
     </MostFrequent>
   );
