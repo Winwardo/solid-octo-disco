@@ -9,9 +9,10 @@ Created by team `solid-octo-disco 👌` (Topher Winward & Vasily Shelkov)
 ## I want to just run this.
 If you are reading this as a marker, you should have access to a pre-built copy of Socto.
 Two steps are required to running Socto:
-+ Ensure OrientDB is running. Do this by running `START_DATABASE_WINDOWS.bat`.
++ Ensure OrientDB is running. Do this by running `START_DATABASE_WINDOWS.bat` (or `./START_DATABASE_LINUX.sh` in a new terminal).
   + If you receive the error `"The ORIENTDB_HOME environment variable is not defined correctly"`, please manually go to `./lib/orientdb/bin/` and double click `server.bat` - do not run it from a command prompt.
 + Start the Node server: run `npm start` from a command prompt within the `solid-octo-disco` folder.
++ Go to http://localhost:3000/orient/generate (if not pre-build)
 + Socto should now be accessible at http://localhost:3000.
 + If either the `./build` or `./node_modules` folder is missing, please follow the next instructions for building.
 
