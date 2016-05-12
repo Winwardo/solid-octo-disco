@@ -7,6 +7,8 @@ import bodyParser from 'body-parser';
 import {
   searchFootballSeasons, searchFootballSeasonTeams, searchFootballTeamPlayers
 } from './footballSearch';
+const {SparqlClient, SPARQL} = require('sparql-client-2');
+
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -65,6 +67,109 @@ app.post('/football/seasons/:year/teams', (req, res) => {
 
 app.get('/football/teams/:teamid/players', (req, res) => {
   searchFootballTeamPlayers(res, req.params.teamid);
+});
+
+app.get('/journalism/teams/:teamname', (req, res) => {
+  const team = req.params.teamname;
+
+  const client =
+    new SparqlClient('http://dbpedia.org/sparql')
+      .register({
+        db: 'http://dbpedia.org/resource/',
+        dbpedia: 'http://dbpedia.org/property/'
+      });
+
+  const cityName = 'Vienna';
+
+  const clubPlayers = client
+    .query(SPARQL`
+      SELECT * WHERE {
+        ${{dbr: team}} <http://dbpedia.org/ontology/wikiPageRedirects> ?team .
+        ?team a <http://dbpedia.org/ontology/SoccerClub> .
+        ?player dbp:currentclub ?team .
+        ?player dbp:fullname ?name
+      }
+    `)
+    .execute();
+
+  const clubDescription = client
+    .query(SPARQL`
+      SELECT * WHERE {
+        ${{dbr: team}} <http://dbpedia.org/ontology/wikiPageRedirects> ?team .
+        ?team a <http://dbpedia.org/ontology/SoccerClub> .
+        ?team dbo:abstract ?abstract .
+        FILTER(langMatches(lang(?abstract), "EN"))
+      }
+    `)
+    .execute();
+
+  const groundsDescription = client
+      .query(SPARQL`
+        SELECT * WHERE {
+          ${{dbr: team}} <http://dbpedia.org/ontology/wikiPageRedirects> ?team .
+          ?team a <http://dbpedia.org/ontology/SoccerClub> .
+          ?team dbo:ground ?grounds .
+            ?grounds dbp:name ?groundname .
+            ?grounds dbo:thumbnail ?thumbnail
+
+            FILTER(langMatches(lang(?groundname), "EN"))
+        }
+      `)
+      .execute();
+
+  Promise.all([clubPlayers, clubDescription, groundsDescription])
+    .then(thing => {
+        console.log(thing.length)
+
+        let players = [];
+        try {
+          players = thing[0].results.bindings.map((player) => {return {
+              name: player.name.value,
+              source: player.player.value,
+            }});
+        } catch (err) { }
+
+        let clubInfo = {};
+        try {
+          const clubInfoRaw = thing[1].results.bindings[0]
+          clubInfo = {abstract: clubInfoRaw.abstract.value}
+        } catch (err) { }
+
+        let groundsInfo = {}
+        try {
+          const groundsInfoRaw = thing[2].results.bindings[0]
+          groundsInfo = {
+            name: groundsInfoRaw.groundname.value,
+            thumbnail: groundsInfoRaw.thumbnail.value,
+          }
+        } catch (err) { }
+
+        //console.log(thing);
+        res.end(JSON.stringify({players, clubInfo, groundsInfo}));
+      },
+      rej => {
+        console.log("fail")
+        console.log(rej)
+        res.end("poop")
+      }
+    );
+
+
+
+  //console.log("hey", team);
+  //const client = new sparql.Client('http://dbpedia.org/sparql');
+  //
+  //
+  //const query = 'SELECT * WHERE { ' +
+  //  'dbr:' + team + '<http://dbpedia.org/ontology/wikiPageRedirects> ?team . ' +
+  //  '?team a <http://dbpedia.org/ontology/SoccerClub> . ' +
+  //  '?player dbp:currentclub ?team . ' +
+  //  '?player dbp:fullname ?name ' +
+  //  '}';
+  //client.query(query, (err, response) => {
+  //  console.log(response);
+  //  res.end(JSON.stringify(response));
+  //});
 });
 
 // Used for development purposes to make sure we're hitting the correct twitter end point
