@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SlidingSearchBar from './SearchBar';
 
 const MostFrequent = ({
-  title, icon, count, filterTerm, onTypingInSearchBar, onToggleAll, currentToggledAction, children
+  title, icon, count, filterTerm, onTypingInSearchBar, onToggleAll, currentToggledAction, children,
 }) => (
   <div className="ui raised purple segment">
     <div className="ui one statistics">

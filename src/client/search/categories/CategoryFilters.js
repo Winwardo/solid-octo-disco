@@ -69,7 +69,7 @@ class CategoryFilters extends Component {
       seasonYearTabsContent.push(
         <div key={`yearcontent${y}`} className={tabContentClassName} data-tab={y}>
           <div className="ui stackable grid">
-            <div className="four wide column" style={{ paddingRight: '0px'}}>
+            <div className="four wide column" style={{ paddingRight: '0px' }}>
               <LeagueCategory leagues={this.props.football.seasonsByYear[y]}
                 currentYear={currentYear} tabYear={y}
                 currentSearchTerms={this.props.currentSearchTerms}

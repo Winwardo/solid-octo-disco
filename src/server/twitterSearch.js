@@ -104,7 +104,7 @@ const getImageUrl = (rawTweet) => {
   }
 
   return 'none';
-}
+};
 
 /**
  * Convert some raw user from the Twitter API into a proper immutable Tweeter object.
