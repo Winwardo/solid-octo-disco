@@ -1,4 +1,4 @@
-const { SparqlClient, SPARQL } = require('sparql-client-2');
+import { SparqlClient, SPARQL } from 'sparql-client-2';
 import { newPromiseChain } from '../shared/utilities';
 
 const client =
