@@ -69,7 +69,6 @@ app.get('/football/teams/:teamid/players', (req, res) => {
 });
 
 app.get('/journalism/teams/:teamname', (req, res) => {
-  console.log('hit');
   journalismTeam(res, req.params.teamname);
 });
 
