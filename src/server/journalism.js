@@ -14,8 +14,8 @@ export const journalismTeam = (res, team) => {
       SELECT * WHERE {
         dbr:${team} <http://dbpedia.org/ontology/wikiPageRedirects> ?team .
         ?team a <http://dbpedia.org/ontology/SoccerClub> .
-        ?player dbp:currentclub ?team .
-        ?player dbp:fullname ?name
+        ?player <http://dbpedia.org/property/currentclub> ?team .
+        ?player <http://dbpedia.org/property/fullname> ?name
       }
     `)
     .execute();
@@ -25,7 +25,7 @@ export const journalismTeam = (res, team) => {
       SELECT * WHERE {
         dbr:${team} <http://dbpedia.org/ontology/wikiPageRedirects> ?team .
         ?team a <http://dbpedia.org/ontology/SoccerClub> .
-        ?team dbo:abstract ?abstract .
+        ?team <http://dbpedia.org/ontology/abstract> ?abstract .
         FILTER(langMatches(lang(?abstract), "EN"))
       }
     `)
@@ -36,11 +36,11 @@ export const journalismTeam = (res, team) => {
         SELECT * WHERE {
           dbr:${team} <http://dbpedia.org/ontology/wikiPageRedirects> ?team .
           ?team a <http://dbpedia.org/ontology/SoccerClub> .
-          ?team dbo:ground ?grounds .
-            ?grounds dbp:name ?groundname .
-            ?grounds dbo:thumbnail ?thumbnail
+          ?team <http://dbpedia.org/ontology/ground> ?grounds .
+          ?grounds <http://dbpedia.org/property/name> ?groundname .
+          ?grounds <http://dbpedia.org/ontology/thumbnail> ?thumbnail
 
-            FILTER(langMatches(lang(?groundname), "EN"))
+          FILTER(langMatches(lang(?groundname), "EN"))
         }
       `)
     .execute();
