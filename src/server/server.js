@@ -7,7 +7,7 @@ import bodyParser from 'body-parser';
 import {
   searchFootballSeasons, searchFootballSeasonTeams, searchFootballTeamPlayers
 } from './footballSearch';
-import { journalismTeam } from './journalism';
+import { journalismTeam, journalismPlayer } from './journalism';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -70,6 +70,10 @@ app.get('/football/teams/:teamid/players', (req, res) => {
 
 app.get('/journalism/teams/:teamname', (req, res) => {
   journalismTeam(res, req.params.teamname);
+});
+
+app.get('/journalism/player/:playername', (req, res) => {
+  journalismPlayer(res, req.params.playername);
 });
 
 // Used for development purposes to make sure we're hitting the correct twitter end point

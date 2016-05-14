@@ -45,8 +45,7 @@ export const journalismTeam = (res, team) => {
       `)
     .execute();
 
-  newPromiseChain()
-    .then(() => Promise.all([clubPlayers, clubDescription, groundsDescription]))
+  Promise.all([clubPlayers, clubDescription, groundsDescription])
     .then(
       results => {
         const players = extractPlayers(results[0]);
@@ -67,10 +66,7 @@ const extractPlayers = (rawPlayersJson) => {
 
   try {
     const rawPlayers = rawPlayersJson.results.bindings;
-    return rawPlayers.map((player) => ({
-        name: player.name.value,
-        source: player.player.value,
-      }));
+    return rawPlayers;
   } catch (err) {
     console.warn(`Unable to find players for team ${team}.`);
     return defaultObject;
@@ -84,7 +80,7 @@ const extractClubInfo = (rawClubJson) => {
     const clubInfoRaw = rawClubJson.results.bindings[0];
     return {
       ...defaultObject,
-      abstract: clubInfoRaw.abstract.value,
+      abstract: clubInfoRaw.abstract,
     };
   } catch (err) {
     console.log(`Unable to retrieve club info for ${team}.`);
@@ -99,8 +95,8 @@ const extractGroundsInfo = (rawGroundsJson) => {
     const groundsInfoRaw = rawGroundsJson.results.bindings[0];
     return {
       ...defaultObject,
-      name: groundsInfoRaw.groundname.value,
-      thumbnail: groundsInfoRaw.thumbnail.value,
+      name: groundsInfoRaw.groundname,
+      thumbnail: groundsInfoRaw.thumbnail,
     };
   } catch (err) {
     console.log(`Unable to retrieve grounds info for ${team}.`);
@@ -108,3 +104,58 @@ const extractGroundsInfo = (rawGroundsJson) => {
   }
 };
 
+export const journalismPlayer = (res, playerName) => {
+  const mainDescription = client
+    .query(`
+      SELECT DISTINCT * WHERE {
+        ?player foaf:name "${playerName}"@en .
+        {
+          ?player a umbel-rc:SoccerPlayer
+        } UNION {
+          ?player a dbo:SoccerPlayer
+        } .
+
+        OPTIONAL { ?player <http://dbpedia.org/property/fullname> ?fullname } .
+        OPTIONAL { ?player <http://dbpedia.org/ontology/Person/height> ?height } .
+        OPTIONAL { ?player <http://dbpedia.org/ontology/birthDate> ?birthdate } .
+        OPTIONAL { ?player <http://dbpedia.org/property/position> ?position . ?position rdfs:label ?positionlabel . FILTER(langMatches(lang(?positionlabel), "EN")) } .
+        OPTIONAL { ?player <http://dbpedia.org/property/caps> ?caps } .
+        OPTIONAL { ?player <http://dbpedia.org/property/quote> ?quote } .
+        OPTIONAL { ?player <http://dbpedia.org/ontology/thumbnail> ?thumbnail } .
+        OPTIONAL { ?player <http://dbpedia.org/property/currentclub> ?currentclub . ?currentclub <http://dbpedia.org/property/fullname> ?currentclubname } .
+
+        OPTIONAL { ?player dbo:abstract ?abstract . FILTER(langMatches(lang(?abstract), "EN")) } .
+      }
+      LIMIT 1
+    `)
+    .execute();
+
+  const allTeams = client
+    .query(`
+      SELECT DISTINCT * WHERE {
+        ?player foaf:name "${playerName}"@en .
+        {
+          ?player a umbel-rc:SoccerPlayer
+        } UNION {
+          ?player a dbo:SoccerPlayer
+        } .
+
+        ?player dbo:team ?team .
+        ?team rdfs:label ?teamname .
+        FILTER(langMatches(lang(?teamname), "EN")) .
+      }
+    `)
+    .execute();
+
+  Promise.all([mainDescription, allTeams])
+    .then((result) => {
+      try {
+        res.end(JSON.stringify({
+          description: result[0].results.bindings[0],
+          teams: result[1].results.bindings,
+        }));
+      } catch (err) {
+
+      }
+    });
+};;
