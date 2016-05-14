@@ -9,6 +9,18 @@ const client =
     });
 
 export const journalismTeam = (res, team) => {
+  return getTeamInformation(team)
+    .then(result => {
+        res.end(JSON.stringify(result));
+      },
+      rej => {
+        console.log(rej);
+        res.status(500).end(`Unable to retrieve information about team ${team}.`);
+      }
+    );
+};
+
+const getTeamInformation = (team) => {
   const clubPlayers = client
     .query(`
       SELECT * WHERE {
@@ -45,18 +57,14 @@ export const journalismTeam = (res, team) => {
       `)
     .execute();
 
-  Promise.all([clubPlayers, clubDescription, groundsDescription])
+  return Promise.all([clubPlayers, clubDescription, groundsDescription])
     .then(
       results => {
         const players = extractPlayers(results[0]);
         const clubInfo = extractClubInfo(results[1]);
         const groundsInfo = extractGroundsInfo(results[2]);
 
-        res.end(JSON.stringify({ players, clubInfo, groundsInfo }));
-      },
-      rej => {
-        console.log(rej);
-        res.status(500).end(`Unable to retrieve information about team ${team}.`);
+        return {team, players, clubInfo, groundsInfo};
       }
     );
 };
