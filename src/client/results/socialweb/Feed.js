@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { setFeedPageNumber, setFeedPageLimit } from '../search/searchActions';
-import { TwitterProfilePicture } from '../Twitter';
-import { fetchPost, newPromiseChain } from '../../shared/utilities';
+import { setFeedPageNumber, setFeedPageLimit } from '../../search/searchActions';
+import { TwitterProfilePicture } from '../../Twitter';
 
 class Feed extends Component {
   componentDidMount() {

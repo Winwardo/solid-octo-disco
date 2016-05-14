@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { toggleMostActiveUser } from './../mostFrequentActions';
-import { mostFrequentWords } from './../../../tweetAnalysis';
-import { TwitterProfilePicture } from '../../../Twitter';
+import { toggleMostActiveUser } from '../mostFrequentActions';
+import { mostFrequentWords } from '../../../../tweetAnalysis';
+import { TwitterProfilePicture } from '../../../../Twitter';
 
 class UserItemsList extends Component {
   componentDidMount() {
