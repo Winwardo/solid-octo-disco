@@ -1,26 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 const Header = () => (
-	<div className="ui three item menu borderless">
-		<h1 className="item">
-			Socto
+		<h1 className="ui center aligned icon header">
 			<i className="icon-thumbs-ok"></i>
-		</h1>
-
-		<a className="item">
-			<i className="huge help circle icon"></i>
-			logo
-		</a>
-
-		{/* Not Implemented Login/Register yet
-			<div className="item">
-			<div className="ui buttons">
-			<button className="ui button">Join</button>
-			<div className="or"></div>
-			<button className="ui button">Log In</button>
+			<div className="content">
+				Socto
 			</div>
-		</div> */}
-	</div>
+		</h1>
 );
 
 export default Header;
