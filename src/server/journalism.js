@@ -23,17 +23,17 @@ export const journalismTeam = (res, team1) => {
       return getTeamInformation(team1).then((results) => ({...all, leftTeam: results}))
     }).then((all) => {
       return Promise.all(all.footballApiData.fixtures.slice(0, 2).map((fixture) => {
-        let t;
+        let otherTeamName;
         if (fixture.homeTeamName === team1) {
-          t = getTeamInformation(fixture.awayTeamName)
+          otherTeamName = fixture.awayTeamName;
         } else if (fixture.awayTeamName === team1) {
-          t = getTeamInformation(fixture.homeTeamName)
+          otherTeamName = fixture.homeTeamName;
         } else {
           throw("Bad error")
         }
 
-        return t.then((result) => (
-        {leftTeam: all.leftTeam, rightTeam: result}
+        return getTeamInformation(otherTeamName).then((result) => (
+          {leftTeam: all.leftTeam, rightTeam: result}
         ));
       })).then((data) => ({...all, matches: data}))
     }).then((all) => ({matches: all.matches, dbInfo: all.dbInfo})
