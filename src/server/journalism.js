@@ -93,29 +93,28 @@ const getTeamInformation = (teamOriginal) => {
   return Promise.all([clubPlayers, clubDescription, groundsDescription])
     .then(
       results => {
-        const players = extractPlayers(results[0]);
-        const clubInfo = extractClubInfo(results[1]);
-        const groundsInfo = extractGroundsInfo(results[2]);
-        console.log('d');
+        const players = extractPlayers(results[0], team);
+        const clubInfo = extractClubInfo(results[1], team);
+        const groundsInfo = extractGroundsInfo(results[2], team);
 
         return { team, players, clubInfo, groundsInfo };
       }
     );
 };
 
-const extractPlayers = (rawPlayersJson) => {
+const extractPlayers = (rawPlayersJson, team) => {
   const defaultObject = [];
 
   try {
     const rawPlayers = rawPlayersJson.results.bindings;
     return rawPlayers;
   } catch (err) {
-    console.warn(`Unable to find players for team {team}.`);
+    console.warn(`Unable to find players for team ${team}.`);
     return defaultObject;
   }
 };
 
-const extractClubInfo = (rawClubJson) => {
+const extractClubInfo = (rawClubJson, team) => {
   const defaultObject = { abstract: 'No description available.' };
 
   try {
@@ -125,12 +124,12 @@ const extractClubInfo = (rawClubJson) => {
       abstract: clubInfoRaw.abstract,
     };
   } catch (err) {
-    console.log(`Unable to retrieve club info for {team}.`);
+    console.log(`Unable to retrieve club info for ${team}.`);
     return defaultObject;
   }
 };
 
-const extractGroundsInfo = (rawGroundsJson) => {
+const extractGroundsInfo = (rawGroundsJson, team) => {
   const defaultObject = { name: { value: 'No name available.' }, thumbnail: { value: 'none' } };
 
   try {
@@ -141,7 +140,7 @@ const extractGroundsInfo = (rawGroundsJson) => {
       thumbnail: groundsInfoRaw.thumbnail,
     };
   } catch (err) {
-    console.log(`Unable to retrieve grounds info for {team}.`);
+    console.log(`Unable to retrieve grounds info for ${team}.`);
     return defaultObject;
   }
 };
