@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { throttleFunction } from '../../../shared/utilities';
+import React from 'react';
+import { throttleFunction } from '../../../../shared/utilities';
 
 const SlidingSearchBar = ({ onTypingInSearchBar, currentValue }) => {
   const delayedOnTypingInSearchBar = throttleFunction(onTypingInSearchBar, 250);

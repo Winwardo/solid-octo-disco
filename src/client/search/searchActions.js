@@ -1,6 +1,6 @@
 import { fetchPost, newPromiseChain } from '../../shared/utilities';
 import { doesFeedHaveUsefulResults } from '../tweetAnalysis';
-import { resetMostFrequent } from './../results/mostfrequent/mostFrequentActions';
+import { resetMostFrequent } from './../results/socialweb/mostfrequent/mostFrequentActions';
 
 let nextSearchTermId = 0;
 let lastSearchRequestId = 0;
