@@ -10,39 +10,39 @@ const client =
       dbpedia: 'http://dbpedia.org/property/',
     });
 
-export const journalismTeam = (res, team1) => {
+export const journalismTeam = (res, team) => {
   return newPromiseChain()
-    .then(() => db.query('SELECT FROM team WHERE name = :name LIMIT 1', {params: {name: team1}}))
+    .then(() => db.query('SELECT FROM team WHERE name = :name LIMIT 1', { params: { name: team } }))
     .then((results) => {
       const searchTeamDbInfo = results[0];
-      return {dbInfo: searchTeamDbInfo};
+      return { dbInfo: searchTeamDbInfo };
     }).then((all) => {
       return fetchFromFootballAPI(`http://api.football-data.org/v1/teams/${all.dbInfo.id}/fixtures`)
-        .then((data) => ({...all, footballApiData: data}))
+        .then((data) => ({ ...all, footballApiData: data }));
     }).then((all) => {
-      return getTeamInformation(team1).then((results) => ({...all, leftTeam: results}))
+      return getTeamInformation(team).then((results) => ({ ...all, leftTeam: results }));
     }).then((all) => {
       return Promise.all(all.footballApiData.fixtures.slice(0, 2).map((fixture) => {
         let otherTeamName;
-        if (fixture.homeTeamName === team1) {
+        if (fixture.homeTeamName === team) {
           otherTeamName = fixture.awayTeamName;
-        } else if (fixture.awayTeamName === team1) {
+        } else if (fixture.awayTeamName === team) {
           otherTeamName = fixture.homeTeamName;
         } else {
-          throw("Bad error")
+          throw('Bad error');
         }
 
         return getTeamInformation(otherTeamName).then((result) => (
-          {leftTeam: all.leftTeam, rightTeam: result}
+          { leftTeam: all.leftTeam, rightTeam: result }
         ));
-      })).then((data) => ({...all, matches: data}))
-    }).then((all) => ({matches: all.matches, dbInfo: all.dbInfo})
-    ).then((all) => res.end(JSON.stringify(all)))
+      })).then((data) => ({ ...all, matches: data }));
+    }).then((all) => ({ matches: all.matches, dbInfo: all.dbInfo })
+    ).then((all) => res.end(JSON.stringify(all)));
 };
 
 const getTeamInformation = (teamOriginal) => {
-  console.log("teamOriginal:", teamOriginal)
-  const team = teamOriginal.replace(/ /g, "_");
+  console.log('teamOriginal:', teamOriginal);
+  const team = teamOriginal.replace(/ /g, '_');
 
   const clubPlayers = client
     .query(`
@@ -86,9 +86,9 @@ const getTeamInformation = (teamOriginal) => {
         const players = extractPlayers(results[0]);
         const clubInfo = extractClubInfo(results[1]);
         const groundsInfo = extractGroundsInfo(results[2]);
-        console.log("d")
+        console.log('d');
 
-        return {team, players, clubInfo, groundsInfo};
+        return { team, players, clubInfo, groundsInfo };
       }
     );
 };
@@ -121,7 +121,7 @@ const extractClubInfo = (rawClubJson) => {
 };
 
 const extractGroundsInfo = (rawGroundsJson) => {
-  const defaultObject = { name: {value: 'No name available.'}, thumbnail: {value: 'none'} };
+  const defaultObject = { name: { value: 'No name available.' }, thumbnail: { value: 'none' } };
 
   try {
     const groundsInfoRaw = rawGroundsJson.results.bindings[0];
