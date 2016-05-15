@@ -1,5 +1,7 @@
 import { SparqlClient, SPARQL } from 'sparql-client-2';
 import { newPromiseChain } from '../shared/utilities';
+import { db } from './orientdb';
+import { footballAccessOptions, fetchFromFootballAPI } from './footballSearch';
 
 const client =
   new SparqlClient('http://dbpedia.org/sparql')
@@ -8,19 +10,39 @@ const client =
       dbpedia: 'http://dbpedia.org/property/',
     });
 
-export const journalismTeam = (res, team) => {
-  return getTeamInformation(team)
-    .then(result => {
-        res.end(JSON.stringify(result));
-      },
-      rej => {
-        console.log(rej);
-        res.status(500).end(`Unable to retrieve information about team ${team}.`);
-      }
-    );
+export const journalismTeam = (res, team1) => {
+  return newPromiseChain()
+    .then(() => db.query('SELECT FROM team WHERE name = :name LIMIT 1', {params: {name: team1}}))
+    .then((results) => {
+      const searchTeamDbInfo = results[0];
+      return {dbInfo: searchTeamDbInfo};
+    }).then((all) => {
+      return fetchFromFootballAPI(`http://api.football-data.org/v1/teams/${all.dbInfo.id}/fixtures`)
+        .then((data) => ({...all, footballApiData: data}))
+    }).then((all) => {
+      return getTeamInformation(team1).then((results) => ({...all, leftTeam: results}))
+    }).then((all) => {
+      return Promise.all(all.footballApiData.fixtures.slice(0,2).map((fixture) => {
+        let t;
+        if (fixture.homeTeamName === team1) {
+          t = getTeamInformation(fixture.awayTeamName)
+        } else if (fixture.awayTeamName === team1) {
+          t = getTeamInformation(fixture.homeTeamName)
+        } else {
+          throw("Bad error")
+        }
+
+        return t.then((result) => (
+          {...all, rightTeam: result}
+        ));
+      })).then((data) => ({...all, matches: data}))
+    }).then((all) => res.end(JSON.stringify(all)))
 };
 
-const getTeamInformation = (team) => {
+const getTeamInformation = (teamOriginal) => {
+  console.log("teamOriginal:", teamOriginal)
+  const team = teamOriginal.replace(/ /g, "_");
+
   const clubPlayers = client
     .query(`
       SELECT * WHERE {
@@ -63,6 +85,7 @@ const getTeamInformation = (team) => {
         const players = extractPlayers(results[0]);
         const clubInfo = extractClubInfo(results[1]);
         const groundsInfo = extractGroundsInfo(results[2]);
+        console.log("d")
 
         return {team, players, clubInfo, groundsInfo};
       }
@@ -76,7 +99,7 @@ const extractPlayers = (rawPlayersJson) => {
     const rawPlayers = rawPlayersJson.results.bindings;
     return rawPlayers;
   } catch (err) {
-    console.warn(`Unable to find players for team ${team}.`);
+    console.warn(`Unable to find players for team {team}.`);
     return defaultObject;
   }
 };
@@ -91,13 +114,13 @@ const extractClubInfo = (rawClubJson) => {
       abstract: clubInfoRaw.abstract,
     };
   } catch (err) {
-    console.log(`Unable to retrieve club info for ${team}.`);
+    console.log(`Unable to retrieve club info for {team}.`);
     return defaultObject;
   }
 };
 
 const extractGroundsInfo = (rawGroundsJson) => {
-  const defaultObject = { name: 'No name available.', thumbnail: 'none' };
+  const defaultObject = { name: {value: 'No name available.'}, thumbnail: {value: 'none'} };
 
   try {
     const groundsInfoRaw = rawGroundsJson.results.bindings[0];
@@ -107,7 +130,7 @@ const extractGroundsInfo = (rawGroundsJson) => {
       thumbnail: groundsInfoRaw.thumbnail,
     };
   } catch (err) {
-    console.log(`Unable to retrieve grounds info for ${team}.`);
+    console.log(`Unable to retrieve grounds info for {team}.`);
     return defaultObject;
   }
 };
