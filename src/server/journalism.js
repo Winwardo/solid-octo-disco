@@ -17,27 +17,35 @@ export const journalismTeam = (res, team) => {
       const searchTeamDbInfo = results[0];
       return { dbInfo: searchTeamDbInfo };
     }).then((all) => {
-      return fetchFromFootballAPI(`http://api.football-data.org/v1/teams/${all.dbInfo.id}/fixtures`)
+      return newPromiseChain()
+        .then(() => fetchFromFootballAPI(`http://api.football-data.org/v1/teams/${all.dbInfo.id}/fixtures`))
         .then((data) => ({ ...all, footballApiData: data }));
-    }).then((all) => {
-      return getTeamInformation(team).then((results) => ({ ...all, leftTeam: results }));
-    }).then((all) => {
-      return Promise.all(all.footballApiData.fixtures.slice(0, 2).map((fixture) => {
-        let otherTeamName;
-        if (fixture.homeTeamName === team) {
-          otherTeamName = fixture.awayTeamName;
-        } else if (fixture.awayTeamName === team) {
-          otherTeamName = fixture.homeTeamName;
-        } else {
-          throw('Bad error');
-        }
+    }).then((all) => (
+      getTeamInformation(team).then((results) => ({ ...all, leftTeam: results }))
+    )).then((all) => {
+      return Promise.all(
+        all.footballApiData.fixtures.slice(0, 2).map(
+          (fixture) => {
+            let otherTeamName;
+            if (fixture.homeTeamName === team) {
+              otherTeamName = fixture.awayTeamName;
+            } else if (fixture.awayTeamName === team) {
+              otherTeamName = fixture.homeTeamName;
+            } else {
+              throw(`Neither home nor away team matches the given team name ${team}.`);
+            }
 
-        return getTeamInformation(otherTeamName).then((result) => (
-          { leftTeam: all.leftTeam, rightTeam: result }
-        ));
-      })).then((data) => ({ ...all, matches: data }));
-    }).then((all) => ({ matches: all.matches, dbInfo: all.dbInfo })
-    ).then((all) => res.end(JSON.stringify(all)));
+            return getTeamInformation(otherTeamName).then((result) => (
+              { leftTeam: all.leftTeam, rightTeam: result }
+            ));
+          }
+        )
+      ).then((data) => (
+        { ...all, matches: data }
+      ));
+    }).then((all) => (
+      { matches: all.matches, dbInfo: all.dbInfo }
+    )).then((all) => res.end(JSON.stringify(all)));
 };
 
 const getTeamInformation = (teamOriginal) => {
