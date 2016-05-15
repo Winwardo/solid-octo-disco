@@ -7,7 +7,7 @@ const SOCIALWEB_RESULTS_TAB_INDEX = 0;
 const JOURNALISM_INFORMATION_TAB_INDEX = 1;
 
 let Results = ({
-  searchTerms, feed, mostFrequent, resultsViewIndex, onClickChangeResultsView
+  searchTerms, feed, mostFrequent, resultsViewIndex, onClickChangeResultsView,
 }) => {
   if (searchTerms.length === 0) {
     return (
