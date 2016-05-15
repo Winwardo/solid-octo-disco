@@ -5,10 +5,10 @@ import * as actions from './resultsActions';
 
 describe('#resultsReducer', () => {
   it('should change the results view', () => {
-    const stateBefore = false;
-    const action = actions.changeResultsView(true);
+    const stateBefore = 0;
+    const action = actions.changeResultsView(1);
 
-    const stateAfter = true;
+    const stateAfter = 1;
 
     deepFreeze(action);
 

@@ -92,11 +92,6 @@ a:hover .tweet.fullname {
   color: white
 }
 
-/*.ui.link.menu .item:active,.ui.menu .link.item:active,.ui.menu a.item:active{
-  background:rgba(0,0,0,.03);
-  color:rgba(0,0,0,.95)
-}*/
-
 .ui.menu .active.item{
   background: #a333c8;
   color: white;

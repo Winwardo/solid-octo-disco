@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import { changeResultsView } from './resultsActions';
 import SocialWebResults from './socialweb/SocialWebResults';
 
+const SOCIALWEB_RESULTS_TAB_INDEX = 0;
+const JOURNALISM_INFORMATION_TAB_INDEX = 1;
+
 let Results = ({
-  searchTerms, feed, mostFrequent, showJournalismInfo,
-  onClickSocialWebResults, onClickJournalismInfo,
+  searchTerms, feed, mostFrequent, resultsViewIndex, onClickChangeResultsView
 }) => {
   if (searchTerms.length === 0) {
     return (
@@ -21,20 +23,26 @@ let Results = ({
     );
   }
 
+  const showSocialWebResults = resultsViewIndex === SOCIALWEB_RESULTS_TAB_INDEX;
+  const showJournalismInfo = resultsViewIndex === JOURNALISM_INFORMATION_TAB_INDEX;
   return (
     <div className="row">
       <div className="ui fluid pointing two item top attached menu">
-        <a className={`item ${!showJournalismInfo && 'active'}`} onClick={onClickSocialWebResults}>
+        <a className={`item ${showSocialWebResults && 'active'}`}
+          onClick={() => onClickChangeResultsView(SOCIALWEB_RESULTS_TAB_INDEX)}
+        >
           Social Web Results
         </a>
-        <a className={`item ${showJournalismInfo && 'active'}`} onClick={onClickJournalismInfo}>
+        <a className={`item ${showJournalismInfo && 'active'}`}
+          onClick={() => onClickChangeResultsView(JOURNALISM_INFORMATION_TAB_INDEX)}
+        >
           Journalism Information
         </a>
       </div>
       <div className="ui bottom attached segment">
-        <div className={`ui tab ${!showJournalismInfo && 'active'}`} data-tab="social-web">
+        <div className={`ui tab ${showSocialWebResults && 'active'}`} data-tab="social-web">
           <SocialWebResults feed={feed} mostFrequent={mostFrequent}
-            socialWebVisible={!showJournalismInfo}
+            socialWebVisible={showSocialWebResults}
           />
         </div>
         <div className={`ui tab ${showJournalismInfo && 'active'}`} data-tab="journalism-info">
@@ -49,12 +57,11 @@ const mapStateToProps = (state) => ({
   searchTerms: state.searchTerms,
   feed: state.feed,
   mostFrequent: state.mostFrequent,
-  showJournalismInfo: state.showJournalismInfo,
+  resultsViewIndex: state.showJournalismInfo,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onClickSocialWebResults: () => dispatch(changeResultsView(false)),
-  onClickJournalismInfo: () => dispatch(changeResultsView(true)),
+  onClickChangeResultsView: (newResultsViewIndex) => dispatch(changeResultsView(newResultsViewIndex)),
 });
 
 Results = connect(mapStateToProps, mapDispatchToProps)(Results);
