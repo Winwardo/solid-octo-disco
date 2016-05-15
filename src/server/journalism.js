@@ -45,7 +45,9 @@ export const journalismTeam = (res, team) => {
       ));
     }).then((all) => (
       { matches: all.matches, dbInfo: all.dbInfo }
-    )).then((all) => res.end(JSON.stringify(all)));
+    )).then((all) =>
+      res.end(JSON.stringify(all))
+    );
 };
 
 const getTeamInformation = (teamOriginal) => {
