@@ -22,7 +22,7 @@ export const journalismTeam = (res, team1) => {
     }).then((all) => {
       return getTeamInformation(team1).then((results) => ({...all, leftTeam: results}))
     }).then((all) => {
-      return Promise.all(all.footballApiData.fixtures.slice(0,2).map((fixture) => {
+      return Promise.all(all.footballApiData.fixtures.slice(0, 2).map((fixture) => {
         let t;
         if (fixture.homeTeamName === team1) {
           t = getTeamInformation(fixture.awayTeamName)
@@ -33,10 +33,11 @@ export const journalismTeam = (res, team1) => {
         }
 
         return t.then((result) => (
-          {...all, rightTeam: result}
+        {leftTeam: all.leftTeam, rightTeam: result}
         ));
       })).then((data) => ({...all, matches: data}))
-    }).then((all) => res.end(JSON.stringify(all)))
+    }).then((all) => ({matches: all.matches, dbInfo: all.dbInfo})
+    ).then((all) => res.end(JSON.stringify(all)))
 };
 
 const getTeamInformation = (teamOriginal) => {
