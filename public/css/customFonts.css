@@ -16,6 +16,7 @@ i {
     font-style: normal;
     font-weight: normal;
     font-variant: normal;
+    font-size: 200%;
     text-transform: none;
     line-height: 1;
 
@@ -79,4 +80,27 @@ a:hover .tweet.fullname {
 
 .ui.slider.cache.checkbox input:checked~.box:before, .ui.slider.cache.checkbox input:checked~label:before {
   background-color: #a333c8!important
+}
+
+.ui.menu a.item:hover{
+  background:#a333c8;
+  color: white
+}
+
+.ui.menu a.item.active:hover{
+  background:#a333c8;
+  color: white
+}
+
+.ui.menu .active.item{
+  background: #a333c8;
+  color: white;
+}
+
+.ui.menu .item:before{
+  background: #a333c8;
+}
+
+.ui.pointing.menu .active.item:after,.ui.pointing.menu .active.item:hover:after{
+  background-color:#a333c8;
 }
