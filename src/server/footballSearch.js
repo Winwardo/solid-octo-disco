@@ -4,14 +4,13 @@ import { newPromiseChain } from './../shared/utilities';
 
 // These keys should be hidden in a private config file or environment variables
 // For simplicity of this assignment, they will be visible here
-const footballAccessOptions = {
+export const footballAccessOptions = {
   method: 'GET',
   headers: {
     'X-Auth-Token': 'f39c0cf21f95409498f8eea5eb129b0f',
     'X-Response-Control': 'minified',
   },
   dataType: 'json',
-
 };
 
 const footballAPIHost = 'http://api.football-data.org';
@@ -129,7 +128,7 @@ export const searchFootballTeamPlayers = (res, teamId) => {
       });
 };
 
-const fetchFromFootballAPI = (footballRequestUrl) => (
+export const fetchFromFootballAPI = (footballRequestUrl) => (
   newPromiseChain()
     .then(() => console.info('Hitting Football API:', footballRequestUrl))
     .then(() => fetch(footballRequestUrl, footballAccessOptions))
