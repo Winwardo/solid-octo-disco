@@ -140,7 +140,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onClickAddCategoryFilter: (newTerm) => dispatch(addSearchTerm(newTerm)),
+  onClickAddCategoryFilter: (newTerm, entityType) => dispatch(addSearchTerm(newTerm, entityType)),
   onClickRemoveCategoryFilter: (id) => dispatch(deleteSearchTerm(id)),
   onClickSelectTeam: (id, name, shortName, crestUrl) =>
     dispatch(fetchFootballTeamPlayers(id, name, shortName, crestUrl)),

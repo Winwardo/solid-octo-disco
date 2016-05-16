@@ -5,12 +5,15 @@ import { resetMostFrequent } from './../results/socialweb/mostfrequent/mostFrequ
 let nextSearchTermId = 0;
 let lastSearchRequestId = 0;
 
+export const PLAYER_ENTITY = 'player';
+export const TEAM_ENTITY = 'team';
 export const ADD_SEARCH_TERM = 'ADD_SEARCH_TERM';
-export const addSearchTerm = (query) => {
+export const addSearchTerm = (query, entity) => {
   const searchQuery = {
     type: ADD_SEARCH_TERM,
     id: nextSearchTermId++,
     source: 'twitter',
+    entity
   };
 
   switch (query.charAt(0)) {

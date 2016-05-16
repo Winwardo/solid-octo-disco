@@ -38,6 +38,7 @@ const searchTermReducer = (state, action) => {
       query: action.query,
       paramTypes: createTwitterParamTypes(action.paramTypes),
       source: action.source,
+      entity: action.entity,
     };
   case TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION: {
     if (state.id !== action.id) {

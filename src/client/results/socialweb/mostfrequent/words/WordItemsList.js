@@ -88,7 +88,6 @@ const ConflatedWordItem = ({ componentId, accordianIndex, toggleMostUsedWords, c
 
             // Loops through each child checkboxes'(conflated word's variants)
             $(`.ui.checkbox.words[data-id^="${conflatedWordInfo.word}child${componentId}"]`).each((index) => {
-              console.log('works!');
               const $childCheckbox = $(`.ui.checkbox.words[data-id="${conflatedWordInfo.word}child${componentId}${index}"]`);
 
               // To see if it's the same checked/unchecked state as the master(conflated word).

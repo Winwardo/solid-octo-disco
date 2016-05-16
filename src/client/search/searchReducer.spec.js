@@ -8,13 +8,14 @@ import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tw
 describe('#SearchTermsReducer', () => {
   it('should add a hashtag search term', () => {
     const stateBefore = [];
-    const action = actions.addSearchTerm('#Football');
+    const action = actions.addSearchTerm('#Football', false);
 
     const stateAfter = [{
       id: action.id,
       query: 'Football',
       paramTypes: createTwitterParamTypes(['hashtag']),
       source: 'twitter',
+      entity: false
     }, ];
 
     deepFreeze(stateBefore);
@@ -29,16 +30,18 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
+      entity: false
     }, ];
-    const action = actions.addSearchTerm('@Manchester');
+    const action = actions.addSearchTerm('@Manchester', false);
 
     const stateAfter = [
       ...stateBefore,
       {
-        id: 9,
+        id: 11,
         query: 'Manchester',
         paramTypes: createTwitterParamTypes(['mention', 'author']),
         source: 'twitter',
+        entity: false
       }, ];
 
     deepFreeze(stateBefore);
@@ -53,6 +56,7 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
+      entity: false
     }, ];
     const action = actions.deleteSearchTerm(0);
 
@@ -70,11 +74,13 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
+      entity: false
     }, {
       id: 1,
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
+      entity: false
     }, ];
     const action = actions.deleteSearchTerm(0);
 
@@ -83,6 +89,7 @@ describe('#SearchTermsReducer', () => {
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
+      entity: false
     }, ];
 
     deepFreeze(stateBefore);
@@ -97,11 +104,13 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
+      entity: false
     }, {
       id: 1,
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
+      entity: false
     }, ];
     const action = actions.toggleSearchTermParamTypeSelection(0, 'author');
 
@@ -110,11 +119,49 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: createTwitterParamTypes(['author', 'mention']),
       source: 'twitter',
+      entity: false
     }, {
       id: 1,
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
+      entity: false
+    }, ];
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    searchTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('should add a team entity search term', () => {
+    const stateBefore = [];
+    const action = actions.addSearchTerm('#Manchester United FC', actions.TEAM_ENTITY);
+
+    const stateAfter = [{
+      id: action.id,
+      query: 'Manchester United FC',
+      paramTypes: createTwitterParamTypes(['hashtag']),
+      source: 'twitter',
+      entity: actions.TEAM_ENTITY,
+    }, ];
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    searchTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('should add a player entity search term', () => {
+    const stateBefore = [];
+    const action = actions.addSearchTerm('#Wayne Rooney', actions.PLAYER_ENTITY);
+
+    const stateAfter = [{
+      id: action.id,
+      query: 'Wayne Rooney',
+      paramTypes: createTwitterParamTypes(['hashtag']),
+      source: 'twitter',
+      entity: actions.PLAYER_ENTITY,
     }, ];
 
     deepFreeze(stateBefore);

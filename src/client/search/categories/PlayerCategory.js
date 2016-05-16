@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { getSemanticCountryFlagName } from './../../../shared/utilities';
+import { PLAYER_ENTITY } from '../searchActions';
 
 class PlayerCategory extends Component {
   componentDidMount() {
@@ -33,9 +34,7 @@ class PlayerCategory extends Component {
               <i className="soccer purple icon"></i>
           }
           <div className="menu">
-            <div className="ui icon search input">
-              <i className="search icon"></i>
-              <input type="text" placeholder="Search players..." />
+            <div className="ui icon search input">name.." />
             </div>
             {this.props.teamPlayers.map(player => {
               const searchesQueriesSameAsPlayer = this.props.currentSearchTerms
@@ -52,7 +51,7 @@ class PlayerCategory extends Component {
                       search => this.props.onClickRemovePlayer(search.id)
                       );
                     } else {
-                      this.props.onClickAddPlayer(player.name);
+                      this.props.onClickAddPlayer(player.name, PLAYER_ENTITY);
                     }
                   }}
                 />
@@ -81,7 +80,7 @@ PlayerCategory.propTypes = {
 };
 
 const TeamPlayer = ({ name, nationality, alreadyAddedToSearch, onClick }) => (
-  <div className="item player" onClick={() => onClick(name)}>
+  <div className="item player" onClick={() => onClick(name, PLAYER_ENTITY)}>
     <i className={`${getSemanticCountryFlagName(nationality)} flag`} />
     {name}
     <div className="ui right floated">
