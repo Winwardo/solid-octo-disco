@@ -1,16 +1,21 @@
-import { fetchPost, newPromiseChain } from '../../shared/utilities';
+import { fetchPost, newPromiseChain, makeGetHeader } from '../../shared/utilities';
 import { doesFeedHaveUsefulResults } from '../tweetAnalysis';
 import { resetMostFrequent } from './../results/socialweb/mostfrequent/mostFrequentActions';
+
+import fetch from 'isomorphic-fetch';
 
 let nextSearchTermId = 0;
 let lastSearchRequestId = 0;
 
+export const PLAYER_ENTITY = 'player';
+export const TEAM_ENTITY = 'team';
 export const ADD_SEARCH_TERM = 'ADD_SEARCH_TERM';
-export const addSearchTerm = (query) => {
+export const addSearchTerm = (query, entity) => {
   const searchQuery = {
     type: ADD_SEARCH_TERM,
     id: nextSearchTermId++,
     source: 'twitter',
+    entity,
   };
 
   switch (query.charAt(0)) {
@@ -79,16 +84,16 @@ const searchDatabaseAsCache = (dispatch, searchTerms, requestId) =>
 
 const searchDatabase = (dispatch, searchTerms, requestId, searchTwitter) =>
   newPromiseChain()
-  .then(() => dispatch(resetMostFrequent()))
-  .then(() => fetchPost('/search', { searchTerms, searchTwitter }))
-  .then(response => response.json())
-  .then(feedResults => {
-    if (searchTwitter) {
-      dispatch(receiveFeedResults(feedResults, requestId, true));
-    }
-    dispatch(receiveFeedResults(feedResults, requestId, false));
-    return feedResults;
-  });
+    .then(() => dispatch(resetMostFrequent()))
+    .then(() => fetchPost('/search', { searchTerms, searchTwitter }))
+    .then(response => response.json())
+    .then(feedResults => {
+      if (searchTwitter) {
+        dispatch(receiveFeedResults(feedResults, requestId, true));
+      }
+      dispatch(receiveFeedResults(feedResults, requestId, false));
+      return feedResults;
+    });
 
 export const RECEIVE_FEED_RESULTS = 'RECEIVE_FEED_RESULTS';
 const receiveFeedResults = (data, requestId, recievedFromTwitter) => ({
@@ -97,6 +102,59 @@ const receiveFeedResults = (data, requestId, recievedFromTwitter) => ({
   requestId,
   fetchedRequestFromTwitter: recievedFromTwitter,
 });
+
+export const INVALIDATE_JOURNALISM_INFORMATION = 'INVALIDATE_JOURNALISM_INFORMATION';
+export const REQUEST_ENTITY = 'REQUEST_ENTITY';
+export const RECEIVE_ENTITY = 'RECEIVE_ENTITY';
+export const invalidateJournalismInfo = () =>
+  (dispatch, getState) => {
+    let invalidated = false;
+    getState().searchTerms.forEach(searchTerm => {
+      if (searchTerm.entity) {
+        // only requests the entity from dbpedia if it hasn't already been fetched.
+        if (!getState().journalismInfo.entities[searchTerm.id]) {
+          // only invalidates journalismInfo if there is an entity in the search terms list
+          // and it has not already been invalidated.
+          if (!invalidated) {
+            dispatch({ type: INVALIDATE_JOURNALISM_INFORMATION });
+            invalidated = true;
+          }
+
+          dispatch({
+            type: REQUEST_ENTITY,
+            id: searchTerm.id,
+            query: searchTerm.query,
+            entityType: searchTerm.entity,
+          });
+
+          // hits different end points depending on whether it's a player or team being queried.
+          switch (searchTerm.entity) {
+            case PLAYER_ENTITY:
+              newPromiseChain()
+                .then(() => fetch(`/journalism/players/${searchTerm.query}`, makeGetHeader()))
+                .then(response => response.json())
+                .then()
+                .then(json => dispatch({
+                  type: RECEIVE_ENTITY,
+                  id: searchTerm.id,
+                  entityInfo: json,
+                }));
+              break;
+            case TEAM_ENTITY:
+              newPromiseChain()
+                .then(() => fetch(`/journalism/teams/${searchTerm.query}`, makeGetHeader()))
+                .then(response => response.json())
+                .then(json => dispatch({
+                  type: RECEIVE_ENTITY,
+                  id: searchTerm.id,
+                  entityInfo: json,
+                }));
+              break;
+          }
+        }
+      }
+    });
+  };
 
 export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';
 export const deleteSearchTerm = (id) => ({

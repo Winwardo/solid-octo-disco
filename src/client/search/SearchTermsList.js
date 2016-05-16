@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { throttleFunction } from './../../shared/utilities';
 import TermItem from './TermItem';
 import {
-  deleteSearchTerm, invalidateFeedResults, toggleSearchTermParamTypeSelection
+  deleteSearchTerm, invalidateFeedResults, toggleSearchTermParamTypeSelection,
+  invalidateJournalismInfo
 } from './searchActions';
 
 class TermsList extends Component {
@@ -52,7 +53,10 @@ const mapDispatchToProps = (dispatch) => ({
   onSearchTermDeleteClick: (id) => {
     dispatch(deleteSearchTerm(id));
   },
-  onSearchTermsChange: throttleFunction(() => dispatch(invalidateFeedResults()), 1000),
+  onSearchTermsChange: throttleFunction(() => {
+    dispatch(invalidateFeedResults());
+    dispatch(invalidateJournalismInfo());
+  }, 2000),
 });
 
 export default connect(

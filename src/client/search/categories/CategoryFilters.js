@@ -127,7 +127,6 @@ class CategoryFilters extends Component {
 }
 CategoryFilters.propTypes = {
   football: React.PropTypes.object,
-  onClickCategoryFilter: React.PropTypes.func,
   onClickToggleDbOnlySearch: React.PropTypes.func,
   currentSearchTerms: React.PropTypes.array,
   onClickAddCategoryFilter: React.PropTypes.func,
@@ -140,7 +139,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onClickAddCategoryFilter: (newTerm) => dispatch(addSearchTerm(newTerm)),
+  onClickAddCategoryFilter: (newTerm, entityType) => dispatch(addSearchTerm(newTerm, entityType)),
   onClickRemoveCategoryFilter: (id) => dispatch(deleteSearchTerm(id)),
   onClickSelectTeam: (id, name, shortName, crestUrl) =>
     dispatch(fetchFootballTeamPlayers(id, name, shortName, crestUrl)),
@@ -159,5 +158,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(CategoryFilters);
