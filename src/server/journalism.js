@@ -23,21 +23,29 @@ export const journalismTeam = (res, team, footballDataOrgTeamId) =>
         all.footballApiData.fixtures.slice(0, 10).map(
           (fixture) => {
             let otherTeamName;
+            let searchedTeamIsHome;
             if (fixture.homeTeamName === team) {
               otherTeamName = fixture.awayTeamName;
+              searchedTeamIsHome = true;
             } else if (fixture.awayTeamName === team) {
               otherTeamName = fixture.homeTeamName;
+              searchedTeamIsHome = false;
             } else {
-              throw(`Neither home nor away team matches the given team name ${team}.`);
+              throw (`Neither home nor away team matches the given team name ${team}.`);
             }
 
             return getTeamInformation(otherTeamName).then((result) => (
-              { leftTeam: all.leftTeam, rightTeam: result }
+              {
+                leftTeam: all.leftTeam,
+                rightTeam: result,
+                fixtureInfo: fixture,
+                searchedTeamIsHome
+              }
             ));
           }
         )
       ).then((data) => ({ ...all, matches: data }))
-    ).then((all) => ({ matches: all.matches, dbInfo: all.dbInfo }))
+    ).then((all) => ({ matches: all.matches, team }))
     .then((all) => res.end(JSON.stringify(all)));
 
 const getTeamInformation = (teamOriginal) => {
