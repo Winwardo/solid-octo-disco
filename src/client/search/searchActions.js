@@ -15,7 +15,7 @@ export const addSearchTerm = (query, entity) => {
     type: ADD_SEARCH_TERM,
     id: nextSearchTermId++,
     source: 'twitter',
-    entity
+    entity,
   };
 
   switch (query.charAt(0)) {
@@ -110,12 +110,12 @@ export const invalidateJournalismInfo = () =>
   (dispatch, getState) => {
     let invalidated = false;
     getState().searchTerms.forEach(searchTerm => {
-      if(searchTerm.entity){
+      if (searchTerm.entity) {
         // only requests the entity from dbpedia if it hasn't already been fetched.
-        if(!getState().journalismInfo.entities[searchTerm.id]){
+        if (!getState().journalismInfo.entities[searchTerm.id]) {
           // only invalidates journalismInfo if there is an entity in the search terms list
           // and it has not already been invalidated.
-          if(!invalidated){
+          if (!invalidated) {
             dispatch({ type: INVALIDATE_JOURNALISM_INFORMATION });
             invalidated = true;
           }
@@ -126,6 +126,7 @@ export const invalidateJournalismInfo = () =>
             query: searchTerm.query,
             entityType: searchTerm.entity,
           });
+
           // hits different end points depending on whether it's a player or team being queried.
           switch (searchTerm.entity) {
             case PLAYER_ENTITY:
@@ -136,7 +137,7 @@ export const invalidateJournalismInfo = () =>
                 .then(json => dispatch({
                   type: RECEIVE_ENTITY,
                   id: searchTerm.id,
-                  entityInfo: json
+                  entityInfo: json,
                 }));
               break;
             case TEAM_ENTITY:
@@ -146,13 +147,13 @@ export const invalidateJournalismInfo = () =>
                 .then(json => dispatch({
                   type: RECEIVE_ENTITY,
                   id: searchTerm.id,
-                  entityInfo: json
+                  entityInfo: json,
                 }));
               break;
           }
         }
       }
-    })
+    });
   };
 
 export const DELETE_SEARCH_TERM = 'DELETE_SEARCH_TERM';

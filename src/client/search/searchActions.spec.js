@@ -14,7 +14,7 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['hashtag'],
       source: 'twitter',
-      entity: false
+      entity: false,
     };
 
     actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
@@ -30,7 +30,7 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['keyword'],
       source: 'twitter',
-      entity: false
+      entity: false,
     };
 
     actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
@@ -46,7 +46,7 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['author', 'mention'],
       source: 'twitter',
-      entity: false
+      entity: false,
     };
 
     actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
@@ -62,7 +62,7 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['author', 'keyword', 'mention'],
       source: 'twitter',
-      entity: false
+      entity: false,
     };
 
     actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
@@ -78,7 +78,7 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['author', 'hashtag', 'mention'],
       source: 'twitter',
-      entity: false
+      entity: false,
     };
 
     actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
@@ -94,7 +94,7 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['hashtag', 'keyword'],
       source: 'twitter',
-      entity: false
+      entity: false,
     };
 
     actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
@@ -110,7 +110,7 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['author', 'hashtag', 'keyword', 'mention'],
       source: 'twitter',
-      entity: false
+      entity: false,
     };
 
     actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
@@ -126,7 +126,7 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['author', 'hashtag', 'keyword', 'mention'],
       source: 'twitter',
-      entity: false
+      entity: false,
     };
 
     actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
@@ -142,7 +142,7 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['author', 'hashtag', 'keyword', 'mention'],
       source: 'twitter',
-      entity: actions.PLAYER_ENTITY
+      entity: actions.PLAYER_ENTITY,
     };
 
     actions.addSearchTerm(query, actions.PLAYER_ENTITY).should.deep.equal(expectedAction);
@@ -158,7 +158,7 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['author', 'hashtag', 'keyword', 'mention'],
       source: 'twitter',
-      entity: actions.TEAM_ENTITY
+      entity: actions.TEAM_ENTITY,
     };
 
     actions.addSearchTerm(query, actions.TEAM_ENTITY).should.deep.equal(expectedAction);

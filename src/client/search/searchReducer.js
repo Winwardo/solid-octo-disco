@@ -124,7 +124,6 @@ const journalismInfoReducerInitialState = {
   requestedEntitiesCount: 0,
 };
 
-
 export const journalismInfoReducer = (state = journalismInfoReducerInitialState, action) => {
   switch (action.type) {
     case INVALIDATE_JOURNALISM_INFORMATION:
@@ -137,19 +136,19 @@ export const journalismInfoReducer = (state = journalismInfoReducerInitialState,
         ...state,
         entities: {
           ...state.entities,
-          [action.id]: entityReducer(state.entities[action.id], action)
+          [action.id]: entityReducer(state.entities[action.id], action),
         },
         requestedEntitiesCount: state.requestedEntitiesCount + 1,
       };
-    case RECEIVE_ENTITY:{
+    case RECEIVE_ENTITY: {
       const recievedEntity = {
         ...state,
         entities: {
           ...state.entities,
-          [action.id]: entityReducer(state.entities[action.id], action)
+          [action.id]: entityReducer(state.entities[action.id], action),
         },
         entityCurrentlySelected: !state.entityCurrentlySelected && state.entityCurrentlySelected !== 0 ? action.id : state.entityCurrentlySelected,
-      }
+      };
 
       if (state.requestedEntitiesCount - 1 === 0) {
         return {
@@ -168,9 +167,9 @@ export const journalismInfoReducer = (state = journalismInfoReducerInitialState,
     default:
       return state;
   }
-}
+};;
 
-const entityReducer = (state, action ) => {
+const entityReducer = (state, action) => {
   switch (action.type) {
     case REQUEST_ENTITY:
       return {
@@ -187,4 +186,4 @@ const entityReducer = (state, action ) => {
     default:
       return state;
   }
-}
+};
