@@ -57,7 +57,7 @@ class PlayerCategory extends Component {
                         playerNationality: player.nationality.toLowerCase(),
                         marketValue: player.marketValue,
                         contractUntil: player.contractUntil,
-                        position: player.position
+                        position: player.position,
                       });
                     }
                   }}

@@ -40,7 +40,6 @@ export const journalismTeam = (res, team, footballDataOrgTeamId) =>
     ).then((all) => ({ matches: all.matches, dbInfo: all.dbInfo }))
     .then((all) => res.end(JSON.stringify(all)));
 
-
 const getTeamInformation = (teamOriginal) => {
   const team = teamOriginal.replace(/ /g, '_');
 

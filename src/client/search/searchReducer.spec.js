@@ -256,7 +256,7 @@ describe('#JournalismInfoReducer', () => {
     const stateBefore = journalismInfoReducerInitialState;
 
     const action = {
-      type: actions.INVALIDATE_JOURNALISM_INFORMATION
+      type: actions.INVALIDATE_JOURNALISM_INFORMATION,
     };
 
     const stateAfter = {
@@ -287,7 +287,7 @@ describe('#JournalismInfoReducer', () => {
           query: action.query,
           entityType: action.entityType,
           fetching: true,
-        }
+        },
       },
       requestedEntitiesCount: journalismInfoReducerInitialState.requestedEntitiesCount + 1,
     };
@@ -308,7 +308,7 @@ describe('#JournalismInfoReducer', () => {
           query: 'Manchester United FC',
           entityType: actions.TEAM_ENTITY,
           fetching: true,
-        }
+        },
       },
       requestedEntitiesCount: journalismInfoReducerInitialState.requestedEntitiesCount + 1,
     };
@@ -316,7 +316,7 @@ describe('#JournalismInfoReducer', () => {
     const action = {
       type: actions.RECEIVE_ENTITY,
       id: entityId,
-      entityInfo: { exampleInfo: [] }
+      entityInfo: { exampleInfo: [] },
     };
 
     const stateAfter = {
@@ -325,8 +325,8 @@ describe('#JournalismInfoReducer', () => {
         [entityId]: {
           ...stateBefore.entities[entityId],
           fetching: false,
-          entity: action.entityInfo
-        }
+          entity: action.entityInfo,
+        },
       },
       requestedEntitiesCount: 0,
       entityCurrentlySelected: entityId,

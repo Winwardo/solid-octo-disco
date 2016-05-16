@@ -175,7 +175,7 @@ const entityReducer = (state, action) => {
       query: action.query,
       entityType: action.entityType,
       fetching: true,
-      details: action.details
+      details: action.details,
     };
   case RECEIVE_ENTITY:
     return {
