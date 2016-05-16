@@ -24,7 +24,7 @@ export const journalismTeam = (res, team) => {
       getTeamInformation(team).then((results) => ({ ...all, leftTeam: results }))
     )).then((all) => {
       return Promise.all(
-        all.footballApiData.fixtures.slice(0, 2).map(
+        all.footballApiData.fixtures.slice(0, 10).map(
           (fixture) => {
             let otherTeamName;
             if (fixture.homeTeamName === team) {
@@ -51,7 +51,6 @@ export const journalismTeam = (res, team) => {
 };
 
 const getTeamInformation = (teamOriginal) => {
-  console.log('teamOriginal:', teamOriginal);
   const team = teamOriginal.replace(/ /g, '_');
 
   const clubPlayers = client
