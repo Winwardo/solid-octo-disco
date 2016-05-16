@@ -53,7 +53,12 @@ class PlayerCategory extends Component {
                       search => this.props.onClickRemovePlayer(search.id)
                       );
                     } else {
-                      this.props.onClickAddPlayer(player.name, PLAYER_ENTITY);
+                      this.props.onClickAddPlayer(player.name, PLAYER_ENTITY, {
+                        playerNationality: player.nationality.toLowerCase(),
+                        marketValue: player.marketValue,
+                        contractUntil: player.contractUntil,
+                        position: player.position
+                      });
                     }
                   }}
                 />

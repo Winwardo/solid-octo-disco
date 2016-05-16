@@ -1,7 +1,7 @@
-import { SparqlClient, SPARQL } from 'sparql-client-2';
+import { SparqlClient } from 'sparql-client-2';
 import { newPromiseChain } from '../shared/utilities';
 import { db } from './orientdb';
-import { footballAccessOptions, fetchFromFootballAPI } from './footballSearch';
+import { fetchFromFootballAPI } from './footballSearch';
 
 const client =
   new SparqlClient('http://dbpedia.org/sparql')
@@ -10,20 +10,16 @@ const client =
       dbpedia: 'http://dbpedia.org/property/',
     });
 
-export const journalismTeam = (res, team) => {
-  return newPromiseChain()
-    .then(() => db.query('SELECT FROM team WHERE name = :name LIMIT 1', { params: { name: team } }))
-    .then((results) => {
-      const searchTeamDbInfo = results[0];
-      return { dbInfo: searchTeamDbInfo };
-    }).then((all) => {
-      return newPromiseChain()
-        .then(() => fetchFromFootballAPI(`http://api.football-data.org/v1/teams/${all.dbInfo.id}/fixtures`))
-        .then((data) => ({ ...all, footballApiData: data }));
-    }).then((all) => (
-      getTeamInformation(team).then((results) => ({ ...all, leftTeam: results }))
-    )).then((all) => {
-      return Promise.all(
+export const journalismTeam = (res, team, footballDataOrgTeamId) =>
+  newPromiseChain()
+    .then(() => fetchFromFootballAPI(`http://api.football-data.org/v1/teams/${footballDataOrgTeamId}/fixtures`))
+    .then((data) => ({ footballApiData: data }))
+    .then((all) =>
+      newPromiseChain()
+        .then(() => getTeamInformation(team))
+        .then((teamInformation) => ({ ...all, leftTeam: teamInformation }))
+    ).then((all) =>
+      Promise.all(
         all.footballApiData.fixtures.slice(0, 10).map(
           (fixture) => {
             let otherTeamName;
@@ -40,15 +36,10 @@ export const journalismTeam = (res, team) => {
             ));
           }
         )
-      ).then((data) => (
-        { ...all, matches: data }
-      ));
-    }).then((all) => (
-      { matches: all.matches, dbInfo: all.dbInfo }
-    )).then((all) =>
-      res.end(JSON.stringify(all))
-    );
-};
+      ).then((data) => ({ ...all, matches: data }))
+    ).then((all) => ({ matches: all.matches, dbInfo: all.dbInfo }))
+    .then((all) => res.end(JSON.stringify(all)));
+
 
 const getTeamInformation = (teamOriginal) => {
   const team = teamOriginal.replace(/ /g, '_');
@@ -198,4 +189,4 @@ export const journalismPlayer = (res, playerName) => {
 
       }
     });
-};;
+};

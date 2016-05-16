@@ -39,6 +39,7 @@ const searchTermReducer = (state, action) => {
       paramTypes: createTwitterParamTypes(action.paramTypes),
       source: action.source,
       entity: action.entity,
+      details: action.details ? action.details : false,
     };
   case TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION: {
     if (state.id !== action.id) {
@@ -79,33 +80,32 @@ const feedReducerInitialState = {
 
 export const feedReducer = (state = feedReducerInitialState, action) => {
   switch (action.type) {
-    case INVALIDATE_FEED_RESULTS:
+  case INVALIDATE_FEED_RESULTS:
+    return {
+      ...state,
+      lastRequestId: action.requestId,
+      fetchingRequestFromDB: true,
+    };
+  case RECEIVE_FEED_RESULTS:
+    if (state.lastRequestId > action.requestId) {
+      // Response is from an old request, ignore it
+      return state;
+    } else {
+      // Response is from the most recent request, actually show the posts
       return {
         ...state,
-        lastRequestId: action.requestId,
-        fetchingRequestFromDB: true,
+        posts: sortPostsForFeed(action.data.data.records),
+        groupedMostFrequentWords: groupedCountWords(mostFrequentWords(action.data.data.records.map((post) => post.data.content))),
+        mostFrequentUsers: mostFrequentUsers(action.data.data.records),
+        fetchingRequestFromDB: action.fetchedRequestFromTwitter,
       };
-    case RECEIVE_FEED_RESULTS:
-      if (state.lastRequestId > action.requestId) {
-        // Response is from an old request, ignore it
-        return state;
-      } else {
-        // Response is from the most recent request, actually show the posts
-        return {
-
-          ...state,
-          posts: sortPostsForFeed(action.data.data.records),
-          groupedMostFrequentWords: groupedCountWords(mostFrequentWords(action.data.data.records.map((post) => post.data.content))),
-          mostFrequentUsers: mostFrequentUsers(action.data.data.records),
-          fetchingRequestFromDB: action.fetchedRequestFromTwitter,
-        };
-      }
-    case SET_FEED_PAGE_NUMBER:
-      return { ...state, paginationInfo: { ...state.paginationInfo, number: action.number } };
-    case SET_FEED_PAGE_LIMIT:
-      return { ...state, paginationInfo: { ...state.paginationInfo, limit: action.limit } };
-    default:
-      return state;
+    }
+  case SET_FEED_PAGE_NUMBER:
+    return { ...state, paginationInfo: { ...state.paginationInfo, number: action.number } };
+  case SET_FEED_PAGE_LIMIT:
+    return { ...state, paginationInfo: { ...state.paginationInfo, limit: action.limit } };
+  default:
+    return state;
   }
 };
 
@@ -126,63 +126,64 @@ export const journalismInfoReducerInitialState = {
 
 export const journalismInfoReducer = (state = journalismInfoReducerInitialState, action) => {
   switch (action.type) {
-    case INVALIDATE_JOURNALISM_INFORMATION:
-      return {
-        ...state,
-        fetchingEntityInfo: true,
-      };
-    case REQUEST_ENTITY:
-      return {
-        ...state,
-        entities: {
-          ...state.entities,
-          [action.id]: entityReducer(state.entities[action.id], action),
-        },
-        requestedEntitiesCount: state.requestedEntitiesCount + 1,
-      };
-    case RECEIVE_ENTITY: {
-      const recievedEntity = {
-        ...state,
-        entities: {
-          ...state.entities,
-          [action.id]: entityReducer(state.entities[action.id], action),
-        },
-        entityCurrentlySelected: !state.entityCurrentlySelected && state.entityCurrentlySelected !== 0 ? action.id : state.entityCurrentlySelected,
-      };
+  case INVALIDATE_JOURNALISM_INFORMATION:
+    return {
+      ...state,
+      fetchingEntityInfo: true,
+    };
+  case REQUEST_ENTITY:
+    return {
+      ...state,
+      entities: {
+        ...state.entities,
+        [action.id]: entityReducer(state.entities[action.id], action),
+      },
+      requestedEntitiesCount: state.requestedEntitiesCount + 1,
+    };
+  case RECEIVE_ENTITY: {
+    const recievedEntity = {
+      ...state,
+      entities: {
+        ...state.entities,
+        [action.id]: entityReducer(state.entities[action.id], action),
+      },
+      entityCurrentlySelected: !state.entityCurrentlySelected && state.entityCurrentlySelected !== 0 ? action.id : state.entityCurrentlySelected,
+    };
 
-      if (state.requestedEntitiesCount - 1 === 0) {
-        return {
-          ...recievedEntity,
-          requestedEntitiesCount: 0,
-          fetchingEntityInfo: false,
-        };
-      }
-
+    if (state.requestedEntitiesCount - 1 === 0) {
       return {
         ...recievedEntity,
-        requestedEntitiesCount: state.requestedEntitiesCount - 1,
+        requestedEntitiesCount: 0,
+        fetchingEntityInfo: false,
       };
     }
-    default:
-      return state;
+
+    return {
+      ...recievedEntity,
+      requestedEntitiesCount: state.requestedEntitiesCount - 1,
+    };
   }
-};;
+  default:
+    return state;
+  }
+};
 
 const entityReducer = (state, action) => {
   switch (action.type) {
-    case REQUEST_ENTITY:
-      return {
-        query: action.query,
-        entityType: action.entityType,
-        fetching: true,
-      };
-    case RECEIVE_ENTITY:
-      return {
-        ...state,
-        entity: action.entityInfo,
-        fetching: false,
-      };
-    default:
-      return state;
+  case REQUEST_ENTITY:
+    return {
+      query: action.query,
+      entityType: action.entityType,
+      fetching: true,
+      details: action.details
+    };
+  case RECEIVE_ENTITY:
+    return {
+      ...state,
+      entity: action.entityInfo,
+      fetching: false,
+    };
+  default:
+    return state;
   }
 };

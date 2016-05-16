@@ -68,8 +68,8 @@ app.get('/football/teams/:teamid/players', (req, res) => {
   searchFootballTeamPlayers(res, req.params.teamid);
 });
 
-app.get('/journalism/teams/:teamname', (req, res) => {
-  journalismTeam(res, req.params.teamname);
+app.get('/journalism/teams/:teamname/:footballDataOrgTeamId', (req, res) => {
+  journalismTeam(res, req.params.teamname, req.params.footballDataOrgTeamId);
 });
 
 app.get('/journalism/players/:playername', (req, res) => {
