@@ -60,8 +60,8 @@ class LeagueCategory extends Component {
                       search => this.props.onClickRemoveLeague(search.id)
                     );
                   } else {
-                    this.props.onClickAddLeague(`*${leagueName}`);
-                    this.props.onClickAddLeague(`#${league.league}`);
+                    this.props.onClickAddLeague(`*${leagueName}`, false);
+                    this.props.onClickAddLeague(`#${league.league}`, false);
                   }
                 }}
               />

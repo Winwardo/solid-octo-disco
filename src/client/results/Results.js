@@ -57,7 +57,7 @@ const mapStateToProps = (state) => ({
   searchTerms: state.searchTerms,
   feed: state.feed,
   mostFrequent: state.mostFrequent,
-  resultsViewIndex: state.showJournalismInfo,
+  resultsViewIndex: state.resultsTabShown,
 });
 
 const mapDispatchToProps = (dispatch) => ({
