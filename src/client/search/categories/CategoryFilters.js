@@ -127,7 +127,6 @@ class CategoryFilters extends Component {
 }
 CategoryFilters.propTypes = {
   football: React.PropTypes.object,
-  onClickCategoryFilter: React.PropTypes.func,
   onClickToggleDbOnlySearch: React.PropTypes.func,
   currentSearchTerms: React.PropTypes.array,
   onClickAddCategoryFilter: React.PropTypes.func,
@@ -159,5 +158,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(CategoryFilters);

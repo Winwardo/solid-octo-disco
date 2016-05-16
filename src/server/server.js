@@ -72,7 +72,7 @@ app.get('/journalism/teams/:teamname', (req, res) => {
   journalismTeam(res, req.params.teamname);
 });
 
-app.get('/journalism/player/:playername', (req, res) => {
+app.get('/journalism/players/:playername', (req, res) => {
   journalismPlayer(res, req.params.playername);
 });
 

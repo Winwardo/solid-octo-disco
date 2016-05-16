@@ -34,7 +34,9 @@ class PlayerCategory extends Component {
               <i className="soccer purple icon"></i>
           }
           <div className="menu">
-            <div className="ui icon search input">name.." />
+            <div className="ui icon search input">
+              <i className="search icon"></i>
+              <input type="text" placeholder="Search players..." />
             </div>
             {this.props.teamPlayers.map(player => {
               const searchesQueriesSameAsPlayer = this.props.currentSearchTerms
@@ -60,10 +62,11 @@ class PlayerCategory extends Component {
             )}
           </div>
         </div>
-        { !this.props.isTeamPlayersFetching &&
-          <div className="ui purple left pointing label">
-            {this.props.teamPlayers.length}
-          </div>
+        {
+          !this.props.isTeamPlayersFetching &&
+            <div className="ui purple left pointing label">
+              {this.props.teamPlayers.length}
+            </div>
         }
       </div>
     );
@@ -72,7 +75,7 @@ class PlayerCategory extends Component {
 PlayerCategory.propTypes = {
   teamName: React.PropTypes.string,
   teamCrestUrl: React.PropTypes.string,
-  isTeamPlayersFetching: React.PropTypes.boolean,
+  isTeamPlayersFetching: React.PropTypes.bool,
   teamPlayers: React.PropTypes.array,
   currentSearchTerms: React.PropTypes.array,
   onClickAddPlayer: React.PropTypes.func,
