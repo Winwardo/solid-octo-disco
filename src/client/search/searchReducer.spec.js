@@ -1,6 +1,8 @@
 import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
-import { searchTermsReducer, feedReducer } from './searchReducer';
+import {
+  searchTermsReducer, feedReducer, journalismInfoReducerInitialState, journalismInfoReducer
+} from './searchReducer';
 import * as actions from './searchActions';
 import { createTwitterParamTypes } from '../../shared/utilities';
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
@@ -233,5 +235,94 @@ describe('#FeedReducer', () => {
     deepFreeze(action);
 
     feedReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+});
+
+describe('#JournalismInfoReducer', () => {
+  it('invalidates the journalism info', () => {
+    const stateBefore = journalismInfoReducerInitialState;
+
+    const action = {
+      type: actions.INVALIDATE_JOURNALISM_INFORMATION
+    };
+
+    const stateAfter = {
+      ...stateBefore,
+      fetchingEntityInfo: true,
+    };
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    journalismInfoReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('shows that it is requesting an enitity', () => {
+    const stateBefore = journalismInfoReducerInitialState;
+
+    const action = {
+      type: actions.REQUEST_ENTITY,
+      id: 0,
+      query: 'Manchester United FC',
+      entityType: actions.TEAM_ENTITY,
+    };
+
+    const stateAfter = {
+      ...stateBefore,
+      entities: {
+        [action.id]: {
+          query: action.query,
+          entityType: action.entityType,
+          fetching: true,
+        }
+      },
+      requestedEntitiesCount: journalismInfoReducerInitialState.requestedEntitiesCount + 1,
+    };
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    journalismInfoReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('correctly receives an enitity and stops invalidation since all entities fetched', () => {
+    const entityId = 0;
+
+    const stateBefore = {
+      ...journalismInfoReducerInitialState,
+      entities: {
+        [entityId]: {
+          query: 'Manchester United FC',
+          entityType: actions.TEAM_ENTITY,
+          fetching: true,
+        }
+      },
+      requestedEntitiesCount: journalismInfoReducerInitialState.requestedEntitiesCount + 1,
+    };
+
+    const action = {
+      type: actions.RECEIVE_ENTITY,
+      id: entityId,
+      entityInfo: { exampleInfo: [] }
+    };
+
+    const stateAfter = {
+      ...stateBefore,
+      entities: {
+        [entityId]: {
+          ...stateBefore.entities[entityId],
+          fetching: false,
+          entity: action.entityInfo
+        }
+      },
+      requestedEntitiesCount: 0,
+      entityCurrentlySelected: entityId,
+      fetchingEntityInfo: false,
+    };
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    journalismInfoReducer(stateBefore, action).should.deep.equal(stateAfter);
   });
 });

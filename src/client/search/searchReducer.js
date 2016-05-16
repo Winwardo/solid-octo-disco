@@ -117,7 +117,7 @@ const sortPostsForFeed = (feed) => (
   )
 );
 
-const journalismInfoReducerInitialState = {
+export const journalismInfoReducerInitialState = {
   entities: {},
   entityCurrentlySelected: false,
   fetchingEntityInfo: false,
@@ -161,7 +161,6 @@ export const journalismInfoReducer = (state = journalismInfoReducerInitialState,
       return {
         ...recievedEntity,
         requestedEntitiesCount: state.requestedEntitiesCount - 1,
-        fetchingEntityInfo: false,
       };
     }
     default:
