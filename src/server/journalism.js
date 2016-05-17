@@ -49,7 +49,7 @@ export const journalismTeam = (res, team, footballDataOrgTeamId) =>
           }
         )
       ).then((data) => ({ ...all, matches: data }))
-    ).then((all) => ({ matches: all.matches, team }))
+    ).then((all) => ({ matches: all.matches }))
     .then((all) => res.end(JSON.stringify(all)));
 
 const getTeamInformation = (teamOriginal) => {
@@ -98,7 +98,7 @@ const getTeamInformation = (teamOriginal) => {
         const clubInfo = extractClubInfo(results[1], team);
         const groundsInfo = extractGroundsInfo(results[2], team);
 
-        return { team, players, clubInfo, groundsInfo };
+        return { team: teamOriginal, players, clubInfo, groundsInfo };
       }
     );
 };

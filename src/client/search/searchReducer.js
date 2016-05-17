@@ -2,9 +2,10 @@ import moment from 'moment';
 import {
   ADD_SEARCH_TERM, TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION, DELETE_SEARCH_TERM,
   RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT, TOGGLE_SEARCH_ONLY_DB,
-  INVALIDATE_FEED_RESULTS, INVALIDATE_JOURNALISM_INFORMATION, REQUEST_ENTITY, RECEIVE_ENTITY
+  INVALIDATE_FEED_RESULTS, INVALIDATE_JOURNALISM_INFORMATION, REQUEST_ENTITY, RECEIVE_ENTITY,
+  TEAM_ENTITY
 } from './searchActions';
-import { SELECT_ENTITY_TAB } from '../results/journalism/journalismActions';
+import { SELECT_ENTITY_TAB, SELECT_TEAM_ENTITY_MATCH } from '../results/journalism/journalismActions';
 import { createTwitterParamTypes, toggleParamType } from '../../shared/utilities';
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
 
@@ -169,6 +170,14 @@ export const journalismInfoReducer = (state = journalismInfoReducerInitialState,
       ...state,
       entityCurrentlySelected: action.newEntityTabIndex,
     };
+  case SELECT_TEAM_ENTITY_MATCH:
+    return {
+      ...state,
+      entities: {
+        ...state.entities,
+        [action.entityId]: entityReducer(state.entities[action.entityId], action)
+      }
+    };
   default:
     return state;
   }
@@ -184,10 +193,39 @@ const entityReducer = (state, action) => {
       details: action.details,
     };
   case RECEIVE_ENTITY:
+    if (state.entityType === TEAM_ENTITY) {
+      const matchDaysFromToday = action.entityInfo.matches.reduce((closestMatch, match, matchId) => {
+        const daysFromMatch = Math.abs(moment().diff(match.fixtureInfo.date, 'days'));
+        if (daysFromMatch < closestMatch.daysFromToday) {
+          return {
+            id: matchId,
+            daysFromToday: daysFromMatch,
+          };
+        }
+        return closestMatch;
+      }, { id: 0, daysFromToday: 100 });
+      return {
+        ...state,
+        entity: {
+          ...action.entityInfo,
+          selectedMatch: matchDaysFromToday.id
+        },
+        fetching: false,
+      };
+    }
+
     return {
       ...state,
       entity: action.entityInfo,
       fetching: false,
+    };
+  case SELECT_TEAM_ENTITY_MATCH:
+    return {
+      ...state,
+      entity: {
+        ...state.entity,
+        selectedMatch: action.newMatchId
+      }
     };
   default:
     return state;

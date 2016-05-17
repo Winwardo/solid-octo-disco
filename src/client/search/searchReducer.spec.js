@@ -302,15 +302,15 @@ describe('#JournalismInfoReducer', () => {
     journalismInfoReducer(stateBefore, action).should.deep.equal(stateAfter);
   });
 
-  it('correctly receives an enitity and stops invalidation since all entities fetched', () => {
+  it('correctly receives an entity and stops invalidation since all entities fetched', () => {
     const entityId = 0;
 
     const stateBefore = {
       ...journalismInfoReducerInitialState,
       entities: {
         [entityId]: {
-          query: 'Manchester United FC',
-          entityType: actions.TEAM_ENTITY,
+          query: 'Wayne Rooney',
+          entityType: actions.PLAYER_ENTITY,
           fetching: true,
         },
       },
