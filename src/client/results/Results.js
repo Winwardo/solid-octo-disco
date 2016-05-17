@@ -10,7 +10,7 @@ const JOURNALISM_INFORMATION_TAB_INDEX = 1;
 
 let Results = ({
   searchTerms, feed, mostFrequent, resultsViewIndex, onClickChangeResultsView,
-  journalismInfo, onClickSelectEntityTab
+  journalismInfo, onClickSelectEntityTab,
 }) => {
   if (searchTerms.length === 0) {
     return (
@@ -64,7 +64,7 @@ const mapStateToProps = (state) => ({
   feed: state.feed,
   mostFrequent: state.mostFrequent,
   resultsViewIndex: state.resultsTabShown,
-  journalismInfo: state.journalismInfo
+  journalismInfo: state.journalismInfo,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -280,7 +280,7 @@ describe('#JournalismInfoReducer', () => {
       id: 0,
       query: 'Manchester United FC',
       entityType: actions.TEAM_ENTITY,
-      details: false
+      details: false,
     };
 
     const stateAfter = {
@@ -290,7 +290,7 @@ describe('#JournalismInfoReducer', () => {
           query: action.query,
           entityType: action.entityType,
           fetching: true,
-          details: false
+          details: false,
         },
       },
       requestedEntitiesCount: journalismInfoReducerInitialState.requestedEntitiesCount + 1,

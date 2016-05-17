@@ -13,7 +13,7 @@ const JournalismInformation = ({ journalismInfo, onClickSelectEntityTab }) => (
           id: entityId,
           name: journalismInfo.entities[entityId].query,
           fetching: journalismInfo.entities[entityId].fetching,
-          crestUrl: journalismInfo.entities[entityId].details.crestUrl
+          crestUrl: journalismInfo.entities[entityId].details.crestUrl,
         }))}
         onClickSelectEntityTab={onClickSelectEntityTab}
       />
@@ -36,7 +36,7 @@ const JournalismInformation = ({ journalismInfo, onClickSelectEntityTab }) => (
                   matches={entityInfo.entity.matches}
                 />
               </div>
-              )
+              );
               default:
               return `Sorry there is no ${entity.entityType} type that can be shown`;
             }

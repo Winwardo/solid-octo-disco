@@ -167,7 +167,7 @@ export const journalismInfoReducer = (state = journalismInfoReducerInitialState,
   case SELECT_ENTITY_TAB:
     return {
       ...state,
-      entityCurrentlySelected: action.newEntityTabIndex
+      entityCurrentlySelected: action.newEntityTabIndex,
     };
   default:
     return state;
