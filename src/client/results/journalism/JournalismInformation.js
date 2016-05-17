@@ -21,18 +21,25 @@ const JournalismInformation = ({ journalismInfo, onClickSelectEntityTab }) => (
         {
           Object.keys(journalismInfo.entities).map(entityId => {
             const entityInfo = journalismInfo.entities[entityId];
+            if (entityInfo.fetching) {
+              return (
+                <div className="ui active dimmer">
+                  <div className="ui medium text loader">Loading</div>
+                </div>
+              );
+            }
+
             switch (entityInfo.entityType) {
               case PLAYER_ENTITY:
               return (
-                <div className={`ui tab ${journalismInfo.entityCurrentlySelected === parseInt(entityId, 10) && 'active'}`}>
-                  <PlayerInformation />
-                </div>
+              <div className={`ui tab ${journalismInfo.entityCurrentlySelected === parseInt(entityId, 10) && 'active'}`}>
+                <PlayerInformation />
+              </div>
               );
               case TEAM_ENTITY:
               return (
               <div className={`ui tab ${journalismInfo.entityCurrentlySelected === parseInt(entityId, 10) && 'active'}`}>
                 <TeamInformation
-                  name={entityInfo.entity.team}
                   matches={entityInfo.entity.matches}
                 />
               </div>
