@@ -149,7 +149,8 @@ describe('#SearchTermsReducer', () => {
 
   it('should add a team entity search term', () => {
     const stateBefore = [];
-    const action = actions.addSearchTerm('#Manchester United FC', actions.TEAM_ENTITY, 1);
+    const EXAMPLE_DETAILS = 1;
+    const action = actions.addSearchTerm('#Manchester United FC', actions.TEAM_ENTITY, EXAMPLE_DETAILS);
 
     const stateAfter = [{
       id: action.id,
@@ -157,7 +158,7 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['hashtag']),
       source: 'twitter',
       entity: actions.TEAM_ENTITY,
-      details: 1,
+      details: EXAMPLE_DETAILS,
     }, ];
 
     deepFreeze(stateBefore);

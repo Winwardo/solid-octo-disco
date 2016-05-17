@@ -138,7 +138,6 @@ export const invalidateJournalismInfo = () =>
             newPromiseChain()
               .then(() => fetch(`/journalism/players/${searchTerm.query}`, makeGetHeader()))
               .then(response => response.json())
-              .then()
               .then(json => dispatch({
                 type: RECEIVE_ENTITY,
                 id: searchTerm.id,
