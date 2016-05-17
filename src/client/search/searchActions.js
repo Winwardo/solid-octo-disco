@@ -10,13 +10,17 @@ let lastSearchRequestId = 0;
 export const PLAYER_ENTITY = 'player';
 export const TEAM_ENTITY = 'team';
 export const ADD_SEARCH_TERM = 'ADD_SEARCH_TERM';
-export const addSearchTerm = (query, entity) => {
-  const searchQuery = {
+export const addSearchTerm = (query, entity, details) => {
+  let searchQuery = {
     type: ADD_SEARCH_TERM,
     id: nextSearchTermId++,
     source: 'twitter',
     entity,
   };
+
+  if (details) {
+    searchQuery.details = details;
+  }
 
   switch (query.charAt(0)) {
   case '#':
@@ -125,31 +129,35 @@ export const invalidateJournalismInfo = () =>
             id: searchTerm.id,
             query: searchTerm.query,
             entityType: searchTerm.entity,
+            details: searchTerm.details,
           });
 
           // hits different end points depending on whether it's a player or team being queried.
           switch (searchTerm.entity) {
-            case PLAYER_ENTITY:
-              newPromiseChain()
-                .then(() => fetch(`/journalism/players/${searchTerm.query}`, makeGetHeader()))
-                .then(response => response.json())
-                .then()
-                .then(json => dispatch({
-                  type: RECEIVE_ENTITY,
-                  id: searchTerm.id,
-                  entityInfo: json,
-                }));
-              break;
-            case TEAM_ENTITY:
-              newPromiseChain()
-                .then(() => fetch(`/journalism/teams/${searchTerm.query}`, makeGetHeader()))
-                .then(response => response.json())
-                .then(json => dispatch({
-                  type: RECEIVE_ENTITY,
-                  id: searchTerm.id,
-                  entityInfo: json,
-                }));
-              break;
+          case PLAYER_ENTITY:
+            newPromiseChain()
+              .then(() => fetch(`/journalism/players/${searchTerm.query}`, makeGetHeader()))
+              .then(response => response.json())
+              .then(json => dispatch({
+                type: RECEIVE_ENTITY,
+                id: searchTerm.id,
+                entityInfo: json,
+              }));
+            break;
+          case TEAM_ENTITY:
+            newPromiseChain()
+              .then(() => fetch(
+                `/journalism/teams/${searchTerm.query}/${searchTerm.details.footballDataOrgTeamId}`,
+                makeGetHeader()
+              )).then(response => response.json())
+              .then(json => dispatch({
+                type: RECEIVE_ENTITY,
+                id: searchTerm.id,
+                entityInfo: json,
+              }));
+            break;
+          default:
+            break;
           }
         }
       }

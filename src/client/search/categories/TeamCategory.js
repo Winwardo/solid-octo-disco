@@ -122,7 +122,12 @@ const LeagueTeamsList = ({
                   search => onClickRemoveTeam(search.id)
                   );
                 } else {
-                  onClickAddTeam(`^#${team.name}`, TEAM_ENTITY);
+                  onClickAddTeam(`^#${team.name}`, TEAM_ENTITY, {
+                    footballDataOrgTeamId: team.id,
+                    shortName: team.shortName,
+                    crestUrl: team.crestUrl,
+                    squadMarketValue: team.squadMarketValue,
+                  });
                   onClickAddTeam(`#${team.shortName}`, false);
                 }
               }}

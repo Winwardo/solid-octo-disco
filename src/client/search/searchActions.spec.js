@@ -133,9 +133,9 @@ describe('#SearchActions', () => {
   });
 
   it('should create an action to add a player entity', () => {
-    const query = 'Manchester United FC';
+    const query = 'Wayne Rooney';
 
-    const expectedQuery = 'Manchester United FC';
+    const expectedQuery = 'Wayne Rooney';
     const expectedAction = {
       type: 'ADD_SEARCH_TERM',
       id: searchTermId++,
@@ -149,9 +149,9 @@ describe('#SearchActions', () => {
   });
 
   it('should create an action to add a team entity', () => {
-    const query = 'Wayne Rooney';
+    const query = 'Manchester United FC';
 
-    const expectedQuery = 'Wayne Rooney';
+    const expectedQuery = 'Manchester United FC';
     const expectedAction = {
       type: 'ADD_SEARCH_TERM',
       id: searchTermId++,
@@ -159,9 +159,10 @@ describe('#SearchActions', () => {
       paramTypes: ['author', 'hashtag', 'keyword', 'mention'],
       source: 'twitter',
       entity: actions.TEAM_ENTITY,
+      details: 1,
     };
 
-    actions.addSearchTerm(query, actions.TEAM_ENTITY).should.deep.equal(expectedAction);
+    actions.addSearchTerm(query, actions.TEAM_ENTITY, 1).should.deep.equal(expectedAction);
   });
 
   it('should create an action to delete search term with id', () => {

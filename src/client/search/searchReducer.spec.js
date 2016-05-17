@@ -18,6 +18,7 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['hashtag']),
       source: 'twitter',
       entity: false,
+      details: false,
     }, ];
 
     deepFreeze(stateBefore);
@@ -33,6 +34,7 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
       entity: false,
+      details: false,
     }, ];
     const action = actions.addSearchTerm('@Manchester', false);
 
@@ -44,6 +46,7 @@ describe('#SearchTermsReducer', () => {
         paramTypes: createTwitterParamTypes(['mention', 'author']),
         source: 'twitter',
         entity: false,
+        details: false,
       }, ];
 
     deepFreeze(stateBefore);
@@ -59,6 +62,7 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
       entity: false,
+      details: false,
     }, ];
     const action = actions.deleteSearchTerm(0);
 
@@ -77,12 +81,14 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
       entity: false,
+      details: false,
     }, {
       id: 1,
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
       entity: false,
+      details: false,
     }, ];
     const action = actions.deleteSearchTerm(0);
 
@@ -92,6 +98,7 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
       entity: false,
+      details: false,
     }, ];
 
     deepFreeze(stateBefore);
@@ -107,12 +114,14 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
       entity: false,
+      details: false,
     }, {
       id: 1,
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
       entity: false,
+      details: false,
     }, ];
     const action = actions.toggleSearchTermParamTypeSelection(0, 'author');
 
@@ -122,12 +131,14 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['author', 'mention']),
       source: 'twitter',
       entity: false,
+      details: false,
     }, {
       id: 1,
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
       entity: false,
+      details: false,
     }, ];
 
     deepFreeze(stateBefore);
@@ -138,7 +149,8 @@ describe('#SearchTermsReducer', () => {
 
   it('should add a team entity search term', () => {
     const stateBefore = [];
-    const action = actions.addSearchTerm('#Manchester United FC', actions.TEAM_ENTITY);
+    const EXAMPLE_DETAILS = 1;
+    const action = actions.addSearchTerm('#Manchester United FC', actions.TEAM_ENTITY, EXAMPLE_DETAILS);
 
     const stateAfter = [{
       id: action.id,
@@ -146,6 +158,7 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['hashtag']),
       source: 'twitter',
       entity: actions.TEAM_ENTITY,
+      details: EXAMPLE_DETAILS,
     }, ];
 
     deepFreeze(stateBefore);
@@ -164,6 +177,7 @@ describe('#SearchTermsReducer', () => {
       paramTypes: createTwitterParamTypes(['hashtag']),
       source: 'twitter',
       entity: actions.PLAYER_ENTITY,
+      details: false,
     }, ];
 
     deepFreeze(stateBefore);
@@ -243,7 +257,7 @@ describe('#JournalismInfoReducer', () => {
     const stateBefore = journalismInfoReducerInitialState;
 
     const action = {
-      type: actions.INVALIDATE_JOURNALISM_INFORMATION
+      type: actions.INVALIDATE_JOURNALISM_INFORMATION,
     };
 
     const stateAfter = {
@@ -265,6 +279,7 @@ describe('#JournalismInfoReducer', () => {
       id: 0,
       query: 'Manchester United FC',
       entityType: actions.TEAM_ENTITY,
+      details: false
     };
 
     const stateAfter = {
@@ -274,7 +289,8 @@ describe('#JournalismInfoReducer', () => {
           query: action.query,
           entityType: action.entityType,
           fetching: true,
-        }
+          details: false
+        },
       },
       requestedEntitiesCount: journalismInfoReducerInitialState.requestedEntitiesCount + 1,
     };
@@ -295,7 +311,7 @@ describe('#JournalismInfoReducer', () => {
           query: 'Manchester United FC',
           entityType: actions.TEAM_ENTITY,
           fetching: true,
-        }
+        },
       },
       requestedEntitiesCount: journalismInfoReducerInitialState.requestedEntitiesCount + 1,
     };
@@ -303,7 +319,7 @@ describe('#JournalismInfoReducer', () => {
     const action = {
       type: actions.RECEIVE_ENTITY,
       id: entityId,
-      entityInfo: { exampleInfo: [] }
+      entityInfo: { exampleInfo: [] },
     };
 
     const stateAfter = {
@@ -312,8 +328,8 @@ describe('#JournalismInfoReducer', () => {
         [entityId]: {
           ...stateBefore.entities[entityId],
           fetching: false,
-          entity: action.entityInfo
-        }
+          entity: action.entityInfo,
+        },
       },
       requestedEntitiesCount: 0,
       entityCurrentlySelected: entityId,
