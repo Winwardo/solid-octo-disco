@@ -1,4 +1,5 @@
 import { SparqlClient } from 'sparql-client-2';
+import moment from 'moment';
 import { newPromiseChain } from '../shared/utilities';
 import { db } from './orientdb';
 import { fetchFromFootballAPI } from './footballSearch';
@@ -20,7 +21,10 @@ export const journalismTeam = (res, team, footballDataOrgTeamId) =>
         .then((teamInformation) => ({ ...all, leftTeam: teamInformation }))
     ).then((all) =>
       Promise.all(
-        all.footballApiData.fixtures.slice(0, 10).map(
+        all.footballApiData.fixtures.filter(fixture => {
+          const fixtureMonthDifferenceFromToday = moment().diff(moment(fixture.date), 'months');
+          return fixtureMonthDifferenceFromToday <= 1 && fixtureMonthDifferenceFromToday >= -1;
+        }).reverse().map(
           (fixture) => {
             let otherTeamName;
             let searchedTeamIsHome;
