@@ -4,6 +4,7 @@ import {
   RECEIVE_FEED_RESULTS, SET_FEED_PAGE_NUMBER, SET_FEED_PAGE_LIMIT, TOGGLE_SEARCH_ONLY_DB,
   INVALIDATE_FEED_RESULTS, INVALIDATE_JOURNALISM_INFORMATION, REQUEST_ENTITY, RECEIVE_ENTITY
 } from './searchActions';
+import { SELECT_ENTITY_TAB } from '../results/journalism/journalismActions';
 import { createTwitterParamTypes, toggleParamType } from '../../shared/utilities';
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
 
@@ -163,6 +164,11 @@ export const journalismInfoReducer = (state = journalismInfoReducerInitialState,
       requestedEntitiesCount: state.requestedEntitiesCount - 1,
     };
   }
+  case SELECT_ENTITY_TAB:
+    return {
+      ...state,
+      entityCurrentlySelected: action.newEntityTabIndex
+    };
   default:
     return state;
   }
