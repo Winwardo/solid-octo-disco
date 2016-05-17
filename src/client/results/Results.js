@@ -2,12 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { changeResultsView } from './resultsActions';
 import SocialWebResults from './socialweb/SocialWebResults';
+import JournalismInformation from './journalism/JournalismInformation';
+import { selectEntityTab } from './journalism/journalismActions';
 
 const SOCIALWEB_RESULTS_TAB_INDEX = 0;
 const JOURNALISM_INFORMATION_TAB_INDEX = 1;
 
 let Results = ({
   searchTerms, feed, mostFrequent, resultsViewIndex, onClickChangeResultsView,
+  journalismInfo, onClickSelectEntityTab,
 }) => {
   if (searchTerms.length === 0) {
     return (
@@ -46,7 +49,10 @@ let Results = ({
           />
         </div>
         <div className={`ui tab ${showJournalismInfo && 'active'}`} data-tab="journalism-info">
-          Here will go the journalist info
+          <JournalismInformation
+            journalismInfo={journalismInfo}
+            onClickSelectEntityTab={onClickSelectEntityTab}
+          />
         </div>
       </div>
     </div>
@@ -58,10 +64,12 @@ const mapStateToProps = (state) => ({
   feed: state.feed,
   mostFrequent: state.mostFrequent,
   resultsViewIndex: state.resultsTabShown,
+  journalismInfo: state.journalismInfo,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onClickChangeResultsView: (newResultsViewIndex) => dispatch(changeResultsView(newResultsViewIndex)),
+  onClickSelectEntityTab: (newEntityTabIndex) => dispatch(selectEntityTab(newEntityTabIndex)),
 });
 
 Results = connect(mapStateToProps, mapDispatchToProps)(Results);

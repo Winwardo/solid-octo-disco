@@ -4,6 +4,7 @@ import {
   searchTermsReducer, feedReducer, journalismInfoReducerInitialState, journalismInfoReducer
 } from './searchReducer';
 import * as actions from './searchActions';
+import { selectEntityTab } from '../results/journalism/journalismActions';
 import { createTwitterParamTypes } from '../../shared/utilities';
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
 
@@ -279,7 +280,7 @@ describe('#JournalismInfoReducer', () => {
       id: 0,
       query: 'Manchester United FC',
       entityType: actions.TEAM_ENTITY,
-      details: false
+      details: false,
     };
 
     const stateAfter = {
@@ -289,7 +290,7 @@ describe('#JournalismInfoReducer', () => {
           query: action.query,
           entityType: action.entityType,
           fetching: true,
-          details: false
+          details: false,
         },
       },
       requestedEntitiesCount: journalismInfoReducerInitialState.requestedEntitiesCount + 1,
@@ -334,6 +335,22 @@ describe('#JournalismInfoReducer', () => {
       requestedEntitiesCount: 0,
       entityCurrentlySelected: entityId,
       fetchingEntityInfo: false,
+    };
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    journalismInfoReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('select a new entity tab', () => {
+    const stateBefore = journalismInfoReducerInitialState;
+
+    const action = selectEntityTab(1);
+
+    const stateAfter = {
+      ...stateBefore,
+      entityCurrentlySelected: 1,
     };
 
     deepFreeze(stateBefore);

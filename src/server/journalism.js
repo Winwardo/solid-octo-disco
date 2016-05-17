@@ -39,7 +39,7 @@ export const journalismTeam = (res, team, footballDataOrgTeamId) =>
                 leftTeam: all.leftTeam,
                 rightTeam: result,
                 fixtureInfo: fixture,
-                searchedTeamIsHome
+                searchedTeamIsHome,
               }
             ));
           }
