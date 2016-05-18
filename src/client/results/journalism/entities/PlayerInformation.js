@@ -59,11 +59,11 @@ const PlayerBox = ({playerInfo}) => {
           </tr>
           <tr>
             <td><strong>Contracted until:</strong></td>
-            <td><span property="https://schema.org/endDate"><abbr title="From http://api.football-data.org/">{details.contractUntil}</abbr></span></td>
+            <td><abbr title="From http://api.football-data.org/"><span property="https://schema.org/endDate">{details.contractUntil}</span></abbr></td>
           </tr>
           <tr>
             <td><strong>Market value:</strong></td>
-            <td typeof="https://schema.org/MonetaryAmount"><span property="https://schema.org/value"><abbr title="From http://api.football-data.org/">{details.marketValue}</abbr></span></td>
+            <td typeof="https://schema.org/MonetaryAmount"><abbr title="From http://api.football-data.org/"><span property="https://schema.org/value">{details.marketValue}</span></abbr></td>
           </tr>
         </tbody>
       </table>
