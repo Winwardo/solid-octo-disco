@@ -19,7 +19,7 @@ const PlayerBox = ({playerInfo}) => {
 
   return (
     <div style={{float: "left"}}>
-      <table className="ui compact celled table">
+      <table className="ui celled purple table">
         <tbody>
           <tr>
             <td colSpan="2">
@@ -43,7 +43,7 @@ const PlayerBox = ({playerInfo}) => {
             <td>{desc.birthdate.value}</td>
           </tr>
           <tr>
-            <td><strong>Current football team:</strong></td>
+            <td><strong>Current team:</strong></td>
             <td><a href={tryOrNa(desc, "currentclub")}>{tryOrNa(desc, "currentclubname")}</a></td>
           </tr>
           <tr>
@@ -52,11 +52,11 @@ const PlayerBox = ({playerInfo}) => {
           </tr>
           <tr>
             <td><strong>Contracted until:</strong></td>
-            <td>{details.contractUntil}</td>
+            <td><abbr title="From http://api.football-data.org/">{details.contractUntil}</abbr></td>
           </tr>
           <tr>
             <td><strong>Market value:</strong></td>
-            <td>{details.marketValue}</td>
+            <td><abbr title="From http://api.football-data.org/">{details.marketValue}</abbr></td>
           </tr>
         </tbody>
       </table>
@@ -115,6 +115,8 @@ const PlayerInformation = ({playerInfo}) => {
           <div style={{height: "32px"}} />
           <div>
             {playerInfo.entity.description.abstract.value}
+            <div style={{height: "16px"}} />
+            For more information, please see <a href={desc.player.value}>{desc.player.value}</a>.
           </div>
         </div>
       </div>
