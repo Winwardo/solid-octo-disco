@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { Statistic } from '../../../common/common';
 
 const tryPropertyOrElse = (object, property, else_) => {
@@ -16,6 +17,8 @@ const tryPropertyOrNA = (object, property) => (
 const PlayerBox = ({playerInfo}) => {
   const desc = playerInfo.entity.description;
   const details = playerInfo.details;
+
+  const age = moment().diff(tryPropertyOrElse(desc, "birthdate", "2000-01-01"), 'years');
 
   return (
     <div style={{float: "left"}}>
@@ -36,11 +39,11 @@ const PlayerBox = ({playerInfo}) => {
           </tr>
           <tr>
             <td><strong>Full name:</strong></td>
-            <td>{desc.fullname.value}</td>
+            <td>{tryPropertyOrNA(desc, "fullname")}</td>
           </tr>
           <tr>
             <td><strong>Birth date:</strong></td>
-            <td>{desc.birthdate.value}</td>
+            <td>{tryPropertyOrNA(desc, "birthdate")} ({age} years old)</td>
           </tr>
           <tr>
             <td><strong>Current team:</strong></td>
@@ -72,8 +75,8 @@ const PastTeams = ({teams}) => (
         <div className="item">
           <i className="large soccer middle aligned icon"></i>
           <div className="content">
-            <a className="header" href={team.team.value}>{team.teamname.value}</a>
-            <div className="description">{team.teamcomment.value}</div>
+            <a className="header" href={tryPropertyOrNA(team, "team")}>{tryPropertyOrNA(team, "teamname")}</a>
+            <div className="description">{tryPropertyOrNA(team, "teamcomment")}</div>
           </div>
         </div>
       ))}
