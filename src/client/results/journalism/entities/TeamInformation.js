@@ -6,10 +6,17 @@ const TeamInformation = ({ matches, selectedMatchId, onSelectMatch }) => (
     <div className="row">
       <div className="ui grid">
         <div className="four wide column">
-          <MatchList matches={matches} selectedMatchId={selectedMatchId} onSelectMatch={onSelectMatch} />
+          <MatchList
+            matches={matches}
+            selectedMatchId={selectedMatchId}
+            onSelectMatch={onSelectMatch}
+          />
         </div>
         <div className="twelve wide column">
-          <MatchInformation leftTeam={`left team`} rightTeam={`right team`}/>
+          <MatchInformation
+            leftTeam={matches[selectedMatchId].leftTeam}
+            rightTeam={matches[selectedMatchId].rightTeam}
+          />
         </div>
       </div>
     </div>
@@ -49,10 +56,13 @@ const MatchInformation = ({ leftTeam, rightTeam }) => (
   <div className="ui raised purple segment">
     <div className="ui grid">
       <div className="eight wide column">
-        {leftTeam}
+        {leftTeam.team}
+      </div>
+      <div className="ui vertical divider">
+        VS.
       </div>
       <div className="eight wide column">
-        {rightTeam}
+        {rightTeam.team}
       </div>
     </div>
   </div>
