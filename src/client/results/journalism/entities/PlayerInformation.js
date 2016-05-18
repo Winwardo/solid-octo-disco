@@ -46,6 +46,10 @@ const PlayerBox = ({playerInfo}) => {
             <td>{tryPropertyOrNA(desc, "birthdate")} ({age} years old)</td>
           </tr>
           <tr>
+            <td><strong>Nationality:</strong></td>
+            <td><i className={`${details.playerNationality} flag`} />{details.nationality}</td>
+          </tr>
+          <tr>
             <td><strong>Current team:</strong></td>
             <td><a href={tryPropertyOrNA(desc, "currentclub")}>{tryPropertyOrNA(desc, "currentclubname")}</a></td>
           </tr>
@@ -93,8 +97,6 @@ const PlayerInformation = ({playerInfo}) => {
     height /= 100;
   }
 
-  console.log(playerInfo)
-
   return (
     <div className="container" style={{marginLeft: "auto", marginRight: "auto"}}>
       <div className="ui grid">
@@ -112,7 +114,7 @@ const PlayerInformation = ({playerInfo}) => {
             <div className="ui statistics three column grid" style={{width: "100%"}}>
               <Statistic label="Caps" value={tryPropertyOrNA(desc, "caps")} className="column" />
               <Statistic label="Goals" value={tryPropertyOrNA(desc, "goals")} className="column" />
-              <Statistic label="Height (metres)" value={height} className="column" />
+              <Statistic label="Height (metres)" value={height.toFixed(2)} className="column" />
             </div>
           </div>
           <div style={{height: "32px"}} />

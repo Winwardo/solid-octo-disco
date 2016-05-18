@@ -55,6 +55,7 @@ class PlayerCategory extends Component {
                     } else {
                       this.props.onClickAddPlayer(player.name, PLAYER_ENTITY, {
                         playerNationality: player.nationality.toLowerCase(),
+                        nationality: player.nationality,
                         marketValue: player.marketValue,
                         contractUntil: player.contractUntil,
                         position: player.position,
