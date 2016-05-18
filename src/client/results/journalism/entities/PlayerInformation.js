@@ -1,17 +1,17 @@
 import React from 'react';
 import { Statistic } from '../../../common/common';
 
-const tryOrElse = (thing, property, else_) => {
+const tryPropertyOrElse = (object, property, else_) => {
   try {
-    return thing[property].value;
+    return object[property].value;
   } catch (e) {
     return else_;
   }
 }
 
-const tryOrNa = (thing, property) => {
-  return tryOrElse(thing, property, "N/A")
-}
+const tryPropertyOrNA = (object, property) => (
+  tryPropertyOrElse(object, property, "N/A")
+)
 
 const PlayerBox = ({playerInfo}) => {
   const desc = playerInfo.entity.description;
@@ -28,7 +28,7 @@ const PlayerBox = ({playerInfo}) => {
                 style={{maxHeight: "300px", width:"100%", marginLeft:"auto", marginRight:"auto", overflow:"hidden"}}
               >
                 <img
-                  src={tryOrElse(desc, "thumbnail", "none")}
+                  src={tryPropertyOrElse(desc, "thumbnail", "none")}
                   style={{width:"100%", marginLeft:"auto", marginRight:"auto"}}
                 />
               </div>
@@ -44,11 +44,11 @@ const PlayerBox = ({playerInfo}) => {
           </tr>
           <tr>
             <td><strong>Current team:</strong></td>
-            <td><a href={tryOrNa(desc, "currentclub")}>{tryOrNa(desc, "currentclubname")}</a></td>
+            <td><a href={tryPropertyOrNA(desc, "currentclub")}>{tryPropertyOrNA(desc, "currentclubname")}</a></td>
           </tr>
           <tr>
             <td><strong>Position:</strong></td>
-            <td><a href={tryOrNa(desc, "position")}>{tryOrNa(desc, "positionlabel")}</a></td>
+            <td><a href={tryPropertyOrNA(desc, "position")}>{tryPropertyOrNA(desc, "positionlabel")}</a></td>
           </tr>
           <tr>
             <td><strong>Contracted until:</strong></td>
@@ -85,7 +85,7 @@ const PlayerInformation = ({playerInfo}) => {
   const desc = playerInfo.entity.description;
   const details = playerInfo.details;
 
-  let height = tryOrNa(desc, "height");
+  let height = tryPropertyOrNA(desc, "height");
   if (height !== "N/A") {
     height /= 100;
   }
@@ -104,11 +104,11 @@ const PlayerInformation = ({playerInfo}) => {
               <a href={desc.player.value}>
                 {playerInfo.query}
               </a>
-              <div className="sub header">{tryOrElse(desc, "quote", "")}</div>
+              <div className="sub header">{tryPropertyOrElse(desc, "quote", "")}</div>
             </h1>
             <div className="ui statistics three column grid" style={{width: "100%"}}>
-              <Statistic label="Caps" value={tryOrNa(desc, "caps")} className="column" />
-              <Statistic label="Goals" value={tryOrNa(desc, "goals")} className="column" />
+              <Statistic label="Caps" value={tryPropertyOrNA(desc, "caps")} className="column" />
+              <Statistic label="Goals" value={tryPropertyOrNA(desc, "goals")} className="column" />
               <Statistic label="Height (metres)" value={height} className="column" />
             </div>
           </div>
