@@ -104,3 +104,18 @@ a:hover .tweet.fullname {
 .ui.pointing.menu .active.item:after,.ui.pointing.menu .active.item:hover:after{
   background-color:#a333c8;
 }
+
+.ui.secondary.pointing.menu .active.item {
+  border-color:#a333c8;
+  color:#a333c8;
+}
+
+.ui.secondary.pointing.menu .item:hover {
+  border-color:#a333c8;
+  color:#a333c8;
+}
+
+.ui.secondary.pointing.menu .active:hover {
+  border-color:#a333c8;
+  color:#a333c8;
+}

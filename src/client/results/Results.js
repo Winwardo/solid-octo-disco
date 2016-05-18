@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { changeResultsView } from './resultsActions';
 import SocialWebResults from './socialweb/SocialWebResults';
 import JournalismInformation from './journalism/JournalismInformation';
-import { selectEntityTab } from './journalism/journalismActions';
+import { selectEntityTab, selectTeamEntityMatch } from './journalism/journalismActions';
 
 const SOCIALWEB_RESULTS_TAB_INDEX = 0;
 const JOURNALISM_INFORMATION_TAB_INDEX = 1;
 
 let Results = ({
   searchTerms, feed, mostFrequent, resultsViewIndex, onClickChangeResultsView,
-  journalismInfo, onClickSelectEntityTab,
+  journalismInfo, onClickSelectEntityTab, onClickSelectTeamMatch
 }) => {
   if (searchTerms.length === 0) {
     return (
@@ -52,6 +52,7 @@ let Results = ({
           <JournalismInformation
             journalismInfo={journalismInfo}
             onClickSelectEntityTab={onClickSelectEntityTab}
+            onClickSelectTeamMatch={onClickSelectTeamMatch}
           />
         </div>
       </div>
@@ -70,6 +71,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onClickChangeResultsView: (newResultsViewIndex) => dispatch(changeResultsView(newResultsViewIndex)),
   onClickSelectEntityTab: (newEntityTabIndex) => dispatch(selectEntityTab(newEntityTabIndex)),
+  onClickSelectTeamMatch: (entityId, newTeamMatchId) => dispatch(selectTeamEntityMatch(entityId, newTeamMatchId)),
 });
 
 Results = connect(mapStateToProps, mapDispatchToProps)(Results);
