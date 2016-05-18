@@ -166,7 +166,10 @@ export const journalismPlayer = (res, playerName) => {
         OPTIONAL { ?player <http://dbpedia.org/property/goals> ?goals } .
         OPTIONAL { ?player <http://dbpedia.org/property/quote> ?quote } .
         OPTIONAL { ?player <http://dbpedia.org/ontology/thumbnail> ?thumbnail } .
-        OPTIONAL { ?player <http://dbpedia.org/property/currentclub> ?currentclub . ?currentclub <http://dbpedia.org/property/fullname> ?currentclubname } .
+        OPTIONAL {
+          ?player <http://dbpedia.org/property/currentclub> ?currentclub .
+          ?currentclub <http://dbpedia.org/property/fullname> ?currentclubname .
+        }
 
         OPTIONAL { ?player dbo:abstract ?abstract . FILTER(langMatches(lang(?abstract), "EN")) } .
       }
@@ -186,6 +189,12 @@ export const journalismPlayer = (res, playerName) => {
 
         ?player dbo:team ?team .
         ?team rdfs:label ?teamname .
+
+        OPTIONAL {
+          ?team rdfs:comment ?teamcomment .
+          FILTER(langMatches(lang(?teamcomment), "EN")) .
+        } .
+
         FILTER(langMatches(lang(?teamname), "EN")) .
       }
     `)

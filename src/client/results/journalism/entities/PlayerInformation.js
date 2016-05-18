@@ -64,29 +64,62 @@ const PlayerBox = ({playerInfo}) => {
   )
 };
 
+const PastTeams = ({teams}) => (
+  <div>
+    <h2 class="ui header">Past teams</h2>
+    <div className="ui relaxed divided list">
+      {teams.map((team) => (
+        <div className="item">
+          <i className="large soccer middle aligned icon"></i>
+          <div className="content">
+            <a className="header" href={team.team.value}>{team.teamname.value}</a>
+            <div className="description">{team.teamcomment.value}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)
+
 const PlayerInformation = ({playerInfo}) => {
   const desc = playerInfo.entity.description;
   const details = playerInfo.details;
 
+  let height = tryOrNa(desc, "height");
+  if (height !== "N/A") {
+    height /= 100;
+  }
+
   console.log(playerInfo)
 
   return (
-    <div className="container">
-      <h1>
-        <a href={desc.player.value}>
-          {playerInfo.query}
-        </a>
-      </h1>
-      <h2>{tryOrElse(desc, "quote", "")}</h2>
-      <PlayerBox playerInfo={playerInfo} style={{float: "left"}}/>
-      <div>
-        <div className="ui statistics">
-          <Statistic label="Caps" value={tryOrNa(desc, "caps")} />
-          <Statistic label="Goals" value={tryOrNa(desc, "goals")} />
-          <Statistic label="Height (cm)" value={tryOrNa(desc, "height")} />
+    <div className="container" style={{marginLeft: "auto", marginRight: "auto"}}>
+      <div className="ui grid">
+        <div className="six wide column">
+          <PlayerBox playerInfo={playerInfo} style={{float: "left"}}/>
         </div>
-        {playerInfo.entity.description.abstract.value}
+        <div className="ten wide column">
+          <div>
+            <h1 className="ui header" style={{textAlign: "center", fontSize: "3em"}}>
+              <a href={desc.player.value}>
+                {playerInfo.query}
+              </a>
+              <div className="sub header">{tryOrElse(desc, "quote", "")}</div>
+            </h1>
+            <div className="ui statistics three column grid" style={{width: "100%"}}>
+              <Statistic label="Caps" value={tryOrNa(desc, "caps")} className="column" />
+              <Statistic label="Goals" value={tryOrNa(desc, "goals")} className="column" />
+              <Statistic label="Height (metres)" value={height} className="column" />
+            </div>
+          </div>
+          <div style={{height: "32px"}} />
+          <div>
+            {playerInfo.entity.description.abstract.value}
+          </div>
+        </div>
       </div>
+      <div style={{height: "48px"}} />
+      <PastTeams teams={playerInfo.entity.teams} />
     </div>
   );
 };
