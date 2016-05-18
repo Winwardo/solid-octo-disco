@@ -1,7 +1,9 @@
 import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
+import moment from 'moment';
 import {
-  searchTermsReducer, feedReducer, journalismInfoReducerInitialState, journalismInfoReducer
+  searchTermsReducer, feedReducer, journalismInfoReducerInitialState, journalismInfoReducer,
+  isMatchCloserToToday
 } from './searchReducer';
 import * as actions from './searchActions';
 import { selectEntityTab } from '../results/journalism/journalismActions';
@@ -357,5 +359,42 @@ describe('#JournalismInfoReducer', () => {
     deepFreeze(action);
 
     journalismInfoReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('should return the new closest matchwith the newMatchId', () => {
+    const currentClosestMatch = { id: -1, daysFromToday: 100 };
+    const matchCheckingAgainst = { fixtureInfo: {
+      date: '2016-05-15T14:00:00Z'
+    } };
+    const newMatchId = 1;
+
+    const expectedOutput = {
+      id: 1,
+      daysFromToday: Math.abs(moment().diff(matchCheckingAgainst.fixtureInfo.date, 'days')),
+    };
+    const actualOutput = isMatchCloserToToday(
+      currentClosestMatch,
+      matchCheckingAgainst,
+      newMatchId
+    );
+
+    actualOutput.should.deep.equal(expectedOutput);
+  });
+
+  it('should return the inputted closestMatch since matchCheckingAgainst is further away', () => {
+    const currentClosestMatch = { id: 1, daysFromToday: 0, };
+    const matchCheckingAgainst = { fixtureInfo: {
+      date: '2016-05-15T14:00:00Z'
+    } };
+    const newMatchId = 1;
+
+    const expectedOutput = { id: 1, daysFromToday: 0, };
+    const actualOutput = isMatchCloserToToday(
+      currentClosestMatch,
+      matchCheckingAgainst,
+      newMatchId
+    );
+
+    actualOutput.should.deep.equal(expectedOutput);
   });
 });

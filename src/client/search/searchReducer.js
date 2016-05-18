@@ -194,16 +194,10 @@ const entityReducer = (state, action) => {
     };
   case RECEIVE_ENTITY:
     if (state.entityType === TEAM_ENTITY) {
-      const matchDaysFromToday = action.entityInfo.matches.reduce((closestMatch, match, matchId) => {
-        const daysFromMatch = Math.abs(moment().diff(match.fixtureInfo.date, 'days'));
-        if (daysFromMatch < closestMatch.daysFromToday) {
-          return {
-            id: matchId,
-            daysFromToday: daysFromMatch,
-          };
-        }
-        return closestMatch;
-      }, { id: 0, daysFromToday: 100 });
+      const matchDaysFromToday = action.entityInfo.matches.reduce(
+        isMatchCloserToToday,
+        { id: -1, daysFromToday: 100 }
+      );
       return {
         ...state,
         entity: {
@@ -230,4 +224,23 @@ const entityReducer = (state, action) => {
   default:
     return state;
   }
+};
+
+/**
+ * Given a closestMatch object { id:number, daysFromToday: number } check
+ * if the match being checked is closer to today's date.
+ * @param { id:number, daysFromToday: number } Object
+ * @param {Object} which must have fixtureInfo.date property
+ * @param Number new matchId which will replace the closestMatch.id property if closer
+ * @returns { id:number, daysFromToday: number } Object
+ */
+export const isMatchCloserToToday = (closestMatch, match, matchId) => {
+  const daysFromMatch = Math.abs(moment().diff(match.fixtureInfo.date, 'days'));
+  if (daysFromMatch < closestMatch.daysFromToday) {
+    return {
+      id: matchId,
+      daysFromToday: daysFromMatch,
+    };
+  }
+  return closestMatch;
 };
