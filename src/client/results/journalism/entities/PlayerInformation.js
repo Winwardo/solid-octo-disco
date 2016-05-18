@@ -39,31 +39,31 @@ const PlayerBox = ({playerInfo}) => {
           </tr>
           <tr>
             <td><strong>Full name:</strong></td>
-            <td>{tryPropertyOrNA(desc, "fullname")}</td>
+            <td><span property="http://dbpedia.org/property/fullname">{tryPropertyOrNA(desc, "fullname")}</span></td>
           </tr>
           <tr>
             <td><strong>Birth date:</strong></td>
-            <td>{tryPropertyOrNA(desc, "birthdate")} ({age} years old)</td>
+            <td><span property="http://dbpedia.org/property/birthDate">{tryPropertyOrNA(desc, "birthdate")}</span> ({age} years old)</td>
           </tr>
           <tr>
             <td><strong>Nationality:</strong></td>
-            <td><i className={`${details.playerNationality} flag`} />{details.nationality}</td>
+            <td><i className={`${details.playerNationality} flag`} /><span property="https://schema.org/nationality">{details.nationality}</span></td>
           </tr>
           <tr>
             <td><strong>Current team:</strong></td>
-            <td><a href={tryPropertyOrNA(desc, "currentclub")}>{tryPropertyOrNA(desc, "currentclubname")}</a></td>
+            <td><a href={tryPropertyOrNA(desc, "currentclub")} property="http://dbpedia.org/property/currentclub">{tryPropertyOrNA(desc, "currentclubname")}</a></td>
           </tr>
           <tr>
             <td><strong>Position:</strong></td>
-            <td><a href={tryPropertyOrNA(desc, "position")}>{tryPropertyOrNA(desc, "positionlabel")}</a></td>
+            <td><a href={tryPropertyOrNA(desc, "position")} property="http://dbpedia.org/ontology/position">{tryPropertyOrNA(desc, "positionlabel")}</a></td>
           </tr>
           <tr>
             <td><strong>Contracted until:</strong></td>
-            <td><abbr title="From http://api.football-data.org/">{details.contractUntil}</abbr></td>
+            <td><span property="https://schema.org/endDate"><abbr title="From http://api.football-data.org/">{details.contractUntil}</abbr></span></td>
           </tr>
           <tr>
             <td><strong>Market value:</strong></td>
-            <td><abbr title="From http://api.football-data.org/">{details.marketValue}</abbr></td>
+            <td typeof="https://schema.org/MonetaryAmount"><span property="https://schema.org/value"><abbr title="From http://api.football-data.org/">{details.marketValue}</abbr></span></td>
           </tr>
         </tbody>
       </table>
@@ -76,11 +76,11 @@ const PastTeams = ({teams}) => (
     <h2 class="ui header">Past teams</h2>
     <div className="ui relaxed divided list">
       {teams.map((team) => (
-        <div className="item">
+        <div className="item" typeof="http://dbpedia.org/ontology/team">
           <i className="large soccer middle aligned icon"></i>
           <div className="content">
-            <a className="header" href={tryPropertyOrNA(team, "team")}>{tryPropertyOrNA(team, "teamname")}</a>
-            <div className="description">{tryPropertyOrNA(team, "teamcomment")}</div>
+            <a className="header" href={tryPropertyOrNA(team, "team")} property="rdfs:label">{tryPropertyOrNA(team, "teamname")}</a>
+            <div className="description" property="rdfs:comment">{tryPropertyOrNA(team, "teamcomment")}</div>
           </div>
         </div>
       ))}
@@ -98,7 +98,7 @@ const PlayerInformation = ({playerInfo}) => {
   }
 
   return (
-    <div className="container" style={{marginLeft: "auto", marginRight: "auto"}}>
+    <div className="container" style={{marginLeft: "auto", marginRight: "auto"}} typeof="http://dbpedia.org/ontology/SoccerPlayer">
       <div className="ui grid">
         <div className="six wide column">
           <PlayerBox playerInfo={playerInfo} style={{float: "left"}}/>
@@ -112,9 +112,9 @@ const PlayerInformation = ({playerInfo}) => {
               <div className="sub header">{tryPropertyOrElse(desc, "quote", "")}</div>
             </h1>
             <div className="ui statistics three column grid" style={{width: "100%"}}>
-              <Statistic label="Caps" value={tryPropertyOrNA(desc, "caps")} className="column" />
-              <Statistic label="Goals" value={tryPropertyOrNA(desc, "goals")} className="column" />
-              <Statistic label="Height (metres)" value={height.toFixed(2)} className="column" />
+              <Statistic label="Caps" value={tryPropertyOrNA(desc, "caps")} className="column" property="http://dbpedia.org/property/caps"/>
+              <Statistic label="Goals" value={tryPropertyOrNA(desc, "goals")} className="column" property="http://dbpedia.org/property/goals"/>
+              <Statistic label="Height (metres)" value={height.toFixed(2)} className="column" property="http://dbpedia.org/ontology/Person/height"/>
             </div>
           </div>
           <div style={{height: "32px"}} />
