@@ -158,10 +158,12 @@ export const journalismPlayer = (res, playerName) => {
         } .
 
         OPTIONAL { ?player <http://dbpedia.org/property/fullname> ?fullname } .
+        OPTIONAL { ?player <http://dbpedia.org/property/name> ?name } .
         OPTIONAL { ?player <http://dbpedia.org/ontology/Person/height> ?height } .
         OPTIONAL { ?player <http://dbpedia.org/ontology/birthDate> ?birthdate } .
         OPTIONAL { ?player <http://dbpedia.org/property/position> ?position . ?position rdfs:label ?positionlabel . FILTER(langMatches(lang(?positionlabel), "EN")) } .
         OPTIONAL { ?player <http://dbpedia.org/property/caps> ?caps } .
+        OPTIONAL { ?player <http://dbpedia.org/property/goals> ?goals } .
         OPTIONAL { ?player <http://dbpedia.org/property/quote> ?quote } .
         OPTIONAL { ?player <http://dbpedia.org/ontology/thumbnail> ?thumbnail } .
         OPTIONAL { ?player <http://dbpedia.org/property/currentclub> ?currentclub . ?currentclub <http://dbpedia.org/property/fullname> ?currentclubname } .

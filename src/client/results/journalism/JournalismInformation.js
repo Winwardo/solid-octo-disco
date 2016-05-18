@@ -36,7 +36,7 @@ const JournalismInformation = ({
                         <div className="ui medium text loader">Loading</div>
                       </div>
                     :
-                      <PlayerInformation />
+                      <PlayerInformation playerInfo={entityInfo}/>
                   }
                 </div>
               );
