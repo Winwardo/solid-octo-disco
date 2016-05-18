@@ -194,6 +194,9 @@ const entityReducer = (state, action) => {
     };
   case RECEIVE_ENTITY:
     if (state.entityType === TEAM_ENTITY) {
+      // if it's a team entity, then select the match that is closest to
+      // today as a default so team information is displayed to the user
+      // straight away in the journalism information
       const matchDaysFromToday = action.entityInfo.matches.reduce(
         isMatchCloserToToday,
         { id: -1, daysFromToday: 100 }
