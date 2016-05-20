@@ -37,7 +37,7 @@ class Feed extends Component {
             Showing {filteredFeed.length}/{feed.length} posts
           </div>
         </div>
-        <div className="ui divided items" typeof="https://schema.org/DataFeed" property="">
+        <div className="ui divided items" typeof="https://schema.org/DataFeed">
           {paginatedFeed.map((feedItem) => (
             <FeedItem content={feedItem} key={feedItem.data.id} />
           ))}
