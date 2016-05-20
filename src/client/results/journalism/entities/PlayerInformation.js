@@ -1,18 +1,50 @@
 import React from 'react';
 import moment from 'moment';
 import { Statistic } from '../../../common/common';
+import { tryPropertyOrElse, tryPropertyOrNA } from '../../../../shared/utilities';
 
-const tryPropertyOrElse = (object, property, else_) => {
-  try {
-    return object[property].value;
-  } catch (e) {
-    return else_;
+const PlayerInformation = ({playerInfo}) => {
+  const desc = playerInfo.entity.description;
+  const details = playerInfo.details;
+
+  let height = tryPropertyOrNA(desc, "height");
+  if (height !== "N/A") {
+    height /= 100;
   }
-}
 
-const tryPropertyOrNA = (object, property) => (
-  tryPropertyOrElse(object, property, "N/A")
-)
+  return (
+    <div className="container" style={{marginLeft: "auto", marginRight: "auto"}} typeof="http://dbpedia.org/ontology/SoccerPlayer">
+      <div className="ui grid">
+        <div className="six wide column">
+          <PlayerBox playerInfo={playerInfo} style={{float: "left"}}/>
+        </div>
+        <div className="ten wide column">
+          <div>
+            <h1 className="ui header" style={{textAlign: "center", fontSize: "3em"}}>
+              <a href={desc.player.value}>
+                {playerInfo.query}
+              </a>
+              <div className="sub header">{tryPropertyOrElse(desc, "quote", "")}</div>
+            </h1>
+            <div className="ui statistics three column grid" style={{width: "100%"}}>
+              <Statistic label="Caps" value={tryPropertyOrNA(desc, "caps")} className="column" property="http://dbpedia.org/property/caps"/>
+              <Statistic label="Goals" value={tryPropertyOrNA(desc, "goals")} className="column" property="http://dbpedia.org/property/goals"/>
+              <Statistic label="Height (metres)" value={height.toFixed(2)} className="column" property="http://dbpedia.org/ontology/Person/height"/>
+            </div>
+          </div>
+          <div style={{height: "32px"}} />
+          <div>
+            {playerInfo.entity.description.abstract.value}
+            <div style={{height: "16px"}} />
+            For more information, please see <a href={desc.player.value}>{desc.player.value}</a>.
+          </div>
+        </div>
+      </div>
+      <div style={{height: "48px"}} />
+      <PastTeams teams={playerInfo.entity.teams} />
+    </div>
+  );
+};
 
 const PlayerBox = ({playerInfo}) => {
   const desc = playerInfo.entity.description;
@@ -87,48 +119,5 @@ const PastTeams = ({teams}) => (
     </div>
   </div>
 )
-
-const PlayerInformation = ({playerInfo}) => {
-  const desc = playerInfo.entity.description;
-  const details = playerInfo.details;
-
-  let height = tryPropertyOrNA(desc, "height");
-  if (height !== "N/A") {
-    height /= 100;
-  }
-
-  return (
-    <div className="container" style={{marginLeft: "auto", marginRight: "auto"}} typeof="http://dbpedia.org/ontology/SoccerPlayer">
-      <div className="ui grid">
-        <div className="six wide column">
-          <PlayerBox playerInfo={playerInfo} style={{float: "left"}}/>
-        </div>
-        <div className="ten wide column">
-          <div>
-            <h1 className="ui header" style={{textAlign: "center", fontSize: "3em"}}>
-              <a href={desc.player.value}>
-                {playerInfo.query}
-              </a>
-              <div className="sub header">{tryPropertyOrElse(desc, "quote", "")}</div>
-            </h1>
-            <div className="ui statistics three column grid" style={{width: "100%"}}>
-              <Statistic label="Caps" value={tryPropertyOrNA(desc, "caps")} className="column" property="http://dbpedia.org/property/caps"/>
-              <Statistic label="Goals" value={tryPropertyOrNA(desc, "goals")} className="column" property="http://dbpedia.org/property/goals"/>
-              <Statistic label="Height (metres)" value={height.toFixed(2)} className="column" property="http://dbpedia.org/ontology/Person/height"/>
-            </div>
-          </div>
-          <div style={{height: "32px"}} />
-          <div>
-            {playerInfo.entity.description.abstract.value}
-            <div style={{height: "16px"}} />
-            For more information, please see <a href={desc.player.value}>{desc.player.value}</a>.
-          </div>
-        </div>
-      </div>
-      <div style={{height: "48px"}} />
-      <PastTeams teams={playerInfo.entity.teams} />
-    </div>
-  );
-};
 
 export default PlayerInformation;
