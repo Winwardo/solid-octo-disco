@@ -4,7 +4,7 @@ import {
   flattenObjectToArray, flattenImmutableObject,
   makePostHeader,
   createTwitterParamTypes, toggleParamType,
-  range
+  range, tryPropertyOrElse, tryPropertyOrNA
 } from './utilities';
 should();
 
@@ -134,5 +134,69 @@ describe('#Utilities', () => {
       range(1, 10, -1).should.deep.equal([]);
     });
   });
+
+  describe('retrieving properties from SPARQL objects', () => {
+    it('will return the value for a property that exists', () => {
+      const myValue = "something";
+      const else_ = "another thing";
+      const actual = tryPropertyOrElse(
+        {
+          myProperty: {
+            value: myValue
+          }
+        },
+        "myProperty",
+        else_
+      );
+
+      actual.should.equal(myValue);
+    });
+
+    it('will return else for a property that doesn\'t exist', () => {
+      const myValue = "something";
+      const else_ = "another thing";
+      const actual = tryPropertyOrElse(
+        {
+          myProperty: {
+            value: myValue
+          }
+        },
+        "someOtherProperty",
+        else_
+      );
+
+      actual.should.equal(else_);
+    });
+
+    it('will return else for a property that exists but lacks a .value', () => {
+      const myValue = "something";
+      const else_ = "another thing";
+      const actual = tryPropertyOrElse(
+        {
+          myProperty: {
+            notValue: myValue
+          }
+        },
+        "myProperty",
+        else_
+      );
+
+      actual.should.equal(else_);
+    });
+
+    it('will return N/A for a property that doesn\'t exist', () => {
+      const myValue = "something";
+      const actual = tryPropertyOrNA(
+        {
+          myProperty: {
+            value: myValue
+          }
+        },
+        "someOtherProperty",
+      );
+
+      actual.should.equal("N/A");
+    });
+  })
 });
 
