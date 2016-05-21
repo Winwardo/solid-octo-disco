@@ -54,26 +54,6 @@ export const journalismTeam = (res, team, footballDataOrgTeamId) =>
 const getTeamInformation = (teamOriginal) => {
   const team = teamOriginal.replace(/ /g, '_');
 
-  const clubPlayers = client
-    .registerCommon('rdfs')
-    .query(`
-      SELECT * WHERE {
-        dbr:${team} <http://dbpedia.org/ontology/wikiPageRedirects> ?team .
-        ?team a <http://dbpedia.org/ontology/SoccerClub> .
-        OPTIONAL {
-          ?player <http://dbpedia.org/property/currentclub> ?team .
-          OPTIONAL { ?player <http://dbpedia.org/property/fullname> ?name } .
-          OPTIONAL { ?player <http://dbpedia.org/ontology/number> ?number } .
-          OPTIONAL { ?player <http://dbpedia.org/ontology/birthDate> ?birthDate } .
-          OPTIONAL { ?player <http://dbpedia.org/ontology/position> ?position } .
-          OPTIONAL { ?position rdfs:label ?positionLabel } .
-        }
-
-        FILTER(langMatches(lang(?positionLabel), "EN")) .
-      }
-    `)
-    .execute();
-
   const clubDescription = client
     .registerCommon('rdfs')
     .query(`
@@ -91,6 +71,41 @@ const getTeamInformation = (teamOriginal) => {
     `)
     .execute();
 
+  const groundsDescription = client
+    .query(`
+        SELECT * WHERE {
+          dbr:${team} <http://dbpedia.org/ontology/wikiPageRedirects> ?team .
+          ?team a <http://dbpedia.org/ontology/SoccerClub> .
+          OPTIONAL {
+            ?team <http://dbpedia.org/ontology/ground> ?grounds .
+            OPTIONAL { ?grounds <http://dbpedia.org/property/name> ?groundname } .
+            OPTIONAL { ?grounds <http://dbpedia.org/ontology/seatingCapacity> ?capacity } .
+            OPTIONAL { ?grounds <http://dbpedia.org/ontology/thumbnail> ?thumbnail } .
+            FILTER(langMatches(lang(?groundname), "EN")) .
+          } .
+        }
+      `)
+    .execute();
+
+  const clubPlayers = client
+    .registerCommon('rdfs')
+    .query(`
+      SELECT * WHERE {
+        dbr:${team} <http://dbpedia.org/ontology/wikiPageRedirects> ?team .
+        ?team a <http://dbpedia.org/ontology/SoccerClub> .
+        OPTIONAL {
+          ?player <http://dbpedia.org/property/currentclub> ?team .
+          OPTIONAL { ?player <http://dbpedia.org/property/fullname> ?name } .
+          OPTIONAL { ?player <http://dbpedia.org/ontology/number> ?number } .
+          OPTIONAL { ?player <http://dbpedia.org/ontology/birthDate> ?birthDate } .
+          OPTIONAL { ?player <http://dbpedia.org/ontology/position> ?position . ?position rdfs:label ?positionLabel } .
+        }
+
+        FILTER(langMatches(lang(?positionLabel), "EN")) .
+      }
+    `)
+    .execute();
+
   const chairmanDescription = client
     .registerCommon('rdfs')
     .query(`
@@ -100,7 +115,6 @@ const getTeamInformation = (teamOriginal) => {
         OPTIONAL {
           ?team <http://dbpedia.org/ontology/chairman> ?chairman .
           OPTIONAL { ?chairman <http://dbpedia.org/property/fullname> ?fullname } .
-          OPTIONAL { ?chairman <http://dbpedia.org/property/name> ?name } .
           OPTIONAL { ?chairman <http://dbpedia.org/ontology/birthDate> ?birthDate } .
           OPTIONAL { ?chairman rdfs:comment ?comment } .
           OPTIONAL { ?chairman <http://dbpedia.org/ontology/thumbnail> ?thumbnail } .
@@ -138,46 +152,27 @@ const getTeamInformation = (teamOriginal) => {
       SELECT ?winners ?label WHERE {
         dbr:${team} <http://dbpedia.org/ontology/wikiPageRedirects> ?team .
         ?team a <http://dbpedia.org/ontology/SoccerClub> .
-        OPTIONAL { ?winners <http://dbpedia.org/property/winners> ?team } .
-        OPTIONAL { ?winners rdfs:label ?label } .
+        OPTIONAL { ?winners <http://dbpedia.org/property/winners> ?team . ?winners rdfs:label ?label } .
         FILTER(langMatches(lang(?label), "EN")) .
       }
     `)
     .execute();
 
-
-  const groundsDescription = client
-    .query(`
-        SELECT * WHERE {
-          dbr:${team} <http://dbpedia.org/ontology/wikiPageRedirects> ?team .
-          ?team a <http://dbpedia.org/ontology/SoccerClub> .
-          OPTIONAL {
-            ?team <http://dbpedia.org/ontology/ground> ?grounds .
-            OPTIONAL { ?grounds <http://dbpedia.org/property/name> ?groundname } .
-            OPTIONAL { ?grounds <http://dbpedia.org/ontology/seatingCapacity> ?capacity } .
-            OPTIONAL { ?grounds <http://dbpedia.org/ontology/thumbnail> ?thumbnail } .
-            FILTER(langMatches(lang(?groundname), "EN")) .
-          } .
-        }
-      `)
-    .execute();
-
   return Promise.all([
-    clubPlayers, clubDescription, groundsDescription, ListOfleaguesWon,
-    chairmanDescription, managerDescription
+    clubDescription, groundsDescription, clubPlayers, chairmanDescription, managerDescription, ListOfleaguesWon
   ])
     .then(
       results => {
-        console.log('yey')
-        const players = results[0].results.bindings;
-        const clubInfo = results[1].results.bindings[0];
-        const groundsInfo = results[2].results.bindings[0];
-        const leaguesWon = results[3].results.bindings;
-        const chairman = results[4].results.bindings;
-        const manager = results[5].results.bindings;
+        console.log('yey');
+        const clubInfo = results[0].results.bindings[0];
+        const groundsInfo = results[1].results.bindings[0];
+        const players = results[2].results.bindings;
+        const chairman = results[3].results.bindings;
+        const manager = results[4].results.bindings;
+        const leaguesWon = results[5].results.bindings;
 
         return {
-          team: teamOriginal, players, clubInfo, groundsInfo, leaguesWon, chairman, manager
+          team: teamOriginal, clubInfo, groundsInfo, players, chairman, manager, leaguesWon
         };
       },
       rej => {
