@@ -53,17 +53,67 @@ const MatchList = ({ matches, selectedMatchId, onSelectMatch }) => (
 );
 
 const MatchInformation = ({ leftTeam, rightTeam }) => (
-  <div className="ui raised purple segment">
+  <div className="row">
     <div className="ui grid">
       <div className="eight wide column">
-        {leftTeam.team}
-      </div>
-      <div className="ui vertical divider">
-        VS.
+        <TeamDetails
+          name={leftTeam.team}
+          website={leftTeam.clubInfo.website.value}
+          nickname={leftTeam.clubInfo.nickname.value}
+          groundsName={leftTeam.groundsInfo.name.value}
+          groundsCapacity={leftTeam.groundInfo.capacity.value}
+          groundsThumbnailSrc={leftTeam.groundInfo.thumbnail.value}
+          currentLeague={leftTeam.clubInfo.league.value}
+          abstract={leftTeam.clubInfo.abstract.value}
+          chairman={'leftTeam.chairman'}
+          manager={'leftTeam.manager'}
+          players={'leftTeam.players'}
+          pastLeaguesWon={'leftTeam.clubInfo.winners'}
+        />
       </div>
       <div className="eight wide column">
-        {rightTeam.team}
+        <TeamDetails
+          name={rightTeam.team}
+          website={rightTeam.clubInfo.website}
+          nickname={rightTeam.clubInfo.nickname}
+          groundsName={rightTeam.groundInfo.name.value}
+          groundsCapacity={rightTeam.groundInfo.capacity.value}
+          groundsThumbnailSrc={rightTeam.groundInfo.thumbnail.value}
+          currentLeague={rightTeam.clubInfo.league.value}
+          abstract={rightTeam.clubInfo.abstract.value}
+          chairman={'rightTeam.chairman'}
+          manager={'rightTeam.manager'}
+          players={'rightTeam.players'}
+          pastLeaguesWon={'rightTeam.clubInfo.winners'}
+        />
       </div>
+    </div>
+  </div>
+);
+
+const TeamDetails = ({
+  name, website, nickName, groundsName, groundsCapacity, groundsThumbnailSrc, currentLeague,
+  abstract, chairman, manager, players, pastLeaguesWon
+}) => (
+  <div>
+    <a className="ui massive purple ribbon label" src={website}>{name}</a>
+    <h2 className="ui header">A.K.A {nickName}</h2>
+    <div>
+      <a src="http://google.com" target="_blank">
+        <h2 className="ui center aligned header">{groundsName} ({groundsCapacity} seats)</h2>
+        <img
+          className="ui centered circular large image"
+          src={groundsThumbnailSrc}
+          alt={`${name}'s club grounds'`}
+        />
+      </a>
+    </div>
+    <div className="ui raised segment">
+      <h3 className="ui header">Club Information</h3>
+      <h3 className="ui sub header">
+        Current League: <a>{currentLeague}</a>
+      </h3>
+      <p>{abstract}</p>
     </div>
   </div>
 );
