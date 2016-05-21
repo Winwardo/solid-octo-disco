@@ -64,9 +64,11 @@ const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome }) => (
             name={leftTeam.team}
             website={tryPropertyOrElse(leftTeam.clubInfo, 'website', '')}
             nickName={tryPropertyOrElse(leftTeam.clubInfo, 'nickname', 'unknown nickname')}
+            groundsOriginalPage={tryPropertyOrElse(leftTeam.groundsInfo, 'grounds', '')}
             groundsName={tryPropertyOrNA(leftTeam.groundsInfo, 'groundname')}
             groundsCapacity={tryPropertyOrNA(leftTeam.groundsInfo, 'capacity')}
             groundsThumbnailSrc={tryPropertyOrElse(leftTeam.groundsInfo, 'thumbnail', '')}
+            currentLeagueOriginalPage={tryPropertyOrNA(leftTeam.clubInfo, 'league')}
             currentLeague={tryPropertyOrNA(leftTeam.clubInfo, 'label')}
             abstract={tryPropertyOrNA(leftTeam.clubInfo, 'abstract')}
             chairman={leftTeam.chairman}
@@ -85,9 +87,11 @@ const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome }) => (
             name={rightTeam.team}
             website={tryPropertyOrElse(rightTeam.clubInfo, 'website', '')}
             nickName={tryPropertyOrElse(rightTeam.clubInfo, 'nickname', 'unknown nickname')}
+            groundsOriginalPage={tryPropertyOrElse(rightTeam.groundsInfo, 'grounds', '')}
             groundsName={tryPropertyOrNA(rightTeam.groundsInfo, 'groundname')}
             groundsCapacity={tryPropertyOrNA(rightTeam.groundsInfo, 'capacity')}
             groundsThumbnailSrc={tryPropertyOrElse(rightTeam.groundsInfo, 'thumbnail', '')}
+            currentLeagueOriginalPage={tryPropertyOrNA(rightTeam.clubInfo, 'league')}
             currentLeague={tryPropertyOrNA(rightTeam.clubInfo, 'label')}
             abstract={tryPropertyOrNA(rightTeam.clubInfo, 'abstract')}
             chairman={rightTeam.chairman}
@@ -102,8 +106,9 @@ const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome }) => (
 );
 
 const TeamDetails = ({
-  homeTeam, rightAligned, name, website, nickName, groundsName, groundsCapacity, groundsThumbnailSrc, currentLeague,
-  abstract, chairman, manager, players, pastLeaguesWon
+  homeTeam, rightAligned, name, website, nickName, currentLeague, currentLeagueOriginalPage, abstract,
+  groundsOriginalPage, groundsName, groundsCapacity, groundsThumbnailSrc,
+  chairman, manager, players, pastLeaguesWon
 }) => (
   <div>
     <a
@@ -114,23 +119,137 @@ const TeamDetails = ({
       {homeTeam && <i className="large home icon" />} {name}
     </a>
     <h2 className="ui header">A.K.A {nickName}</h2>
-    <div>
-      <h2 className="ui center aligned header">{groundsName} {groundsCapacity !== 'N/A' && `(${groundsCapacity} seats)`}</h2>
+    <a href={groundsOriginalPage} target="_blank">
+      <h2 className="ui center aligned header">
+        {groundsName} {groundsCapacity !== 'N/A' && `(${groundsCapacity} seats)`}
+      </h2>
       <img
         className="ui centered circular large image"
         src={groundsThumbnailSrc}
         alt={`${name}'s club grounds'`}
       />
-    </div>
+    </a>
     <div className="ui raised segment">
       <h3 className="ui header">Club Information</h3>
       <h3 className="ui sub header">
-        Current League: <a>{currentLeague}</a>
+        Current League: <a href={currentLeagueOriginalPage} target="_blank">{currentLeague}</a>
       </h3>
       <br />
       <p>{abstract}</p>
     </div>
+
+    <div className="ui raised segment">
+      <h3 className="ui header">Current Club</h3>
+      <div className="ui cards">
+        {
+          <ClubOwnerCard
+            originalPage={tryPropertyOrElse(chairman[0], 'chairman', '')}
+            thumbnail={tryPropertyOrElse(chairman[0], 'thumbnail', 'public/images/defaultUser.png')}
+            title={'Chairman'}
+            name={tryPropertyOrElse(chairman[0], 'name', 'N/A')}
+            birthDate={tryPropertyOrElse(chairman[0], 'birthDate', 'N/A')}
+            comment={tryPropertyOrElse(chairman[0], 'comment', 'No extra information available')}
+          />
+        }
+        {manager.map(clubOwner => (
+          <ClubOwnerCard
+            originalPage={tryPropertyOrElse(clubOwner, 'manager', '')}
+            thumbnail={tryPropertyOrElse(clubOwner, 'thumbnail', 'public/images/defaultUser.png')}
+            title={'Manager'}
+            name={tryPropertyOrNA(clubOwner, 'name')}
+            birthDate={tryPropertyOrNA(clubOwner, 'birthDate')}
+            comment={tryPropertyOrElse(clubOwner, 'comment', 'No extra information available')}
+          />
+        ))}
+      </div>
+      <br />
+      <h3 className="ui header">Players</h3>
+      <TeamPlayerList players={players} />
+    </div>
+
+    <div className="ui raised segment">
+      <h3 className="ui header">
+        <i className="yellow trophy icon"></i>
+        Past Leagues Won
+      </h3>
+      {pastLeaguesWon.map(league => (
+        <a href={league.winners.value} target="_blank">
+          <h3 className="ui sub header">{league.label.value}</h3>
+        </a>
+      ))}
+    </div>
   </div>
+);
+
+const ClubOwnerCard = ({ originalPage, thumbnail, title, name, birthDate, comment }) => (
+  <a className="ui purple card" href={originalPage} target="_blank">
+    <div className="image">
+      <img src={thumbnail} alt={`${name}'`} />
+    </div>
+    <div className="content">
+      <a className="header">{title} - {name}</a>
+      <div className="meta">
+        <span className="date">Born: {birthDate}</span>
+      </div>
+      <div className="description">
+        {comment}
+      </div>
+    </div>
+  </a>
+);
+
+const TeamPlayerList = ({ players }) => (
+  <table className="ui very basic collapsing celled purple table">
+    <thead>
+      <tr>
+        <th>Number</th>
+        <th>Position</th>
+        <th>Name</th>
+        <th>Birthdate</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        players.map(player => {
+          // alot of the position definitions have '(football association)' which
+          // is unnecessary details so remove them if it exists, otherwise use rawPosition.
+          const playerPositionRaw = tryPropertyOrNA(player, 'positionLabel');
+          let playerPosition = playerPositionRaw
+          .substring(0, playerPositionRaw.indexOf('('));
+
+          if (!playerPosition) {
+            playerPosition = playerPositionRaw;
+          }
+          return (
+            <tr>
+              <td>
+                {tryPropertyOrNA(player, 'number')}
+              </td>
+              <td>
+                {playerPosition}
+              </td>
+              <td>
+                {tryPropertyOrNA(player, 'name')}
+              </td>
+              <td>
+                {tryPropertyOrNA(player, 'birthDate')}
+              </td>
+              <td>
+                <div className="ui labeled button">
+                  <div className="ui purple button">
+                    <i className="add user icon"></i>
+                  </div>
+                  <a className="ui basic purple left pointing label">
+                    Details
+                  </a>
+                </div>
+              </td>
+            </tr>
+          );
+        })
+      }
+    </tbody>
+  </table>
 );
 
 export default TeamInformation;

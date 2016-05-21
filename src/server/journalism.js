@@ -114,7 +114,7 @@ const getTeamInformation = (teamOriginal) => {
         ?team a <http://dbpedia.org/ontology/SoccerClub> .
         OPTIONAL {
           ?team <http://dbpedia.org/ontology/chairman> ?chairman .
-          OPTIONAL { ?chairman <http://dbpedia.org/property/fullname> ?fullname } .
+          OPTIONAL { ?chairman <http://dbpedia.org/property/name> ?name } .
           OPTIONAL { ?chairman <http://dbpedia.org/ontology/birthDate> ?birthDate } .
           OPTIONAL { ?chairman rdfs:comment ?comment } .
           OPTIONAL { ?chairman <http://dbpedia.org/ontology/thumbnail> ?thumbnail } .
