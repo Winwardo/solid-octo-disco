@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { tryPropertyOrElse, tryPropertyOrNA } from '../../../../shared/utilities';
 
 const TeamInformation = ({ matches, selectedMatchId, onSelectMatch }) => (
   <div>
@@ -59,32 +60,32 @@ const MatchInformation = ({ leftTeam, rightTeam }) => (
         <TeamDetails
           name={leftTeam.team}
           website={leftTeam.clubInfo.website.value}
-          nickname={leftTeam.clubInfo.nickname.value}
-          groundsName={leftTeam.groundsInfo.name.value}
-          groundsCapacity={leftTeam.groundInfo.capacity.value}
-          groundsThumbnailSrc={leftTeam.groundInfo.thumbnail.value}
-          currentLeague={leftTeam.clubInfo.league.value}
+          nickName={leftTeam.clubInfo.nickname.value}
+          groundsName={leftTeam.groundsInfo.groundname.value}
+          groundsCapacity={leftTeam.groundsInfo.capacity.value}
+          groundsThumbnailSrc={leftTeam.groundsInfo.thumbnail.value}
+          currentLeague={leftTeam.clubInfo.label.value}
           abstract={leftTeam.clubInfo.abstract.value}
-          chairman={'leftTeam.chairman'}
-          manager={'leftTeam.manager'}
-          players={'leftTeam.players'}
-          pastLeaguesWon={'leftTeam.clubInfo.winners'}
+          chairman={leftTeam.chairman}
+          manager={leftTeam.manager}
+          players={leftTeam.players}
+          pastLeaguesWon={leftTeam.leaguesWon}
         />
       </div>
       <div className="eight wide column">
         <TeamDetails
           name={rightTeam.team}
-          website={rightTeam.clubInfo.website}
-          nickname={rightTeam.clubInfo.nickname}
-          groundsName={rightTeam.groundInfo.name.value}
-          groundsCapacity={rightTeam.groundInfo.capacity.value}
-          groundsThumbnailSrc={rightTeam.groundInfo.thumbnail.value}
-          currentLeague={rightTeam.clubInfo.league.value}
+          website={rightTeam.clubInfo.website.value}
+          nickName={rightTeam.clubInfo.nickname.value}
+          groundsName={rightTeam.groundsInfo.groundname.value}
+          groundsCapacity={rightTeam.groundsInfo.capacity.value}
+          groundsThumbnailSrc={rightTeam.groundsInfo.thumbnail.value}
+          currentLeague={rightTeam.clubInfo.label.value}
           abstract={rightTeam.clubInfo.abstract.value}
-          chairman={'rightTeam.chairman'}
-          manager={'rightTeam.manager'}
-          players={'rightTeam.players'}
-          pastLeaguesWon={'rightTeam.clubInfo.winners'}
+          chairman={rightTeam.chairman}
+          manager={rightTeam.manager}
+          players={rightTeam.players}
+          pastLeaguesWon={rightTeam.leaguesWon}
         />
       </div>
     </div>
@@ -96,23 +97,22 @@ const TeamDetails = ({
   abstract, chairman, manager, players, pastLeaguesWon
 }) => (
   <div>
-    <a className="ui massive purple ribbon label" src={website}>{name}</a>
+    <a className="ui massive purple ribbon label" href={website} target="_blank">{name}</a>
     <h2 className="ui header">A.K.A {nickName}</h2>
     <div>
-      <a src="http://google.com" target="_blank">
-        <h2 className="ui center aligned header">{groundsName} ({groundsCapacity} seats)</h2>
-        <img
-          className="ui centered circular large image"
-          src={groundsThumbnailSrc}
-          alt={`${name}'s club grounds'`}
-        />
-      </a>
+      <h2 className="ui center aligned header">{groundsName} ({groundsCapacity} seats)</h2>
+      <img
+        className="ui centered circular large image"
+        src={groundsThumbnailSrc}
+        alt={`${name}'s club grounds'`}
+      />
     </div>
     <div className="ui raised segment">
       <h3 className="ui header">Club Information</h3>
       <h3 className="ui sub header">
         Current League: <a>{currentLeague}</a>
       </h3>
+      <br />
       <p>{abstract}</p>
     </div>
   </div>

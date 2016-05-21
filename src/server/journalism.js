@@ -163,7 +163,6 @@ const getTeamInformation = (teamOriginal) => {
   ])
     .then(
       results => {
-        console.log('yey');
         const clubInfo = results[0].results.bindings[0];
         const groundsInfo = results[1].results.bindings[0];
         const players = results[2].results.bindings;
@@ -174,9 +173,6 @@ const getTeamInformation = (teamOriginal) => {
         return {
           team: teamOriginal, clubInfo, groundsInfo, players, chairman, manager, leaguesWon
         };
-      },
-      rej => {
-        console.log(rej);
       }
     );
 };
