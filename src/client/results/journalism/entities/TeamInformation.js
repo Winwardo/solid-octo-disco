@@ -17,6 +17,7 @@ const TeamInformation = ({ matches, selectedMatchId, onSelectMatch }) => (
           <MatchInformation
             leftTeam={matches[selectedMatchId].leftTeam}
             rightTeam={matches[selectedMatchId].rightTeam}
+            searchedTeamIsHome={matches[selectedMatchId].searchedTeamIsHome}
           />
         </div>
       </div>
@@ -53,54 +54,68 @@ const MatchList = ({ matches, selectedMatchId, onSelectMatch }) => (
   </div>
 );
 
-const MatchInformation = ({ leftTeam, rightTeam }) => (
+const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome }) => (
   <div className="row">
-    <div className="ui grid">
-      <div className="eight wide column">
-        <TeamDetails
-          name={leftTeam.team}
-          website={leftTeam.clubInfo.website.value}
-          nickName={leftTeam.clubInfo.nickname.value}
-          groundsName={leftTeam.groundsInfo.groundname.value}
-          groundsCapacity={leftTeam.groundsInfo.capacity.value}
-          groundsThumbnailSrc={leftTeam.groundsInfo.thumbnail.value}
-          currentLeague={leftTeam.clubInfo.label.value}
-          abstract={leftTeam.clubInfo.abstract.value}
-          chairman={leftTeam.chairman}
-          manager={leftTeam.manager}
-          players={leftTeam.players}
-          pastLeaguesWon={leftTeam.leaguesWon}
-        />
-      </div>
-      <div className="eight wide column">
-        <TeamDetails
-          name={rightTeam.team}
-          website={rightTeam.clubInfo.website.value}
-          nickName={rightTeam.clubInfo.nickname.value}
-          groundsName={rightTeam.groundsInfo.groundname.value}
-          groundsCapacity={rightTeam.groundsInfo.capacity.value}
-          groundsThumbnailSrc={rightTeam.groundsInfo.thumbnail.value}
-          currentLeague={rightTeam.clubInfo.label.value}
-          abstract={rightTeam.clubInfo.abstract.value}
-          chairman={rightTeam.chairman}
-          manager={rightTeam.manager}
-          players={rightTeam.players}
-          pastLeaguesWon={rightTeam.leaguesWon}
-        />
+    <div className="ui raised segment">
+      <div className="ui grid">
+        <div className="eight wide column">
+          <TeamDetails
+            homeTeam={searchedTeamIsHome}
+            name={leftTeam.team}
+            website={tryPropertyOrElse(leftTeam.clubInfo, 'website', '')}
+            nickName={tryPropertyOrElse(leftTeam.clubInfo, 'nickname', 'unknown nickname')}
+            groundsName={tryPropertyOrNA(leftTeam.groundsInfo, 'groundname')}
+            groundsCapacity={tryPropertyOrNA(leftTeam.groundsInfo, 'capacity')}
+            groundsThumbnailSrc={tryPropertyOrElse(leftTeam.groundsInfo, 'thumbnail', '')}
+            currentLeague={tryPropertyOrNA(leftTeam.clubInfo, 'label')}
+            abstract={tryPropertyOrNA(leftTeam.clubInfo, 'abstract')}
+            chairman={leftTeam.chairman}
+            manager={leftTeam.manager}
+            players={leftTeam.players}
+            pastLeaguesWon={leftTeam.leaguesWon}
+          />
+        </div>
+        <div className="ui vertical divider" style={{ color: '#a333c8' }}>
+          VS
+        </div>
+        <div className="eight wide column">
+          <TeamDetails
+            homeTeam={!searchedTeamIsHome}
+            rightAligned={true}
+            name={rightTeam.team}
+            website={tryPropertyOrElse(rightTeam.clubInfo, 'website', '')}
+            nickName={tryPropertyOrElse(rightTeam.clubInfo, 'nickname', 'unknown nickname')}
+            groundsName={tryPropertyOrNA(rightTeam.groundsInfo, 'groundname')}
+            groundsCapacity={tryPropertyOrNA(rightTeam.groundsInfo, 'capacity')}
+            groundsThumbnailSrc={tryPropertyOrElse(rightTeam.groundsInfo, 'thumbnail', '')}
+            currentLeague={tryPropertyOrNA(rightTeam.clubInfo, 'label')}
+            abstract={tryPropertyOrNA(rightTeam.clubInfo, 'abstract')}
+            chairman={rightTeam.chairman}
+            manager={rightTeam.manager}
+            players={rightTeam.players}
+            pastLeaguesWon={rightTeam.leaguesWon}
+          />
+        </div>
       </div>
     </div>
   </div>
 );
 
 const TeamDetails = ({
-  name, website, nickName, groundsName, groundsCapacity, groundsThumbnailSrc, currentLeague,
+  homeTeam, rightAligned, name, website, nickName, groundsName, groundsCapacity, groundsThumbnailSrc, currentLeague,
   abstract, chairman, manager, players, pastLeaguesWon
 }) => (
   <div>
-    <a className="ui massive purple ribbon label" href={website} target="_blank">{name}</a>
+    <a
+      className={`ui massive purple ${rightAligned ? 'right' : ''} ribbon label`}
+      href={website}
+      target="_blank"
+    >
+      {homeTeam && <i className="large home icon" />} {name}
+    </a>
     <h2 className="ui header">A.K.A {nickName}</h2>
     <div>
-      <h2 className="ui center aligned header">{groundsName} ({groundsCapacity} seats)</h2>
+      <h2 className="ui center aligned header">{groundsName} {groundsCapacity !== 'N/A' && `(${groundsCapacity} seats)`}</h2>
       <img
         className="ui centered circular large image"
         src={groundsThumbnailSrc}
