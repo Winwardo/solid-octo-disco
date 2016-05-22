@@ -158,7 +158,7 @@ const TeamDetails = ({
       {homeTeam && <i className="large home icon" />} {name}
     </a>
     <h2 className="ui header" property="http://dbpedia.org/property/nickname">A.K.A {nickName}</h2>
-    <a href={groundsOriginalPage} target="_blank" typeof="http://dbpedia.org/ontology/ground">
+    <a href={groundsOriginalPage} target="_blank" property="http://dbpedia.org/ontology/ground" typeof="http://dbpedia.org/ontology/Stadium">
       <h2 className="ui center aligned header">
         <span property="http://dbpedia.org/property/name">{groundsName}</span>
         {
@@ -175,7 +175,7 @@ const TeamDetails = ({
     </a>
     <div className="ui raised segment">
       <h3 className="ui header">Club Information</h3>
-      <h3 className="ui sub header" typeof="http://dbpedia.org/ontology/league">
+      <h3 className="ui sub header" property="http://dbpedia.org/ontology/league" typeof="http://dbpedia.org/ontology/SportsLeague">
         Current League:
         <a href={currentLeagueOriginalPage} target="_blank" property="http://www.w3.org/2000/01/rdf-schema#label">
           {currentLeague}
@@ -222,8 +222,8 @@ const TeamDetails = ({
         Past Leagues Won
       </h3>
       {pastLeaguesWon.map(league => (
-        <a href={league.winners.value} target="_blank">
-          <h3 className="ui sub header">{league.label.value}</h3>
+        <a href={league.winners.value} target="_blank" property="http://dbpedia.org/property/winners" typeof="http://dbpedia.org/ontology/FootballLeagueSeason">
+          <h3 className="ui sub header" property="http://www.w3.org/2000/01/rdf-schema#label">{league.label.value}</h3>
         </a>
       ))}
     </div>
@@ -231,7 +231,7 @@ const TeamDetails = ({
 );
 
 const ClubOwnerCard = ({ originalPage, thumbnail, title, name, birthDate, comment, entitytypeof }) => (
-  <a className="ui purple card" href={originalPage} target="_blank" typeof={entitytypeof}>
+  <a className="ui purple card" href={originalPage} target="_blank" property={entitytypeof} typeof="http://dbpedia.org/ontology/Agent">
     <div className="image">
       <img src={thumbnail} alt={`${name}'`} property="http://dbpedia.org/ontology/thumbnail" />
     </div>
@@ -248,7 +248,7 @@ const ClubOwnerCard = ({ originalPage, thumbnail, title, name, birthDate, commen
 );
 
 const TeamPlayerList = ({ players }) => (
-  <table className="ui very basic celled purple table" property="http://dbpedia.org/property/currentclub">
+  <table className="ui very basic celled purple table">
     <thead>
       <tr>
         <th>Number</th>
@@ -270,11 +270,11 @@ const TeamPlayerList = ({ players }) => (
             playerPosition = playerPositionRaw;
           }
           return (
-            <tr typeof="http://dbpedia.org/ontology/SoccerPlayer">
+            <tr property="http://dbpedia.org/property/currentclub" typeof="http://dbpedia.org/ontology/SoccerPlayer">
               <td property="http://dbpedia.org/ontology/number">
                 {tryPropertyOrNA(player, 'number')}
               </td>
-              <td typeof="http://dbpedia.org/ontology/position">
+              <td property="http://dbpedia.org/ontology/position" typeof="http://dbpedia.org/ontology/position">
                 <a href={tryPropertyOrElse(player, 'position', '')} target="_blank" property="http://www.w3.org/2000/01/rdf-schema#label">
                   {playerPosition}
                 </a>
