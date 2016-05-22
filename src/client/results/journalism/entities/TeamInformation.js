@@ -18,6 +18,8 @@ const TeamInformation = ({ matches, selectedMatchId, onSelectMatch }) => (
             leftTeam={matches[selectedMatchId].leftTeam}
             rightTeam={matches[selectedMatchId].rightTeam}
             searchedTeamIsHome={matches[selectedMatchId].searchedTeamIsHome}
+            result={matches[selectedMatchId].fixtureInfo.result}
+            status={matches[selectedMatchId].fixtureInfo.status}
           />
         </div>
       </div>
@@ -28,87 +30,119 @@ const TeamInformation = ({ matches, selectedMatchId, onSelectMatch }) => (
 const MatchList = ({ matches, selectedMatchId, onSelectMatch }) => (
   <div className="ui raised purple segment" style={{ margin: '0px 10px' }}>
     <h1 className="ui center aligned purple header">Matches</h1>
-    {matches.map((match, id) => (
-      <div
-        key={`match${id}`}
-        className="ui left labeled fluid button" style={{ marginBottom: '7px' }}
-        onClick={() => onSelectMatch(id)}
-      >
-        <div className={`ui basic right pointing ${selectedMatchId === id && 'purple'} label`}>
-          {moment(match.fixtureInfo.date).format('DD/MM/YY')}
-        </div>
-        <div className={`ui left aligned fluid ${selectedMatchId === id && 'purple'} button`}>
-          {match.searchedTeamIsHome && <i className="home icon"></i>}
-          {match.leftTeam.team}
-          <h4
-            className={`ui horizontal ${selectedMatchId === id && 'inverted'} divider header`}
-            style={{ margin: '2px 0px' }}
+    {
+      matches.map((match, id) => {
+        let leftTeamGoals = '';
+        let rightTeamGoals = '';
+
+        if (match.fixtureInfo.status === 'FINISHED') {
+          if (match.searchedTeamIsHome) {
+            leftTeamGoals = match.fixtureInfo.result.goalsHomeTeam;
+            rightTeamGoals = match.fixtureInfo.result.goalsAwayTeam;
+          } else {
+            leftTeamGoals = match.fixtureInfo.result.goalsAwayTeam;
+            rightTeamGoals = match.fixtureInfo.result.goalsHomeTeam;
+          }
+        }
+
+        return (
+          <div
+            key={`match${id}`}
+            className="ui left labeled fluid button" style={{ marginBottom: '7px' }}
+            onClick={() => onSelectMatch(id)}
           >
-            VS
-          </h4>
-          {!match.searchedTeamIsHome && <i className="home icon"></i>}
-          {match.rightTeam.team}
-        </div>
-      </div>
-    ))}
+            <div className={`ui basic right pointing ${selectedMatchId === id && 'purple'} label`}>
+              {moment(match.fixtureInfo.date).format('DD/MM/YY')}
+            </div>
+            <div className={`ui left aligned fluid ${selectedMatchId === id && 'purple'} button`}>
+              {match.searchedTeamIsHome && <i className="home icon"></i>}
+              {match.leftTeam.team} - {leftTeamGoals}
+              <h4
+                className={`ui horizontal ${selectedMatchId === id && 'inverted'} divider header`}
+                style={{ margin: '2px 0px' }}
+              >
+                VS
+              </h4>
+              {!match.searchedTeamIsHome && <i className="home icon"></i>}
+              {match.rightTeam.team} - {rightTeamGoals}
+            </div>
+          </div>
+        );
+      })
+    }
   </div>
 );
 
-const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome }) => (
-  <div className="row">
-    <div className="ui raised segment">
-      <div className="ui grid">
-        <div className="eight wide column">
-          <TeamDetails
-            homeTeam={searchedTeamIsHome}
-            name={leftTeam.team}
-            website={tryPropertyOrElse(leftTeam.clubInfo, 'website', '')}
-            nickName={tryPropertyOrElse(leftTeam.clubInfo, 'nickname', 'unknown nickname')}
-            groundsOriginalPage={tryPropertyOrElse(leftTeam.groundsInfo, 'grounds', '')}
-            groundsName={tryPropertyOrNA(leftTeam.groundsInfo, 'groundname')}
-            groundsCapacity={tryPropertyOrNA(leftTeam.groundsInfo, 'capacity')}
-            groundsThumbnailSrc={tryPropertyOrElse(leftTeam.groundsInfo, 'thumbnail', '')}
-            currentLeagueOriginalPage={tryPropertyOrNA(leftTeam.clubInfo, 'league')}
-            currentLeague={tryPropertyOrNA(leftTeam.clubInfo, 'label')}
-            abstract={tryPropertyOrNA(leftTeam.clubInfo, 'abstract')}
-            chairman={leftTeam.chairman}
-            manager={leftTeam.manager}
-            players={leftTeam.players}
-            pastLeaguesWon={leftTeam.leaguesWon}
-          />
-        </div>
-        <div className="ui vertical divider" style={{ color: '#a333c8' }}>
-          VS
-        </div>
-        <div className="eight wide column">
-          <TeamDetails
-            homeTeam={!searchedTeamIsHome}
-            rightAligned={true}
-            name={rightTeam.team}
-            website={tryPropertyOrElse(rightTeam.clubInfo, 'website', '')}
-            nickName={tryPropertyOrElse(rightTeam.clubInfo, 'nickname', 'unknown nickname')}
-            groundsOriginalPage={tryPropertyOrElse(rightTeam.groundsInfo, 'grounds', '')}
-            groundsName={tryPropertyOrNA(rightTeam.groundsInfo, 'groundname')}
-            groundsCapacity={tryPropertyOrNA(rightTeam.groundsInfo, 'capacity')}
-            groundsThumbnailSrc={tryPropertyOrElse(rightTeam.groundsInfo, 'thumbnail', '')}
-            currentLeagueOriginalPage={tryPropertyOrNA(rightTeam.clubInfo, 'league')}
-            currentLeague={tryPropertyOrNA(rightTeam.clubInfo, 'label')}
-            abstract={tryPropertyOrNA(rightTeam.clubInfo, 'abstract')}
-            chairman={rightTeam.chairman}
-            manager={rightTeam.manager}
-            players={rightTeam.players}
-            pastLeaguesWon={rightTeam.leaguesWon}
-          />
+const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome, result, status }) => {
+  let leftTeamGoals = '';
+  let rightTeamGoals = '';
+
+  if (status === 'FINISHED') {
+    if (searchedTeamIsHome) {
+      leftTeamGoals = result.goalsHomeTeam;
+      rightTeamGoals = result.goalsAwayTeam;
+    } else {
+      leftTeamGoals = result.goalsAwayTeam;
+      rightTeamGoals = result.goalsHomeTeam;
+    }
+  }
+  return (
+    <div className="row">
+      <div className="ui raised segment">
+        <h1 className="ui center aligned purple header">{leftTeamGoals} VS {rightTeamGoals}</h1>
+        <div className="ui grid">
+          <div className="eight wide column">
+            <TeamDetails
+              homeTeam={searchedTeamIsHome}
+              name={leftTeam.team}
+              website={tryPropertyOrElse(leftTeam.clubInfo, 'website', '')}
+              nickName={tryPropertyOrElse(leftTeam.clubInfo, 'nickname', 'unknown nickname')}
+              groundsOriginalPage={tryPropertyOrElse(leftTeam.groundsInfo, 'grounds', '')}
+              groundsName={tryPropertyOrNA(leftTeam.groundsInfo, 'groundname')}
+              groundsCapacity={tryPropertyOrNA(leftTeam.groundsInfo, 'capacity')}
+              groundsThumbnailSrc={tryPropertyOrElse(leftTeam.groundsInfo, 'thumbnail', '')}
+              currentLeagueOriginalPage={tryPropertyOrNA(leftTeam.clubInfo, 'league')}
+              currentLeague={tryPropertyOrNA(leftTeam.clubInfo, 'label')}
+              abstract={tryPropertyOrNA(leftTeam.clubInfo, 'abstract')}
+              chairman={leftTeam.chairman}
+              manager={leftTeam.manager}
+              players={leftTeam.players}
+              pastLeaguesWon={leftTeam.leaguesWon}
+            />
+          </div>
+          <div className="ui vertical divider" style={{ color: '#a333c8' }}>
+            VS
+          </div>
+          <div className="eight wide column">
+            <TeamDetails
+              homeTeam={!searchedTeamIsHome}
+              rightAligned={true}
+              name={rightTeam.team}
+              website={tryPropertyOrElse(rightTeam.clubInfo, 'website', '')}
+              nickName={tryPropertyOrElse(rightTeam.clubInfo, 'nickname', 'unknown nickname')}
+              groundsOriginalPage={tryPropertyOrElse(rightTeam.groundsInfo, 'grounds', '')}
+              groundsName={tryPropertyOrNA(rightTeam.groundsInfo, 'groundname')}
+              groundsCapacity={tryPropertyOrNA(rightTeam.groundsInfo, 'capacity')}
+              groundsThumbnailSrc={tryPropertyOrElse(rightTeam.groundsInfo, 'thumbnail', '')}
+              currentLeagueOriginalPage={tryPropertyOrNA(rightTeam.clubInfo, 'league')}
+              currentLeague={tryPropertyOrNA(rightTeam.clubInfo, 'label')}
+              abstract={tryPropertyOrNA(rightTeam.clubInfo, 'abstract')}
+              chairman={rightTeam.chairman}
+              manager={rightTeam.manager}
+              players={rightTeam.players}
+              pastLeaguesWon={rightTeam.leaguesWon}
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+}
 
 const TeamDetails = ({
-  homeTeam, rightAligned, name, website, nickName, currentLeague, currentLeagueOriginalPage, abstract,
-  groundsOriginalPage, groundsName, groundsCapacity, groundsThumbnailSrc,
-  chairman, manager, players, pastLeaguesWon
+  homeTeam, rightAligned, name, website, nickName, currentLeague,
+  currentLeagueOriginalPage, abstract, groundsOriginalPage, groundsName,
+  groundsCapacity, groundsThumbnailSrc, chairman, manager, players, pastLeaguesWon
 }) => (
   <div>
     <a
@@ -199,7 +233,7 @@ const ClubOwnerCard = ({ originalPage, thumbnail, title, name, birthDate, commen
 );
 
 const TeamPlayerList = ({ players }) => (
-  <table className="ui very basic collapsing celled purple table">
+  <table className="ui very basic celled purple table">
     <thead>
       <tr>
         <th>Number</th>
@@ -226,23 +260,17 @@ const TeamPlayerList = ({ players }) => (
                 {tryPropertyOrNA(player, 'number')}
               </td>
               <td>
-                {playerPosition}
+                <a href={tryPropertyOrElse(player, 'position', '')} target="_blank">
+                  {playerPosition}
+                </a>
               </td>
               <td>
-                {tryPropertyOrNA(player, 'name')}
+                <a href={tryPropertyOrElse(player, 'player', '')} target="_blank">
+                  {tryPropertyOrNA(player, 'name')}
+                </a>
               </td>
               <td>
                 {tryPropertyOrNA(player, 'birthDate')}
-              </td>
-              <td>
-                <div className="ui labeled button">
-                  <div className="ui purple button">
-                    <i className="add user icon"></i>
-                  </div>
-                  <a className="ui basic purple left pointing label">
-                    Details
-                  </a>
-                </div>
               </td>
             </tr>
           );
