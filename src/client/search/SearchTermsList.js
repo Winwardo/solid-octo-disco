@@ -54,8 +54,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(deleteSearchTerm(id));
   },
   onSearchTermsChange: throttleFunction(() => {
-    dispatch(invalidateFeedResults());
     dispatch(invalidateJournalismInfo());
+    dispatch(invalidateFeedResults());
   }, 2000),
 });
 
