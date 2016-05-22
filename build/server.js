@@ -66,6 +66,8 @@
 
 	var _footballSearch = __webpack_require__(16);
 
+	var _journalism = __webpack_require__(17);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var app = (0, _express2.default)();
@@ -73,14 +75,14 @@
 
 	// In development hotload React using webpack-hot-middleware
 	if (process.env.NODE_ENV === 'development') {
-	  var webpack = __webpack_require__(17);
+	  var webpack = __webpack_require__(19);
 	  var compiler = webpack(_webpackConfig2.default[1]);
-	  app.use(__webpack_require__(18)(compiler, {
+	  app.use(__webpack_require__(20)(compiler, {
 	    noInfo: true,
 	    publicPath: _webpackConfig2.default[1].output.publicPath
 	  }));
 
-	  app.use(__webpack_require__(19)(compiler));
+	  app.use(__webpack_require__(21)(compiler));
 	}
 
 	// parse application/x-www-form-urlencoded
@@ -125,6 +127,14 @@
 
 	app.get('/football/teams/:teamid/players', function (req, res) {
 	  (0, _footballSearch.searchFootballTeamPlayers)(res, req.params.teamid);
+	});
+
+	app.get('/journalism/teams/:teamname/:footballDataOrgTeamId', function (req, res) {
+	  (0, _journalism.journalismTeam)(res, req.params.teamname, req.params.footballDataOrgTeamId);
+	});
+
+	app.get('/journalism/players/:playername', function (req, res) {
+	  (0, _journalism.journalismPlayer)(res, req.params.playername);
 	});
 
 	// Used for development purposes to make sure we're hitting the correct twitter end point
@@ -716,7 +726,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.getSemanticCountryFlagName = exports.range = exports.throttleFunction = exports.toggleParamType = exports.createTwitterParamTypes = exports.fetchPost = exports.makePostHeader = exports.makeGetHeader = exports.newPromiseChain = exports.toggleArrayElement = exports.flattenImmutableObject = exports.flattenObjectToArray = undefined;
+	exports.tryPropertyOrNA = exports.tryPropertyOrElse = exports.getSemanticCountryFlagName = exports.range = exports.throttleFunction = exports.toggleParamType = exports.createTwitterParamTypes = exports.fetchPost = exports.makePostHeader = exports.makeGetHeader = exports.newPromiseChain = exports.toggleArrayElement = exports.flattenImmutableObject = exports.flattenObjectToArray = undefined;
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -970,6 +980,33 @@
 	    default:
 	      return countryName;
 	  }
+	};
+
+	/**
+	 * Retrieve the .value property of some optional SPARQL result, else return a given default.
+	 * @param object {Object} Of the form {myProperty: {type: "literal", value: "my value"}}
+	 * @param property {String} The key name to select
+	 * @param else_ {Object} Any object to return if the key does not exist
+	 * @returns {*}
+	 */
+	var tryPropertyOrElse = exports.tryPropertyOrElse = function tryPropertyOrElse(object, property, else_) {
+	  try {
+	    var result = object[property].value;
+	    if (result !== undefined) {
+	      return result;
+	    }
+	  } catch (e) {}
+
+	  return else_;
+	};
+
+	/**
+	 * Retrieve the .value property of some optional SPARQL result, else return "N/A"
+	 * @param object {Object} Of the form {myProperty: {type: "literal", value: "my value"}}
+	 * @param property {String} The key name to select
+	 */
+	var tryPropertyOrNA = exports.tryPropertyOrNA = function tryPropertyOrNA(object, property) {
+	  return tryPropertyOrElse(object, property, "N/A");
 	};
 
 /***/ },
@@ -1633,7 +1670,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.searchFootballTeamPlayers = exports.searchFootballSeasonTeams = exports.searchFootballSeasons = undefined;
+	exports.fetchFromFootballAPI = exports.searchFootballTeamPlayers = exports.searchFootballSeasonTeams = exports.searchFootballSeasons = exports.footballAccessOptions = undefined;
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -1649,14 +1686,13 @@
 
 	// These keys should be hidden in a private config file or environment variables
 	// For simplicity of this assignment, they will be visible here
-	var footballAccessOptions = {
+	var footballAccessOptions = exports.footballAccessOptions = {
 	  method: 'GET',
 	  headers: {
 	    'X-Auth-Token': 'f39c0cf21f95409498f8eea5eb129b0f',
 	    'X-Response-Control': 'minified'
 	  },
 	  dataType: 'json'
-
 	};
 
 	var footballAPIHost = 'http://api.football-data.org';
@@ -1769,7 +1805,7 @@
 	  });
 	};
 
-	var fetchFromFootballAPI = function fetchFromFootballAPI(footballRequestUrl) {
+	var fetchFromFootballAPI = exports.fetchFromFootballAPI = function fetchFromFootballAPI(footballRequestUrl) {
 	  return (0, _utilities.newPromiseChain)().then(function () {
 	    return console.info('Hitting Football API:', footballRequestUrl);
 	  }).then(function () {
@@ -1797,18 +1833,144 @@
 
 /***/ },
 /* 17 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = require("webpack");
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.journalismPlayer = exports.journalismTeam = undefined;
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _sparqlClient = __webpack_require__(18);
+
+	var _moment = __webpack_require__(14);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
+	var _utilities = __webpack_require__(7);
+
+	var _footballSearch = __webpack_require__(16);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var client = new _sparqlClient.SparqlClient('http://dbpedia.org/sparql').register({
+	  db: 'http://dbpedia.org/resource/',
+	  dbpedia: 'http://dbpedia.org/property/'
+	});
+
+	var journalismTeam = exports.journalismTeam = function journalismTeam(res, team, footballDataOrgTeamId) {
+	  return (0, _utilities.newPromiseChain)().then(function () {
+	    return (0, _footballSearch.fetchFromFootballAPI)('http://api.football-data.org/v1/teams/' + footballDataOrgTeamId + '/fixtures');
+	  }).then(function (data) {
+	    return { footballApiData: data };
+	  }).then(function (all) {
+	    return (0, _utilities.newPromiseChain)().then(function () {
+	      return getTeamInformation(team);
+	    }).then(function (teamInformation) {
+	      return _extends({}, all, { leftTeam: teamInformation });
+	    });
+	  }).then(function (all) {
+	    return Promise.all(all.footballApiData.fixtures.filter(function (fixture) {
+	      var fixtureMonthDifferenceFromToday = (0, _moment2.default)().diff((0, _moment2.default)(fixture.date), 'months');
+	      return fixtureMonthDifferenceFromToday <= 1 && fixtureMonthDifferenceFromToday >= -1;
+	    }).reverse().map(function (fixture) {
+	      var otherTeamName = void 0;
+	      var searchedTeamIsHome = void 0;
+	      if (fixture.homeTeamName === team) {
+	        otherTeamName = fixture.awayTeamName;
+	        searchedTeamIsHome = true;
+	      } else if (fixture.awayTeamName === team) {
+	        otherTeamName = fixture.homeTeamName;
+	        searchedTeamIsHome = false;
+	      } else {
+	        throw 'Neither home nor away team matches the given team name ' + team + '.';
+	      }
+
+	      return getTeamInformation(otherTeamName).then(function (result) {
+	        return {
+	          leftTeam: all.leftTeam,
+	          rightTeam: result,
+	          fixtureInfo: fixture,
+	          searchedTeamIsHome: searchedTeamIsHome
+	        };
+	      });
+	    })).then(function (data) {
+	      return _extends({}, all, { matches: data });
+	    });
+	  }).then(function (all) {
+	    return { matches: all.matches };
+	  }).then(function (all) {
+	    return res.end(JSON.stringify(all));
+	  });
+	};
+
+	var getTeamInformation = function getTeamInformation(teamOriginal) {
+	  var team = teamOriginal.replace(/ /g, '_');
+
+	  var clubDescription = client.registerCommon('rdfs').query('\n      SELECT * WHERE {\n        dbr:' + team + ' <http://dbpedia.org/ontology/wikiPageRedirects> ?team .\n        ?team a <http://dbpedia.org/ontology/SoccerClub> .\n        OPTIONAL { ?team <http://dbpedia.org/ontology/abstract> ?abstract } .\n        OPTIONAL { ?team <http://dbpedia.org/property/nickname> ?nickname } .\n        OPTIONAL { ?team <http://dbpedia.org/property/website> ?website } .\n        OPTIONAL { ?team <http://dbpedia.org/ontology/league> ?league . ?league rdfs:label ?label } .\n\n        FILTER(langMatches(lang(?abstract), "EN")) .\n        FILTER(langMatches(lang(?label), "EN")) .\n      }\n    ').execute();
+
+	  var groundsDescription = client.query('\n        SELECT * WHERE {\n          dbr:' + team + ' <http://dbpedia.org/ontology/wikiPageRedirects> ?team .\n          ?team a <http://dbpedia.org/ontology/SoccerClub> .\n          OPTIONAL {\n            ?team <http://dbpedia.org/ontology/ground> ?grounds .\n            OPTIONAL { ?grounds <http://dbpedia.org/property/name> ?groundname } .\n            OPTIONAL { ?grounds <http://dbpedia.org/ontology/seatingCapacity> ?capacity } .\n            OPTIONAL { ?grounds <http://dbpedia.org/ontology/thumbnail> ?thumbnail } .\n            FILTER(langMatches(lang(?groundname), "EN")) .\n          } .\n        }\n      ').execute();
+
+	  var clubPlayers = client.registerCommon('rdfs').query('\n      SELECT * WHERE {\n        dbr:' + team + ' <http://dbpedia.org/ontology/wikiPageRedirects> ?team .\n        ?team a <http://dbpedia.org/ontology/SoccerClub> .\n        OPTIONAL {\n          ?player <http://dbpedia.org/property/currentclub> ?team .\n          OPTIONAL { ?player <http://dbpedia.org/property/fullname> ?name } .\n          OPTIONAL { ?player <http://dbpedia.org/ontology/number> ?number } .\n          OPTIONAL { ?player <http://dbpedia.org/ontology/birthDate> ?birthDate } .\n          OPTIONAL { ?player <http://dbpedia.org/ontology/position> ?position . ?position rdfs:label ?positionLabel } .\n        }\n\n        FILTER(langMatches(lang(?positionLabel), "EN")) .\n      }\n    ').execute();
+
+	  var chairmanDescription = client.registerCommon('rdfs').query('\n      SELECT * WHERE {\n        dbr:' + team + ' <http://dbpedia.org/ontology/wikiPageRedirects> ?team .\n        ?team a <http://dbpedia.org/ontology/SoccerClub> .\n        OPTIONAL {\n          ?team <http://dbpedia.org/ontology/chairman> ?chairman .\n          OPTIONAL { ?chairman <http://dbpedia.org/property/name> ?name } .\n          OPTIONAL { ?chairman <http://dbpedia.org/ontology/birthDate> ?birthDate } .\n          OPTIONAL { ?chairman rdfs:comment ?comment } .\n          OPTIONAL { ?chairman <http://dbpedia.org/ontology/thumbnail> ?thumbnail } .\n        } .\n\n        FILTER(langMatches(lang(?name), "EN")) .\n        FILTER(langMatches(lang(?comment), "EN")) .\n      }\n    ').execute();
+
+	  var managerDescription = client.registerCommon('rdfs').query('\n      SELECT * WHERE {\n        dbr:' + team + ' <http://dbpedia.org/ontology/wikiPageRedirects> ?team .\n        ?team a <http://dbpedia.org/ontology/SoccerClub> .\n        OPTIONAL {\n          ?team <http://dbpedia.org/ontology/manager> ?manager\n          OPTIONAL { ?manager <http://dbpedia.org/property/fullname> ?name } .\n          OPTIONAL { ?manager <http://dbpedia.org/ontology/birthDate> ?birthDate } .\n          OPTIONAL { ?manager rdfs:comment ?comment } .\n          OPTIONAL { ?manager <http://dbpedia.org/ontology/thumbnail> ?thumbnail } .\n        } .\n\n        FILTER(langMatches(lang(?name), "EN")) .\n        FILTER(langMatches(lang(?comment), "EN")) .\n      }\n    ').execute();
+
+	  var ListOfleaguesWon = client.registerCommon('rdfs').query('\n      SELECT ?winners ?label WHERE {\n        dbr:' + team + ' <http://dbpedia.org/ontology/wikiPageRedirects> ?team .\n        ?team a <http://dbpedia.org/ontology/SoccerClub> .\n        OPTIONAL { ?winners <http://dbpedia.org/property/winners> ?team . ?winners rdfs:label ?label } .\n        FILTER(langMatches(lang(?label), "EN")) .\n      }\n    ').execute();
+
+	  return Promise.all([clubDescription, groundsDescription, clubPlayers, chairmanDescription, managerDescription, ListOfleaguesWon]).then(function (results) {
+	    var clubInfo = results[0].results.bindings[0];
+	    var groundsInfo = results[1].results.bindings[0];
+	    var players = results[2].results.bindings;
+	    var chairman = results[3].results.bindings;
+	    var manager = results[4].results.bindings;
+	    var leaguesWon = results[5].results.bindings;
+
+	    return {
+	      team: teamOriginal, clubInfo: clubInfo, groundsInfo: groundsInfo, players: players, chairman: chairman, manager: manager, leaguesWon: leaguesWon
+	    };
+	  });
+	};
+
+	var journalismPlayer = exports.journalismPlayer = function journalismPlayer(res, playerName) {
+	  var mainDescription = client.registerCommon('rdfs').query('\n      SELECT DISTINCT * WHERE {\n        ?player foaf:name "' + playerName + '"@en .\n        {\n          ?player a umbel-rc:SoccerPlayer\n        } UNION {\n          ?player a dbo:SoccerPlayer\n        } .\n\n        OPTIONAL { ?player <http://dbpedia.org/property/fullname> ?fullname } .\n        OPTIONAL { ?player <http://dbpedia.org/property/name> ?name } .\n        OPTIONAL { ?player <http://dbpedia.org/ontology/Person/height> ?height } .\n        OPTIONAL { ?player <http://dbpedia.org/ontology/birthDate> ?birthdate } .\n        OPTIONAL { ?player <http://dbpedia.org/property/position> ?position . ?position rdfs:label ?positionlabel . FILTER(langMatches(lang(?positionlabel), "EN")) } .\n        OPTIONAL { ?player <http://dbpedia.org/property/caps> ?caps } .\n        OPTIONAL { ?player <http://dbpedia.org/property/goals> ?goals } .\n        OPTIONAL { ?player <http://dbpedia.org/property/quote> ?quote } .\n        OPTIONAL { ?player <http://dbpedia.org/ontology/thumbnail> ?thumbnail } .\n        OPTIONAL {\n          ?player <http://dbpedia.org/property/currentclub> ?currentclub .\n          ?currentclub <http://dbpedia.org/property/fullname> ?currentclubname .\n        }\n\n        OPTIONAL { ?player dbo:abstract ?abstract . FILTER(langMatches(lang(?abstract), "EN")) } .\n      }\n      LIMIT 1\n    ').execute();
+
+	  var allTeams = client.query('\n      SELECT DISTINCT * WHERE {\n        ?player foaf:name "' + playerName + '"@en .\n        {\n          ?player a umbel-rc:SoccerPlayer\n        } UNION {\n          ?player a dbo:SoccerPlayer\n        } .\n\n        ?player dbo:team ?team .\n        ?team rdfs:label ?teamname .\n\n        OPTIONAL {\n          ?team rdfs:comment ?teamcomment .\n          FILTER(langMatches(lang(?teamcomment), "EN")) .\n        } .\n\n        FILTER(langMatches(lang(?teamname), "EN")) .\n      }\n    ').execute();
+
+	  Promise.all([mainDescription, allTeams]).then(function (result) {
+	    try {
+	      res.end(JSON.stringify({
+	        description: result[0].results.bindings[0],
+	        teams: result[1].results.bindings
+	      }));
+	    } catch (err) {}
+	  });
+	};
 
 /***/ },
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = require("webpack-dev-middleware");
+	module.exports = require("sparql-client-2");
 
 /***/ },
 /* 19 */
+/***/ function(module, exports) {
+
+	module.exports = require("webpack");
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	module.exports = require("webpack-dev-middleware");
+
+/***/ },
+/* 21 */
 /***/ function(module, exports) {
 
 	module.exports = require("webpack-hot-middleware");
