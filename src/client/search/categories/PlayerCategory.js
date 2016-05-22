@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { getSemanticCountryFlagName } from './../../../shared/utilities';
+import { PLAYER_ENTITY } from '../searchActions';
 
 class PlayerCategory extends Component {
   componentDidMount() {
@@ -52,7 +53,13 @@ class PlayerCategory extends Component {
                       search => this.props.onClickRemovePlayer(search.id)
                       );
                     } else {
-                      this.props.onClickAddPlayer(player.name);
+                      this.props.onClickAddPlayer(player.name, PLAYER_ENTITY, {
+                        playerNationality: player.nationality.toLowerCase(),
+                        nationality: player.nationality,
+                        marketValue: player.marketValue,
+                        contractUntil: player.contractUntil,
+                        position: player.position,
+                      });
                     }
                   }}
                 />
@@ -61,10 +68,11 @@ class PlayerCategory extends Component {
             )}
           </div>
         </div>
-        { !this.props.isTeamPlayersFetching &&
-          <div className="ui purple left pointing label">
-            {this.props.teamPlayers.length}
-          </div>
+        {
+          !this.props.isTeamPlayersFetching &&
+            <div className="ui purple left pointing label">
+              {this.props.teamPlayers.length}
+            </div>
         }
       </div>
     );
@@ -73,7 +81,7 @@ class PlayerCategory extends Component {
 PlayerCategory.propTypes = {
   teamName: React.PropTypes.string,
   teamCrestUrl: React.PropTypes.string,
-  isTeamPlayersFetching: React.PropTypes.boolean,
+  isTeamPlayersFetching: React.PropTypes.bool,
   teamPlayers: React.PropTypes.array,
   currentSearchTerms: React.PropTypes.array,
   onClickAddPlayer: React.PropTypes.func,
@@ -81,7 +89,7 @@ PlayerCategory.propTypes = {
 };
 
 const TeamPlayer = ({ name, nationality, alreadyAddedToSearch, onClick }) => (
-  <div className="item player" onClick={() => onClick(name)}>
+  <div className="item player" onClick={() => onClick(name, PLAYER_ENTITY)}>
     <i className={`${getSemanticCountryFlagName(nationality)} flag`} />
     {name}
     <div className="ui right floated">

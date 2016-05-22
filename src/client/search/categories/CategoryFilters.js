@@ -69,7 +69,7 @@ class CategoryFilters extends Component {
       seasonYearTabsContent.push(
         <div key={`yearcontent${y}`} className={tabContentClassName} data-tab={y}>
           <div className="ui stackable grid">
-            <div className="four wide column" style={{ paddingRight: '0px'}}>
+            <div className="four wide column" style={{ paddingRight: '0px' }}>
               <LeagueCategory leagues={this.props.football.seasonsByYear[y]}
                 currentYear={currentYear} tabYear={y}
                 currentSearchTerms={this.props.currentSearchTerms}
@@ -127,7 +127,6 @@ class CategoryFilters extends Component {
 }
 CategoryFilters.propTypes = {
   football: React.PropTypes.object,
-  onClickCategoryFilter: React.PropTypes.func,
   onClickToggleDbOnlySearch: React.PropTypes.func,
   currentSearchTerms: React.PropTypes.array,
   onClickAddCategoryFilter: React.PropTypes.func,
@@ -140,7 +139,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onClickAddCategoryFilter: (newTerm) => dispatch(addSearchTerm(newTerm)),
+  onClickAddCategoryFilter: (newTerm, entityType, details) =>
+    dispatch(addSearchTerm(newTerm, entityType, details)),
   onClickRemoveCategoryFilter: (id) => dispatch(deleteSearchTerm(id)),
   onClickSelectTeam: (id, name, shortName, crestUrl) =>
     dispatch(fetchFootballTeamPlayers(id, name, shortName, crestUrl)),
@@ -159,5 +159,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(CategoryFilters);

@@ -14,9 +14,10 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['hashtag'],
       source: 'twitter',
+      entity: false,
     };
 
-    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+    actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
   });
 
   it('should create an action to add just a keyword', () => {
@@ -29,9 +30,10 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['keyword'],
       source: 'twitter',
+      entity: false,
     };
 
-    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+    actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
   });
 
   it('should create an action to add an author and mention', () => {
@@ -44,9 +46,10 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['author', 'mention'],
       source: 'twitter',
+      entity: false,
     };
 
-    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+    actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
   });
 
   it('should create an action to add everything apart from a hashtag', () => {
@@ -59,9 +62,10 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['author', 'keyword', 'mention'],
       source: 'twitter',
+      entity: false,
     };
 
-    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+    actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
   });
 
   it('should create an action to add everything apart from a keyword', () => {
@@ -74,9 +78,10 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['author', 'hashtag', 'mention'],
       source: 'twitter',
+      entity: false,
     };
 
-    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+    actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
   });
 
   it('should create an action to add everything apart from author and mention', () => {
@@ -89,9 +94,10 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['hashtag', 'keyword'],
       source: 'twitter',
+      entity: false,
     };
 
-    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+    actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
   });
 
   it('should create an action to add a default search term if ^ without a symbol afterwards', () => {
@@ -104,9 +110,10 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['author', 'hashtag', 'keyword', 'mention'],
       source: 'twitter',
+      entity: false,
     };
 
-    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+    actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
   });
 
   it('should create an action to add a default search term', () => {
@@ -119,9 +126,43 @@ describe('#SearchActions', () => {
       query: expectedQuery,
       paramTypes: ['author', 'hashtag', 'keyword', 'mention'],
       source: 'twitter',
+      entity: false,
     };
 
-    actions.addSearchTerm(query).should.deep.equal(expectedAction);
+    actions.addSearchTerm(query, false).should.deep.equal(expectedAction);
+  });
+
+  it('should create an action to add a player entity', () => {
+    const query = 'Wayne Rooney';
+
+    const expectedQuery = 'Wayne Rooney';
+    const expectedAction = {
+      type: 'ADD_SEARCH_TERM',
+      id: searchTermId++,
+      query: expectedQuery,
+      paramTypes: ['author', 'hashtag', 'keyword', 'mention'],
+      source: 'twitter',
+      entity: actions.PLAYER_ENTITY,
+    };
+
+    actions.addSearchTerm(query, actions.PLAYER_ENTITY).should.deep.equal(expectedAction);
+  });
+
+  it('should create an action to add a team entity', () => {
+    const query = 'Manchester United FC';
+
+    const expectedQuery = 'Manchester United FC';
+    const expectedAction = {
+      type: 'ADD_SEARCH_TERM',
+      id: searchTermId++,
+      query: expectedQuery,
+      paramTypes: ['author', 'hashtag', 'keyword', 'mention'],
+      source: 'twitter',
+      entity: actions.TEAM_ENTITY,
+      details: 1,
+    };
+
+    actions.addSearchTerm(query, actions.TEAM_ENTITY, 1).should.deep.equal(expectedAction);
   });
 
   it('should create an action to delete search term with id', () => {

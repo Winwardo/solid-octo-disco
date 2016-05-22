@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { setFeedPageNumber, setFeedPageLimit } from '../search/searchActions';
-import { TwitterProfilePicture } from '../Twitter';
-import { fetchPost, newPromiseChain } from '../../shared/utilities';
+import { setFeedPageNumber, setFeedPageLimit } from '../../search/searchActions';
+import { TwitterProfilePicture } from '../../Twitter';
 
 class Feed extends Component {
   componentDidMount() {
@@ -38,7 +37,7 @@ class Feed extends Component {
             Showing {filteredFeed.length}/{feed.length} posts
           </div>
         </div>
-        <div className="ui divided items">
+        <div className="ui divided items" typeof="https://schema.org/DataFeed">
           {paginatedFeed.map((feedItem) => (
             <FeedItem content={feedItem} key={feedItem.data.id} />
           ))}
@@ -194,15 +193,15 @@ const Tweet = ({ content }) => {
 
   let verifiedImage;
   if (content.author.is_verified) {
-    verifiedImage = <img className="popup image" src="public/images/verified.png" alt="User is verified on Twitter." data-title="User is verified on Twitter" />
+    verifiedImage = <img className="popup image" src="public/images/verified.png" alt="User is verified on Twitter." data-title="User is verified on Twitter" />;
   }
 
   const image_url = content.data.image_url;
   let tweetImage;
   if (image_url !== 'none') {
     tweetImage = <a href={image_url} target="_blank">
-        <img className="ui bordered centered rounded image" style={{maxHeight: '400px', width: '60%'}} src={image_url} alt={`Embedded image: ${image_url}`} />
-      </a>
+        <img className="ui bordered centered rounded image" style={{ maxHeight: '400px', width: '60%' }} src={image_url} alt={`Embedded image: ${image_url}`} />
+      </a>;
   }
 
   // Just below we use dangerousSetInnerHTML.
@@ -211,24 +210,27 @@ const Tweet = ({ content }) => {
   // would contain &lt;script&gt;, which is totally safe to render.
 
   return (
-    <div className="content">
-      <TwitterProfilePicture author={content.author} size="tiny" />
+    <div className="content" resource={`//twitter.com/${content.author.handle}/status/${content.data.id}`} typeof="https://schema.org/SocialMediaPosting">
+      <div typeof="https://schema.org/Person" property="https://schema.org/author">
+        <TwitterProfilePicture author={content.author} size="tiny" property="https://schema.org/image"/>
 
-      {goldStar}
-      <a href={`//twitter.com/${content.author.handle}`} target="_blank">
-        <strong className="tweet fullname header">{decodedAuthorName}</strong>
-        &nbsp;
-        <span style={{color: '#A333C8'}}>@{content.author.handle} {verifiedImage}</span>
-      </a>
+        {goldStar}
+        <a href={`//twitter.com/${content.author.handle}`} target="_blank">
+          <strong className="tweet fullname header" property="https://schema.org/name">{decodedAuthorName}</strong>
+          <span style={{ color: '#A333C8' }}> @<span property="https://schema.org/alternateName">{content.author.handle}</span> {verifiedImage}</span>
+        </a>
+      </div>
       <br />
-      <div dangerouslySetInnerHTML={{ __html: tweetWithLinks }} />
+      <div property="https://schema.org/articleBody">
+        <div dangerouslySetInnerHTML={{ __html: tweetWithLinks }} />
+      </div>
 
       {tweetImage}
       {quotedContent}
 
       <div className="meta">
         <span className="date">
-          <a href={`//twitter.com/${content.author.handle}/status/${content.data.id}`}>
+          <a href={`//twitter.com/${content.author.handle}/status/${content.data.id}`} property="https://schema.org/dateCreated">
             {moment(content.data.date).calendar()}
           </a>
         </span>

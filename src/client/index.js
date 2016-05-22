@@ -4,8 +4,11 @@ import React from 'react';
 import { combineReducers, compose, applyMiddleware, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
-import { searchTermsReducer, feedReducer, searchOnlyDB } from './search/searchReducer';
-import mostFrequentReducer from './results/mostfrequent/mostFrequentReducer';
+import {
+  searchTermsReducer, feedReducer, searchOnlyDB, journalismInfoReducer
+} from './search/searchReducer';
+import resultsTabShown from './results/resultsReducer';
+import mostFrequentReducer from './results/socialweb/mostfrequent/mostFrequentReducer';
 import footballCategoryFiltersReducer from './search/categories/categoryFiltersReducer';
 import { fetchAllFootballSeasons } from './search/categories/categoryFilterActions';
 import moment from 'moment';
@@ -15,7 +18,9 @@ const feedApp = combineReducers({
   mostFrequent: mostFrequentReducer,
   feed: feedReducer,
   football: footballCategoryFiltersReducer,
+  journalismInfo: journalismInfoReducer,
   searchOnlyDB,
+  resultsTabShown,
 });
 
 const middlewares = [thunkMiddleware];

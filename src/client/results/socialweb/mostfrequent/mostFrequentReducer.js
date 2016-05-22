@@ -1,4 +1,4 @@
-import { toggleArrayElement } from './../../../shared/utilities';
+import { toggleArrayElement } from '../../../../shared/utilities';
 import {
   UPDATE_MOST_USED_WORDS_SEARCH_FILTER, TOGGLE_MOST_USED_WORDS,
   UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER, TOGGLE_MOST_ACTIVE_USER,

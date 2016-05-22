@@ -40,7 +40,7 @@ let AddSearchTerm = ({ dispatch }) => {
               $('#addSearchTermErrorText').html('Can only be less than 30 characters');
               $('#addSearchTerm').popup('show');
             } else {
-              dispatch(addSearchTerm(e.target.value));
+              dispatch(addSearchTerm(e.target.value, false));
               e.target.value = '';
             }
           }

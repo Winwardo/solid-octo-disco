@@ -229,3 +229,31 @@ export const getSemanticCountryFlagName = (countryName) => {
     return countryName;
   }
 };
+
+/**
+ * Retrieve the .value property of some optional SPARQL result, else return a given default.
+ * @param object {Object} Of the form {myProperty: {type: "literal", value: "my value"}}
+ * @param property {String} The key name to select
+ * @param else_ {Object} Any object to return if the key does not exist
+ * @returns {*}
+ */
+export const tryPropertyOrElse = (object, property, else_) => {
+  try {
+    const result = object[property].value;
+    if (result !== undefined) {
+      return result;
+    }
+  } catch (e) {
+  }
+
+  return else_;
+}
+
+/**
+ * Retrieve the .value property of some optional SPARQL result, else return "N/A"
+ * @param object {Object} Of the form {myProperty: {type: "literal", value: "my value"}}
+ * @param property {String} The key name to select
+ */
+export const tryPropertyOrNA = (object, property) => (
+  tryPropertyOrElse(object, property, "N/A")
+)

@@ -25,7 +25,7 @@ class LeagueCategory extends Component {
       'ui purple horizontal label year league count content transition hidden';
 
     return (
-      <div className="large fluid ui dropdown labeled icon button leagues category" style={{ paddingLeft: '13px!important', paddingRight: '38px!important'}}>
+      <div className="large fluid ui dropdown labeled icon button leagues category" style={{ paddingLeft: '13px!important', paddingRight: '38px!important' }}>
         {yearsLeagues.length === 0 ? isFetchingLoader : <i className="trophy purple icon"></i>}
         <span className="text">
           {
@@ -60,8 +60,8 @@ class LeagueCategory extends Component {
                       search => this.props.onClickRemoveLeague(search.id)
                     );
                   } else {
-                    this.props.onClickAddLeague(`*${leagueName}`);
-                    this.props.onClickAddLeague(`#${league.league}`);
+                    this.props.onClickAddLeague(`*${leagueName}`, false);
+                    this.props.onClickAddLeague(`#${league.league}`, false);
                   }
                 }}
               />

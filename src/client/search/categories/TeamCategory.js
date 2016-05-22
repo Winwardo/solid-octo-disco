@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { TEAM_ENTITY } from '../searchActions';
 
 class TeamCategory extends Component {
   componentDidMount() {
@@ -118,11 +119,16 @@ const LeagueTeamsList = ({
               onClickTeam={() => {
                 if (teamAlreadyAddedToSearch) {
                   searchesQueriesSameAsTeam.forEach(
-                    search => onClickRemoveTeam(search.id)
+                  search => onClickRemoveTeam(search.id)
                   );
                 } else {
-                  onClickAddTeam(`^#${team.name}`);
-                  onClickAddTeam(`#${team.shortName}`);
+                  onClickAddTeam(`^#${team.name}`, TEAM_ENTITY, {
+                    footballDataOrgTeamId: team.id,
+                    shortName: team.shortName,
+                    crestUrl: team.crestUrl,
+                    squadMarketValue: team.squadMarketValue,
+                  });
+                  onClickAddTeam(`#${team.shortName}`, false);
                 }
               }}
               onClickSelectTeam={() =>

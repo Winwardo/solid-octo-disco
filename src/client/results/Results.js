@@ -1,128 +1,78 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import Feed from './Feed';
-import MostUsedWords from './mostfrequent/words/MostUsedWords';
-import MostActiveUsers from './mostfrequent/users/MostActiveUsers';
-import GoogleMap from './GoogleMap';
+import { changeResultsView } from './resultsActions';
+import SocialWebResults from './socialweb/SocialWebResults';
+import JournalismInformation from './journalism/JournalismInformation';
+import { selectEntityTab, selectTeamEntityMatch } from './journalism/journalismActions';
 
-class Results extends Component {
-  componentDidMount() {
-    $('.ui.sticky').sticky({ context: '#feed' });
-    $('.tabular.menu.results .item.active').tab();
-  }
+const SOCIALWEB_RESULTS_TAB_INDEX = 0;
+const JOURNALISM_INFORMATION_TAB_INDEX = 1;
 
-  componentDidUpdate() {
-    $('.ui.sticky').sticky({ context: '#feed' });
-    $('.tabular.menu.results .item').tab();
-  }
-
-  render() {
-    const { mostFrequent, feed } = this.props;
-
-    const posts = feed.posts;
-    if (posts.length === 0) {
-      return (
-        <div className="row">
-          <div className="col-xs-12">
-            <div className="ui violet inverted center aligned segment">
-              <h3 className="ui inverted header">
-                Start using Socto by typing into the search bar or by using the filters.
-              </h3>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
+let Results = ({
+  searchTerms, feed, mostFrequent, resultsViewIndex, onClickChangeResultsView,
+  journalismInfo, onClickSelectEntityTab, onClickSelectTeamMatch
+}) => {
+  if (searchTerms.length === 0) {
     return (
-      <div style={{ width: '100%' }}>
-        <div className="row" style={{ margin: '0px 25px' }}>
-          <div className="hidden-md-down col-lg-4">
-            <div className="ui sticky">
-              <MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
-                userInfoList={feed.mostFrequentUsers}
-                isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
-                postsLength={posts.length}
-              />
-            </div>
-          </div>
-
-          <div className="col-sm-12 col-md-6 col-md-push-6 hidden-lg-up">
-            <div className="ui tabular menu results">
-              <div className="purple item active" data-tab="top-users">Top Users</div>
-              <div className="purple item" data-tab="top-words">Top Words</div>
-            </div>
-            <div className="ui tab active" data-tab="top-users">
-              <MostActiveUsers filterTerm={mostFrequent.users.filterTerm}
-                userInfoList={feed.mostFrequentUsers}
-                isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
-                postsLength={posts.length}
-              />
-            </div>
-            <div className="ui tab" data-tab="top-words">
-              <MostUsedWords filterTerm={mostFrequent.words.filterTerm}
-                wordInfoList={feed.groupedMostFrequentWords}
-                isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
-                postsLength={posts.length}
-                componentId="1"
-              />
-            </div>
-          </div>
-
-          <div id="feed" className="col-sm-12 col-md-6 col-md-pull-6 col-lg-5 col-lg-pull-0">
-            <div className="hidden-md-down row">
-              <div id="tweetMap" style={{ height: '450px', width: '100%' }} ></div>
-              <GoogleMap posts={posts.filter((post) => post.data.longitude !== 0)} />
-            </div>
-
-
-            <div className="row">
-              <Feed feed={posts}
-                toggledWords={mostFrequent.words.toToggle}
-                isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
-                toggledUsers={mostFrequent.users.toToggle}
-                isUsersToggledActionHide={mostFrequent.users.isToggledActionHide}
-                paginationInfo={feed.paginationInfo}
-              />
-            </div>
-          </div>
-
-          <div className="hidden-md-down col-lg-3">
-            <div className="ui sticky">
-              <MostUsedWords filterTerm={mostFrequent.words.filterTerm}
-                wordInfoList={feed.groupedMostFrequentWords}
-                isWordsToggledActionHide={mostFrequent.words.isToggledActionHide}
-                postsLength={posts.length}
-                componentId="2"
-              />
-            </div>
-          </div>
-
-        </div>
-        <div className={`ui ${feed.posts.length > 0 && feed.fetchingRequestFromDB && 'active'} purple dimmer`}
-          style={{ position: 'fixed'}}
-        >
-          <div className="content">
-            <div className="center">
-              <h2 className="ui inverted icon header">
-                <div className="ui large text loader">Fetching posts from the database</div>
-              </h2>
-            </div>
+      <div className="row">
+        <div className="col-xs-12">
+          <div className="ui violet inverted center aligned segment">
+            <h3 className="ui inverted header">
+              Start using Socto by typing into the search bar or by using the filters.
+            </h3>
           </div>
         </div>
       </div>
     );
   }
-}
-Results.propTypes = {
-  feed: React.PropTypes.object,
-  mostFrequent: React.PropTypes.object,
+
+  const showSocialWebResults = resultsViewIndex === SOCIALWEB_RESULTS_TAB_INDEX;
+  const showJournalismInfo = resultsViewIndex === JOURNALISM_INFORMATION_TAB_INDEX;
+  return (
+    <div className="row">
+      <div className="ui fluid pointing two item top attached menu">
+        <a className={`item ${showSocialWebResults && 'active'}`}
+          onClick={() => onClickChangeResultsView(SOCIALWEB_RESULTS_TAB_INDEX)}
+        >
+          Social Web Results
+        </a>
+        <a className={`item ${showJournalismInfo && 'active'}`}
+          onClick={() => onClickChangeResultsView(JOURNALISM_INFORMATION_TAB_INDEX)}
+        >
+          Journalism Information
+        </a>
+      </div>
+      <div className="ui bottom attached segment">
+        <div className={`ui tab ${showSocialWebResults && 'active'}`} data-tab="social-web">
+          <SocialWebResults feed={feed} mostFrequent={mostFrequent}
+            socialWebVisible={showSocialWebResults}
+          />
+        </div>
+        <div className={`ui tab ${showJournalismInfo && 'active'}`} data-tab="journalism-info">
+          <JournalismInformation
+            journalismInfo={journalismInfo}
+            onClickSelectEntityTab={onClickSelectEntityTab}
+            onClickSelectTeamMatch={onClickSelectTeamMatch}
+          />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const mapStateToProps = (state) => ({
+  searchTerms: state.searchTerms,
   feed: state.feed,
   mostFrequent: state.mostFrequent,
+  resultsViewIndex: state.resultsTabShown,
+  journalismInfo: state.journalismInfo,
 });
 
-Results = connect(mapStateToProps)(Results);
+const mapDispatchToProps = (dispatch) => ({
+  onClickChangeResultsView: (newResultsViewIndex) => dispatch(changeResultsView(newResultsViewIndex)),
+  onClickSelectEntityTab: (newEntityTabIndex) => dispatch(selectEntityTab(newEntityTabIndex)),
+  onClickSelectTeamMatch: (entityId, newTeamMatchId) => dispatch(selectTeamEntityMatch(entityId, newTeamMatchId)),
+});
+
+Results = connect(mapStateToProps, mapDispatchToProps)(Results);
 export default Results;

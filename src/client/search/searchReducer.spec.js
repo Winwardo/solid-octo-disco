@@ -1,20 +1,27 @@
 import { should } from 'chai';
 import deepFreeze from 'deep-freeze';
-import { searchTermsReducer, feedReducer } from './searchReducer';
+import moment from 'moment';
+import {
+  searchTermsReducer, feedReducer, journalismInfoReducerInitialState, journalismInfoReducer,
+  isMatchCloserToToday
+} from './searchReducer';
 import * as actions from './searchActions';
+import { selectEntityTab } from '../results/journalism/journalismActions';
 import { createTwitterParamTypes } from '../../shared/utilities';
 import { groupedCountWords, mostFrequentWords, mostFrequentUsers } from './../tweetAnalysis';
 
 describe('#SearchTermsReducer', () => {
   it('should add a hashtag search term', () => {
     const stateBefore = [];
-    const action = actions.addSearchTerm('#Football');
+    const action = actions.addSearchTerm('#Football', false);
 
     const stateAfter = [{
       id: action.id,
       query: 'Football',
       paramTypes: createTwitterParamTypes(['hashtag']),
       source: 'twitter',
+      entity: false,
+      details: false,
     }, ];
 
     deepFreeze(stateBefore);
@@ -29,16 +36,20 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
+      entity: false,
+      details: false,
     }, ];
-    const action = actions.addSearchTerm('@Manchester');
+    const action = actions.addSearchTerm('@Manchester', false);
 
     const stateAfter = [
       ...stateBefore,
       {
-        id: 9,
+        id: 11,
         query: 'Manchester',
         paramTypes: createTwitterParamTypes(['mention', 'author']),
         source: 'twitter',
+        entity: false,
+        details: false,
       }, ];
 
     deepFreeze(stateBefore);
@@ -53,6 +64,8 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
+      entity: false,
+      details: false,
     }, ];
     const action = actions.deleteSearchTerm(0);
 
@@ -70,11 +83,15 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
+      entity: false,
+      details: false,
     }, {
       id: 1,
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
+      entity: false,
+      details: false,
     }, ];
     const action = actions.deleteSearchTerm(0);
 
@@ -83,6 +100,8 @@ describe('#SearchTermsReducer', () => {
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
+      entity: false,
+      details: false,
     }, ];
 
     deepFreeze(stateBefore);
@@ -97,11 +116,15 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: createTwitterParamTypes(['mention']),
       source: 'twitter',
+      entity: false,
+      details: false,
     }, {
       id: 1,
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
+      entity: false,
+      details: false,
     }, ];
     const action = actions.toggleSearchTermParamTypeSelection(0, 'author');
 
@@ -110,11 +133,54 @@ describe('#SearchTermsReducer', () => {
       query: 'Football',
       paramTypes: createTwitterParamTypes(['author', 'mention']),
       source: 'twitter',
+      entity: false,
+      details: false,
     }, {
       id: 1,
       query: 'Manchester',
       paramTypes: createTwitterParamTypes(['hashtag', 'author']),
       source: 'twitter',
+      entity: false,
+      details: false,
+    }, ];
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    searchTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('should add a team entity search term', () => {
+    const stateBefore = [];
+    const EXAMPLE_DETAILS = 1;
+    const action = actions.addSearchTerm('#Manchester United FC', actions.TEAM_ENTITY, EXAMPLE_DETAILS);
+
+    const stateAfter = [{
+      id: action.id,
+      query: 'Manchester United FC',
+      paramTypes: createTwitterParamTypes(['hashtag']),
+      source: 'twitter',
+      entity: actions.TEAM_ENTITY,
+      details: EXAMPLE_DETAILS,
+    }, ];
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    searchTermsReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('should add a player entity search term', () => {
+    const stateBefore = [];
+    const action = actions.addSearchTerm('#Wayne Rooney', actions.PLAYER_ENTITY);
+
+    const stateAfter = [{
+      id: action.id,
+      query: 'Wayne Rooney',
+      paramTypes: createTwitterParamTypes(['hashtag']),
+      source: 'twitter',
+      entity: actions.PLAYER_ENTITY,
+      details: false,
     }, ];
 
     deepFreeze(stateBefore);
@@ -186,5 +252,149 @@ describe('#FeedReducer', () => {
     deepFreeze(action);
 
     feedReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+});
+
+describe('#JournalismInfoReducer', () => {
+  it('invalidates the journalism info', () => {
+    const stateBefore = journalismInfoReducerInitialState;
+
+    const action = {
+      type: actions.INVALIDATE_JOURNALISM_INFORMATION,
+    };
+
+    const stateAfter = {
+      ...stateBefore,
+      fetchingEntityInfo: true,
+    };
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    journalismInfoReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('shows that it is requesting an enitity', () => {
+    const stateBefore = journalismInfoReducerInitialState;
+
+    const action = {
+      type: actions.REQUEST_ENTITY,
+      id: 0,
+      query: 'Manchester United FC',
+      entityType: actions.TEAM_ENTITY,
+      details: false,
+    };
+
+    const stateAfter = {
+      ...stateBefore,
+      entities: {
+        [action.id]: {
+          query: action.query,
+          entityType: action.entityType,
+          fetching: true,
+          details: false,
+        },
+      },
+      requestedEntitiesCount: journalismInfoReducerInitialState.requestedEntitiesCount + 1,
+    };
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    journalismInfoReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('correctly receives an entity and stops invalidation since all entities fetched', () => {
+    const entityId = 0;
+
+    const stateBefore = {
+      ...journalismInfoReducerInitialState,
+      entities: {
+        [entityId]: {
+          query: 'Wayne Rooney',
+          entityType: actions.PLAYER_ENTITY,
+          fetching: true,
+        },
+      },
+      requestedEntitiesCount: journalismInfoReducerInitialState.requestedEntitiesCount + 1,
+    };
+
+    const action = {
+      type: actions.RECEIVE_ENTITY,
+      id: entityId,
+      entityInfo: { exampleInfo: [] },
+    };
+
+    const stateAfter = {
+      ...stateBefore,
+      entities: {
+        [entityId]: {
+          ...stateBefore.entities[entityId],
+          fetching: false,
+          entity: action.entityInfo,
+        },
+      },
+      requestedEntitiesCount: 0,
+      entityCurrentlySelected: entityId,
+      fetchingEntityInfo: false,
+    };
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    journalismInfoReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('select a new entity tab', () => {
+    const stateBefore = journalismInfoReducerInitialState;
+
+    const action = selectEntityTab(1);
+
+    const stateAfter = {
+      ...stateBefore,
+      entityCurrentlySelected: 1,
+    };
+
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+
+    journalismInfoReducer(stateBefore, action).should.deep.equal(stateAfter);
+  });
+
+  it('should return the new closest matchwith the newMatchId', () => {
+    const currentClosestMatch = { id: -1, daysFromToday: 100 };
+    const matchCheckingAgainst = { fixtureInfo: {
+      date: '2016-05-15T14:00:00Z'
+    } };
+    const newMatchId = 1;
+
+    const expectedOutput = {
+      id: 1,
+      daysFromToday: Math.abs(moment().diff(matchCheckingAgainst.fixtureInfo.date, 'days')),
+    };
+    const actualOutput = isMatchCloserToToday(
+      currentClosestMatch,
+      matchCheckingAgainst,
+      newMatchId
+    );
+
+    actualOutput.should.deep.equal(expectedOutput);
+  });
+
+  it('should return the inputted closestMatch since matchCheckingAgainst is further away', () => {
+    const currentClosestMatch = { id: 1, daysFromToday: 0, };
+    const matchCheckingAgainst = { fixtureInfo: {
+      date: '2016-05-15T14:00:00Z'
+    } };
+    const newMatchId = 1;
+
+    const expectedOutput = { id: 1, daysFromToday: 0, };
+    const actualOutput = isMatchCloserToToday(
+      currentClosestMatch,
+      matchCheckingAgainst,
+      newMatchId
+    );
+
+    actualOutput.should.deep.equal(expectedOutput);
   });
 });
