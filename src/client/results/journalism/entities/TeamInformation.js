@@ -91,12 +91,14 @@ const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome, result, sta
       <div className="ui raised segment">
         <h1 className="ui center aligned purple header" style={{ marginTop: '5px' }}>
           <div className="ui massive center aligned purple label">
-            {leftTeamGoals} VS {rightTeamGoals}
+            {leftTeamGoals} : {rightTeamGoals}
           </div>
         </h1>
         <div className="ui grid">
           <div className="eight wide column">
+            {console.log("leftTeam", leftTeam)}
             <TeamDetails
+              originalResource={leftTeam.clubInfo.team.value}
               homeTeam={searchedTeamIsHome}
               name={leftTeam.team}
               website={tryPropertyOrElse(leftTeam.clubInfo, 'website', '')}
@@ -112,6 +114,7 @@ const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome, result, sta
               manager={leftTeam.manager}
               players={leftTeam.players}
               pastLeaguesWon={leftTeam.leaguesWon}
+              key={leftTeam.team}
             />
           </div>
           <div className="ui vertical divider" style={{ color: '#a333c8' }}>
@@ -119,6 +122,7 @@ const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome, result, sta
           </div>
           <div className="eight wide column">
             <TeamDetails
+              originalResource={rightTeam.clubInfo.team.value}
               homeTeam={!searchedTeamIsHome}
               rightAligned={true}
               name={rightTeam.team}
@@ -135,6 +139,7 @@ const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome, result, sta
               manager={rightTeam.manager}
               players={rightTeam.players}
               pastLeaguesWon={rightTeam.leaguesWon}
+              key={rightTeam.team}
             />
           </div>
         </div>
@@ -144,7 +149,7 @@ const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome, result, sta
 };
 
 const TeamDetails = ({
-  homeTeam, rightAligned, name, website, nickName, currentLeague,
+  originalResource, homeTeam, rightAligned, name, website, nickName, currentLeague,
   currentLeagueOriginalPage, abstract, groundsOriginalPage, groundsName,
   groundsCapacity, groundsThumbnailSrc, chairman, manager, players, pastLeaguesWon
 }) => (
@@ -155,23 +160,27 @@ const TeamDetails = ({
       target="_blank"
       property="http://www.w3.org/2000/01/rdf-schema#label"
     >
-      {homeTeam && <i className="large home icon" />} {name}
+      {homeTeam && <i className="large home icon" /> || <div style={{height: "36px", width: "1px", display: "inline-block"}}>&nbsp;</div> } {name}
     </a>
     <h2 className="ui header" property="http://dbpedia.org/property/nickname">A.K.A {nickName}</h2>
     <a href={groundsOriginalPage} target="_blank" property="http://dbpedia.org/ontology/ground" typeof="http://dbpedia.org/ontology/Stadium">
       <h2 className="ui center aligned header">
         <span property="http://dbpedia.org/property/name">{groundsName}</span>
+        <span className="ui sub header">
         {
-          groundsCapacity !== 'N/A' &&
             <span property="http://dbpedia.org/ontology/seatingCapacity">({groundsCapacity} seats)</span>
         }
+        </span>
       </h2>
-      <img
-        className="ui centered circular large image"
-        src={groundsThumbnailSrc}
-        alt={`${name}'s club grounds'`}
-        property="http://dbpedia.org/ontology/thumbnail"
-      />
+      <div style={{maxHeight: "300px", height: "300px"}}>
+        <img
+          className="ui centered circular image"
+          src={groundsThumbnailSrc || "/public/images/nogrounds.jpg"}
+          alt={`${name}'s club grounds'`}
+          property="http://dbpedia.org/ontology/thumbnail"
+          style={{height: "100%"}}
+        />
+      </div>
     </a>
     <div className="ui raised segment">
       <h3 className="ui header">Club Information</h3>
@@ -183,6 +192,9 @@ const TeamDetails = ({
       </h3>
       <br />
       <p property="http://dbpedia.org/ontology/abstract">{abstract}</p>
+      <p>
+        Information collected from <a href={originalResource}>{originalResource}</a>.
+      </p>
     </div>
 
     <div className="ui raised segment">
@@ -236,7 +248,7 @@ const ClubOwnerCard = ({ originalPage, thumbnail, title, name, birthDate, commen
       <img src={thumbnail} alt={`${name}'`} property="http://dbpedia.org/ontology/thumbnail" />
     </div>
     <div className="content">
-      <a className="header">{title} - <span property="http://dbpedia.org/property/fullname">{name}</span></a>
+      <span className="header">{title} - <span property="http://dbpedia.org/property/fullname">{name}</span></span>
       <div className="meta">
         <span className="date">Born: <span property="http://dbpedia.org/property/birthDate">{birthDate}</span></span>
       </div>
