@@ -1,27 +1,33 @@
 {
-  "coverage": "18.3%",
-  "expectCount": 153,
-  "actualCount": 28,
+  "coverage": "17.12%",
+  "expectCount": 181,
+  "actualCount": 31,
   "files": {
     "src/client/search/searchActions.js": {
-      "expectCount": 15,
+      "expectCount": 21,
       "actualCount": 0,
       "undocumentLines": [
-        8,
-        101,
-        45,
-        93,
-        120,
-        114,
-        126,
-        107,
-        9,
+        12,
+        167,
+        54,
+        110,
+        10,
+        112,
         102,
-        46,
-        121,
-        115,
-        127,
-        108
+        111,
+        186,
+        180,
+        11,
+        192,
+        173,
+        13,
+        168,
+        55,
+        113,
+        187,
+        181,
+        193,
+        174
       ]
     },
     "src/client/search/AddSearchTerm.js": {
@@ -35,6 +41,14 @@
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
+    },
+    "src/client/results/resultsActions.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2
+      ]
     },
     "src/shared/data/databaseObjects.js": {
       "expectCount": 6,
@@ -61,17 +75,24 @@
         15
       ]
     },
-    "src/client/results/Feed.js": {
+    "src/client/results/journalism/EntityMenu.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        3
+      ]
+    },
+    "src/client/results/socialweb/Feed.js": {
       "expectCount": 4,
       "actualCount": 0,
       "undocumentLines": [
+        7,
         8,
-        9,
-        13,
-        17
+        12,
+        16
       ]
     },
-    "src/client/results/GoogleMap.js": {
+    "src/client/results/socialweb/GoogleMap.js": {
       "expectCount": 9,
       "actualCount": 0,
       "undocumentLines": [
@@ -93,6 +114,13 @@
         3
       ]
     },
+    "src/client/results/journalism/JournalismInformation.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        7
+      ]
+    },
     "src/client/search/categories/LeagueCategory.js": {
       "expectCount": 3,
       "actualCount": 0,
@@ -110,7 +138,7 @@
         298
       ]
     },
-    "src/client/results/mostfrequent/MostFrequent.js": {
+    "src/client/results/socialweb/mostfrequent/MostFrequent.js": {
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [
@@ -121,10 +149,17 @@
       "expectCount": 4,
       "actualCount": 0,
       "undocumentLines": [
-        4,
         5,
-        11,
-        19
+        6,
+        12,
+        20
+      ]
+    },
+    "src/client/results/journalism/entities/PlayerInformation.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        6
       ]
     },
     "src/client/search/categories/categoryFilterActions.js": {
@@ -152,7 +187,7 @@
         81
       ]
     },
-    "src/client/results/mostfrequent/mostFrequentActions.js": {
+    "src/client/results/socialweb/mostfrequent/mostFrequentActions.js": {
       "expectCount": 14,
       "actualCount": 0,
       "undocumentLines": [
@@ -173,13 +208,20 @@
       ]
     },
     "src/client/results/Results.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        11
+      ]
+    },
+    "src/client/results/journalism/journalismActions.js": {
       "expectCount": 4,
       "actualCount": 0,
       "undocumentLines": [
-        8,
-        9,
-        14,
-        19
+        1,
+        7,
+        2,
+        8
       ]
     },
     "src/client/search/Search.js": {
@@ -187,11 +229,28 @@
       "actualCount": 1,
       "undocumentLines": []
     },
-    "src/client/results/mostfrequent/SearchBar.js": {
+    "src/client/results/socialweb/mostfrequent/SearchBar.js": {
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [
         4
+      ]
+    },
+    "src/client/results/socialweb/SocialWebResults.js": {
+      "expectCount": 4,
+      "actualCount": 0,
+      "undocumentLines": [
+        7,
+        8,
+        15,
+        22
+      ]
+    },
+    "src/client/common/common.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        3
       ]
     },
     "src/server/twitterSearch.js": {
@@ -207,9 +266,16 @@
       "expectCount": 3,
       "actualCount": 0,
       "undocumentLines": [
-        3,
         4,
-        11
+        5,
+        12
+      ]
+    },
+    "src/client/results/journalism/entities/TeamInformation.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        5
       ]
     },
     "src/client/search/TermItem.js": {
@@ -226,7 +292,7 @@
         3
       ]
     },
-    "src/client/results/mostfrequent/users/UserItemsList.js": {
+    "src/client/results/socialweb/mostfrequent/users/UserItemsList.js": {
       "expectCount": 4,
       "actualCount": 0,
       "undocumentLines": [
@@ -236,14 +302,14 @@
         40
       ]
     },
-    "src/client/results/mostfrequent/words/WordItemsList.js": {
+    "src/client/results/socialweb/mostfrequent/words/WordItemsList.js": {
       "expectCount": 4,
       "actualCount": 0,
       "undocumentLines": [
         3,
         4,
         19,
-        35
+        36
       ]
     },
     "src/client/search/categories/YearSelector.js": {
@@ -254,8 +320,8 @@
       ]
     },
     "src/shared/utilities.js": {
-      "expectCount": 12,
-      "actualCount": 12,
+      "expectCount": 14,
+      "actualCount": 14,
       "undocumentLines": []
     },
     "src/server/orientdb.js": {
@@ -271,12 +337,25 @@
       "undocumentLines": []
     },
     "src/client/search/searchReducer.js": {
-      "expectCount": 3,
+      "expectCount": 6,
+      "actualCount": 1,
+      "undocumentLines": [
+        83,
+        129,
+        122,
+        62,
+        12
+      ]
+    },
+    "src/server/footballSearch.js": {
+      "expectCount": 5,
       "actualCount": 0,
       "undocumentLines": [
-        79,
-        58,
-        10
+        131,
+        7,
+        45,
+        19,
+        100
       ]
     },
     "src/client/search/categories/categoryFiltersReducer.js": {
@@ -285,6 +364,14 @@
       "undocumentLines": [
         8,
         17
+      ]
+    },
+    "src/server/journalism.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        180,
+        13
       ]
     },
     "src/shared/data/databaseInsertActions.js": {
@@ -305,7 +392,7 @@
         6
       ]
     },
-    "src/client/results/mostfrequent/mostFrequentReducer.js": {
+    "src/client/results/socialweb/mostfrequent/mostFrequentReducer.js": {
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [
@@ -319,13 +406,11 @@
         26
       ]
     },
-    "src/server/footballSearch.js": {
-      "expectCount": 3,
+    "src/client/results/resultsReducer.js": {
+      "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [
-        46,
-        20,
-        101
+        3
       ]
     }
   }

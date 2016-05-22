@@ -13,151 +13,193 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber127",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber193",
     "#FeedReducer",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber128",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber194",
     "#FeedReducer can receive new feed results, and will group and sort them",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber175",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber241",
     "#FeedReducer can set the pagination limit",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber159",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber225",
     "#FeedReducer can set the pagination page",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html#lineNumber11",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber258",
+    "#JournalismInfoReducer",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber307",
+    "#JournalismInfoReducer correctly receives an entity and stops invalidation since all entities fetched",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber259",
+    "#JournalismInfoReducer invalidates the journalism info",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber348",
+    "#JournalismInfoReducer select a new entity tab",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber384",
+    "#JournalismInfoReducer should return the inputted closestMatch since matchCheckingAgainst is further away",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber364",
+    "#JournalismInfoReducer should return the new closest matchwith the newMatchId",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber277",
+    "#JournalismInfoReducer shows that it is requesting an enitity",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentActions.spec.js.html#lineNumber11",
     "#MostFrequentActions",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html#lineNumber12",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentActions.spec.js.html#lineNumber12",
     "#MostFrequentActions should create a correct search for most  used words",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html#lineNumber19",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentActions.spec.js.html#lineNumber19",
     "#MostFrequentActions should create a correct search for most active user",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html#lineNumber46",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentActions.spec.js.html#lineNumber46",
     "#MostFrequentActions should create an action for toggling all most active users",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html#lineNumber40",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentActions.spec.js.html#lineNumber40",
     "#MostFrequentActions should create an action for toggling all most used words",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html#lineNumber33",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentActions.spec.js.html#lineNumber33",
     "#MostFrequentActions should create an action for toggling hiding most active user",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html#lineNumber26",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentActions.spec.js.html#lineNumber26",
     "#MostFrequentActions should create an action for toggling hiding most used word",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber22",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber22",
     "#MostFrequentReducer",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber164",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber164",
     "#MostFrequentReducer Most active users",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber222",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber222",
     "#MostFrequentReducer Most active users Toggling of hidden users",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber223",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber223",
     "#MostFrequentReducer Most active users Toggling of hidden users should add a hidden word",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber246",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber246",
     "#MostFrequentReducer Most active users Toggling of hidden users should show/remove a hidden users",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber165",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber165",
     "#MostFrequentReducer Most active users should add the given search term for most active users",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber188",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber188",
     "#MostFrequentReducer Most active users should change isToggledActionHide and empty the toToggle users",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber23",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber23",
     "#MostFrequentReducer Most used words",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber81",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber81",
     "#MostFrequentReducer Most used words Toggling of hidden words",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber82",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber82",
     "#MostFrequentReducer Most used words Toggling of hidden words should add a hidden word",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber105",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber105",
     "#MostFrequentReducer Most used words Toggling of hidden words should not conflate similar hidden words",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber139",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber139",
     "#MostFrequentReducer Most used words Toggling of hidden words should show/remove a hidden word",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber24",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber24",
     "#MostFrequentReducer Most used words should add the given search term to words search filter",
     "test"
   ],
   [
     "",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber47",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html#lineNumber47",
     "#MostFrequentReducer Most used words should change toggle isToggledActionHide and empty the toToggle words",
     "test"
   ],
@@ -253,13 +295,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/src/client/search/searchActions.spec.js.html#lineNumber112",
+    "test-file/src/client/search/searchActions.spec.js.html#lineNumber119",
     "#SearchActions should create an action to add a default search term",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchActions.spec.js.html#lineNumber97",
+    "test-file/src/client/search/searchActions.spec.js.html#lineNumber103",
     "#SearchActions should create an action to add a default search term if ^ without a symbol afterwards",
     "test"
   ],
@@ -271,79 +313,103 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/src/client/search/searchActions.spec.js.html#lineNumber37",
+    "test-file/src/client/search/searchActions.spec.js.html#lineNumber135",
+    "#SearchActions should create an action to add a player entity",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/search/searchActions.spec.js.html#lineNumber151",
+    "#SearchActions should create an action to add a team entity",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/search/searchActions.spec.js.html#lineNumber39",
     "#SearchActions should create an action to add an author and mention",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchActions.spec.js.html#lineNumber52",
+    "test-file/src/client/search/searchActions.spec.js.html#lineNumber55",
     "#SearchActions should create an action to add everything apart from a hashtag",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchActions.spec.js.html#lineNumber67",
+    "test-file/src/client/search/searchActions.spec.js.html#lineNumber71",
     "#SearchActions should create an action to add everything apart from a keyword",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchActions.spec.js.html#lineNumber82",
+    "test-file/src/client/search/searchActions.spec.js.html#lineNumber87",
     "#SearchActions should create an action to add everything apart from author and mention",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchActions.spec.js.html#lineNumber22",
+    "test-file/src/client/search/searchActions.spec.js.html#lineNumber23",
     "#SearchActions should create an action to add just a keyword",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchActions.spec.js.html#lineNumber127",
+    "test-file/src/client/search/searchActions.spec.js.html#lineNumber168",
     "#SearchActions should create an action to delete search term with id",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchActions.spec.js.html#lineNumber138",
+    "test-file/src/client/search/searchActions.spec.js.html#lineNumber179",
     "#SearchActions should create an action to toggle a search term with id paramtype selection",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber8",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber13",
     "#SearchTermsReducer",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber9",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber14",
     "#SearchTermsReducer should add a hashtag search term",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber26",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber33",
     "#SearchTermsReducer should add a new query to existing queries",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber67",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber173",
+    "#SearchTermsReducer should add a player entity search term",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber153",
+    "#SearchTermsReducer should add a team entity search term",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber80",
     "#SearchTermsReducer should delete term with id",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber94",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber113",
     "#SearchTermsReducer should edit term paramType with id",
     "test"
   ],
   [
     "",
-    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber50",
+    "test-file/src/client/search/searchReducer.spec.js.html#lineNumber61",
     "#SearchTermsReducer should return empty search terms when deleting search terms with single term",
     "test"
   ],
@@ -595,6 +661,36 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/src/shared/utilities.spec.js.html#lineNumber138",
+    "#Utilities retrieving properties from SPARQL objects",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/shared/utilities.spec.js.html#lineNumber187",
+    "#Utilities retrieving properties from SPARQL objects will return N/A for a property that doesn't exist",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/shared/utilities.spec.js.html#lineNumber155",
+    "#Utilities retrieving properties from SPARQL objects will return else for a property that doesn't exist",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/shared/utilities.spec.js.html#lineNumber171",
+    "#Utilities retrieving properties from SPARQL objects will return else for a property that exists but lacks a .value",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/shared/utilities.spec.js.html#lineNumber139",
+    "#Utilities retrieving properties from SPARQL objects will return the value for a property that exists",
+    "test"
+  ],
+  [
+    "",
     "test-file/src/client/search/categories/categoryFilterActions.spec.js.html#lineNumber4",
     "#categoryFilterActions",
     "test"
@@ -732,6 +828,30 @@ window.esdocSearchIndex = [
     "test"
   ],
   [
+    "",
+    "test-file/src/client/results/resultsActions.spec.js.html#lineNumber4",
+    "#resultsActions",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/results/resultsActions.spec.js.html#lineNumber5",
+    "#resultsActions should create an action to change the results view (journalismInfo/socialWebResults)",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/results/resultsReducer.spec.js.html#lineNumber6",
+    "#resultsReducer",
+    "test"
+  ],
+  [
+    "",
+    "test-file/src/client/results/resultsReducer.spec.js.html#lineNumber7",
+    "#resultsReducer should change the results view",
+    "test"
+  ],
+  [
     "solid-octo-disco/src/client/search/searchactions.js~add_search_term",
     "variable/index.html#static-variable-ADD_SEARCH_TERM",
     "<span>ADD_SEARCH_TERM</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchActions.js</span>",
@@ -747,6 +867,12 @@ window.esdocSearchIndex = [
     "solid-octo-disco/src/client/queryinterface.js~app",
     "variable/index.html#static-variable-App",
     "<span>App</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/queryInterface.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/results/resultsactions.js~change_results_view",
+    "variable/index.html#static-variable-CHANGE_RESULTS_VIEW",
+    "<span>CHANGE_RESULTS_VIEW</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/resultsActions.js</span>",
     "variable"
   ],
   [
@@ -774,15 +900,21 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/feed.js~feed",
-    "class/src/client/results/Feed.js~Feed.html",
-    "<span>Feed</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/Feed.js</span>",
+    "solid-octo-disco/src/client/results/journalism/entitymenu.js~entitymenu",
+    "variable/index.html#static-variable-EntityMenu",
+    "<span>EntityMenu</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/journalism/EntityMenu.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/results/socialweb/feed.js~feed",
+    "class/src/client/results/socialweb/Feed.js~Feed.html",
+    "<span>Feed</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/Feed.js</span>",
     "class"
   ],
   [
-    "solid-octo-disco/src/client/results/googlemap.js~googlemap",
-    "class/src/client/results/GoogleMap.js~GoogleMap.html",
-    "<span>GoogleMap</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/GoogleMap.js</span>",
+    "solid-octo-disco/src/client/results/socialweb/googlemap.js~googlemap",
+    "class/src/client/results/socialweb/GoogleMap.js~GoogleMap.html",
+    "<span>GoogleMap</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/GoogleMap.js</span>",
     "class"
   ],
   [
@@ -804,6 +936,18 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "solid-octo-disco/src/client/search/searchactions.js~invalidate_journalism_information",
+    "variable/index.html#static-variable-INVALIDATE_JOURNALISM_INFORMATION",
+    "<span>INVALIDATE_JOURNALISM_INFORMATION</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchActions.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/results/journalism/journalisminformation.js~journalisminformation",
+    "variable/index.html#static-variable-JournalismInformation",
+    "<span>JournalismInformation</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/journalism/JournalismInformation.js</span>",
+    "variable"
+  ],
+  [
     "solid-octo-disco/src/client/search/categories/leaguecategory.js~leaguecategory",
     "class/src/client/search/categories/LeagueCategory.js~LeagueCategory.html",
     "<span>LeagueCategory</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/categories/LeagueCategory.js</span>",
@@ -816,9 +960,15 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequent.js~mostfrequent",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequent.js~mostfrequent",
     "variable/index.html#static-variable-MostFrequent",
-    "<span>MostFrequent</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/MostFrequent.js</span>",
+    "<span>MostFrequent</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/MostFrequent.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/search/searchactions.js~player_entity",
+    "variable/index.html#static-variable-PLAYER_ENTITY",
+    "<span>PLAYER_ENTITY</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchActions.js</span>",
     "variable"
   ],
   [
@@ -832,6 +982,18 @@ window.esdocSearchIndex = [
     "class/src/client/search/categories/PlayerCategory.js~PlayerCategory.html",
     "<span>PlayerCategory</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/categories/PlayerCategory.js</span>",
     "class"
+  ],
+  [
+    "solid-octo-disco/src/client/results/journalism/entities/playerinformation.js~playerinformation",
+    "variable/index.html#static-variable-PlayerInformation",
+    "<span>PlayerInformation</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/journalism/entities/PlayerInformation.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/search/searchactions.js~receive_entity",
+    "variable/index.html#static-variable-RECEIVE_ENTITY",
+    "<span>RECEIVE_ENTITY</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchActions.js</span>",
+    "variable"
   ],
   [
     "solid-octo-disco/src/client/search/searchactions.js~receive_feed_results",
@@ -870,6 +1032,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "solid-octo-disco/src/client/search/searchactions.js~request_entity",
+    "variable/index.html#static-variable-REQUEST_ENTITY",
+    "<span>REQUEST_ENTITY</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchActions.js</span>",
+    "variable"
+  ],
+  [
     "solid-octo-disco/src/client/search/categories/categoryfilteractions.js~request_football_season",
     "variable/index.html#static-variable-REQUEST_FOOTBALL_SEASON",
     "<span>REQUEST_FOOTBALL_SEASON</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/categories/categoryFilterActions.js</span>",
@@ -882,21 +1050,33 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~reset_most_frequent",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~reset_most_frequent",
     "variable/index.html#static-variable-RESET_MOST_FREQUENT",
-    "<span>RESET_MOST_FREQUENT</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>RESET_MOST_FREQUENT</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
     "solid-octo-disco/src/client/results/results.js~results",
-    "class/src/client/results/Results.js~Results.html",
+    "variable/index.html#static-variable-Results",
     "<span>Results</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/Results.js</span>",
-    "class"
+    "variable"
   ],
   [
     "solid-octo-disco/src/client/search/categories/categoryfilteractions.js~select_and_request_football_team",
     "variable/index.html#static-variable-SELECT_AND_REQUEST_FOOTBALL_TEAM",
     "<span>SELECT_AND_REQUEST_FOOTBALL_TEAM</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/categories/categoryFilterActions.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/results/journalism/journalismactions.js~select_entity_tab",
+    "variable/index.html#static-variable-SELECT_ENTITY_TAB",
+    "<span>SELECT_ENTITY_TAB</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/journalism/journalismActions.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/results/journalism/journalismactions.js~select_team_entity_match",
+    "variable/index.html#static-variable-SELECT_TEAM_ENTITY_MATCH",
+    "<span>SELECT_TEAM_ENTITY_MATCH</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/journalism/journalismActions.js</span>",
     "variable"
   ],
   [
@@ -918,33 +1098,51 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/searchbar.js~slidingsearchbar",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/searchbar.js~slidingsearchbar",
     "variable/index.html#static-variable-SlidingSearchBar",
-    "<span>SlidingSearchBar</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/SearchBar.js</span>",
+    "<span>SlidingSearchBar</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/SearchBar.js</span>",
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~toggle_all_most_active_users",
+    "solid-octo-disco/src/client/results/socialweb/socialwebresults.js~socialwebresults",
+    "class/src/client/results/socialweb/SocialWebResults.js~SocialWebResults.html",
+    "<span>SocialWebResults</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/SocialWebResults.js</span>",
+    "class"
+  ],
+  [
+    "solid-octo-disco/src/client/common/common.js~statistic",
+    "variable/index.html#static-variable-Statistic",
+    "<span>Statistic</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/common/common.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/search/searchactions.js~team_entity",
+    "variable/index.html#static-variable-TEAM_ENTITY",
+    "<span>TEAM_ENTITY</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchActions.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~toggle_all_most_active_users",
     "variable/index.html#static-variable-TOGGLE_ALL_MOST_ACTIVE_USERS",
-    "<span>TOGGLE_ALL_MOST_ACTIVE_USERS</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>TOGGLE_ALL_MOST_ACTIVE_USERS</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~toggle_all_most_used_words",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~toggle_all_most_used_words",
     "variable/index.html#static-variable-TOGGLE_ALL_MOST_USED_WORDS",
-    "<span>TOGGLE_ALL_MOST_USED_WORDS</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>TOGGLE_ALL_MOST_USED_WORDS</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~toggle_most_active_user",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~toggle_most_active_user",
     "variable/index.html#static-variable-TOGGLE_MOST_ACTIVE_USER",
-    "<span>TOGGLE_MOST_ACTIVE_USER</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>TOGGLE_MOST_ACTIVE_USER</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~toggle_most_used_words",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~toggle_most_used_words",
     "variable/index.html#static-variable-TOGGLE_MOST_USED_WORDS",
-    "<span>TOGGLE_MOST_USED_WORDS</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>TOGGLE_MOST_USED_WORDS</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
@@ -970,6 +1168,12 @@ window.esdocSearchIndex = [
     "class/src/client/search/categories/TeamCategory.js~TeamCategory.html",
     "<span>TeamCategory</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/categories/TeamCategory.js</span>",
     "class"
+  ],
+  [
+    "solid-octo-disco/src/client/results/journalism/entities/teaminformation.js~teaminformation",
+    "variable/index.html#static-variable-TeamInformation",
+    "<span>TeamInformation</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/journalism/entities/TeamInformation.js</span>",
+    "variable"
   ],
   [
     "solid-octo-disco/src/client/search/termitem.js~termitem",
@@ -1002,27 +1206,27 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~update_most_active_users_search_filter",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~update_most_active_users_search_filter",
     "variable/index.html#static-variable-UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER",
-    "<span>UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~update_most_used_words_search_filter",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~update_most_used_words_search_filter",
     "variable/index.html#static-variable-UPDATE_MOST_USED_WORDS_SEARCH_FILTER",
-    "<span>UPDATE_MOST_USED_WORDS_SEARCH_FILTER</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>UPDATE_MOST_USED_WORDS_SEARCH_FILTER</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/users/useritemslist.js~useritemslist",
-    "class/src/client/results/mostfrequent/users/UserItemsList.js~UserItemsList.html",
-    "<span>UserItemsList</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/users/UserItemsList.js</span>",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/users/useritemslist.js~useritemslist",
+    "class/src/client/results/socialweb/mostfrequent/users/UserItemsList.js~UserItemsList.html",
+    "<span>UserItemsList</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/users/UserItemsList.js</span>",
     "class"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/words/worditemslist.js~worditemslist",
-    "class/src/client/results/mostfrequent/words/WordItemsList.js~WordItemsList.html",
-    "<span>WordItemsList</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/words/WordItemsList.js</span>",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/words/worditemslist.js~worditemslist",
+    "class/src/client/results/socialweb/mostfrequent/words/WordItemsList.js~WordItemsList.html",
+    "<span>WordItemsList</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/words/WordItemsList.js</span>",
     "class"
   ],
   [
@@ -1047,6 +1251,12 @@ window.esdocSearchIndex = [
     "solid-octo-disco/src/server/tweetfinder.js~buildtwitterquery",
     "variable/index.html#static-variable-buildTwitterQuery",
     "<span>buildTwitterQuery</span> <span class=\"search-result-import-path\">solid-octo-disco/src/server/tweetFinder.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/results/resultsactions.js~changeresultsview",
+    "variable/index.html#static-variable-changeResultsView",
+    "<span>changeResultsView</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/resultsActions.js</span>",
     "variable"
   ],
   [
@@ -1104,6 +1314,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "solid-octo-disco/src/server/footballsearch.js~fetchfromfootballapi",
+    "variable/index.html#static-variable-fetchFromFootballAPI",
+    "<span>fetchFromFootballAPI</span> <span class=\"search-result-import-path\">solid-octo-disco/src/server/footballSearch.js</span>",
+    "variable"
+  ],
+  [
     "solid-octo-disco/src/shared/utilities.js~fetchpost",
     "variable/index.html#static-variable-fetchPost",
     "<span>fetchPost</span> <span class=\"search-result-import-path\">solid-octo-disco/src/shared/utilities.js</span>",
@@ -1119,6 +1335,12 @@ window.esdocSearchIndex = [
     "solid-octo-disco/src/shared/utilities.js~flattenobjecttoarray",
     "variable/index.html#static-variable-flattenObjectToArray",
     "<span>flattenObjectToArray</span> <span class=\"search-result-import-path\">solid-octo-disco/src/shared/utilities.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/server/footballsearch.js~footballaccessoptions",
+    "variable/index.html#static-variable-footballAccessOptions",
+    "<span>footballAccessOptions</span> <span class=\"search-result-import-path\">solid-octo-disco/src/server/footballSearch.js</span>",
     "variable"
   ],
   [
@@ -1167,6 +1389,42 @@ window.esdocSearchIndex = [
     "solid-octo-disco/src/client/search/searchactions.js~invalidatefeedresults",
     "variable/index.html#static-variable-invalidateFeedResults",
     "<span>invalidateFeedResults</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchActions.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/search/searchactions.js~invalidatejournalisminfo",
+    "variable/index.html#static-variable-invalidateJournalismInfo",
+    "<span>invalidateJournalismInfo</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchActions.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/search/searchreducer.js~ismatchclosertotoday",
+    "variable/index.html#static-variable-isMatchCloserToToday",
+    "<span>isMatchCloserToToday</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchReducer.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/search/searchreducer.js~journalisminforeducer",
+    "variable/index.html#static-variable-journalismInfoReducer",
+    "<span>journalismInfoReducer</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchReducer.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/search/searchreducer.js~journalisminforeducerinitialstate",
+    "variable/index.html#static-variable-journalismInfoReducerInitialState",
+    "<span>journalismInfoReducerInitialState</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchReducer.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/server/journalism.js~journalismplayer",
+    "variable/index.html#static-variable-journalismPlayer",
+    "<span>journalismPlayer</span> <span class=\"search-result-import-path\">solid-octo-disco/src/server/journalism.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/server/journalism.js~journalismteam",
+    "variable/index.html#static-variable-journalismTeam",
+    "<span>journalismTeam</span> <span class=\"search-result-import-path\">solid-octo-disco/src/server/journalism.js</span>",
     "variable"
   ],
   [
@@ -1224,9 +1482,9 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentreducer.js~mostfrequentreducer",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentreducer.js~mostfrequentreducer",
     "variable/index.html#static-variable-mostFrequentReducer",
-    "<span>mostFrequentReducer</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentReducer.js</span>",
+    "<span>mostFrequentReducer</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentReducer.js</span>",
     "variable"
   ],
   [
@@ -1302,9 +1560,9 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~resetmostfrequent",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~resetmostfrequent",
     "variable/index.html#static-variable-resetMostFrequent",
-    "<span>resetMostFrequent</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>resetMostFrequent</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
@@ -1368,6 +1626,18 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "solid-octo-disco/src/client/results/journalism/journalismactions.js~selectentitytab",
+    "variable/index.html#static-variable-selectEntityTab",
+    "<span>selectEntityTab</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/journalism/journalismActions.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/results/journalism/journalismactions.js~selectteamentitymatch",
+    "variable/index.html#static-variable-selectTeamEntityMatch",
+    "<span>selectTeamEntityMatch</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/journalism/journalismActions.js</span>",
+    "variable"
+  ],
+  [
     "solid-octo-disco/src/client/search/searchactions.js~setfeedpagelimit",
     "variable/index.html#static-variable-setFeedPageLimit",
     "<span>setFeedPageLimit</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchActions.js</span>",
@@ -1377,6 +1647,12 @@ window.esdocSearchIndex = [
     "solid-octo-disco/src/client/search/searchactions.js~setfeedpagenumber",
     "variable/index.html#static-variable-setFeedPageNumber",
     "<span>setFeedPageNumber</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/search/searchActions.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/client/results/resultsreducer.js~showjournalisminfo",
+    "variable/index.html#static-variable-showJournalismInfo",
+    "<span>showJournalismInfo</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/resultsReducer.js</span>",
     "variable"
   ],
   [
@@ -1392,15 +1668,15 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~toggleallmostactiveuserssearch",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~toggleallmostactiveuserssearch",
     "variable/index.html#static-variable-toggleAllMostActiveUsersSearch",
-    "<span>toggleAllMostActiveUsersSearch</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>toggleAllMostActiveUsersSearch</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~toggleallmostusedwordssearch",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~toggleallmostusedwordssearch",
     "variable/index.html#static-variable-toggleAllMostUsedWordsSearch",
-    "<span>toggleAllMostUsedWordsSearch</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>toggleAllMostUsedWordsSearch</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
@@ -1410,15 +1686,15 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~togglemostactiveuser",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~togglemostactiveuser",
     "variable/index.html#static-variable-toggleMostActiveUser",
-    "<span>toggleMostActiveUser</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>toggleMostActiveUser</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~togglemostusedwords",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~togglemostusedwords",
     "variable/index.html#static-variable-toggleMostUsedWords",
-    "<span>toggleMostUsedWords</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>toggleMostUsedWords</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
@@ -1440,21 +1716,33 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "solid-octo-disco/src/shared/utilities.js~trypropertyorelse",
+    "variable/index.html#static-variable-tryPropertyOrElse",
+    "<span>tryPropertyOrElse</span> <span class=\"search-result-import-path\">solid-octo-disco/src/shared/utilities.js</span>",
+    "variable"
+  ],
+  [
+    "solid-octo-disco/src/shared/utilities.js~trypropertyorna",
+    "variable/index.html#static-variable-tryPropertyOrNA",
+    "<span>tryPropertyOrNA</span> <span class=\"search-result-import-path\">solid-octo-disco/src/shared/utilities.js</span>",
+    "variable"
+  ],
+  [
     "solid-octo-disco/src/server/tweetfinder.js~uniontweets",
     "variable/index.html#static-variable-unionTweets",
     "<span>unionTweets</span> <span class=\"search-result-import-path\">solid-octo-disco/src/server/tweetFinder.js</span>",
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~updateactiveuserssearch",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~updateactiveuserssearch",
     "variable/index.html#static-variable-updateActiveUsersSearch",
-    "<span>updateActiveUsersSearch</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>updateActiveUsersSearch</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
-    "solid-octo-disco/src/client/results/mostfrequent/mostfrequentactions.js~updatemostusedwordssearch",
+    "solid-octo-disco/src/client/results/socialweb/mostfrequent/mostfrequentactions.js~updatemostusedwordssearch",
     "variable/index.html#static-variable-updateMostUsedWordsSearch",
-    "<span>updateMostUsedWordsSearch</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/mostfrequent/mostFrequentActions.js</span>",
+    "<span>updateMostUsedWordsSearch</span> <span class=\"search-result-import-path\">solid-octo-disco/src/client/results/socialweb/mostfrequent/mostFrequentActions.js</span>",
     "variable"
   ],
   [
@@ -1830,6 +2118,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/client/common/common.js",
+    "file/src/client/common/common.js.html",
+    "src/client/common/common.js",
+    "file"
+  ],
+  [
     "src/client/index.js",
     "file/src/client/index.js.html",
     "src/client/index.js",
@@ -1842,213 +2136,285 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/client/results/feed.js",
-    "file/src/client/results/Feed.js.html",
-    "src/client/results/Feed.js",
-    "file"
-  ],
-  [
-    "src/client/results/feed.js~feed#componentdidmount",
-    "class/src/client/results/Feed.js~Feed.html#instance-method-componentDidMount",
-    "src/client/results/Feed.js~Feed#componentDidMount",
-    "method"
-  ],
-  [
-    "src/client/results/feed.js~feed#componentdidupdate",
-    "class/src/client/results/Feed.js~Feed.html#instance-method-componentDidUpdate",
-    "src/client/results/Feed.js~Feed#componentDidUpdate",
-    "method"
-  ],
-  [
-    "src/client/results/feed.js~feed#render",
-    "class/src/client/results/Feed.js~Feed.html#instance-method-render",
-    "src/client/results/Feed.js~Feed#render",
-    "method"
-  ],
-  [
-    "src/client/results/googlemap.js",
-    "file/src/client/results/GoogleMap.js.html",
-    "src/client/results/GoogleMap.js",
-    "file"
-  ],
-  [
-    "src/client/results/googlemap.js~googlemap#addmarker",
-    "class/src/client/results/GoogleMap.js~GoogleMap.html#instance-method-addMarker",
-    "src/client/results/GoogleMap.js~GoogleMap#addMarker",
-    "method"
-  ],
-  [
-    "src/client/results/googlemap.js~googlemap#componentdidmount",
-    "class/src/client/results/GoogleMap.js~GoogleMap.html#instance-method-componentDidMount",
-    "src/client/results/GoogleMap.js~GoogleMap#componentDidMount",
-    "method"
-  ],
-  [
-    "src/client/results/googlemap.js~googlemap#componentdidupdate",
-    "class/src/client/results/GoogleMap.js~GoogleMap.html#instance-method-componentDidUpdate",
-    "src/client/results/GoogleMap.js~GoogleMap#componentDidUpdate",
-    "method"
-  ],
-  [
-    "src/client/results/googlemap.js~googlemap#createmap",
-    "class/src/client/results/GoogleMap.js~GoogleMap.html#instance-method-createMap",
-    "src/client/results/GoogleMap.js~GoogleMap#createMap",
-    "method"
-  ],
-  [
-    "src/client/results/googlemap.js~googlemap#map",
-    "class/src/client/results/GoogleMap.js~GoogleMap.html#instance-member-map",
-    "src/client/results/GoogleMap.js~GoogleMap#map",
-    "member"
-  ],
-  [
-    "src/client/results/googlemap.js~googlemap#markerbounds",
-    "class/src/client/results/GoogleMap.js~GoogleMap.html#instance-member-markerBounds",
-    "src/client/results/GoogleMap.js~GoogleMap#markerBounds",
-    "member"
-  ],
-  [
-    "src/client/results/googlemap.js~googlemap#markers",
-    "class/src/client/results/GoogleMap.js~GoogleMap.html#instance-member-markers",
-    "src/client/results/GoogleMap.js~GoogleMap#markers",
-    "member"
-  ],
-  [
-    "src/client/results/googlemap.js~googlemap#render",
-    "class/src/client/results/GoogleMap.js~GoogleMap.html#instance-method-render",
-    "src/client/results/GoogleMap.js~GoogleMap#render",
-    "method"
-  ],
-  [
     "src/client/results/results.js",
     "file/src/client/results/Results.js.html",
     "src/client/results/Results.js",
     "file"
   ],
   [
-    "src/client/results/results.js~results#componentdidmount",
-    "class/src/client/results/Results.js~Results.html#instance-method-componentDidMount",
-    "src/client/results/Results.js~Results#componentDidMount",
-    "method"
-  ],
-  [
-    "src/client/results/results.js~results#componentdidupdate",
-    "class/src/client/results/Results.js~Results.html#instance-method-componentDidUpdate",
-    "src/client/results/Results.js~Results#componentDidUpdate",
-    "method"
-  ],
-  [
-    "src/client/results/results.js~results#render",
-    "class/src/client/results/Results.js~Results.html#instance-method-render",
-    "src/client/results/Results.js~Results#render",
-    "method"
-  ],
-  [
-    "src/client/results/mostfrequent/mostfrequent.js",
-    "file/src/client/results/mostfrequent/MostFrequent.js.html",
-    "src/client/results/mostfrequent/MostFrequent.js",
+    "src/client/results/journalism/entitymenu.js",
+    "file/src/client/results/journalism/EntityMenu.js.html",
+    "src/client/results/journalism/EntityMenu.js",
     "file"
   ],
   [
-    "src/client/results/mostfrequent/searchbar.js",
-    "file/src/client/results/mostfrequent/SearchBar.js.html",
-    "src/client/results/mostfrequent/SearchBar.js",
+    "src/client/results/journalism/journalisminformation.js",
+    "file/src/client/results/journalism/JournalismInformation.js.html",
+    "src/client/results/journalism/JournalismInformation.js",
     "file"
   ],
   [
-    "src/client/results/mostfrequent/mostfrequentactions.js",
-    "file/src/client/results/mostfrequent/mostFrequentActions.js.html",
-    "src/client/results/mostfrequent/mostFrequentActions.js",
+    "src/client/results/journalism/entities/playerinformation.js",
+    "file/src/client/results/journalism/entities/PlayerInformation.js.html",
+    "src/client/results/journalism/entities/PlayerInformation.js",
     "file"
   ],
   [
-    "src/client/results/mostfrequent/mostfrequentactions.spec.js",
-    "file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html",
-    "src/client/results/mostfrequent/mostFrequentActions.spec.js",
+    "src/client/results/journalism/entities/teaminformation.js",
+    "file/src/client/results/journalism/entities/TeamInformation.js.html",
+    "src/client/results/journalism/entities/TeamInformation.js",
     "file"
   ],
   [
-    "src/client/results/mostfrequent/mostfrequentactions.spec.js",
-    "test-file/src/client/results/mostfrequent/mostFrequentActions.spec.js.html",
-    "src/client/results/mostfrequent/mostFrequentActions.spec.js",
+    "src/client/results/journalism/journalismactions.js",
+    "file/src/client/results/journalism/journalismActions.js.html",
+    "src/client/results/journalism/journalismActions.js",
+    "file"
+  ],
+  [
+    "src/client/results/resultsactions.js",
+    "file/src/client/results/resultsActions.js.html",
+    "src/client/results/resultsActions.js",
+    "file"
+  ],
+  [
+    "src/client/results/resultsactions.spec.js",
+    "file/src/client/results/resultsActions.spec.js.html",
+    "src/client/results/resultsActions.spec.js",
+    "file"
+  ],
+  [
+    "src/client/results/resultsactions.spec.js",
+    "test-file/src/client/results/resultsActions.spec.js.html",
+    "src/client/results/resultsActions.spec.js",
     "testFile"
   ],
   [
-    "src/client/results/mostfrequent/mostfrequentreducer.js",
-    "file/src/client/results/mostfrequent/mostFrequentReducer.js.html",
-    "src/client/results/mostfrequent/mostFrequentReducer.js",
+    "src/client/results/resultsreducer.js",
+    "file/src/client/results/resultsReducer.js.html",
+    "src/client/results/resultsReducer.js",
     "file"
   ],
   [
-    "src/client/results/mostfrequent/mostfrequentreducer.spec.js",
-    "test-file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html",
-    "src/client/results/mostfrequent/mostFrequentReducer.spec.js",
+    "src/client/results/resultsreducer.spec.js",
+    "file/src/client/results/resultsReducer.spec.js.html",
+    "src/client/results/resultsReducer.spec.js",
+    "file"
+  ],
+  [
+    "src/client/results/resultsreducer.spec.js",
+    "test-file/src/client/results/resultsReducer.spec.js.html",
+    "src/client/results/resultsReducer.spec.js",
     "testFile"
   ],
   [
-    "src/client/results/mostfrequent/mostfrequentreducer.spec.js",
-    "file/src/client/results/mostfrequent/mostFrequentReducer.spec.js.html",
-    "src/client/results/mostfrequent/mostFrequentReducer.spec.js",
+    "src/client/results/socialweb/feed.js",
+    "file/src/client/results/socialweb/Feed.js.html",
+    "src/client/results/socialweb/Feed.js",
     "file"
   ],
   [
-    "src/client/results/mostfrequent/users/mostactiveusers.js",
-    "file/src/client/results/mostfrequent/users/MostActiveUsers.js.html",
-    "src/client/results/mostfrequent/users/MostActiveUsers.js",
+    "src/client/results/socialweb/feed.js~feed#componentdidmount",
+    "class/src/client/results/socialweb/Feed.js~Feed.html#instance-method-componentDidMount",
+    "src/client/results/socialweb/Feed.js~Feed#componentDidMount",
+    "method"
+  ],
+  [
+    "src/client/results/socialweb/feed.js~feed#componentdidupdate",
+    "class/src/client/results/socialweb/Feed.js~Feed.html#instance-method-componentDidUpdate",
+    "src/client/results/socialweb/Feed.js~Feed#componentDidUpdate",
+    "method"
+  ],
+  [
+    "src/client/results/socialweb/feed.js~feed#render",
+    "class/src/client/results/socialweb/Feed.js~Feed.html#instance-method-render",
+    "src/client/results/socialweb/Feed.js~Feed#render",
+    "method"
+  ],
+  [
+    "src/client/results/socialweb/googlemap.js",
+    "file/src/client/results/socialweb/GoogleMap.js.html",
+    "src/client/results/socialweb/GoogleMap.js",
     "file"
   ],
   [
-    "src/client/results/mostfrequent/users/useritemslist.js",
-    "file/src/client/results/mostfrequent/users/UserItemsList.js.html",
-    "src/client/results/mostfrequent/users/UserItemsList.js",
+    "src/client/results/socialweb/googlemap.js~googlemap#addmarker",
+    "class/src/client/results/socialweb/GoogleMap.js~GoogleMap.html#instance-method-addMarker",
+    "src/client/results/socialweb/GoogleMap.js~GoogleMap#addMarker",
+    "method"
+  ],
+  [
+    "src/client/results/socialweb/googlemap.js~googlemap#componentdidmount",
+    "class/src/client/results/socialweb/GoogleMap.js~GoogleMap.html#instance-method-componentDidMount",
+    "src/client/results/socialweb/GoogleMap.js~GoogleMap#componentDidMount",
+    "method"
+  ],
+  [
+    "src/client/results/socialweb/googlemap.js~googlemap#componentdidupdate",
+    "class/src/client/results/socialweb/GoogleMap.js~GoogleMap.html#instance-method-componentDidUpdate",
+    "src/client/results/socialweb/GoogleMap.js~GoogleMap#componentDidUpdate",
+    "method"
+  ],
+  [
+    "src/client/results/socialweb/googlemap.js~googlemap#createmap",
+    "class/src/client/results/socialweb/GoogleMap.js~GoogleMap.html#instance-method-createMap",
+    "src/client/results/socialweb/GoogleMap.js~GoogleMap#createMap",
+    "method"
+  ],
+  [
+    "src/client/results/socialweb/googlemap.js~googlemap#map",
+    "class/src/client/results/socialweb/GoogleMap.js~GoogleMap.html#instance-member-map",
+    "src/client/results/socialweb/GoogleMap.js~GoogleMap#map",
+    "member"
+  ],
+  [
+    "src/client/results/socialweb/googlemap.js~googlemap#markerbounds",
+    "class/src/client/results/socialweb/GoogleMap.js~GoogleMap.html#instance-member-markerBounds",
+    "src/client/results/socialweb/GoogleMap.js~GoogleMap#markerBounds",
+    "member"
+  ],
+  [
+    "src/client/results/socialweb/googlemap.js~googlemap#markers",
+    "class/src/client/results/socialweb/GoogleMap.js~GoogleMap.html#instance-member-markers",
+    "src/client/results/socialweb/GoogleMap.js~GoogleMap#markers",
+    "member"
+  ],
+  [
+    "src/client/results/socialweb/googlemap.js~googlemap#render",
+    "class/src/client/results/socialweb/GoogleMap.js~GoogleMap.html#instance-method-render",
+    "src/client/results/socialweb/GoogleMap.js~GoogleMap#render",
+    "method"
+  ],
+  [
+    "src/client/results/socialweb/socialwebresults.js",
+    "file/src/client/results/socialweb/SocialWebResults.js.html",
+    "src/client/results/socialweb/SocialWebResults.js",
     "file"
   ],
   [
-    "src/client/results/mostfrequent/users/useritemslist.js~useritemslist#componentdidmount",
-    "class/src/client/results/mostfrequent/users/UserItemsList.js~UserItemsList.html#instance-method-componentDidMount",
-    "src/client/results/mostfrequent/users/UserItemsList.js~UserItemsList#componentDidMount",
+    "src/client/results/socialweb/socialwebresults.js~socialwebresults#componentdidmount",
+    "class/src/client/results/socialweb/SocialWebResults.js~SocialWebResults.html#instance-method-componentDidMount",
+    "src/client/results/socialweb/SocialWebResults.js~SocialWebResults#componentDidMount",
     "method"
   ],
   [
-    "src/client/results/mostfrequent/users/useritemslist.js~useritemslist#componentdidupdate",
-    "class/src/client/results/mostfrequent/users/UserItemsList.js~UserItemsList.html#instance-method-componentDidUpdate",
-    "src/client/results/mostfrequent/users/UserItemsList.js~UserItemsList#componentDidUpdate",
+    "src/client/results/socialweb/socialwebresults.js~socialwebresults#componentdidupdate",
+    "class/src/client/results/socialweb/SocialWebResults.js~SocialWebResults.html#instance-method-componentDidUpdate",
+    "src/client/results/socialweb/SocialWebResults.js~SocialWebResults#componentDidUpdate",
     "method"
   ],
   [
-    "src/client/results/mostfrequent/users/useritemslist.js~useritemslist#render",
-    "class/src/client/results/mostfrequent/users/UserItemsList.js~UserItemsList.html#instance-method-render",
-    "src/client/results/mostfrequent/users/UserItemsList.js~UserItemsList#render",
+    "src/client/results/socialweb/socialwebresults.js~socialwebresults#render",
+    "class/src/client/results/socialweb/SocialWebResults.js~SocialWebResults.html#instance-method-render",
+    "src/client/results/socialweb/SocialWebResults.js~SocialWebResults#render",
     "method"
   ],
   [
-    "src/client/results/mostfrequent/words/mostusedwords.js",
-    "file/src/client/results/mostfrequent/words/MostUsedWords.js.html",
-    "src/client/results/mostfrequent/words/MostUsedWords.js",
+    "src/client/results/socialweb/mostfrequent/mostfrequent.js",
+    "file/src/client/results/socialweb/mostfrequent/MostFrequent.js.html",
+    "src/client/results/socialweb/mostfrequent/MostFrequent.js",
     "file"
   ],
   [
-    "src/client/results/mostfrequent/words/worditemslist.js",
-    "file/src/client/results/mostfrequent/words/WordItemsList.js.html",
-    "src/client/results/mostfrequent/words/WordItemsList.js",
+    "src/client/results/socialweb/mostfrequent/searchbar.js",
+    "file/src/client/results/socialweb/mostfrequent/SearchBar.js.html",
+    "src/client/results/socialweb/mostfrequent/SearchBar.js",
     "file"
   ],
   [
-    "src/client/results/mostfrequent/words/worditemslist.js~worditemslist#componentdidmount",
-    "class/src/client/results/mostfrequent/words/WordItemsList.js~WordItemsList.html#instance-method-componentDidMount",
-    "src/client/results/mostfrequent/words/WordItemsList.js~WordItemsList#componentDidMount",
+    "src/client/results/socialweb/mostfrequent/mostfrequentactions.js",
+    "file/src/client/results/socialweb/mostfrequent/mostFrequentActions.js.html",
+    "src/client/results/socialweb/mostfrequent/mostFrequentActions.js",
+    "file"
+  ],
+  [
+    "src/client/results/socialweb/mostfrequent/mostfrequentactions.spec.js",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentActions.spec.js.html",
+    "src/client/results/socialweb/mostfrequent/mostFrequentActions.spec.js",
+    "testFile"
+  ],
+  [
+    "src/client/results/socialweb/mostfrequent/mostfrequentactions.spec.js",
+    "file/src/client/results/socialweb/mostfrequent/mostFrequentActions.spec.js.html",
+    "src/client/results/socialweb/mostfrequent/mostFrequentActions.spec.js",
+    "file"
+  ],
+  [
+    "src/client/results/socialweb/mostfrequent/mostfrequentreducer.js",
+    "file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.js.html",
+    "src/client/results/socialweb/mostfrequent/mostFrequentReducer.js",
+    "file"
+  ],
+  [
+    "src/client/results/socialweb/mostfrequent/mostfrequentreducer.spec.js",
+    "file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html",
+    "src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js",
+    "file"
+  ],
+  [
+    "src/client/results/socialweb/mostfrequent/mostfrequentreducer.spec.js",
+    "test-file/src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js.html",
+    "src/client/results/socialweb/mostfrequent/mostFrequentReducer.spec.js",
+    "testFile"
+  ],
+  [
+    "src/client/results/socialweb/mostfrequent/users/mostactiveusers.js",
+    "file/src/client/results/socialweb/mostfrequent/users/MostActiveUsers.js.html",
+    "src/client/results/socialweb/mostfrequent/users/MostActiveUsers.js",
+    "file"
+  ],
+  [
+    "src/client/results/socialweb/mostfrequent/users/useritemslist.js",
+    "file/src/client/results/socialweb/mostfrequent/users/UserItemsList.js.html",
+    "src/client/results/socialweb/mostfrequent/users/UserItemsList.js",
+    "file"
+  ],
+  [
+    "src/client/results/socialweb/mostfrequent/users/useritemslist.js~useritemslist#componentdidmount",
+    "class/src/client/results/socialweb/mostfrequent/users/UserItemsList.js~UserItemsList.html#instance-method-componentDidMount",
+    "src/client/results/socialweb/mostfrequent/users/UserItemsList.js~UserItemsList#componentDidMount",
     "method"
   ],
   [
-    "src/client/results/mostfrequent/words/worditemslist.js~worditemslist#componentdidupdate",
-    "class/src/client/results/mostfrequent/words/WordItemsList.js~WordItemsList.html#instance-method-componentDidUpdate",
-    "src/client/results/mostfrequent/words/WordItemsList.js~WordItemsList#componentDidUpdate",
+    "src/client/results/socialweb/mostfrequent/users/useritemslist.js~useritemslist#componentdidupdate",
+    "class/src/client/results/socialweb/mostfrequent/users/UserItemsList.js~UserItemsList.html#instance-method-componentDidUpdate",
+    "src/client/results/socialweb/mostfrequent/users/UserItemsList.js~UserItemsList#componentDidUpdate",
     "method"
   ],
   [
-    "src/client/results/mostfrequent/words/worditemslist.js~worditemslist#render",
-    "class/src/client/results/mostfrequent/words/WordItemsList.js~WordItemsList.html#instance-method-render",
-    "src/client/results/mostfrequent/words/WordItemsList.js~WordItemsList#render",
+    "src/client/results/socialweb/mostfrequent/users/useritemslist.js~useritemslist#render",
+    "class/src/client/results/socialweb/mostfrequent/users/UserItemsList.js~UserItemsList.html#instance-method-render",
+    "src/client/results/socialweb/mostfrequent/users/UserItemsList.js~UserItemsList#render",
+    "method"
+  ],
+  [
+    "src/client/results/socialweb/mostfrequent/words/mostusedwords.js",
+    "file/src/client/results/socialweb/mostfrequent/words/MostUsedWords.js.html",
+    "src/client/results/socialweb/mostfrequent/words/MostUsedWords.js",
+    "file"
+  ],
+  [
+    "src/client/results/socialweb/mostfrequent/words/worditemslist.js",
+    "file/src/client/results/socialweb/mostfrequent/words/WordItemsList.js.html",
+    "src/client/results/socialweb/mostfrequent/words/WordItemsList.js",
+    "file"
+  ],
+  [
+    "src/client/results/socialweb/mostfrequent/words/worditemslist.js~worditemslist#componentdidmount",
+    "class/src/client/results/socialweb/mostfrequent/words/WordItemsList.js~WordItemsList.html#instance-method-componentDidMount",
+    "src/client/results/socialweb/mostfrequent/words/WordItemsList.js~WordItemsList#componentDidMount",
+    "method"
+  ],
+  [
+    "src/client/results/socialweb/mostfrequent/words/worditemslist.js~worditemslist#componentdidupdate",
+    "class/src/client/results/socialweb/mostfrequent/words/WordItemsList.js~WordItemsList.html#instance-method-componentDidUpdate",
+    "src/client/results/socialweb/mostfrequent/words/WordItemsList.js~WordItemsList#componentDidUpdate",
+    "method"
+  ],
+  [
+    "src/client/results/socialweb/mostfrequent/words/worditemslist.js~worditemslist#render",
+    "class/src/client/results/socialweb/mostfrequent/words/WordItemsList.js~WordItemsList.html#instance-method-render",
+    "src/client/results/socialweb/mostfrequent/words/WordItemsList.js~WordItemsList#render",
     "method"
   ],
   [
@@ -2179,15 +2545,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/search/categories/categoryfiltersreducer.spec.js",
-    "test-file/src/client/search/categories/categoryFiltersReducer.spec.js.html",
-    "src/client/search/categories/categoryFiltersReducer.spec.js",
-    "testFile"
-  ],
-  [
-    "src/client/search/categories/categoryfiltersreducer.spec.js",
     "file/src/client/search/categories/categoryFiltersReducer.spec.js.html",
     "src/client/search/categories/categoryFiltersReducer.spec.js",
     "file"
+  ],
+  [
+    "src/client/search/categories/categoryfiltersreducer.spec.js",
+    "test-file/src/client/search/categories/categoryFiltersReducer.spec.js.html",
+    "src/client/search/categories/categoryFiltersReducer.spec.js",
+    "testFile"
   ],
   [
     "src/client/search/searchactions.js",
@@ -2197,15 +2563,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/search/searchactions.spec.js",
-    "test-file/src/client/search/searchActions.spec.js.html",
-    "src/client/search/searchActions.spec.js",
-    "testFile"
-  ],
-  [
-    "src/client/search/searchactions.spec.js",
     "file/src/client/search/searchActions.spec.js.html",
     "src/client/search/searchActions.spec.js",
     "file"
+  ],
+  [
+    "src/client/search/searchactions.spec.js",
+    "test-file/src/client/search/searchActions.spec.js.html",
+    "src/client/search/searchActions.spec.js",
+    "testFile"
   ],
   [
     "src/client/search/searchreducer.js",
@@ -2215,15 +2581,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/client/search/searchreducer.spec.js",
-    "file/src/client/search/searchReducer.spec.js.html",
-    "src/client/search/searchReducer.spec.js",
-    "file"
-  ],
-  [
-    "src/client/search/searchreducer.spec.js",
     "test-file/src/client/search/searchReducer.spec.js.html",
     "src/client/search/searchReducer.spec.js",
     "testFile"
+  ],
+  [
+    "src/client/search/searchreducer.spec.js",
+    "file/src/client/search/searchReducer.spec.js.html",
+    "src/client/search/searchReducer.spec.js",
+    "file"
   ],
   [
     "src/client/tweetanalysis.js",
@@ -2247,6 +2613,12 @@ window.esdocSearchIndex = [
     "src/server/footballsearch.js",
     "file/src/server/footballSearch.js.html",
     "src/server/footballSearch.js",
+    "file"
+  ],
+  [
+    "src/server/journalism.js",
+    "file/src/server/journalism.js.html",
+    "src/server/journalism.js",
     "file"
   ],
   [
@@ -2299,15 +2671,15 @@ window.esdocSearchIndex = [
   ],
   [
     "src/shared/data/databaseobjects.spec.js",
-    "test-file/src/shared/data/databaseObjects.spec.js.html",
-    "src/shared/data/databaseObjects.spec.js",
-    "testFile"
-  ],
-  [
-    "src/shared/data/databaseobjects.spec.js",
     "file/src/shared/data/databaseObjects.spec.js.html",
     "src/shared/data/databaseObjects.spec.js",
     "file"
+  ],
+  [
+    "src/shared/data/databaseobjects.spec.js",
+    "test-file/src/shared/data/databaseObjects.spec.js.html",
+    "src/shared/data/databaseObjects.spec.js",
+    "testFile"
   ],
   [
     "src/shared/data/databaseschema.js",
@@ -2323,14 +2695,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/shared/utilities.spec.js",
-    "test-file/src/shared/utilities.spec.js.html",
-    "src/shared/utilities.spec.js",
-    "testFile"
-  ],
-  [
-    "src/shared/utilities.spec.js",
     "file/src/shared/utilities.spec.js.html",
     "src/shared/utilities.spec.js",
     "file"
+  ],
+  [
+    "src/shared/utilities.spec.js",
+    "test-file/src/shared/utilities.spec.js.html",
+    "src/shared/utilities.spec.js",
+    "testFile"
   ]
 ]

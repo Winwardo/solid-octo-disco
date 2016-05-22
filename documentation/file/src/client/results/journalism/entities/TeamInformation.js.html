@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../../../">
+  <title data-ice="title">src/client/results/journalism/entities/TeamInformation.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="https://github.com/Winwardo/solid-octo-disco" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Header">Header</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TwitterProfilePicture">TwitterProfilePicture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-App">App</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-doesFeedHaveUsefulResults">doesFeedHaveUsefulResults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-groupedCountWords">groupedCountWords</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentUsers">mostFrequentUsers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentWords">mostFrequentWords</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/common</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Statistic">Statistic</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CHANGE_RESULTS_VIEW">CHANGE_RESULTS_VIEW</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-changeResultsView">changeResultsView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-showJournalismInfo">showJournalismInfo</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/journalism</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EntityMenu">EntityMenu</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-JournalismInformation">JournalismInformation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT_ENTITY_TAB">SELECT_ENTITY_TAB</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT_TEAM_ENTITY_MATCH">SELECT_TEAM_ENTITY_MATCH</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-selectEntityTab">selectEntityTab</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-selectTeamEntityMatch">selectTeamEntityMatch</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/journalism/entities</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PlayerInformation">PlayerInformation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TeamInformation">TeamInformation</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/socialweb</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/socialweb/Feed.js~Feed.html">Feed</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/socialweb/GoogleMap.js~GoogleMap.html">GoogleMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/socialweb/SocialWebResults.js~SocialWebResults.html">SocialWebResults</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/socialweb/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RESET_MOST_FREQUENT">RESET_MOST_FREQUENT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_ACTIVE_USERS">TOGGLE_ALL_MOST_ACTIVE_USERS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_USED_WORDS">TOGGLE_ALL_MOST_USED_WORDS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_ACTIVE_USER">TOGGLE_MOST_ACTIVE_USER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_USED_WORDS">TOGGLE_MOST_USED_WORDS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER">UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_USED_WORDS_SEARCH_FILTER">UPDATE_MOST_USED_WORDS_SEARCH_FILTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-resetMostFrequent">resetMostFrequent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostActiveUsersSearch">toggleAllMostActiveUsersSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostUsedWordsSearch">toggleAllMostUsedWordsSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostActiveUser">toggleMostActiveUser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostUsedWords">toggleMostUsedWords</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateActiveUsersSearch">updateActiveUsersSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateMostUsedWordsSearch">updateMostUsedWordsSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentReducer">mostFrequentReducer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/socialweb/mostfrequent/users</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/socialweb/mostfrequent/users/UserItemsList.js~UserItemsList.html">UserItemsList</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/socialweb/mostfrequent/words</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/socialweb/mostfrequent/words/WordItemsList.js~WordItemsList.html">WordItemsList</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AddSearchTerm">AddSearchTerm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CurrentQueryTerms">CurrentQueryTerms</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Search">Search</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TermItem">TermItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ADD_SEARCH_TERM">ADD_SEARCH_TERM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DELETE_SEARCH_TERM">DELETE_SEARCH_TERM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INVALIDATE_FEED_RESULTS">INVALIDATE_FEED_RESULTS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INVALIDATE_JOURNALISM_INFORMATION">INVALIDATE_JOURNALISM_INFORMATION</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PLAYER_ENTITY">PLAYER_ENTITY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_ENTITY">RECEIVE_ENTITY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FEED_RESULTS">RECEIVE_FEED_RESULTS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REQUEST_ENTITY">REQUEST_ENTITY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_LIMIT">SET_FEED_PAGE_LIMIT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_NUMBER">SET_FEED_PAGE_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TEAM_ENTITY">TEAM_ENTITY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_ONLY_DB">TOGGLE_SEARCH_ONLY_DB</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION">TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addSearchTerm">addSearchTerm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-deleteSearchTerm">deleteSearchTerm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateFeedResults">invalidateFeedResults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateJournalismInfo">invalidateJournalismInfo</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageLimit">setFeedPageLimit</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageNumber">setFeedPageNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchOnlyDb">toggleSearchOnlyDb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchTermParamTypeSelection">toggleSearchTermParamTypeSelection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-feedReducer">feedReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isMatchCloserToToday">isMatchCloserToToday</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-journalismInfoReducer">journalismInfoReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-journalismInfoReducerInitialState">journalismInfoReducerInitialState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchOnlyDB">searchOnlyDB</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchTermsReducer">searchTermsReducer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search/categories</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/LeagueCategory.js~LeagueCategory.html">LeagueCategory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/PlayerCategory.js~PlayerCategory.html">PlayerCategory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/TeamCategory.js~TeamCategory.html">TeamCategory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API">EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-YearSelector">YearSelector</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FOOTBALL_SEASON">RECEIVE_FOOTBALL_SEASON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_SELECTED_FOOTBALL_TEAM_PLAYERS">RECEIVE_SELECTED_FOOTBALL_TEAM_PLAYERS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_YEARS_FOOTBALL_LEAGUES_TEAMS">RECEIVE_YEARS_FOOTBALL_LEAGUES_TEAMS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REMOVE_FOOTBALL_SEASON">REMOVE_FOOTBALL_SEASON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS">REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REQUEST_FOOTBALL_SEASON">REQUEST_FOOTBALL_SEASON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS">REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT_AND_REQUEST_FOOTBALL_TEAM">SELECT_AND_REQUEST_FOOTBALL_TEAM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchAllFootballLeagueTeams">fetchAllFootballLeagueTeams</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchAllFootballSeasons">fetchAllFootballSeasons</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchFootballTeamPlayers">fetchFootballTeamPlayers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-receiveFootballSeason">receiveFootballSeason</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-receiveSelectedFootballTeamPlayers">receiveSelectedFootballTeamPlayers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-receiveYearsFootballLeaguesTeams">receiveYearsFootballLeaguesTeams</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeFootballSeason">removeFootballSeason</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeSelectedFootballTeamPlayers">removeSelectedFootballTeamPlayers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-requestFootballSeason">requestFootballSeason</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-requestYearsFootballLeaguesTeams">requestYearsFootballLeaguesTeams</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-selectAndRequestFootballTeam">selectAndRequestFootballTeam</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-footballCategoryFiltersInitialState">footballCategoryFiltersInitialState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-footballCategoryFiltersReducer">footballCategoryFiltersReducer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">server</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchFromFootballAPI">fetchFromFootballAPI</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-footballAccessOptions">footballAccessOptions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchFootballSeasonTeams">searchFootballSeasonTeams</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchFootballSeasons">searchFootballSeasons</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchFootballTeamPlayers">searchFootballTeamPlayers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-journalismPlayer">journalismPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-journalismTeam">journalismTeam</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-db">db</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-generateDatabase">generateDatabase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MAX_TWEET_RESULTS">MAX_TWEET_RESULTS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-buildTwitterQuery">buildTwitterQuery</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getOriginalTweetUserFromTweet">getOriginalTweetUserFromTweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getTweetFromDb">getTweetFromDb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-normaliseQueryTerm">normaliseQueryTerm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchQuery">searchQuery</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-unionTweets">unionTweets</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TWITTER_ENABLED">TWITTER_ENABLED</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TwitAccess">TwitAccess</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-buildTweeterFromRaw">buildTweeterFromRaw</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchAndSaveFromTwitter">searchAndSaveFromTwitter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchAndSaveResponse">searchAndSaveResponse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stream">stream</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">shared</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createTwitterParamTypes">createTwitterParamTypes</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchPost">fetchPost</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-flattenImmutableObject">flattenImmutableObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-flattenObjectToArray">flattenObjectToArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getSemanticCountryFlagName">getSemanticCountryFlagName</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-makeGetHeader">makeGetHeader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-makePostHeader">makePostHeader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-newPromiseChain">newPromiseChain</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-range">range</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-throttleFunction">throttleFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleArrayElement">toggleArrayElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleParamType">toggleParamType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tryPropertyOrElse">tryPropertyOrElse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tryPropertyOrNA">tryPropertyOrNA</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">shared/data</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkPlaceToCountry">linkPlaceToCountry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkQuoteTweetToOriginalTweet">linkQuoteTweetToOriginalTweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweetToHashtag">linkTweetToHashtag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweetToPlace">linkTweetToPlace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweetToTweeterViaMention">linkTweetToTweeterViaMention</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweeterToRetweet">linkTweeterToRetweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweeterToTweet">linkTweeterToTweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertCountry">upsertCountry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertHashtag">upsertHashtag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertPlace">upsertPlace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertTweet">upsertTweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertTweeter">upsertTweeter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CountryBuilder">CountryBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HashtagBuilder">HashtagBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PlaceBuilder">PlaceBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TweetBuilder">TweetBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TweeterBuilder">TweeterBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-convertSchemaObjectToClass">convertSchemaObjectToClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-schema">schema</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/client/results/journalism/entities/TeamInformation.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import React from &apos;react&apos;;
+import moment from &apos;moment&apos;;
+import { tryPropertyOrElse, tryPropertyOrNA } from &apos;../../../../shared/utilities&apos;;
+
+const TeamInformation = ({ matches, selectedMatchId, onSelectMatch }) =&gt; (
+  &lt;div&gt;
+    &lt;div className=&quot;row&quot;&gt;
+      &lt;div className=&quot;ui grid&quot;&gt;
+        &lt;div className=&quot;four wide column&quot;&gt;
+          &lt;MatchList
+            matches={matches}
+            selectedMatchId={selectedMatchId}
+            onSelectMatch={onSelectMatch}
+          /&gt;
+        &lt;/div&gt;
+        &lt;div className=&quot;twelve wide column&quot;&gt;
+          &lt;MatchInformation
+            leftTeam={matches[selectedMatchId].leftTeam}
+            rightTeam={matches[selectedMatchId].rightTeam}
+            searchedTeamIsHome={matches[selectedMatchId].searchedTeamIsHome}
+            result={matches[selectedMatchId].fixtureInfo.result}
+            status={matches[selectedMatchId].fixtureInfo.status}
+          /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+);
+
+const MatchList = ({ matches, selectedMatchId, onSelectMatch }) =&gt; (
+  &lt;div className=&quot;ui raised purple segment&quot; style={{ margin: &apos;0px 10px&apos; }}&gt;
+    &lt;h1 className=&quot;ui center aligned purple header&quot;&gt;Matches&lt;/h1&gt;
+    {
+      matches.map((match, id) =&gt; {
+        let leftTeamGoals = &apos;&apos;;
+        let rightTeamGoals = &apos;&apos;;
+
+        if (match.fixtureInfo.status === &apos;FINISHED&apos;) {
+          if (match.searchedTeamIsHome) {
+            leftTeamGoals = match.fixtureInfo.result.goalsHomeTeam;
+            rightTeamGoals = match.fixtureInfo.result.goalsAwayTeam;
+          } else {
+            leftTeamGoals = match.fixtureInfo.result.goalsAwayTeam;
+            rightTeamGoals = match.fixtureInfo.result.goalsHomeTeam;
+          }
+        }
+
+        return (
+          &lt;div
+            key={`match${id}`}
+            className=&quot;ui left labeled fluid button&quot; style={{ marginBottom: &apos;7px&apos; }}
+            onClick={() =&gt; onSelectMatch(id)}
+          &gt;
+            &lt;div className={`ui basic right pointing ${selectedMatchId === id &amp;&amp; &apos;purple&apos;} label`}&gt;
+              {moment(match.fixtureInfo.date).format(&apos;DD/MM/YY&apos;)}
+            &lt;/div&gt;
+            &lt;div className={`ui left aligned fluid ${selectedMatchId === id &amp;&amp; &apos;purple&apos;} button`}&gt;
+              {match.searchedTeamIsHome &amp;&amp; &lt;i className=&quot;home icon&quot;&gt;&lt;/i&gt;}
+              {match.leftTeam.team} - {leftTeamGoals}
+              &lt;h4
+                className={`ui horizontal ${selectedMatchId === id &amp;&amp; &apos;inverted&apos;} divider header`}
+                style={{ margin: &apos;2px 0px&apos; }}
+              &gt;
+                VS
+              &lt;/h4&gt;
+              {!match.searchedTeamIsHome &amp;&amp; &lt;i className=&quot;home icon&quot;&gt;&lt;/i&gt;}
+              {match.rightTeam.team} - {rightTeamGoals}
+            &lt;/div&gt;
+          &lt;/div&gt;
+        );
+      })
+    }
+  &lt;/div&gt;
+);
+
+const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome, result, status }) =&gt; {
+  let leftTeamGoals = &apos;&apos;;
+  let rightTeamGoals = &apos;&apos;;
+
+  if (status === &apos;FINISHED&apos;) {
+    if (searchedTeamIsHome) {
+      leftTeamGoals = result.goalsHomeTeam;
+      rightTeamGoals = result.goalsAwayTeam;
+    } else {
+      leftTeamGoals = result.goalsAwayTeam;
+      rightTeamGoals = result.goalsHomeTeam;
+    }
+  }
+  return (
+    &lt;div className=&quot;row&quot;&gt;
+      &lt;div className=&quot;ui raised segment&quot;&gt;
+        &lt;h1 className=&quot;ui center aligned purple header&quot; style={{ marginTop: &apos;5px&apos; }}&gt;
+          &lt;div className=&quot;ui massive center aligned purple label&quot;&gt;
+            {leftTeamGoals} : {rightTeamGoals}
+          &lt;/div&gt;
+        &lt;/h1&gt;
+        &lt;div className=&quot;ui grid&quot;&gt;
+          &lt;div className=&quot;eight wide column&quot;&gt;
+            {console.log(&quot;leftTeam&quot;, leftTeam)}
+            &lt;TeamDetails
+              originalResource={leftTeam.clubInfo.team.value}
+              homeTeam={searchedTeamIsHome}
+              name={leftTeam.team}
+              website={tryPropertyOrElse(leftTeam.clubInfo, &apos;website&apos;, &apos;&apos;)}
+              nickName={tryPropertyOrElse(leftTeam.clubInfo, &apos;nickname&apos;, &apos;unknown nickname&apos;)}
+              groundsOriginalPage={tryPropertyOrElse(leftTeam.groundsInfo, &apos;grounds&apos;, &apos;&apos;)}
+              groundsName={tryPropertyOrNA(leftTeam.groundsInfo, &apos;groundname&apos;)}
+              groundsCapacity={tryPropertyOrNA(leftTeam.groundsInfo, &apos;capacity&apos;)}
+              groundsThumbnailSrc={tryPropertyOrElse(leftTeam.groundsInfo, &apos;thumbnail&apos;, &apos;&apos;)}
+              currentLeagueOriginalPage={tryPropertyOrNA(leftTeam.clubInfo, &apos;league&apos;)}
+              currentLeague={tryPropertyOrNA(leftTeam.clubInfo, &apos;label&apos;)}
+              abstract={tryPropertyOrNA(leftTeam.clubInfo, &apos;abstract&apos;)}
+              chairman={leftTeam.chairman}
+              manager={leftTeam.manager}
+              players={leftTeam.players}
+              pastLeaguesWon={leftTeam.leaguesWon}
+              key={leftTeam.team}
+            /&gt;
+          &lt;/div&gt;
+          &lt;div className=&quot;ui vertical divider&quot; style={{ color: &apos;#a333c8&apos; }}&gt;
+            VS
+          &lt;/div&gt;
+          &lt;div className=&quot;eight wide column&quot;&gt;
+            &lt;TeamDetails
+              originalResource={rightTeam.clubInfo.team.value}
+              homeTeam={!searchedTeamIsHome}
+              rightAligned={true}
+              name={rightTeam.team}
+              website={tryPropertyOrElse(rightTeam.clubInfo, &apos;website&apos;, &apos;&apos;)}
+              nickName={tryPropertyOrElse(rightTeam.clubInfo, &apos;nickname&apos;, &apos;unknown nickname&apos;)}
+              groundsOriginalPage={tryPropertyOrElse(rightTeam.groundsInfo, &apos;grounds&apos;, &apos;&apos;)}
+              groundsName={tryPropertyOrNA(rightTeam.groundsInfo, &apos;groundname&apos;)}
+              groundsCapacity={tryPropertyOrNA(rightTeam.groundsInfo, &apos;capacity&apos;)}
+              groundsThumbnailSrc={tryPropertyOrElse(rightTeam.groundsInfo, &apos;thumbnail&apos;, &apos;&apos;)}
+              currentLeagueOriginalPage={tryPropertyOrNA(rightTeam.clubInfo, &apos;league&apos;)}
+              currentLeague={tryPropertyOrNA(rightTeam.clubInfo, &apos;label&apos;)}
+              abstract={tryPropertyOrNA(rightTeam.clubInfo, &apos;abstract&apos;)}
+              chairman={rightTeam.chairman}
+              manager={rightTeam.manager}
+              players={rightTeam.players}
+              pastLeaguesWon={rightTeam.leaguesWon}
+              key={rightTeam.team}
+            /&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+const TeamDetails = ({
+  originalResource, homeTeam, rightAligned, name, website, nickName, currentLeague,
+  currentLeagueOriginalPage, abstract, groundsOriginalPage, groundsName,
+  groundsCapacity, groundsThumbnailSrc, chairman, manager, players, pastLeaguesWon
+}) =&gt; (
+  &lt;div typeof=&quot;http://dbpedia.org/ontology/SoccerClub&quot;&gt;
+    &lt;a
+      className={`ui massive purple ${rightAligned ? &apos;right&apos; : &apos;&apos;} ribbon label`}
+      href={website}
+      target=&quot;_blank&quot;
+      property=&quot;http://www.w3.org/2000/01/rdf-schema#label&quot;
+    &gt;
+      {homeTeam &amp;&amp; &lt;i className=&quot;large home icon&quot; /&gt; || &lt;div style={{height: &quot;36px&quot;, width: &quot;1px&quot;, display: &quot;inline-block&quot;}}&gt;&amp;nbsp;&lt;/div&gt; } {name}
+    &lt;/a&gt;
+    &lt;h2 className=&quot;ui header&quot; property=&quot;http://dbpedia.org/property/nickname&quot;&gt;A.K.A {nickName}&lt;/h2&gt;
+    &lt;a href={groundsOriginalPage} target=&quot;_blank&quot; property=&quot;http://dbpedia.org/ontology/ground&quot; typeof=&quot;http://dbpedia.org/ontology/Stadium&quot;&gt;
+      &lt;h2 className=&quot;ui center aligned header&quot;&gt;
+        &lt;span property=&quot;http://dbpedia.org/property/name&quot;&gt;{groundsName}&lt;/span&gt;
+        &lt;span className=&quot;ui sub header&quot;&gt;
+        {
+            &lt;span property=&quot;http://dbpedia.org/ontology/seatingCapacity&quot;&gt;({groundsCapacity} seats)&lt;/span&gt;
+        }
+        &lt;/span&gt;
+      &lt;/h2&gt;
+      &lt;div style={{maxHeight: &quot;300px&quot;, height: &quot;300px&quot;}}&gt;
+        &lt;img
+          className=&quot;ui centered circular image&quot;
+          src={groundsThumbnailSrc || &quot;/public/images/nogrounds.jpg&quot;}
+          alt={`${name}&apos;s club grounds&apos;`}
+          property=&quot;http://dbpedia.org/ontology/thumbnail&quot;
+          style={{height: &quot;100%&quot;}}
+        /&gt;
+      &lt;/div&gt;
+    &lt;/a&gt;
+    &lt;div className=&quot;ui raised segment&quot;&gt;
+      &lt;h3 className=&quot;ui header&quot;&gt;Club Information&lt;/h3&gt;
+      &lt;h3 className=&quot;ui sub header&quot; property=&quot;http://dbpedia.org/ontology/league&quot; typeof=&quot;http://dbpedia.org/ontology/SportsLeague&quot;&gt;
+        Current League:
+        &lt;a href={currentLeagueOriginalPage} target=&quot;_blank&quot; property=&quot;http://www.w3.org/2000/01/rdf-schema#label&quot;&gt;
+          {currentLeague}
+        &lt;/a&gt;
+      &lt;/h3&gt;
+      &lt;br /&gt;
+      &lt;p property=&quot;http://dbpedia.org/ontology/abstract&quot;&gt;{abstract}&lt;/p&gt;
+      &lt;p&gt;
+        Information collected from &lt;a href={originalResource}&gt;{originalResource}&lt;/a&gt;.
+      &lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div className=&quot;ui raised segment&quot;&gt;
+      &lt;h3 className=&quot;ui header&quot;&gt;Current Club&lt;/h3&gt;
+      &lt;div className=&quot;ui cards&quot;&gt;
+        {
+          &lt;ClubOwnerCard
+            originalPage={tryPropertyOrElse(chairman[0], &apos;chairman&apos;, &apos;&apos;)}
+            thumbnail={tryPropertyOrElse(chairman[0], &apos;thumbnail&apos;, &apos;public/images/defaultUser.png&apos;)}
+            title={&apos;Chairman&apos;}
+            name={tryPropertyOrElse(chairman[0], &apos;name&apos;, &apos;N/A&apos;)}
+            birthDate={tryPropertyOrElse(chairman[0], &apos;birthDate&apos;, &apos;N/A&apos;)}
+            comment={tryPropertyOrElse(chairman[0], &apos;comment&apos;, &apos;No extra information available&apos;)}
+            entitytypeof=&quot;http://dbpedia.org/ontology/chairman&quot;
+          /&gt;
+        }
+        {manager.map(clubOwner =&gt; (
+          &lt;ClubOwnerCard
+            originalPage={tryPropertyOrElse(clubOwner, &apos;manager&apos;, &apos;&apos;)}
+            thumbnail={tryPropertyOrElse(clubOwner, &apos;thumbnail&apos;, &apos;public/images/defaultUser.png&apos;)}
+            title={&apos;Manager&apos;}
+            name={tryPropertyOrNA(clubOwner, &apos;name&apos;)}
+            birthDate={tryPropertyOrNA(clubOwner, &apos;birthDate&apos;)}
+            comment={tryPropertyOrElse(clubOwner, &apos;comment&apos;, &apos;No extra information available&apos;)}
+            entitytypeof=&quot;http://dbpedia.org/ontology/manager&quot;
+          /&gt;
+        ))}
+      &lt;/div&gt;
+      &lt;br /&gt;
+      &lt;h3 className=&quot;ui header&quot;&gt;Players&lt;/h3&gt;
+      &lt;TeamPlayerList players={players} /&gt;
+    &lt;/div&gt;
+
+    &lt;div className=&quot;ui raised segment&quot;&gt;
+      &lt;h3 className=&quot;ui header&quot;&gt;
+        &lt;i className=&quot;yellow trophy icon&quot;&gt;&lt;/i&gt;
+        Past Leagues Won
+      &lt;/h3&gt;
+      {pastLeaguesWon.map(league =&gt; (
+        &lt;a href={league.winners.value} target=&quot;_blank&quot; property=&quot;http://dbpedia.org/property/winners&quot; typeof=&quot;http://dbpedia.org/ontology/FootballLeagueSeason&quot;&gt;
+          &lt;h3 className=&quot;ui sub header&quot; property=&quot;http://www.w3.org/2000/01/rdf-schema#label&quot;&gt;{league.label.value}&lt;/h3&gt;
+        &lt;/a&gt;
+      ))}
+    &lt;/div&gt;
+  &lt;/div&gt;
+);
+
+const ClubOwnerCard = ({ originalPage, thumbnail, title, name, birthDate, comment, entitytypeof }) =&gt; (
+  &lt;a className=&quot;ui purple card&quot; href={originalPage} target=&quot;_blank&quot; property={entitytypeof} typeof=&quot;http://dbpedia.org/ontology/Agent&quot;&gt;
+    &lt;div className=&quot;image&quot;&gt;
+      &lt;img src={thumbnail} alt={`${name}&apos;`} property=&quot;http://dbpedia.org/ontology/thumbnail&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div className=&quot;content&quot;&gt;
+      &lt;span className=&quot;header&quot;&gt;{title} - &lt;span property=&quot;http://dbpedia.org/property/fullname&quot;&gt;{name}&lt;/span&gt;&lt;/span&gt;
+      &lt;div className=&quot;meta&quot;&gt;
+        &lt;span className=&quot;date&quot;&gt;Born: &lt;span property=&quot;http://dbpedia.org/property/birthDate&quot;&gt;{birthDate}&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div className=&quot;description&quot; property=&quot;http://www.w3.org/2000/01/rdf-schema#comment&quot;&gt;
+        {comment}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/a&gt;
+);
+
+const TeamPlayerList = ({ players }) =&gt; (
+  &lt;table className=&quot;ui very basic celled purple table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th&gt;Number&lt;/th&gt;
+        &lt;th&gt;Position&lt;/th&gt;
+        &lt;th&gt;Name&lt;/th&gt;
+        &lt;th&gt;Birthdate&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      {
+        players.map(player =&gt; {
+          // alot of the position definitions have &apos;(football association)&apos; which
+          // is unnecessary details so remove them if it exists, otherwise use rawPosition.
+          const playerPositionRaw = tryPropertyOrNA(player, &apos;positionLabel&apos;);
+          let playerPosition = playerPositionRaw
+          .substring(0, playerPositionRaw.indexOf(&apos;(&apos;));
+
+          if (!playerPosition) {
+            playerPosition = playerPositionRaw;
+          }
+          return (
+            &lt;tr property=&quot;http://dbpedia.org/property/currentclub&quot; typeof=&quot;http://dbpedia.org/ontology/SoccerPlayer&quot;&gt;
+              &lt;td property=&quot;http://dbpedia.org/ontology/number&quot;&gt;
+                {tryPropertyOrNA(player, &apos;number&apos;)}
+              &lt;/td&gt;
+              &lt;td property=&quot;http://dbpedia.org/ontology/position&quot; typeof=&quot;http://dbpedia.org/ontology/position&quot;&gt;
+                &lt;a href={tryPropertyOrElse(player, &apos;position&apos;, &apos;&apos;)} target=&quot;_blank&quot; property=&quot;http://www.w3.org/2000/01/rdf-schema#label&quot;&gt;
+                  {playerPosition}
+                &lt;/a&gt;
+              &lt;/td&gt;
+              &lt;td&gt;
+                &lt;a href={tryPropertyOrElse(player, &apos;player&apos;, &apos;&apos;)} target=&quot;_blank&quot; property=&quot;http://dbpedia.org/property/fullname&quot;&gt;
+                  {tryPropertyOrNA(player, &apos;name&apos;)}
+                &lt;/a&gt;
+              &lt;/td&gt;
+              &lt;td property=&quot;http://dbpedia.org/ontology/birthDate&quot;&gt;
+                {tryPropertyOrNA(player, &apos;birthDate&apos;)}
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          );
+        })
+      }
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+);
+
+export default TeamInformation;
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.6)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
