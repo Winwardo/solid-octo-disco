@@ -89,7 +89,11 @@ const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome, result, sta
   return (
     <div className="row">
       <div className="ui raised segment">
-        <h1 className="ui center aligned purple header">{leftTeamGoals} VS {rightTeamGoals}</h1>
+        <h1 className="ui center aligned purple header" style={{ marginTop: '5px' }}>
+          <div className="ui massive center aligned purple label">
+            {leftTeamGoals} VS {rightTeamGoals}
+          </div>
+        </h1>
         <div className="ui grid">
           <div className="eight wide column">
             <TeamDetails
@@ -137,39 +141,48 @@ const MatchInformation = ({ leftTeam, rightTeam, searchedTeamIsHome, result, sta
       </div>
     </div>
   );
-}
+};
 
 const TeamDetails = ({
   homeTeam, rightAligned, name, website, nickName, currentLeague,
   currentLeagueOriginalPage, abstract, groundsOriginalPage, groundsName,
   groundsCapacity, groundsThumbnailSrc, chairman, manager, players, pastLeaguesWon
 }) => (
-  <div>
+  <div typeof="http://dbpedia.org/ontology/SoccerClub">
     <a
       className={`ui massive purple ${rightAligned ? 'right' : ''} ribbon label`}
       href={website}
       target="_blank"
+      property="http://www.w3.org/2000/01/rdf-schema#label"
     >
       {homeTeam && <i className="large home icon" />} {name}
     </a>
-    <h2 className="ui header">A.K.A {nickName}</h2>
-    <a href={groundsOriginalPage} target="_blank">
+    <h2 className="ui header" property="http://dbpedia.org/property/nickname">A.K.A {nickName}</h2>
+    <a href={groundsOriginalPage} target="_blank" typeof="http://dbpedia.org/ontology/ground">
       <h2 className="ui center aligned header">
-        {groundsName} {groundsCapacity !== 'N/A' && `(${groundsCapacity} seats)`}
+        <span property="http://dbpedia.org/property/name">{groundsName}</span>
+        {
+          groundsCapacity !== 'N/A' &&
+            <span property="http://dbpedia.org/ontology/seatingCapacity">({groundsCapacity} seats)</span>
+        }
       </h2>
       <img
         className="ui centered circular large image"
         src={groundsThumbnailSrc}
         alt={`${name}'s club grounds'`}
+        property="http://dbpedia.org/ontology/thumbnail"
       />
     </a>
     <div className="ui raised segment">
       <h3 className="ui header">Club Information</h3>
-      <h3 className="ui sub header">
-        Current League: <a href={currentLeagueOriginalPage} target="_blank">{currentLeague}</a>
+      <h3 className="ui sub header" typeof="http://dbpedia.org/ontology/league">
+        Current League:
+        <a href={currentLeagueOriginalPage} target="_blank" property="http://www.w3.org/2000/01/rdf-schema#label">
+          {currentLeague}
+        </a>
       </h3>
       <br />
-      <p>{abstract}</p>
+      <p property="http://dbpedia.org/ontology/abstract">{abstract}</p>
     </div>
 
     <div className="ui raised segment">
@@ -183,6 +196,7 @@ const TeamDetails = ({
             name={tryPropertyOrElse(chairman[0], 'name', 'N/A')}
             birthDate={tryPropertyOrElse(chairman[0], 'birthDate', 'N/A')}
             comment={tryPropertyOrElse(chairman[0], 'comment', 'No extra information available')}
+            entitytypeof="http://dbpedia.org/ontology/chairman"
           />
         }
         {manager.map(clubOwner => (
@@ -193,6 +207,7 @@ const TeamDetails = ({
             name={tryPropertyOrNA(clubOwner, 'name')}
             birthDate={tryPropertyOrNA(clubOwner, 'birthDate')}
             comment={tryPropertyOrElse(clubOwner, 'comment', 'No extra information available')}
+            entitytypeof="http://dbpedia.org/ontology/manager"
           />
         ))}
       </div>
@@ -215,17 +230,17 @@ const TeamDetails = ({
   </div>
 );
 
-const ClubOwnerCard = ({ originalPage, thumbnail, title, name, birthDate, comment }) => (
-  <a className="ui purple card" href={originalPage} target="_blank">
+const ClubOwnerCard = ({ originalPage, thumbnail, title, name, birthDate, comment, entitytypeof }) => (
+  <a className="ui purple card" href={originalPage} target="_blank" typeof={entitytypeof}>
     <div className="image">
-      <img src={thumbnail} alt={`${name}'`} />
+      <img src={thumbnail} alt={`${name}'`} property="http://dbpedia.org/ontology/thumbnail" />
     </div>
     <div className="content">
-      <a className="header">{title} - {name}</a>
+      <a className="header">{title} - <span property="http://dbpedia.org/property/fullname">{name}</span></a>
       <div className="meta">
-        <span className="date">Born: {birthDate}</span>
+        <span className="date">Born: <span property="http://dbpedia.org/property/birthDate">{birthDate}</span></span>
       </div>
-      <div className="description">
+      <div className="description" property="http://www.w3.org/2000/01/rdf-schema#comment">
         {comment}
       </div>
     </div>
@@ -233,7 +248,7 @@ const ClubOwnerCard = ({ originalPage, thumbnail, title, name, birthDate, commen
 );
 
 const TeamPlayerList = ({ players }) => (
-  <table className="ui very basic celled purple table">
+  <table className="ui very basic celled purple table" property="http://dbpedia.org/property/currentclub">
     <thead>
       <tr>
         <th>Number</th>
@@ -255,21 +270,21 @@ const TeamPlayerList = ({ players }) => (
             playerPosition = playerPositionRaw;
           }
           return (
-            <tr>
-              <td>
+            <tr typeof="http://dbpedia.org/ontology/SoccerPlayer">
+              <td property="http://dbpedia.org/ontology/number">
                 {tryPropertyOrNA(player, 'number')}
               </td>
-              <td>
-                <a href={tryPropertyOrElse(player, 'position', '')} target="_blank">
+              <td typeof="http://dbpedia.org/ontology/position">
+                <a href={tryPropertyOrElse(player, 'position', '')} target="_blank" property="http://www.w3.org/2000/01/rdf-schema#label">
                   {playerPosition}
                 </a>
               </td>
               <td>
-                <a href={tryPropertyOrElse(player, 'player', '')} target="_blank">
+                <a href={tryPropertyOrElse(player, 'player', '')} target="_blank" property="http://dbpedia.org/property/fullname">
                   {tryPropertyOrNA(player, 'name')}
                 </a>
               </td>
-              <td>
+              <td property="http://dbpedia.org/ontology/birthDate">
                 {tryPropertyOrNA(player, 'birthDate')}
               </td>
             </tr>
