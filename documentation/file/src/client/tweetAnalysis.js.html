@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/client/tweetAnalysis.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="https://github.com/Winwardo/solid-octo-disco" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Header">Header</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TwitterProfilePicture">TwitterProfilePicture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-App">App</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-doesFeedHaveUsefulResults">doesFeedHaveUsefulResults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-groupedCountWords">groupedCountWords</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentUsers">mostFrequentUsers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentWords">mostFrequentWords</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/common</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Statistic">Statistic</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Results">Results</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CHANGE_RESULTS_VIEW">CHANGE_RESULTS_VIEW</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-changeResultsView">changeResultsView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-showJournalismInfo">showJournalismInfo</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/journalism</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EntityMenu">EntityMenu</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-JournalismInformation">JournalismInformation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT_ENTITY_TAB">SELECT_ENTITY_TAB</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT_TEAM_ENTITY_MATCH">SELECT_TEAM_ENTITY_MATCH</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-selectEntityTab">selectEntityTab</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-selectTeamEntityMatch">selectTeamEntityMatch</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/journalism/entities</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PlayerInformation">PlayerInformation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TeamInformation">TeamInformation</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/socialweb</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/socialweb/Feed.js~Feed.html">Feed</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/socialweb/GoogleMap.js~GoogleMap.html">GoogleMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/socialweb/SocialWebResults.js~SocialWebResults.html">SocialWebResults</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/socialweb/mostfrequent</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MostFrequent">MostFrequent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SlidingSearchBar">SlidingSearchBar</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RESET_MOST_FREQUENT">RESET_MOST_FREQUENT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_ACTIVE_USERS">TOGGLE_ALL_MOST_ACTIVE_USERS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_ALL_MOST_USED_WORDS">TOGGLE_ALL_MOST_USED_WORDS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_ACTIVE_USER">TOGGLE_MOST_ACTIVE_USER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_MOST_USED_WORDS">TOGGLE_MOST_USED_WORDS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER">UPDATE_MOST_ACTIVE_USERS_SEARCH_FILTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UPDATE_MOST_USED_WORDS_SEARCH_FILTER">UPDATE_MOST_USED_WORDS_SEARCH_FILTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-resetMostFrequent">resetMostFrequent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostActiveUsersSearch">toggleAllMostActiveUsersSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleAllMostUsedWordsSearch">toggleAllMostUsedWordsSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostActiveUser">toggleMostActiveUser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleMostUsedWords">toggleMostUsedWords</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateActiveUsersSearch">updateActiveUsersSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-updateMostUsedWordsSearch">updateMostUsedWordsSearch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mostFrequentReducer">mostFrequentReducer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/socialweb/mostfrequent/users</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/socialweb/mostfrequent/users/UserItemsList.js~UserItemsList.html">UserItemsList</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/results/socialweb/mostfrequent/words</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/results/socialweb/mostfrequent/words/WordItemsList.js~WordItemsList.html">WordItemsList</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AddSearchTerm">AddSearchTerm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CurrentQueryTerms">CurrentQueryTerms</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Search">Search</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TermItem">TermItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ADD_SEARCH_TERM">ADD_SEARCH_TERM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DELETE_SEARCH_TERM">DELETE_SEARCH_TERM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INVALIDATE_FEED_RESULTS">INVALIDATE_FEED_RESULTS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INVALIDATE_JOURNALISM_INFORMATION">INVALIDATE_JOURNALISM_INFORMATION</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PLAYER_ENTITY">PLAYER_ENTITY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_ENTITY">RECEIVE_ENTITY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FEED_RESULTS">RECEIVE_FEED_RESULTS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REQUEST_ENTITY">REQUEST_ENTITY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_LIMIT">SET_FEED_PAGE_LIMIT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SET_FEED_PAGE_NUMBER">SET_FEED_PAGE_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TEAM_ENTITY">TEAM_ENTITY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_ONLY_DB">TOGGLE_SEARCH_ONLY_DB</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION">TOGGLE_SEARCH_TERM_PARAMTYPE_SELECTION</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addSearchTerm">addSearchTerm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-deleteSearchTerm">deleteSearchTerm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateFeedResults">invalidateFeedResults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-invalidateJournalismInfo">invalidateJournalismInfo</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageLimit">setFeedPageLimit</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-setFeedPageNumber">setFeedPageNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchOnlyDb">toggleSearchOnlyDb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleSearchTermParamTypeSelection">toggleSearchTermParamTypeSelection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-feedReducer">feedReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isMatchCloserToToday">isMatchCloserToToday</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-journalismInfoReducer">journalismInfoReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-journalismInfoReducerInitialState">journalismInfoReducerInitialState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchOnlyDB">searchOnlyDB</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchTermsReducer">searchTermsReducer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">client/search/categories</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/LeagueCategory.js~LeagueCategory.html">LeagueCategory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/PlayerCategory.js~PlayerCategory.html">PlayerCategory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/client/search/categories/TeamCategory.js~TeamCategory.html">TeamCategory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API">EARLIEST_YEAR_AVAILABLE_FROM_FOOTBALL_API</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-YearSelector">YearSelector</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_FOOTBALL_SEASON">RECEIVE_FOOTBALL_SEASON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_SELECTED_FOOTBALL_TEAM_PLAYERS">RECEIVE_SELECTED_FOOTBALL_TEAM_PLAYERS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RECEIVE_YEARS_FOOTBALL_LEAGUES_TEAMS">RECEIVE_YEARS_FOOTBALL_LEAGUES_TEAMS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REMOVE_FOOTBALL_SEASON">REMOVE_FOOTBALL_SEASON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS">REMOVE_SELECTED_FOOTBALL_TEAM_PLAYERS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REQUEST_FOOTBALL_SEASON">REQUEST_FOOTBALL_SEASON</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS">REQUEST_YEARS_FOOTBALL_LEAGUES_TEAMS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT_AND_REQUEST_FOOTBALL_TEAM">SELECT_AND_REQUEST_FOOTBALL_TEAM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchAllFootballLeagueTeams">fetchAllFootballLeagueTeams</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchAllFootballSeasons">fetchAllFootballSeasons</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchFootballTeamPlayers">fetchFootballTeamPlayers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-receiveFootballSeason">receiveFootballSeason</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-receiveSelectedFootballTeamPlayers">receiveSelectedFootballTeamPlayers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-receiveYearsFootballLeaguesTeams">receiveYearsFootballLeaguesTeams</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeFootballSeason">removeFootballSeason</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeSelectedFootballTeamPlayers">removeSelectedFootballTeamPlayers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-requestFootballSeason">requestFootballSeason</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-requestYearsFootballLeaguesTeams">requestYearsFootballLeaguesTeams</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-selectAndRequestFootballTeam">selectAndRequestFootballTeam</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-footballCategoryFiltersInitialState">footballCategoryFiltersInitialState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-footballCategoryFiltersReducer">footballCategoryFiltersReducer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">server</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchFromFootballAPI">fetchFromFootballAPI</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-footballAccessOptions">footballAccessOptions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchFootballSeasonTeams">searchFootballSeasonTeams</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchFootballSeasons">searchFootballSeasons</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchFootballTeamPlayers">searchFootballTeamPlayers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-journalismPlayer">journalismPlayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-journalismTeam">journalismTeam</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-db">db</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-generateDatabase">generateDatabase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MAX_TWEET_RESULTS">MAX_TWEET_RESULTS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-buildTwitterQuery">buildTwitterQuery</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getOriginalTweetUserFromTweet">getOriginalTweetUserFromTweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getTweetFromDb">getTweetFromDb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-normaliseQueryTerm">normaliseQueryTerm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchQuery">searchQuery</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-unionTweets">unionTweets</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TWITTER_ENABLED">TWITTER_ENABLED</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TwitAccess">TwitAccess</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-buildTweeterFromRaw">buildTweeterFromRaw</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchAndSaveFromTwitter">searchAndSaveFromTwitter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-searchAndSaveResponse">searchAndSaveResponse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stream">stream</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">shared</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createTwitterParamTypes">createTwitterParamTypes</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fetchPost">fetchPost</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-flattenImmutableObject">flattenImmutableObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-flattenObjectToArray">flattenObjectToArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getSemanticCountryFlagName">getSemanticCountryFlagName</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-makeGetHeader">makeGetHeader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-makePostHeader">makePostHeader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-newPromiseChain">newPromiseChain</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-range">range</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-throttleFunction">throttleFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleArrayElement">toggleArrayElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-toggleParamType">toggleParamType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tryPropertyOrElse">tryPropertyOrElse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tryPropertyOrNA">tryPropertyOrNA</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">shared/data</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkPlaceToCountry">linkPlaceToCountry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkQuoteTweetToOriginalTweet">linkQuoteTweetToOriginalTweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweetToHashtag">linkTweetToHashtag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweetToPlace">linkTweetToPlace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweetToTweeterViaMention">linkTweetToTweeterViaMention</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweeterToRetweet">linkTweeterToRetweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-linkTweeterToTweet">linkTweeterToTweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertCountry">upsertCountry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertHashtag">upsertHashtag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertPlace">upsertPlace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertTweet">upsertTweet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-upsertTweeter">upsertTweeter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CountryBuilder">CountryBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HashtagBuilder">HashtagBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PlaceBuilder">PlaceBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TweetBuilder">TweetBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TweeterBuilder">TweeterBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-convertSchemaObjectToClass">convertSchemaObjectToClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-schema">schema</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/client/tweetAnalysis.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import moment from &apos;moment&apos;;
+
+// http://www.ranks.nl/stopwords
+const stopList = [&apos;a&apos;, &apos;about&apos;, &apos;above&apos;, &apos;after&apos;, &apos;again&apos;, &apos;against&apos;, &apos;all&apos;, &apos;am&apos;, &apos;an&apos;, &apos;and&apos;, &apos;any&apos;, &apos;are&apos;, &quot;aren&apos;t&quot;, &apos;as&apos;, &apos;at&apos;, &apos;be&apos;, &apos;because&apos;, &apos;been&apos;, &apos;before&apos;, &apos;being&apos;, &apos;below&apos;, &apos;between&apos;, &apos;both&apos;, &apos;but&apos;, &apos;by&apos;, &quot;can&apos;t&quot;, &apos;cannot&apos;, &apos;could&apos;, &quot;couldn&apos;t&quot;, &apos;did&apos;, &quot;didn&apos;t&quot;, &apos;do&apos;, &apos;does&apos;, &quot;doesn&apos;t&quot;, &apos;doing&apos;, &quot;don&apos;t&quot;, &apos;down&apos;, &apos;during&apos;, &apos;each&apos;, &apos;few&apos;, &apos;for&apos;, &apos;from&apos;, &apos;further&apos;, &apos;had&apos;, &quot;hadn&apos;t&quot;, &apos;has&apos;, &quot;hasn&apos;t&quot;, &apos;have&apos;, &quot;haven&apos;t&quot;, &apos;having&apos;, &apos;he&apos;, &quot;he&apos;d&quot;, &quot;he&apos;ll&quot;, &quot;he&apos;s&quot;, &apos;her&apos;, &apos;here&apos;, &quot;here&apos;s&quot;, &apos;hers&apos;, &apos;herself&apos;, &apos;him&apos;, &apos;himself&apos;, &apos;his&apos;, &apos;how&apos;, &quot;how&apos;s&quot;, &apos;i&apos;, &quot;i&apos;d&quot;, &quot;i&apos;ll&quot;, &quot;i&apos;m&quot;, &quot;i&apos;ve&quot;, &apos;if&apos;, &apos;in&apos;, &apos;into&apos;, &apos;is&apos;, &quot;isn&apos;t&quot;, &apos;it&apos;, &quot;it&apos;s&quot;, &apos;its&apos;, &apos;itself&apos;, &quot;let&apos;s&quot;, &apos;me&apos;, &apos;more&apos;, &apos;most&apos;, &quot;mustn&apos;t&quot;, &apos;my&apos;, &apos;myself&apos;, &apos;no&apos;, &apos;nor&apos;, &apos;not&apos;, &apos;of&apos;, &apos;off&apos;, &apos;on&apos;, &apos;once&apos;, &apos;only&apos;, &apos;or&apos;, &apos;other&apos;, &apos;ought&apos;, &apos;our&apos;, &apos;ours	ourselves&apos;, &apos;out&apos;, &apos;over&apos;, &apos;own&apos;, &apos;same&apos;, &quot;shan&apos;t&quot;, &apos;she&apos;, &quot;she&apos;d&quot;, &quot;she&apos;ll&quot;, &quot;she&apos;s&quot;, &apos;should&apos;, &quot;shouldn&apos;t&quot;, &apos;so&apos;, &apos;some&apos;, &apos;such&apos;, &apos;than&apos;, &apos;that&apos;, &quot;that&apos;s&quot;, &apos;the&apos;, &apos;their&apos;, &apos;theirs&apos;, &apos;them&apos;, &apos;themselves&apos;, &apos;then&apos;, &apos;there&apos;, &quot;there&apos;s&quot;, &apos;these&apos;, &apos;they&apos;, &quot;they&apos;d&quot;, &quot;they&apos;ll&quot;, &quot;they&apos;re&quot;, &quot;they&apos;ve&quot;, &apos;this&apos;, &apos;those&apos;, &apos;through&apos;, &apos;to&apos;, &apos;too&apos;, &apos;under&apos;, &apos;until&apos;, &apos;up&apos;, &apos;very&apos;, &apos;was&apos;, &quot;wasn&apos;t&quot;, &apos;we&apos;, &quot;we&apos;d&quot;, &quot;we&apos;ll&quot;, &quot;we&apos;re&quot;, &quot;we&apos;ve&quot;, &apos;were&apos;, &quot;weren&apos;t&quot;, &apos;what&apos;, &quot;what&apos;s&quot;, &apos;when&apos;, &quot;when&apos;s&quot;, &apos;where&apos;, &quot;where&apos;s&quot;, &apos;which&apos;, &apos;while&apos;, &apos;who&apos;, &quot;who&apos;s&quot;, &apos;whom&apos;, &apos;why&apos;, &quot;why&apos;s&quot;, &apos;with&apos;, &quot;won&apos;t&quot;, &apos;would&apos;, &quot;wouldn&apos;t&quot;, &apos;you&apos;, &quot;you&apos;d&quot;, &quot;you&apos;ll&quot;, &quot;you&apos;re&quot;, &quot;you&apos;ve&quot;, &apos;your&apos;, &apos;yours&apos;, &apos;yourself&apos;, &apos;yourselves&apos;];
+
+/**
+ * Given a list of Tweet objects, return a sorted list of the most frequent words in them
+ * @param tweets
+ * @returns {Array}
+ */
+export const mostFrequentWords = (tweets) =&gt; (
+  wordCountToSortedList(countWords(tweets, stopList))
+);
+
+/**
+ * Given counted words, return a new list with counts broken down by word casing
+ * @param countedWords
+ * @returns {Array}
+ */
+export const groupedCountWords = (countedWords) =&gt; {
+  const wordCount = [];
+  for (const wordInfo of countedWords) {
+    const normalisedWord = wordInfo.word.toLowerCase().replace(&apos;#&apos;, &apos;&apos;);
+
+    let found = false;
+    for (const innerWordInfo of wordCount) {
+      if (innerWordInfo.word === normalisedWord) {
+        found = true;
+        innerWordInfo.count += wordInfo.count;
+        innerWordInfo.makeup.push(wordInfo);
+      }
+    }
+
+    if (!found) {
+      wordCount.push(
+        {
+          word: normalisedWord,
+          count: wordInfo.count,
+          makeup: [
+            {
+              word: wordInfo.word,
+              count: wordInfo.count,
+            },
+          ],
+        }
+      );
+    }
+  }
+
+  return wordCount.sort((wordCount1, wordCount2) =&gt; (wordCount2.count - wordCount1.count));
+};
+
+/**
+ * Given a list of Tweet objects, return a sorted list of the 10 most active users.
+ * If there are more than 10 most active users that have more than 1 tweet then
+ * include them as well along with their tweets.
+ * @param tweets
+ * @returns {Array}\
+ */
+export const mostFrequentUsers = (tweets, minimumTopUserCount = 10) =&gt; {
+  const sortedTopUsers = categoriseByUser(tweets).sort((tweetList1, tweetList2) =&gt; (
+    tweetList2.posts.length - tweetList1.posts.length
+  ));
+  let topRestUsers = [];
+  if (sortedTopUsers.length &gt; minimumTopUserCount) {
+    topRestUsers = sortedTopUsers
+      .slice(minimumTopUserCount + 1)
+      .filter(user =&gt; user.posts.length &gt; 1);
+  }
+
+  return [...sortedTopUsers.slice(0, minimumTopUserCount), ...topRestUsers];
+};
+
+/**
+ * Group a list of posts by their author.
+ * @param [posts]
+ * @returns {{}}
+ */
+const categoriseByUser = (posts) =&gt; (
+  posts.reduce((userPostCount, post) =&gt; {
+    let categorizedUserIndex = -1;
+    userPostCount.forEach((categorizedUserPost, index) =&gt; {
+      if (categorizedUserPost.author.id === post.author.id) {
+        categorizedUserIndex = index;
+      }
+    });
+
+    if (categorizedUserIndex === -1) {
+      userPostCount.push({
+        author: post.author,
+        posts: [post.data],
+        source: post.source,
+      });
+    } else {
+      userPostCount[categorizedUserIndex].posts.push(post.data);
+    }
+
+    return userPostCount;
+  }, [])
+);
+
+// ---------------------------------------------------------------------------------------
+
+/**
+ * Given some list of tweets, create a dictionary of how often each word appears.
+ * Removes matched https://t.co/~ URLs
+ * Correctly matches @mentions and #hashtags
+ * Punctuation (hyphens, commas, full stops) are counted as spaces.
+ * @param tweets An array of Tweet objects
+ * @returns {{}} e.g. {&apos;hello&apos;: 5, &apos;world&apos;: 8}
+ */
+const countWords = (tweets, stopList = []) =&gt; {
+  const wordCount = {};
+  for (const content of tweets) {
+    // Match against either a t.co URL, a mention, hashtag or an entire word.
+    const matcher = /(https\:\/\/t\.co\/.+?)\b|([@#]?\w+)/gmi;
+    const matches = content.match(matcher) || [];
+
+    for (const word of matches) {
+      if (word.indexOf(&apos;https://t.co&apos;) &gt; -1) {
+        continue;
+      }
+      const wordIsInStopList = stopList.indexOf(word.toLowerCase()) &gt; -1;
+      if (!wordIsInStopList &amp;&amp; word.length &gt;= 3) {
+        // ~~ will convert floats to integer,
+        // but importantly quickly convert undefined to 0
+        wordCount[word] = ~~wordCount[word] + 1;
+      }
+    }
+  }
+
+  return wordCount;
+};
+
+/**
+ * Converts some word count object to a list of word/count pairs,
+ * sorted from most frequent to least.
+ * @param wordCounts An object like {&apos;hello&apos;: 5, &apos;world&apos;: 8}
+ * @returns {Array} A sorted list of word/count pairs, e.g. [{&apos;word&apos;: &apos;hello&apos;, &apos;count&apos;: 5}, ...]
+ */
+const wordCountToSortedList = (wordCounts) =&gt; {
+  const result = [];
+  for (let key in wordCounts) {
+    if (wordCounts.hasOwnProperty(key)) {
+      result.push({
+        word: key,
+        count: wordCounts[key],
+      });
+    }
+  }
+
+  return result.sort((wordCount1, wordCount2) =&gt; (wordCount2.count - wordCount1.count));
+};
+
+/**
+ * Give a feed of Tweets, decide if the feed is still relevant.
+ * If a feed had less than 100 results, or more than 5 results are
+ * over 10 minutes old, it is considered not relevant.
+ * @param feedResults
+ * @returns {boolean}
+ */
+export const doesFeedHaveUsefulResults = (feedResults) =&gt; {
+  const twentyMinutesAgo = moment().subtract(20, &apos;minutes&apos;);
+  const minRecentPosts = 20;
+
+  let inDateCount = 0;
+  for (const result of feedResults.data.records) {
+    const test = moment(result.data.date);
+    if (test.isAfter(twentyMinutesAgo)) {
+      inDateCount += 1;
+    }
+  }
+
+  return feedResults.data.count &gt; 100 &amp;&amp; inDateCount &gt; minRecentPosts;
+};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.6)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
